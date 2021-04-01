@@ -17,7 +17,7 @@ namespace Ñ
 
     void incrementaCursor(std::string txt)
     {
-        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min(MB_CUR_MAX, (int)txt.size() - cursor_léxico));
+        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor_léxico));
 
         //std::cout << "incrementaCursor(" << txt << ") - paso:" << paso << "  - cursor_léxico:" << cursor_léxico << "  - txt.size():" << txt.size() << std::endl;
 
@@ -29,7 +29,7 @@ namespace Ñ
 
     std::string siguienteCarácter(std::string txt)
     {
-        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min(MB_CUR_MAX, (int)txt.size() - cursor_léxico));
+        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor_léxico));
         std::string c = "";
 
         //std::cout << "siguienteCarácter(" << txt << ") - paso:" << paso << "  - cursor_léxico:" << cursor_léxico << "  - txt.size():" << txt.size() << std::endl;

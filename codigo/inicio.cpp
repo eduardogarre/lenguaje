@@ -35,7 +35,7 @@ void _interpretaComando(std::string comando)
 
 	if(lexemas.empty())
 	{
-		Ñ::errorConsola("Error durante el análisis léxico, comando incorrecto.");
+		Ñ::errorConsola(u8"Error durante el análisis léxico, comando incorrecto.");
 		return;
 	}
 
@@ -45,7 +45,7 @@ void _interpretaComando(std::string comando)
 
 	if(nodos == nullptr)
 	{
-		Ñ::errorConsola("Error durante el análisis sintáctico, comando incorrecto.");
+		Ñ::errorConsola(u8"Error durante el análisis sintáctico, comando incorrecto.");
 		return;
 	}
 

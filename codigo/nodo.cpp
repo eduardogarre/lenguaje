@@ -28,7 +28,7 @@ void imprimeAjuste()
 void Ñ::Nodo::muestra()
 {
 	imprimeAjuste();
-	std::cout << "(NODO_VACÍO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_VACÍO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 }
 
 Ñ::Literal::Literal() : Ñ::Nodo()
@@ -88,7 +88,7 @@ void Ñ::Identificador::muestra()
 void Ñ::Expresión::muestra()
 {
 	imprimeAjuste();
-	std::cout << "(NODO_EXPRESIÓN) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_EXPRESIÓN) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos, los términos
 	for(auto rama : ramas)
 	{
@@ -106,7 +106,7 @@ void Ñ::Expresión::muestra()
 void Ñ::Término::muestra()
 {
 	imprimeAjuste();
-	std::cout << "(NODO_TÉRMINO) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_TÉRMINO) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos, los factores
 	for(auto rama : ramas)
 	{
@@ -160,7 +160,7 @@ void Ñ::DeclaraVariable::muestra()
 void Ñ::LlamaFunción::muestra()
 {
 	imprimeAjuste();
-	std::cout << "(NODO_LLAMA_FUNCIÓN) [" + función + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_LLAMA_FUNCIÓN) [" + función + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 }
 
 

@@ -17,7 +17,7 @@ namespace Ñ
 
     void incrementaCursor(std::string txt)
     {
-        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min(MB_CUR_MAX, txt.size() - cursor_léxico));
+        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min(MB_CUR_MAX, (int)txt.size() - cursor_léxico));
 
         //std::cout << "incrementaCursor(" << txt << ") - paso:" << paso << "  - cursor_léxico:" << cursor_léxico << "  - txt.size():" << txt.size() << std::endl;
 
@@ -29,7 +29,7 @@ namespace Ñ
 
     std::string siguienteCarácter(std::string txt)
     {
-        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min(MB_CUR_MAX, txt.size() - cursor_léxico));
+        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min(MB_CUR_MAX, (int)txt.size() - cursor_léxico));
         std::string c = "";
 
         //std::cout << "siguienteCarácter(" << txt << ") - paso:" << paso << "  - cursor_léxico:" << cursor_léxico << "  - txt.size():" << txt.size() << std::endl;
@@ -249,20 +249,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -295,20 +295,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -358,20 +358,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -410,20 +410,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -482,20 +482,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -594,20 +594,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -701,20 +701,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -768,20 +768,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -811,20 +811,20 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::cerr << "Error en tiempo de ejecución: " << re.what() << std::endl;
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
             return false;
         }
         catch(const std::exception& ex)
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::cerr << "Error: " << ex.what() << std::endl;
+            std::cerr << u8"Error: " << ex.what() << std::endl;
             return false;
         }
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            std::cerr << "Error desconocido. Posible corrupción de memoria." << std::endl;
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
             return false;
         }
     }
@@ -896,7 +896,7 @@ namespace Ñ
                 if(carácter != "\"")
                 {
                     cursor_léxico = c;
-                    Ñ::errorConsola("Error, esperaba un cierre de comilla doble [\"]");
+                    Ñ::errorConsola(u8"Error, esperaba un cierre de comilla doble [\"]");
                 }
 
                 incrementaCursor(txt);
@@ -915,7 +915,7 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::string error = "Error en tiempo de ejecución: ";
+            std::string error = u8"Error en tiempo de ejecución: ";
             error += re.what();
             Ñ::errorConsola(error);
             return false;
@@ -924,7 +924,7 @@ namespace Ñ
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::string error = "Error: ";
+            std::string error = u8"Error: ";
             error += ex.what();
             Ñ::errorConsola(error);
             return false;
@@ -932,7 +932,7 @@ namespace Ñ
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            Ñ::errorConsola("Error desconocido. Posible corrupción de memoria.");
+            Ñ::errorConsola(u8"Error desconocido. Posible corrupción de memoria.");
             return false;
         }
     }
@@ -973,7 +973,7 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::string error = "Error en tiempo de ejecución: ";
+            std::string error = u8"Error en tiempo de ejecución: ";
             error += re.what();
             Ñ::errorConsola(error);
             return false;
@@ -982,7 +982,7 @@ namespace Ñ
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::string error = "Error: ";
+            std::string error = u8"Error: ";
             error += ex.what();
             Ñ::errorConsola(error);
             return false;
@@ -990,7 +990,7 @@ namespace Ñ
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            Ñ::errorConsola("Error desconocido. Posible corrupción de memoria.");
+            Ñ::errorConsola(u8"Error desconocido. Posible corrupción de memoria.");
             return false;
         }
     }
@@ -1062,7 +1062,7 @@ namespace Ñ
         catch(const std::runtime_error& re)
         {
             // speciffic handling for runtime_error
-            std::string error = "Error en tiempo de ejecución: ";
+            std::string error = u8"Error en tiempo de ejecución: ";
             error += re.what();
             Ñ::errorConsola(error);
             return vacía;
@@ -1071,7 +1071,7 @@ namespace Ñ
         {
             // speciffic handling for all exceptions extending std::exception, except
             // std::runtime_error which is handled explicitly
-            std::string error = "Error: ";
+            std::string error = u8"Error: ";
             error += ex.what();
             Ñ::errorConsola(error);
             return vacía;
@@ -1079,7 +1079,7 @@ namespace Ñ
         catch(...)
         {
             // catch any other errors (that we have no information about)
-            Ñ::errorConsola("Error desconocido. Posible corrupción de memoria.");
+            Ñ::errorConsola(u8"Error desconocido. Posible corrupción de memoria.");
             return vacía;
         }
 
@@ -1098,23 +1098,23 @@ namespace Ñ
             switch (_lexemas.front()->categoría)
             {
             case Ñ::CategoríaLexema::LEXEMA_RESERVADO:
-                std::cout << "LEXEMA_RESERVADO ";
+                std::cout << u8"LEXEMA_RESERVADO ";
                 break;
             case Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR:
-                std::cout << "LEXEMA_IDENTIFICADOR ";
+                std::cout << u8"LEXEMA_IDENTIFICADOR ";
                 break;
             case Ñ::CategoríaLexema::LEXEMA_NOTACIÓN:
-                std::cout << "LEXEMA_NOTACIÓN ";
+                std::cout << u8"LEXEMA_NOTACIÓN ";
                 break;
             case Ñ::CategoríaLexema::LEXEMA_TEXTO:
-                std::cout << "LEXEMA_TEXTO ";
+                std::cout << u8"LEXEMA_TEXTO ";
                 break;
             case Ñ::CategoríaLexema::LEXEMA_NÚMERO:
-                std::cout << "LEXEMA_NÚMERO ";
+                std::cout << u8"LEXEMA_NÚMERO ";
                 break;
             
             default:
-                std::cout << "LEXEMA_DESCONOCIDO ";
+                std::cout << u8"LEXEMA_DESCONOCIDO ";
                 break;
             }
             std::cout << "[" << _lexemas.front()->contenido << "]" << std::endl;

@@ -104,7 +104,38 @@ namespace Ñ
             c == u8"^" ||
             c == u8"<" ||
             c == u8">" ||
-            c == u8"\\"
+            c == u8"\\"||
+            c == "." ||
+            c == "," ||
+            c == ":" ||
+            c == ";" ||
+            c == "-" ||
+            c == "+" ||
+            c == "/" ||
+            c == "*" ||
+            c == "'" ||
+            c == "\"" ||
+            c == "|" ||
+            c == "@" ||
+            c == "€" ||
+            c == "$" ||
+            c == "%" ||
+            c == "&" ||
+            c == "(" ||
+            c == ")" ||
+            c == "=" ||
+            c == "¿" ||
+            c == "?" ||
+            c == "¡" ||
+            c == "!" ||
+            c == "[" ||
+            c == "]" ||
+            c == "{" ||
+            c == "}" ||
+            c == "^" ||
+            c == "<" ||
+            c == ">" ||
+            c == "\\"
         )
         {
             resultado = true;
@@ -320,23 +351,7 @@ namespace Ñ
 
             std::string carácter = siguienteCarácter(txt);
 
-            if(   (carácter == ".")
-                | (carácter == ",")
-                | (carácter == ";")
-                | (carácter == "=")
-                | (carácter == "+")
-                | (carácter == "-")
-                | (carácter == "*")
-                | (carácter == "/")
-                | (carácter == "%")
-                | (carácter == "(")
-                | (carácter == ")")
-                | (carácter == "[")
-                | (carácter == "]")
-                | (carácter == "{")
-                | (carácter == "}")
-                | (carácter == "\\")
-                )
+            if(espuntuación(carácter))
             {
 
                 Ñ::Lexema* l = new Ñ::Lexema();

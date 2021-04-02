@@ -16,12 +16,12 @@ bool notación(std::string carácter);
 Ñ::Literal* literal();
 Ñ::Tipo* tipo();
 Ñ::Identificador* identificador();
-Ñ::DeclaraVariable* declaraVariable();
-Ñ::LlamaFunción* llamaFunción();
-Ñ::Asigna* asigna();
-Ñ::Expresión* expresión();
-Ñ::Término* término();
 Ñ::Factor* factor();
+Ñ::Término* término();
+Ñ::Expresión* expresión();
+Ñ::DeclaraVariable* declaraVariable();
+Ñ::Asigna* asigna();
+Ñ::LlamaFunción* llamaFunción();
 Ñ::Nodo* Ñ::analizaSintaxis(std::vector<Ñ::Lexema*> _lexemas);
 
 

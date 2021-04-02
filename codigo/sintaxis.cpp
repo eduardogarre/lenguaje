@@ -18,6 +18,7 @@ bool notación(std::string carácter);
 Ñ::Identificador* identificador();
 Ñ::DeclaraVariable* declaraVariable();
 Ñ::LlamaFunción* llamaFunción();
+Ñ::Asigna* asigna();
 Ñ::Expresión* expresión();
 Ñ::Término* término();
 Ñ::Factor* factor();
@@ -409,6 +410,92 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Asigna* asigna()
+{
+	//std::cout << "asigna() - cursor[" << cursor << "]" << std::endl;
+
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		//std::cout << "cursor[" << cursor << "]" << std::endl;
+
+		if(Ñ::DeclaraVariable* dv = declaraVariable())
+		{
+			//std::cout << "Declara variable - cursor[" << cursor << "]" << std::endl;
+
+			if(notación("="))
+			{
+				//std::cout << "Asigna? - cursor[" << cursor << "]" << std::endl;
+
+				if(notación("=")) // "=="
+				{
+					//std::cout << "Realmente comparador - cursor[" << cursor << "]" << std::endl;
+					//std::cout << "deshaciendo" << std::endl;
+					delete dv;
+					cursor = c;
+					return nullptr;
+				}
+
+				//std::cout << "Sí es asignación" << std::endl;
+
+				if(Ñ::Expresión* ex = expresión())
+				{
+					//std::cout << "Expresión - cursor[" << cursor << "]" << std::endl;
+
+					Ñ::Asigna* a = new Ñ::Asigna();
+					((Ñ::Nodo*)a)->ramas.push_back((Ñ::Nodo*)dv);
+					((Ñ::Nodo*)a)->ramas.push_back((Ñ::Nodo*)ex);
+
+					return a;
+				}
+
+				//std::cout << "no es una asignación a una declaración" << std::endl;
+			}
+			
+			delete dv;
+		}
+		else if(Ñ::Identificador* id = identificador())
+		{
+			//std::cout << "Identificador - cursor[" << cursor << "]" << std::endl;
+
+			if(notación("="))
+			{
+				//std::cout << "Asigna? - cursor[" << cursor << "]" << std::endl;
+
+				if(notación("=")) // "=="
+				{
+					//std::cout << "Realmente comparador - cursor[" << cursor << "]" << std::endl;
+					//std::cout << "deshaciendo" << std::endl;
+					delete id;
+					cursor = c;
+					return nullptr;
+				}
+
+				//std::cout << "Sí es asignación" << std::endl;
+
+				if(Ñ::Expresión* ex = expresión())
+				{
+					//std::cout << "Expresión - cursor[" << cursor << "]" << std::endl;
+
+					Ñ::Asigna* a = new Ñ::Asigna();
+					((Ñ::Nodo*)a)->ramas.push_back((Ñ::Nodo*)id);
+					((Ñ::Nodo*)a)->ramas.push_back((Ñ::Nodo*)ex);
+
+					return a;
+				}
+
+				//std::cout << "no es una asignación" << std::endl;
+			}
+			
+			delete id;
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::LlamaFunción* llamaFunción()
 {
 	//std::cout << "ejecutaFunción()" << std::endl;
@@ -457,5 +544,5 @@ bool notación(std::string carácter)
 {
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)expresión();
+	return (Ñ::Nodo*)asigna();
 }

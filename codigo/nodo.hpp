@@ -115,6 +115,15 @@ namespace Ñ
         void muestra();
     };
 
+    class Asigna : Nodo
+    {
+    public:
+        Asigna();
+        ~Asigna();
+
+        void muestra();
+    };
+
     class LlamaFunción : Nodo
     {
     public:

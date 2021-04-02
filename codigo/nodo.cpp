@@ -29,6 +29,10 @@ void Ñ::Nodo::muestra()
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_VACÍO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
 }
 
 Ñ::Literal::Literal() : Ñ::Nodo()
@@ -42,6 +46,10 @@ void Ñ::Literal::muestra()
 {
 	imprimeAjuste();
 	std::cout << "(NODO_LITERAL) [" + dato + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
 }
 
 Ñ::Tipo::Tipo() : Ñ::Nodo()
@@ -57,11 +65,19 @@ void Ñ::Tipo::muestra()
 	{
 		imprimeAjuste();
 		std::cout << "(NODO_TIPO) [" + tipo + "[]] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+		for(auto rama : ramas)
+		{
+			muestraNodos(rama);
+		}
 	}
 	else
 	{
 		imprimeAjuste();
 		std::cout << "(NODO_TIPO) [" + tipo + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+		for(auto rama : ramas)
+		{
+			muestraNodos(rama);
+		}
 	}
 }
 
@@ -76,6 +92,10 @@ void Ñ::Identificador::muestra()
 {
 	imprimeAjuste();
 	std::cout << "(NODO_IDENTIFICADOR) [" + id + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
 }
 
 Ñ::Expresión::Expresión() : Ñ::Nodo()
@@ -150,6 +170,23 @@ void Ñ::DeclaraVariable::muestra()
 	}
 }
 
+Ñ::Asigna::Asigna() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_ASIGNA;
+}
+
+Ñ::Asigna::~Asigna() {}
+
+void Ñ::Asigna::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_ASIGNA) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 Ñ::LlamaFunción::LlamaFunción() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN;
@@ -161,6 +198,10 @@ void Ñ::LlamaFunción::muestra()
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_LLAMA_FUNCIÓN) [" + función + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
 }
 
 
@@ -196,6 +237,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
 	{
 		((Ñ::Expresión*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
+	{
+		((Ñ::Asigna*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
 	{

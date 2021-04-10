@@ -204,6 +204,23 @@ void Ñ::LlamaFunción::muestra()
 	}
 }
 
+Ñ::Afirma::Afirma() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_AFIRMA;
+}
+
+Ñ::Afirma::~Afirma() {}
+
+void Ñ::Afirma::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_AFIRMA) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 
 
 void Ñ::muestraNodos(Ñ::Nodo* nodo)
@@ -249,6 +266,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
 	{
 		((Ñ::LlamaFunción*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_AFIRMA)
+	{
+		((Ñ::Afirma*)nodo)->muestra();
 	}
 
 	ajuste--;

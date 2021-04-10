@@ -22,6 +22,7 @@ bool notación(std::string carácter);
 Ñ::DeclaraVariable* declaraVariable();
 Ñ::Asigna* asigna();
 Ñ::LlamaFunción* llamaFunción();
+Ñ::Afirma* afirma();
 Ñ::Nodo* Ñ::analizaSintaxis(std::vector<Ñ::Lexema*> _lexemas);
 
 
@@ -540,9 +541,65 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Afirma* afirma()
+{
+	//std::cout << "afirma()" << std::endl;
+	//std::cout << "cursor[" << cursor << "]" << std::endl;
+
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		if(Ñ::Asigna* as = asigna())
+		{
+			if(notación(";"))
+			{
+				Ñ::Afirma* af = new Ñ::Afirma();
+				((Ñ::Nodo*)af)->ramas.push_back((Ñ::Nodo*)as);
+				return af;
+			}
+			else
+			{
+				delete as;
+			}
+		}
+		
+		if(Ñ::LlamaFunción* fn = llamaFunción())
+		{
+			if(notación(";"))
+			{
+				Ñ::Afirma* af = new Ñ::Afirma();
+				((Ñ::Nodo*)af)->ramas.push_back((Ñ::Nodo*)fn);
+				return af;
+			}
+			else
+			{
+				delete fn;
+			}
+		}
+		
+		if(Ñ::DeclaraVariable* dv = declaraVariable())
+		{
+			if(notación(";"))
+			{
+				Ñ::Afirma* af = new Ñ::Afirma();
+				((Ñ::Nodo*)af)->ramas.push_back((Ñ::Nodo*)dv);
+				return af;
+			}
+			else
+			{
+				delete dv;
+			}
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::analizaSintaxis(std::vector<Ñ::Lexema*> _lexemas)
 {
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)asigna();
+	return (Ñ::Nodo*)afirma();
 }

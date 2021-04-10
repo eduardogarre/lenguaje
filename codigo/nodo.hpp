@@ -22,7 +22,9 @@ namespace Ñ
         NODO_DECLARA_Y_ASIGNA_VARIABLE,
         NODO_DECLARA_FUNCIÓN,
         NODO_DEFINE_FUNCIÓN,
-        NODO_LLAMA_FUNCIÓN
+        NODO_LLAMA_FUNCIÓN,
+
+        NODO_AFIRMA
     };
 
     class Nodo
@@ -131,6 +133,16 @@ namespace Ñ
 
         LlamaFunción();
         ~LlamaFunción();
+
+        void muestra();
+    };
+
+    class Afirma : Nodo
+    {
+    public:
+
+        Afirma();
+        ~Afirma();
 
         void muestra();
     };

@@ -50,6 +50,44 @@ std::map<std::string, Ñ::Símbolo> tablaSímbolos;
         }
         else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
         {
+            auto declvar = nodos->ramas[0];
+            std::string nombre = ((Ñ::DeclaraVariable*)declvar)->variable;
+            if(tablaSímbolos.count(nombre) > 0 )
+            {
+                resultado.error("SEMÁNTICO :: El identificador \"" + nombre + "\" ya se había declarado previamente");
+            }
+
+            if( declvar->ramas.size() != 1)
+            {
+                resultado.error("SEMÁNTICO :: Árbol de la declaración de variable mal construido");
+                return resultado;
+            }
+            else if(declvar->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_TIPO)
+            {
+                auto tipo = (declvar->ramas[0]);
+                std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
+
+                if( cadenaTipo == "bool" ||
+                    cadenaTipo == "ent" ||
+                    cadenaTipo == "nat" ||
+                    cadenaTipo == "real" ||
+                    cadenaTipo == "txt" )
+                {
+                    resultado.éxito();
+                    return resultado;
+                }
+                else
+                {
+                    resultado.error("SEMÁNTICO :: Tipo desconocido");
+                    return resultado;
+                }
+            }
+            else
+            {
+                resultado.error("SEMÁNTICO :: La declaración de variable no contiene tipo");
+                return resultado;
+            }
+
             resultado.éxito();
             return resultado;
         }

@@ -91,3 +91,48 @@ void Ñ::Símbolo::borraImplementación()
     _implementada = false;
     _implementación = nullptr;
 }
+
+void Ñ::Símbolo::muestra()
+{
+    if(_categoría == Ñ::CategoríaSímbolo::VACÍO)
+    {
+        std::cout << "[]";
+    }
+    else if(_categoría == Ñ::CategoríaSímbolo::VARIABLE)
+    {
+        std::cout << "[VARIABLE]" << std::endl;
+        muestraNodos(_tipo);
+    }
+    else if(_categoría == Ñ::CategoríaSímbolo::FUNCIÓN)
+    {
+        std::cout << "[FUNCIÓN]";
+        if(_ejecutable)
+        {
+            std::cout << " [ejecutable]";
+        }
+        else
+        {
+            std::cout << " [----------]";
+        }
+
+        if(_implementada)
+        {
+            std::cout << " [implementada]" << std::endl;
+            muestraNodos(_implementación);
+        }
+        else
+        {
+            std::cout << std::endl;
+        }
+    }
+
+}
+
+void Ñ::muestraTablaSímbolos(std::map<std::string, Ñ::Símbolo> tablaSímbolos)
+{
+    for (auto [clave, valor] : tablaSímbolos)
+    {
+        std::cout << clave << " ";
+        valor.muestra();
+    }
+}

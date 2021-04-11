@@ -90,6 +90,8 @@ void _interpretaComando(std::string comando)
 		}
 	}
 
+	Ñ::muestraTablaSímbolos(tablaSímbolos);
+
 	delete nodos;
 }
 

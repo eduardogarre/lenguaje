@@ -7,9 +7,9 @@ project(compilador VERSION 0.1)
 file(GLOB_RECURSE CODIGO_COMPILADOR CONFIGURE_DEPENDS "./*.hpp" "./*.cpp")
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /utf-8")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /utf-8")
 elseif(CMAKE_COMPILER_IS_GNUC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 
 # add the executable

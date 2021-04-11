@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+#include <string>
+
 #include "nodo.hpp"
 
 namespace Ñ
@@ -32,6 +35,8 @@ namespace Ñ
         Ñ::Nodo* implementación();
         void implementación(Ñ::Nodo* impl);
         void borraImplementación();
+
+        void muestra();
         
     private:
         CategoríaSímbolo _categoría;
@@ -43,4 +48,6 @@ namespace Ñ
 
         void (*_ejecuta)();
     };
+
+    void muestraTablaSímbolos(std::map<std::string, Ñ::Símbolo> tablaSímbolos);
 }

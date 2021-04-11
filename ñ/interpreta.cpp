@@ -2,7 +2,7 @@
 
 #include "interpreta.hpp"
 
-Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo> tablaSímbolos)
+Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>& tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
@@ -18,7 +18,18 @@
     }
     else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
     {
-        muestraNodos(nodos);
+        auto declvar = nodos->ramas[0];
+        std::string nombre = ((Ñ::DeclaraVariable*)declvar)->variable;
+
+        auto tipo = (declvar->ramas[0]);
+        std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
+
+        // Añado la variable a la tabla de símbolos
+        Ñ::Símbolo s;
+        s.declaraVariable(tipo);
+        tablaSímbolos[nombre] = s;
+        
+        resultado.éxito();
         return resultado;
     }
 

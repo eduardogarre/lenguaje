@@ -15,9 +15,9 @@ add_library(lenguaje ${CODIGO_LENGUAJE})
 target_include_directories(lenguaje PUBLIC "${CMAKE_SOURCE_DIR}")
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /utf-8")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /utf-8")
 elseif(CMAKE_COMPILER_IS_GNUC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 
 set_target_properties(lenguaje PROPERTIES

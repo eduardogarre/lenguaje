@@ -1,5 +1,6 @@
 #pragma once
 
+#include "interpreta.hpp"
 #include "lexema.hpp"
 #include "lexico.hpp"
 #include "nodo.hpp"

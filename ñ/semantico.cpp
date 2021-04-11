@@ -1,11 +1,33 @@
+#include <iostream>
+#include <map>
+
 #include "nodo.hpp"
 #include "semantico.hpp"
+#include "simbolo.hpp"
 
-Ñ::Nodo* Ñ::analizaSemántica(Ñ::Nodo* nodos);
+std::map<std::string, Ñ::Símbolo> tablaSímbolos;
 
-Ñ::Nodo* Ñ::analizaSemántica(Ñ::Nodo* nodos)
+Ñ::Nodo* Ñ::analizaSemántica(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>& tablaSímbolos)
 {
-    muestraNodos(nodos);
+    //muestraNodos(nodos);
 
-    return nodos;
+    if(nodos->categoría != Ñ::CategoríaNodo::NODO_AFIRMA)
+    {
+        //std::cout << "SEMÁNTICO :: El nodo raíz no es una asignación" << std::endl;
+        return nullptr;
+    }
+
+    if(nodos->ramas.size() < 1)
+    {
+        //std::cout << "SEMÁNTICO :: El nodo raíz está vacío" << std::endl;
+        return nullptr;
+    }
+
+    if( nodos->ramas.size() == 1
+        && nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+    {
+        return nodos;
+    }
+
+    return nullptr;
 }

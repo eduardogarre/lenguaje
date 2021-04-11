@@ -6,6 +6,8 @@
 
 #include "ñ/ñ.hpp"
 
+bool EJECUTA_INTÉRPRETE = true;
+
 void _muestraTexto(std::string txt)
 {
 	std::cout << txt << std::endl;
@@ -18,6 +20,31 @@ std::string _esperaComando()
 	std::getline(std::cin, comando);
 
 	return comando;
+}
+
+void apaga()
+{
+	EJECUTA_INTÉRPRETE = false;
+}
+
+void escribe()
+{
+    std::cout << "hola" << std::endl;
+}
+
+std::map<std::string, Ñ::Símbolo> creaTablaSímbolos()
+{
+    std::map<std::string, Ñ::Símbolo> tablaSímbolos = *(new std::map<std::string, Ñ::Símbolo>());
+
+    Ñ::Símbolo s1;
+    s1.añadeEjecución(escribe);
+    tablaSímbolos["escribe"] = s1;
+
+	Ñ::Símbolo s2;
+	s2.añadeEjecución(apaga);
+	tablaSímbolos["apaga"] = s2;
+
+	return tablaSímbolos;
 }
 
 void _interpretaComando(std::string comando)
@@ -43,14 +70,27 @@ void _interpretaComando(std::string comando)
 		return;
 	}
 
-	Ñ::analizaSemántica(nodos);
+	std::map<std::string, Ñ::Símbolo> tablaSímbolos = creaTablaSímbolos();
+
+	Ñ::Nodo* nodos2 = Ñ::analizaSemántica(nodos, tablaSímbolos);
+
+	if(nodos2 == nullptr)
+	{
+		std::cout << "Error en análisis semántico. Muestro nodos" << std::endl;
+		muestraNodos(nodos);
+	}
+	else
+	{
+		//std::cout << "Ejecuto nodos2" << std::endl;
+		Ñ::interpretaNodos(nodos2, tablaSímbolos);
+	}
 
 	delete nodos;
 }
 
 int main()
 {
-	while (true)
+	while (EJECUTA_INTÉRPRETE)
 	{
 		std::string comando = _esperaComando();
 		_interpretaComando(comando);

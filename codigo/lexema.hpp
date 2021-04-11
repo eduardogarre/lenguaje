@@ -23,4 +23,6 @@ namespace Ñ
         CategoríaLexema categoría;
         std::string contenido;
     };
+    
+    void muestraLexemas(std::vector<Ñ::Lexema*> _lexemas);
 }

@@ -2,9 +2,12 @@
 
 #include <cassert>
 
-template<typename T>
-void pop_front(std::vector<T>& vec)
+namespace Ñ
 {
-    assert(!vec.empty());
-    vec.erase(vec.begin());
+    template<typename T>
+    void pop_front(std::vector<T>& vec)
+    {
+        assert(!vec.empty());
+        vec.erase(vec.begin());
+    }
 }

@@ -2,27 +2,46 @@
 
 #include "interpreta.hpp"
 
-void Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo> tablaSímbolos)
+Ñ::ResultadoInterpretación Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo> tablaSímbolos)
 {
-    Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos->ramas[0]);
-    //std::cout << "SEMÁNTICO :: Compruebo si la función " << fn->función << "() es ejecutable" << std::endl;
+    Ñ::ResultadoInterpretación resultado;
 
-    if ( tablaSímbolos.count(fn->función) == 0 )
+    if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
-        std::cout << fn->función << "() no está en la tabla de símbolos" << std::endl;
-    }
-    else
-    {
-        Ñ::Símbolo s = tablaSímbolos.at(fn->función);
-        if(s.esEjecutable())
+        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos->ramas[0]);
+        //std::cout << "SEMÁNTICO :: Compruebo si la función " << fn->función << "() es ejecutable" << std::endl;
+
+        if ( tablaSímbolos.count(fn->función) == 0 )
         {
-            //std::cout << fn->función << "() está en la tabla de símbolos y es ejecutable" << std::endl;
-            //std::cout << "ejecuto " << fn->función << "()" << std::endl;
-            s.ejecuta();
+            resultado.resultado = Ñ::CategoríaResultadoInterpretación::ERROR;
+            resultado.mensaje = fn->función + "() no está en la tabla de símbolos";
+            return resultado;
         }
         else
         {
-            std::cout << fn->función << "() está en la tabla de símbolos pero debe implementarse" << std::endl;
+            Ñ::Símbolo s = tablaSímbolos.at(fn->función);
+            if(s.esEjecutable())
+            {
+                //std::cout << fn->función << "() está en la tabla de símbolos y es ejecutable" << std::endl;
+                //std::cout << "ejecuto " << fn->función << "()" << std::endl;
+                s.ejecuta();
+
+                resultado.resultado = Ñ::CategoríaResultadoInterpretación::ÉXITO;
+                return resultado;
+            }
+            else
+            {
+                resultado.resultado = Ñ::CategoríaResultadoInterpretación::ERROR;
+                resultado.mensaje = fn->función + "() está en la tabla de símbolos pero debe implementarse";
+                return resultado;
+            }
         }
     }
+    else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+    {
+        return resultado;
+    }
+
+    resultado.mensaje = "No se consigue interpretar el árbol de nodos";
+    return resultado;
 }

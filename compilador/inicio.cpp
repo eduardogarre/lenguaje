@@ -82,7 +82,12 @@ void _interpretaComando(std::string comando)
 	else
 	{
 		//std::cout << "Ejecuto nodos2" << std::endl;
-		Ñ::interpretaNodos(nodos2, tablaSímbolos);
+
+		auto resultado = Ñ::interpretaNodos(nodos2, tablaSímbolos);
+		if(resultado.resultado == Ñ::CategoríaResultadoInterpretación::ERROR)
+		{
+			std::cout << resultado.mensaje << std::endl;
+		}
 	}
 
 	delete nodos;

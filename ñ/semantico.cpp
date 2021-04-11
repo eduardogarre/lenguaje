@@ -14,15 +14,13 @@ std::map<std::string, Ñ::Símbolo> tablaSímbolos;
 
     if(nodos->categoría != Ñ::CategoríaNodo::NODO_AFIRMA)
     {
-        resultado.resultado = Ñ::CategoríaResultado::ERROR;
-        resultado.mensaje = "SEMÁNTICO :: El nodo raíz no es una asignación";
+        resultado.error("SEMÁNTICO :: El nodo raíz no es una asignación");
         return resultado;
     }
 
     if(nodos->ramas.size() < 1)
     {
-        resultado.resultado = Ñ::CategoríaResultado::ERROR;
-        resultado.mensaje = "SEMÁNTICO :: El nodo raíz está vacío";
+        resultado.error("SEMÁNTICO :: El nodo raíz está vacío");
         return resultado;
     }
 
@@ -30,17 +28,16 @@ std::map<std::string, Ñ::Símbolo> tablaSímbolos;
     {
         if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
         {
-            resultado.resultado = Ñ::CategoríaResultado::ÉXITO;
+            resultado.éxito();
             return resultado;
         }
         else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
         {
-            resultado.resultado = Ñ::CategoríaResultado::ÉXITO;
+            resultado.éxito();
             return resultado;
         }
     }
 
-    resultado.resultado = Ñ::CategoríaResultado::ERROR;
-    resultado.mensaje = "SEMÁNTICO :: No reconozco el árbol de nodos";
+    resultado.error("SEMÁNTICO :: No reconozco el árbol de nodos");
     return resultado;
 }

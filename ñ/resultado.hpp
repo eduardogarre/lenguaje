@@ -4,17 +4,18 @@
 
 namespace Ñ
 {
-    enum CategoríaResultado {
-        ERROR,
-        ÉXITO
-    };
 
     class Resultado
     {
     public:
-        CategoríaResultado resultado;
-        std::string mensaje;
+        bool _error;
+        std::string _mensaje;
 
-        Resultado() : resultado(Ñ::CategoríaResultado::ERROR) {}
+        Resultado() : _error(true) {}
+
+        bool error() { return _error; }
+        void error(std::string msj) { _error = true; _mensaje = msj; }
+        void éxito() { _error = false; }
+        std::string mensaje() { return (_error ? _mensaje : ""); }
     };
 }

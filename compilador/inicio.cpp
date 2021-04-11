@@ -74,9 +74,9 @@ void _interpretaComando(std::string comando)
 
 	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolos);
 
-	if(resultado.resultado == Ñ::CategoríaResultado::ERROR)
+	if(resultado.error())
 	{
-		std::cout << resultado.mensaje << std::endl;
+		std::cout << resultado.mensaje() << std::endl;
 		muestraNodos(nodos);
 	}
 	else
@@ -84,9 +84,9 @@ void _interpretaComando(std::string comando)
 		//std::cout << "Ejecuto nodos2" << std::endl;
 
 		auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
-		if(resultado.resultado == Ñ::CategoríaResultado::ERROR)
+		if(resultado.error())
 		{
-			std::cout << resultado.mensaje << std::endl;
+			std::cout << resultado.mensaje() << std::endl;
 		}
 	}
 

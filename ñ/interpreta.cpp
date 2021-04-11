@@ -13,8 +13,7 @@
 
         if ( tablaSímbolos.count(fn->función) == 0 )
         {
-            resultado.resultado = Ñ::CategoríaResultado::ERROR;
-            resultado.mensaje = fn->función + "() no está en la tabla de símbolos";
+            resultado.error(fn->función + "() no está en la tabla de símbolos");
             return resultado;
         }
         else
@@ -26,13 +25,12 @@
                 //std::cout << "ejecuto " << fn->función << "()" << std::endl;
                 s.ejecutaFunción();
 
-                resultado.resultado = Ñ::CategoríaResultado::ÉXITO;
+                resultado.éxito();
                 return resultado;
             }
             else
             {
-                resultado.resultado = Ñ::CategoríaResultado::ERROR;
-                resultado.mensaje = fn->función + "() está en la tabla de símbolos pero debe implementarse";
+                resultado.error(fn->función + "() está en la tabla de símbolos pero debe implementarse");
                 return resultado;
             }
         }
@@ -43,6 +41,6 @@
         return resultado;
     }
 
-    resultado.mensaje = "No se consigue interpretar el árbol de nodos";
+    resultado.error("No se consigue interpretar el árbol de nodos");
     return resultado;
 }

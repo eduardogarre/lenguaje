@@ -9,6 +9,7 @@
 #include "lexico.hpp"
 #include "nodo.hpp"
 #include "salida.hpp"
+#include "semantico.hpp"
 #include "sintaxis.hpp"
 
 
@@ -49,7 +50,7 @@ void _interpretaComando(std::string comando)
 		return;
 	}
 
-	muestraNodos(nodos);
+	Ñ::analizaSemántica(nodos);
 
 	delete nodos;
 }

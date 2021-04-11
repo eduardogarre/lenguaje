@@ -4,12 +4,12 @@
 #include <thread>
 #include <vector>
 
-#include "lexema.hpp"
-#include "lexico.hpp"
-#include "nodo.hpp"
-#include "salida.hpp"
-#include "semantico.hpp"
-#include "sintaxis.hpp"
+#include "lenguaje/lexema.hpp"
+#include "lenguaje/lexico.hpp"
+#include "lenguaje/nodo.hpp"
+#include "lenguaje/salida.hpp"
+#include "lenguaje/semantico.hpp"
+#include "lenguaje/sintaxis.hpp"
 
 
 void _muestraTexto(std::string txt)

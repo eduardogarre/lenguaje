@@ -15,8 +15,8 @@ endif()
 # add the executable
 add_executable(compilador ${CODIGO_COMPILADOR})
 
-# enlaza el ejecutable "compilador" con la biblioteca "ñ"
-target_link_libraries(compilador LINK_PUBLIC ñ)
+# enlaza el ejecutable "compilador" con la biblioteca "lenguaje"
+target_link_libraries(compilador LINK_PUBLIC lenguaje)
 
 set_target_properties(compilador PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG  "../../proyecto/"

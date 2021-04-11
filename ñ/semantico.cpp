@@ -2,38 +2,45 @@
 #include <map>
 
 #include "nodo.hpp"
+#include "resultado.hpp"
 #include "semantico.hpp"
 #include "simbolo.hpp"
 
 std::map<std::string, Ñ::Símbolo> tablaSímbolos;
 
-Ñ::Nodo* Ñ::analizaSemántica(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>& tablaSímbolos)
+Ñ::Resultado Ñ::analizaSemántica(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>& tablaSímbolos)
 {
-    //muestraNodos(nodos);
+    Ñ::Resultado resultado;
 
     if(nodos->categoría != Ñ::CategoríaNodo::NODO_AFIRMA)
     {
-        std::cout << "SEMÁNTICO :: El nodo raíz no es una asignación" << std::endl;
-        return nullptr;
+        resultado.resultado = Ñ::CategoríaResultado::ERROR;
+        resultado.mensaje = "SEMÁNTICO :: El nodo raíz no es una asignación";
+        return resultado;
     }
 
     if(nodos->ramas.size() < 1)
     {
-        std::cout << "SEMÁNTICO :: El nodo raíz está vacío" << std::endl;
-        return nullptr;
+        resultado.resultado = Ñ::CategoríaResultado::ERROR;
+        resultado.mensaje = "SEMÁNTICO :: El nodo raíz está vacío";
+        return resultado;
     }
 
     if( nodos->ramas.size() == 1)
     {
         if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
         {
-            return nodos;
+            resultado.resultado = Ñ::CategoríaResultado::ÉXITO;
+            return resultado;
         }
         else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
         {
-            return nodos;
+            resultado.resultado = Ñ::CategoríaResultado::ÉXITO;
+            return resultado;
         }
     }
 
-    return nullptr;
+    resultado.resultado = Ñ::CategoríaResultado::ERROR;
+    resultado.mensaje = "SEMÁNTICO :: No reconozco el árbol de nodos";
+    return resultado;
 }

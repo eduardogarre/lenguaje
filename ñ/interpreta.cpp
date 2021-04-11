@@ -2,9 +2,9 @@
 
 #include "interpreta.hpp"
 
-Ñ::ResultadoInterpretación Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo> tablaSímbolos)
+Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo> tablaSímbolos)
 {
-    Ñ::ResultadoInterpretación resultado;
+    Ñ::Resultado resultado;
 
     if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
@@ -13,7 +13,7 @@
 
         if ( tablaSímbolos.count(fn->función) == 0 )
         {
-            resultado.resultado = Ñ::CategoríaResultadoInterpretación::ERROR;
+            resultado.resultado = Ñ::CategoríaResultado::ERROR;
             resultado.mensaje = fn->función + "() no está en la tabla de símbolos";
             return resultado;
         }
@@ -26,12 +26,12 @@
                 //std::cout << "ejecuto " << fn->función << "()" << std::endl;
                 s.ejecutaFunción();
 
-                resultado.resultado = Ñ::CategoríaResultadoInterpretación::ÉXITO;
+                resultado.resultado = Ñ::CategoríaResultado::ÉXITO;
                 return resultado;
             }
             else
             {
-                resultado.resultado = Ñ::CategoríaResultadoInterpretación::ERROR;
+                resultado.resultado = Ñ::CategoríaResultado::ERROR;
                 resultado.mensaje = fn->función + "() está en la tabla de símbolos pero debe implementarse";
                 return resultado;
             }

@@ -72,19 +72,19 @@ void _interpretaComando(std::string comando)
 
 	std::map<std::string, Ñ::Símbolo> tablaSímbolos = creaTablaSímbolos();
 
-	Ñ::Nodo* nodos2 = Ñ::analizaSemántica(nodos, tablaSímbolos);
+	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolos);
 
-	if(nodos2 == nullptr)
+	if(resultado.resultado == Ñ::CategoríaResultado::ERROR)
 	{
-		std::cout << "Error en análisis semántico. Muestro nodos" << std::endl;
+		std::cout << resultado.mensaje << std::endl;
 		muestraNodos(nodos);
 	}
 	else
 	{
 		//std::cout << "Ejecuto nodos2" << std::endl;
 
-		auto resultado = Ñ::interpretaNodos(nodos2, tablaSímbolos);
-		if(resultado.resultado == Ñ::CategoríaResultadoInterpretación::ERROR)
+		auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
+		if(resultado.resultado == Ñ::CategoríaResultado::ERROR)
 		{
 			std::cout << resultado.mensaje << std::endl;
 		}

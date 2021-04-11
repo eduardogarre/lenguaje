@@ -20,11 +20,11 @@
         else
         {
             Ñ::Símbolo s = tablaSímbolos.at(fn->función);
-            if(s.esEjecutable())
+            if(s.esFunciónEjecutable())
             {
                 //std::cout << fn->función << "() está en la tabla de símbolos y es ejecutable" << std::endl;
                 //std::cout << "ejecuto " << fn->función << "()" << std::endl;
-                s.ejecuta();
+                s.ejecutaFunción();
 
                 resultado.resultado = Ñ::CategoríaResultadoInterpretación::ÉXITO;
                 return resultado;
@@ -39,6 +39,7 @@
     }
     else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
     {
+        muestraNodos(nodos);
         return resultado;
     }
 

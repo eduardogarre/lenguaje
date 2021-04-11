@@ -4,13 +4,7 @@
 #include <thread>
 #include <vector>
 
-#include "ñ/lexema.hpp"
-#include "ñ/lexico.hpp"
-#include "ñ/nodo.hpp"
-#include "ñ/salida.hpp"
-#include "ñ/semantico.hpp"
-#include "ñ/sintaxis.hpp"
-
+#include "ñ/ñ.hpp"
 
 void _muestraTexto(std::string txt)
 {

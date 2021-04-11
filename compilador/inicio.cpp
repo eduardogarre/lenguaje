@@ -4,7 +4,6 @@
 #include <thread>
 #include <vector>
 
-#include "apoyo.hpp"
 #include "lexema.hpp"
 #include "lexico.hpp"
 #include "nodo.hpp"

@@ -6,6 +6,7 @@
 {
     _categoría = CategoríaSímbolo::VACÍO;
     _ejecutable = false;
+    _implementada = false;
 }
 
 Ñ::Símbolo::~Símbolo()
@@ -21,6 +22,11 @@ bool Ñ::Símbolo::esFunción()
 bool Ñ::Símbolo::esFunciónEjecutable()
 {
     return _ejecutable;
+}
+
+bool Ñ::Símbolo::esFunciónImplementada()
+{
+    return _implementada;
 }
 
 bool Ñ::Símbolo::esVariable()
@@ -60,4 +66,28 @@ void Ñ::Símbolo::borraEjecución()
 {
     _ejecutable = false;
     _ejecuta = nullptr;
+}
+
+Ñ::Nodo* Ñ::Símbolo::implementación()
+{
+    if(_implementada)
+    {
+        return _implementación;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+void Ñ::Símbolo::implementación(Ñ::Nodo* impl)
+{
+    _implementada = true;
+    _implementación = impl;
+}
+
+void Ñ::Símbolo::borraImplementación()
+{
+    _implementada = false;
+    _implementación = nullptr;
 }

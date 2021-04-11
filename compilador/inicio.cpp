@@ -47,7 +47,7 @@ std::map<std::string, Ñ::Símbolo> creaTablaSímbolos()
 	return tablaSímbolos;
 }
 
-void _interpretaComando(std::string comando)
+void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>& tablaSímbolos)
 {
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
@@ -69,8 +69,6 @@ void _interpretaComando(std::string comando)
 		Ñ::errorConsola(u8"Error durante el análisis sintáctico, comando incorrecto.");
 		return;
 	}
-
-	std::map<std::string, Ñ::Símbolo> tablaSímbolos = creaTablaSímbolos();
 
 	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolos);
 
@@ -97,10 +95,12 @@ void _interpretaComando(std::string comando)
 
 int main()
 {
+	std::map<std::string, Ñ::Símbolo> tablaSímbolos = creaTablaSímbolos();
+
 	while (EJECUTA_INTÉRPRETE)
 	{
 		std::string comando = _esperaComando();
-		_interpretaComando(comando);
+		_interpretaComando(comando, tablaSímbolos);
 
 		std::this_thread::yield();
 	}

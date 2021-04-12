@@ -56,15 +56,16 @@ void Ñ::Símbolo::ejecutaFunción()
 {
     if(_categoría == CategoríaSímbolo::FUNCIÓN && _ejecutable && _ejecuta)
     {
-        _ejecuta();
+        _ejecuta(_arg);
     }
 }
 
-void Ñ::Símbolo::añadeEjecución(void (*fn)())
+void Ñ::Símbolo::añadeEjecución(void (*fn)(void* arg), void* arg)
 {
     _categoría = CategoríaSímbolo::FUNCIÓN;
     _ejecutable = true;
     _ejecuta = fn;
+    _arg = arg;
 }
 
 void Ñ::Símbolo::borraEjecución()

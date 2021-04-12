@@ -9,5 +9,5 @@
 
 namespace Ñ
 {
-    Ñ::Resultado analizaSemántica(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>& tablaSímbolos);
+    Ñ::Resultado analizaSemántica(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>* tablaSímbolos);
 }

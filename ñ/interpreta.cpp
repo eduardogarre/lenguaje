@@ -2,14 +2,14 @@
 
 #include "interpreta.hpp"
 
-Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>& tablaSímbolos)
+Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
     if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
         Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos->ramas[0]);
-        Ñ::Símbolo s = tablaSímbolos.at(fn->función);
+        Ñ::Símbolo s = tablaSímbolos->at(fn->función);
         
         s.ejecutaFunción();
         
@@ -27,7 +27,7 @@
         // Añado la variable a la tabla de símbolos
         Ñ::Símbolo s;
         s.declaraVariable(tipo);
-        tablaSímbolos[nombre] = s;
+        (*tablaSímbolos)[nombre] = s;
         
         resultado.éxito();
         return resultado;

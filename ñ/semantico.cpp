@@ -8,7 +8,7 @@
 
 std::map<std::string, Ñ::Símbolo> tablaSímbolos;
 
-Ñ::Resultado Ñ::analizaSemántica(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>& tablaSímbolos)
+Ñ::Resultado Ñ::analizaSemántica(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
@@ -30,14 +30,14 @@ std::map<std::string, Ñ::Símbolo> tablaSímbolos;
         {
             Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos->ramas[0]);
             
-            if( tablaSímbolos.count(fn->función) == 0 )
+            if( tablaSímbolos->count(fn->función) == 0 )
             {
                 resultado.error("SEMÁNTICO :: " + fn->función + "() no está en la tabla de símbolos");
                 return resultado;
             }
             else
             {
-                Ñ::Símbolo s = tablaSímbolos.at(fn->función);
+                Ñ::Símbolo s = tablaSímbolos->at(fn->función);
                 if(!s.esFunciónEjecutable() && !s.esFunciónImplementada())
                 {
                     resultado.error("SEMÁNTICO :: " + fn->función + "() está en la tabla de símbolos pero sin implementación");
@@ -52,7 +52,7 @@ std::map<std::string, Ñ::Símbolo> tablaSímbolos;
         {
             auto declvar = nodos->ramas[0];
             std::string nombre = ((Ñ::DeclaraVariable*)declvar)->variable;
-            if(tablaSímbolos.count(nombre) > 0 )
+            if(tablaSímbolos->count(nombre) > 0 )
             {
                 resultado.error("SEMÁNTICO :: El identificador \"" + nombre + "\" ya se había declarado previamente");
             }

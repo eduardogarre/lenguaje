@@ -22,32 +22,43 @@ std::string _esperaComando()
 	return comando;
 }
 
-void apaga()
+void apaga(void* arg)
 {
 	EJECUTA_INTÉRPRETE = false;
 }
 
-void escribe()
+void escribe(void* arg)
 {
     std::cout << "hola" << std::endl;
 }
 
-std::map<std::string, Ñ::Símbolo> creaTablaSímbolos()
+void tabla(void* arg)
 {
-    std::map<std::string, Ñ::Símbolo> tablaSímbolos = *(new std::map<std::string, Ñ::Símbolo>());
+	auto tablaSímbolos = (std::map<std::string, Ñ::Símbolo>*)arg;
+	Ñ::muestraTablaSímbolos(*tablaSímbolos);
+}
 
+std::map<std::string, Ñ::Símbolo>* creaTablaSímbolos()
+{
+	return new std::map<std::string, Ñ::Símbolo>();
+}
+
+void llenaTablaSímbolos(std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
+{
     Ñ::Símbolo s1;
     s1.añadeEjecución(escribe);
-    tablaSímbolos["escribe"] = s1;
+    (*tablaSímbolos)["escribe"] = s1;
 
 	Ñ::Símbolo s2;
 	s2.añadeEjecución(apaga);
-	tablaSímbolos["apaga"] = s2;
+	(*tablaSímbolos)["apaga"] = s2;
 
-	return tablaSímbolos;
+	Ñ::Símbolo s3;
+	s3.añadeEjecución(tabla, tablaSímbolos);
+	(*tablaSímbolos)["tabla"] = s3;
 }
 
-void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>& tablaSímbolos)
+void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
 {
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
@@ -88,14 +99,15 @@ void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>
 		}
 	}
 
-	Ñ::muestraTablaSímbolos(tablaSímbolos);
+	//Ñ::muestraTablaSímbolos(tablaSímbolos);
 
 	delete nodos;
 }
 
 int main()
 {
-	std::map<std::string, Ñ::Símbolo> tablaSímbolos = creaTablaSímbolos();
+	std::map<std::string, Ñ::Símbolo>* tablaSímbolos = creaTablaSímbolos();
+	llenaTablaSímbolos(tablaSímbolos);
 
 	while (EJECUTA_INTÉRPRETE)
 	{

@@ -17,6 +17,11 @@ void imprimeAjuste()
 	categoría = Ñ::CategoríaNodo::NODO_VACÍO;
 }
 
+Ñ::Nodo::Nodo(const Ñ::Nodo& nodo)
+{
+	categoría = Ñ::CategoríaNodo::NODO_VACÍO;
+}
+
 Ñ::Nodo::~Nodo()
 {
 	for(uint32_t i = 0; i < ramas.size(); i++)
@@ -40,6 +45,11 @@ void Ñ::Nodo::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_LITERAL;
 }
 
+Ñ::Literal::Literal(const Ñ::Literal& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_LITERAL;
+}
+
 Ñ::Literal::~Literal() {}
 
 void Ñ::Literal::muestra()
@@ -53,6 +63,11 @@ void Ñ::Literal::muestra()
 }
 
 Ñ::Tipo::Tipo() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_TIPO;
+}
+
+Ñ::Tipo::Tipo(const Ñ::Tipo& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_TIPO;
 }
@@ -86,6 +101,11 @@ void Ñ::Tipo::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_IDENTIFICADOR;
 }
 
+Ñ::Identificador::Identificador(const Ñ::Identificador& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_IDENTIFICADOR;
+}
+
 Ñ::Identificador::~Identificador() {}
 
 void Ñ::Identificador::muestra()
@@ -99,6 +119,11 @@ void Ñ::Identificador::muestra()
 }
 
 Ñ::Expresión::Expresión() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
+}
+
+Ñ::Expresión::Expresión(const Ñ::Expresión& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
 }
@@ -121,6 +146,11 @@ void Ñ::Expresión::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
 }
 
+Ñ::Término::Término(const Ñ::Término& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
+}
+
 Ñ::Término::~Término() {}
 
 void Ñ::Término::muestra()
@@ -135,6 +165,11 @@ void Ñ::Término::muestra()
 }
 
 Ñ::Factor::Factor() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
+}
+
+Ñ::Factor::Factor(const Ñ::Factor& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
 }
@@ -157,6 +192,11 @@ void Ñ::Factor::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE;
 }
 
+Ñ::DeclaraVariable::DeclaraVariable(const Ñ::DeclaraVariable& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE;
+}
+
 Ñ::DeclaraVariable::~DeclaraVariable() {}
 
 void Ñ::DeclaraVariable::muestra()
@@ -171,6 +211,11 @@ void Ñ::DeclaraVariable::muestra()
 }
 
 Ñ::Asigna::Asigna() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_ASIGNA;
+}
+
+Ñ::Asigna::Asigna(const Ñ::Asigna& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_ASIGNA;
 }
@@ -192,6 +237,11 @@ void Ñ::Asigna::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN;
 }
 
+Ñ::LlamaFunción::LlamaFunción(const Ñ::LlamaFunción& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN;
+}
+
 Ñ::LlamaFunción::~LlamaFunción() {}
 
 void Ñ::LlamaFunción::muestra()
@@ -209,6 +259,11 @@ void Ñ::LlamaFunción::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_AFIRMA;
 }
 
+Ñ::Afirma::Afirma(const Ñ::Afirma& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_AFIRMA;
+}
+
 Ñ::Afirma::~Afirma() {}
 
 void Ñ::Afirma::muestra()
@@ -221,7 +276,15 @@ void Ñ::Afirma::muestra()
 	}
 }
 
+void Ñ::borraNodos(Ñ::Nodo* nodos)
+{
+	for(auto rama : nodos->ramas)
+	{
+		Ñ::borraNodos(rama);
+	}
 
+	delete nodos;
+}
 
 void Ñ::muestraNodos(Ñ::Nodo* nodo)
 {

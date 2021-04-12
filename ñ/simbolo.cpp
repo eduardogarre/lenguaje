@@ -7,6 +7,8 @@
     _categoría = CategoríaSímbolo::VACÍO;
     _ejecutable = false;
     _implementada = false;
+
+    _implementación = nullptr;
 }
 
 Ñ::Símbolo::~Símbolo()
@@ -44,7 +46,10 @@ void Ñ::Símbolo::declaraVariable(Ñ::Nodo* tipo)
     }
 
     _categoría = CategoríaSímbolo::VARIABLE;
-    _tipo = tipo;
+    Ñ::Tipo* t = new Ñ::Tipo();
+    t->tipo = ((Ñ::Tipo*)tipo)->tipo;
+    t->vector = ((Ñ::Tipo*)tipo)->vector;
+    _tipo = (Ñ::Nodo*)(t);
 }
 
 void Ñ::Símbolo::ejecutaFunción()

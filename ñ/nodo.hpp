@@ -34,6 +34,7 @@ namespace Ñ
         std::vector<Ñ::Nodo*> ramas;
 
         Nodo();
+        Nodo(const Ñ::Nodo& nodo);
         ~Nodo();
 
         void muestra();
@@ -45,6 +46,7 @@ namespace Ñ
         std::string dato;
 
         Literal();
+        Literal(const Ñ::Literal& nodo);
         ~Literal();
 
         void muestra();
@@ -56,6 +58,7 @@ namespace Ñ
         std::string id;
 
         Identificador();
+        Identificador(const Ñ::Identificador& nodo);
         ~Identificador();
 
         void muestra();
@@ -68,6 +71,7 @@ namespace Ñ
         bool vector;
 
         Tipo();
+        Tipo(const Ñ::Tipo& nodo);
         ~Tipo();
 
         void muestra();
@@ -79,6 +83,7 @@ namespace Ñ
         std::string operación;
 
         Expresión();
+        Expresión(const Ñ::Expresión& nodo);
         ~Expresión();
 
         void muestra();
@@ -90,6 +95,7 @@ namespace Ñ
         std::string operación;
 
         Término();
+        Término(const Ñ::Término& nodo);
         ~Término();
 
         void muestra();
@@ -101,6 +107,7 @@ namespace Ñ
         std::string factor;
 
         Factor();
+        Factor(const Ñ::Factor& nodo);
         ~Factor();
 
         void muestra();
@@ -112,6 +119,7 @@ namespace Ñ
         std::string variable;
 
         DeclaraVariable();
+        DeclaraVariable(const Ñ::DeclaraVariable& nodo);
         ~DeclaraVariable();
 
         void muestra();
@@ -121,6 +129,7 @@ namespace Ñ
     {
     public:
         Asigna();
+        Asigna(const Ñ::Asigna& nodo);
         ~Asigna();
 
         void muestra();
@@ -132,6 +141,7 @@ namespace Ñ
         std::string función;
 
         LlamaFunción();
+        LlamaFunción(const Ñ::LlamaFunción& nodo);
         ~LlamaFunción();
 
         void muestra();
@@ -142,10 +152,12 @@ namespace Ñ
     public:
 
         Afirma();
+        Afirma(const Ñ::Afirma& nodo);
         ~Afirma();
 
         void muestra();
     };
-    
+
+    void borraNodos(Ñ::Nodo* nodos);
     void muestraNodos(Nodo* nodo);
 }

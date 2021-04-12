@@ -100,6 +100,10 @@ int main()
 	while (EJECUTA_INTÉRPRETE)
 	{
 		std::string comando = _esperaComando();
+		if(comando.size() == 0)
+		{
+			continue;
+		}
 		_interpretaComando(comando, tablaSímbolos);
 
 		std::this_thread::yield();

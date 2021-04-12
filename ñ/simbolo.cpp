@@ -105,7 +105,7 @@ void Ñ::Símbolo::muestra()
     }
     else if(_categoría == Ñ::CategoríaSímbolo::VARIABLE)
     {
-        std::cout << "[VARIABLE]" << std::endl << " ";
+        std::cout << "[VARIABLE] ";
         muestraNodos(_tipo);
     }
     else if(_categoría == Ñ::CategoríaSímbolo::FUNCIÓN)

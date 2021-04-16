@@ -20,6 +20,8 @@ namespace Ñ
         NODO_DECLARA_VARIABLE,
         NODO_ASIGNA,
         NODO_DECLARA_Y_ASIGNA_VARIABLE,
+        NODO_ARGUMENTO,
+        NODO_ARGUMENTOS,
         NODO_DECLARA_FUNCIÓN,
         NODO_DEFINE_FUNCIÓN,
         NODO_LLAMA_FUNCIÓN,
@@ -141,6 +143,26 @@ namespace Ñ
         Asigna();
         Asigna(const Ñ::Asigna& nodo);
         ~Asigna();
+
+        void muestra();
+    };
+
+    class Argumento : Nodo
+    {
+    public:
+        Argumento();
+        Argumento(const Ñ::Argumento& nodo);
+        ~Argumento();
+
+        void muestra();
+    };
+
+    class Argumentos : Nodo
+    {
+    public:
+        Argumentos();
+        Argumentos(const Ñ::Argumentos& nodo);
+        ~Argumentos();
 
         void muestra();
     };

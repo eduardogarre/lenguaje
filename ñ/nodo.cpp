@@ -232,6 +232,50 @@ void Ñ::Asigna::muestra()
 	}
 }
 
+Ñ::Argumentos::Argumentos() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTOS;
+}
+
+Ñ::Argumentos::Argumentos(const Ñ::Argumentos& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTOS;
+}
+
+Ñ::Argumentos::~Argumentos() {}
+
+void Ñ::Argumentos::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_ARGUMENTOS) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::Argumento::Argumento() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTO;
+}
+
+Ñ::Argumento::Argumento(const Ñ::Argumento& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTO;
+}
+
+Ñ::Argumento::~Argumento() {}
+
+void Ñ::Argumento::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_ARGUMENTO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 Ñ::LlamaFunción::LlamaFunción() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN;
@@ -325,6 +369,14 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
 	{
 		((Ñ::DeclaraVariable*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTO)
+	{
+		((Ñ::Argumento*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
+	{
+		((Ñ::Argumentos*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
 	{

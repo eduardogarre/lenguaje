@@ -23,6 +23,8 @@ bool notación(std::string carácter);
 Ñ::Nodo* ladoDerechoAsignación();
 Ñ::Nodo* declaraVariable();
 Ñ::Nodo* asigna();
+Ñ::Nodo* argumento();
+Ñ::Nodo* argumentos();
 Ñ::Nodo* llamaFunción();
 Ñ::Nodo* expresión();
 Ñ::Nodo* Ñ::analizaSintaxis(std::vector<Ñ::Lexema*> _lexemas);
@@ -437,6 +439,47 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Nodo* argumento()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		return ladoDerechoAsignación();
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* argumentos()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Argumentos* args = nullptr;
+
+		if(Ñ::Nodo* arg1 = argumento())
+		{
+			args = new Ñ::Argumentos();
+
+			((Ñ::Nodo*)args)->ramas.push_back(arg1);
+
+			while(notación(","))
+			{
+				Ñ::Nodo* arg2 = argumento();
+				((Ñ::Nodo*)args)->ramas.push_back(arg2);
+			}
+
+			return (Ñ::Nodo*)args;
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* llamaFunción()
 {
 	uint32_t c = cursor;
@@ -462,15 +505,23 @@ bool notación(std::string carácter)
 			cursor = c;
 			return nullptr;
 		}
+
+		Ñ::Nodo* args = argumentos();
 		
 		if(!notación(")"))
 		{
+			if(args != nullptr)
+			{
+				delete args;
+			}
+
 			cursor = c;
 			return nullptr;
 		}
 		
 		Ñ::LlamaFunción* fn = new Ñ::LlamaFunción();
 		fn->función = función;
+		((Ñ::Nodo*)fn)->ramas.push_back(args);
 		return (Ñ::Nodo*)fn;
 	}
 

@@ -6,6 +6,9 @@
 
 #include "ñ/ñ.hpp"
 
+// Extiendo nodos para pasar argumentos
+#include "nodos.hpp"
+
 bool EJECUTA_INTÉRPRETE = true;
 
 void _muestraTexto(std::string txt)
@@ -22,20 +25,42 @@ std::string _esperaComando()
 	return comando;
 }
 
-void apaga(void* arg)
+void apaga(Ñ::Argumentos* args)
 {
 	EJECUTA_INTÉRPRETE = false;
 }
 
-void escribe(void* arg)
+void escribe(Ñ::Argumentos* args)
 {
     std::cout << "hola" << std::endl;
 }
 
-void tabla(void* arg)
+void tabla(Ñ::Argumentos* args)
 {
-	auto tablaSímbolos = (std::map<std::string, Ñ::Símbolo>*)arg;
-	Ñ::muestraTablaSímbolos(*tablaSímbolos);
+	if(args == nullptr)
+	{
+		return;
+	}
+	else if(((Ñ::Nodo*)args)->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
+	{
+		if(((Ñ::Nodo*)args)->ramas.size() == 0)
+		{
+			return;
+		}
+		else if(((Ñ::Nodo*)args)->ramas.size() == 1)
+		{
+			Ñ::Nodo* arg = ((Ñ::Nodo*)args)->ramas[0];
+			if(arg == nullptr)
+			{
+				return;
+			}
+			else if(arg->categoría == Ñ::CategoríaNodo::NODO_EXPANDIDO)
+			{
+				auto tablaSímbolos = ((NTablaSímbolos*)arg)->tablaSímbolos;
+				Ñ::muestraTablaSímbolos(*tablaSímbolos);
+			}
+		}
+	}
 }
 
 std::map<std::string, Ñ::Símbolo>* creaTablaSímbolos()
@@ -45,16 +70,22 @@ std::map<std::string, Ñ::Símbolo>* creaTablaSímbolos()
 
 void llenaTablaSímbolos(std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
 {
+	// Añado una función sin argumentos
     Ñ::Símbolo s1;
     s1.añadeEjecución(escribe);
     (*tablaSímbolos)["escribe"] = s1;
 
+	// Añado una función sin argumentos
 	Ñ::Símbolo s2;
 	s2.añadeEjecución(apaga);
 	(*tablaSímbolos)["apaga"] = s2;
 
+	// Añado una función con un único argumento, ntabla
 	Ñ::Símbolo s3;
-	s3.añadeEjecución(tabla, tablaSímbolos);
+	Ñ::Argumentos* args = new Ñ::Argumentos();
+	NTablaSímbolos* ntabla = new NTablaSímbolos(tablaSímbolos);
+	((Ñ::Nodo*)args)->ramas.push_back((Ñ::Nodo*)ntabla);
+	s3.añadeEjecución(tabla, (Ñ::Nodo*)args);
 	(*tablaSímbolos)["tabla"] = s3;
 }
 

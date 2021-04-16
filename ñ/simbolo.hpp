@@ -29,7 +29,7 @@ namespace Ñ
         void declaraVariable(Ñ::Nodo* tipo);
 
         void ejecutaFunción();
-        void añadeEjecución(void (*fn)(void* arg), void* arg = nullptr);
+        void añadeEjecución(void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args = nullptr);
         void borraEjecución();
 
         Ñ::Nodo* implementación();
@@ -46,8 +46,8 @@ namespace Ñ
         Ñ::Nodo* _tipo;
         Ñ::Nodo* _implementación;
 
-        void (*_ejecuta)(void* arg);
-        void * _arg;
+        void (*_ejecuta)(Ñ::Argumentos* args);
+        Ñ::Argumentos * _args;
     };
 
     void muestraTablaSímbolos(std::map<std::string, Ñ::Símbolo> tablaSímbolos);

@@ -9,6 +9,8 @@ namespace Ñ
     enum CategoríaNodo {
         NODO_VACÍO,
 
+        NODO_EXPANDIDO,
+
         NODO_LITERAL,
         NODO_TIPO,
         NODO_IDENTIFICADOR,

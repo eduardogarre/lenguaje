@@ -474,6 +474,8 @@ bool notación(std::string carácter)
 
 			return (Ñ::Nodo*)args;
 		}
+
+		return nullptr;
 	}
 
 	cursor = c;
@@ -487,6 +489,7 @@ bool notación(std::string carácter)
 	if(cursor < lexemas.size())
 	{
 		std::string función;
+		Ñ::Nodo* args = nullptr;
 
 		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
@@ -506,19 +509,27 @@ bool notación(std::string carácter)
 			return nullptr;
 		}
 
-		Ñ::Nodo* args = argumentos();
-		
 		if(!notación(")"))
 		{
-			if(args != nullptr)
-			{
-				delete args;
-			}
+			args = argumentos();
 
-			cursor = c;
-			return nullptr;
+			std::cout << "CURSOR INTERNO: " << cursor << std::endl;
+
+			if(args == nullptr)
+			{
+				cursor = c;
+				return nullptr;
+			}
+			else
+			{
+				if(!notación(")"))
+				{
+					cursor = c;
+					return nullptr;
+				}
+			}
 		}
-		
+
 		Ñ::LlamaFunción* fn = new Ñ::LlamaFunción();
 		fn->función = función;
 		((Ñ::Nodo*)fn)->ramas.push_back(args);

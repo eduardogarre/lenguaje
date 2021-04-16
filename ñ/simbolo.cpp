@@ -56,16 +56,24 @@ void Ñ::Símbolo::ejecutaFunción()
 {
     if(_categoría == CategoríaSímbolo::FUNCIÓN && _ejecutable && _ejecuta)
     {
-        _ejecuta(_arg);
+        _ejecuta(_args);
     }
 }
 
-void Ñ::Símbolo::añadeEjecución(void (*fn)(void* arg), void* arg)
+void Ñ::Símbolo::añadeEjecución(void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args)
 {
     _categoría = CategoríaSímbolo::FUNCIÓN;
     _ejecutable = true;
     _ejecuta = fn;
-    _arg = arg;
+    
+    if(args == nullptr)
+    {
+        _args = nullptr;
+    }
+    else if(args->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
+    {
+        _args = (Ñ::Argumentos*)args;
+    }
 }
 
 void Ñ::Símbolo::borraEjecución()

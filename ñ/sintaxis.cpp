@@ -219,7 +219,6 @@ bool notación(std::string carácter)
 		}
 		else if(notación("("))
 		{
-			Ñ::Factor* fac;
 			Ñ::Nodo* lda;
 
 			if(lda = ladoDerechoAsignación())

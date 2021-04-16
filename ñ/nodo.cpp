@@ -96,28 +96,6 @@ void Ñ::Tipo::muestra()
 	}
 }
 
-Ñ::LadoDerechoAsignación::LadoDerechoAsignación() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
-}
-
-Ñ::LadoDerechoAsignación::LadoDerechoAsignación(const Ñ::LadoDerechoAsignación& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
-}
-
-Ñ::LadoDerechoAsignación::~LadoDerechoAsignación() {}
-
-void Ñ::LadoDerechoAsignación::muestra()
-{
-	imprimeAjuste();
-	std::cout << "(NODO_LADO_DERECHO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
-	for(auto rama : ramas)
-	{
-		muestraNodos(rama);
-	}
-}
-
 Ñ::Identificador::Identificador() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_IDENTIFICADOR;

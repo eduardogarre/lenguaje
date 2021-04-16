@@ -13,7 +13,6 @@ namespace Ñ
         NODO_TIPO,
         NODO_IDENTIFICADOR,
 
-        NODO_LADO_DERECHO_ASIGNACIÓN,
         NODO_OP_SUMA_RESTA,
         NODO_OP_MULTIPLICACIÓN_DIVISIÓN,
         NODO_FACTOR,

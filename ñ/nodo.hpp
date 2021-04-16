@@ -13,8 +13,9 @@ namespace Ñ
         NODO_TIPO,
         NODO_IDENTIFICADOR,
 
-        NODO_EXPRESIÓN,
-        NODO_TÉRMINO,
+        NODO_LADO_DERECHO_ASIGNACIÓN,
+        NODO_OP_SUMA_RESTA,
+        NODO_OP_MULTIPLICACIÓN_DIVISIÓN,
         NODO_FACTOR,
 
         NODO_DECLARA_VARIABLE,
@@ -24,7 +25,7 @@ namespace Ñ
         NODO_DEFINE_FUNCIÓN,
         NODO_LLAMA_FUNCIÓN,
 
-        NODO_AFIRMA
+        NODO_EXPRESIÓN
     };
 
     class Nodo
@@ -77,26 +78,36 @@ namespace Ñ
         void muestra();
     };
 
-    class Expresión : Nodo
+    class LadoDerechoAsignación : Nodo
     {
     public:
-        std::string operación;
-
-        Expresión();
-        Expresión(const Ñ::Expresión& nodo);
-        ~Expresión();
+        LadoDerechoAsignación();
+        LadoDerechoAsignación(const Ñ::LadoDerechoAsignación& nodo);
+        ~LadoDerechoAsignación();
 
         void muestra();
     };
 
-    class Término : Nodo
+    class OpSumaResta : Nodo
     {
     public:
         std::string operación;
 
-        Término();
-        Término(const Ñ::Término& nodo);
-        ~Término();
+        OpSumaResta();
+        OpSumaResta(const Ñ::OpSumaResta& nodo);
+        ~OpSumaResta();
+
+        void muestra();
+    };
+
+    class OpMultiplicaciónDivisión : Nodo
+    {
+    public:
+        std::string operación;
+
+        OpMultiplicaciónDivisión();
+        OpMultiplicaciónDivisión(const Ñ::OpMultiplicaciónDivisión& nodo);
+        ~OpMultiplicaciónDivisión();
 
         void muestra();
     };
@@ -147,13 +158,13 @@ namespace Ñ
         void muestra();
     };
 
-    class Afirma : Nodo
+    class Expresión : Nodo
     {
     public:
 
-        Afirma();
-        Afirma(const Ñ::Afirma& nodo);
-        ~Afirma();
+        Expresión();
+        Expresión(const Ñ::Expresión& nodo);
+        ~Expresión();
 
         void muestra();
     };

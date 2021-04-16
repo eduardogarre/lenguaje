@@ -96,6 +96,28 @@ void Ñ::Tipo::muestra()
 	}
 }
 
+Ñ::LadoDerechoAsignación::LadoDerechoAsignación() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
+}
+
+Ñ::LadoDerechoAsignación::LadoDerechoAsignación(const Ñ::LadoDerechoAsignación& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
+}
+
+Ñ::LadoDerechoAsignación::~LadoDerechoAsignación() {}
+
+void Ñ::LadoDerechoAsignación::muestra()
+{
+	imprimeAjuste();
+	std::cout << "(NODO_LADO_DERECHO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 Ñ::Identificador::Identificador() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_IDENTIFICADOR;
@@ -118,22 +140,22 @@ void Ñ::Identificador::muestra()
 	}
 }
 
-Ñ::Expresión::Expresión() : Ñ::Nodo()
+Ñ::OpSumaResta::OpSumaResta() : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
+	categoría = Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA;
 }
 
-Ñ::Expresión::Expresión(const Ñ::Expresión& nodo) : Ñ::Nodo()
+Ñ::OpSumaResta::OpSumaResta(const Ñ::OpSumaResta& nodo) : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
+	categoría = Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA;
 }
 
-Ñ::Expresión::~Expresión() {}
+Ñ::OpSumaResta::~OpSumaResta() {}
 
-void Ñ::Expresión::muestra()
+void Ñ::OpSumaResta::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_EXPRESIÓN) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_OP_SUMA_RESTA) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos, los términos
 	for(auto rama : ramas)
 	{
@@ -141,22 +163,22 @@ void Ñ::Expresión::muestra()
 	}
 }
 
-Ñ::Término::Término() : Ñ::Nodo()
+Ñ::OpMultiplicaciónDivisión::OpMultiplicaciónDivisión() : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
+	categoría = Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN;
 }
 
-Ñ::Término::Término(const Ñ::Término& nodo) : Ñ::Nodo()
+Ñ::OpMultiplicaciónDivisión::OpMultiplicaciónDivisión(const Ñ::OpMultiplicaciónDivisión& nodo) : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
+	categoría = Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN;
 }
 
-Ñ::Término::~Término() {}
+Ñ::OpMultiplicaciónDivisión::~OpMultiplicaciónDivisión() {}
 
-void Ñ::Término::muestra()
+void Ñ::OpMultiplicaciónDivisión::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_TÉRMINO) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_OP_MULTIPLICACIÓN_DIVISIÓN) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos, los factores
 	for(auto rama : ramas)
 	{
@@ -254,22 +276,22 @@ void Ñ::LlamaFunción::muestra()
 	}
 }
 
-Ñ::Afirma::Afirma() : Ñ::Nodo()
+Ñ::Expresión::Expresión() : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_AFIRMA;
+	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
 }
 
-Ñ::Afirma::Afirma(const Ñ::Afirma& nodo) : Ñ::Nodo()
+Ñ::Expresión::Expresión(const Ñ::Expresión& nodo) : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_AFIRMA;
+	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
 }
 
-Ñ::Afirma::~Afirma() {}
+Ñ::Expresión::~Expresión() {}
 
-void Ñ::Afirma::muestra()
+void Ñ::Expresión::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_AFIRMA) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_EXPRESIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
@@ -310,13 +332,13 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::Factor*)nodo)->muestra();
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TÉRMINO)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
 	{
-		((Ñ::Término*)nodo)->muestra();
+		((Ñ::OpMultiplicaciónDivisión*)nodo)->muestra();
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
 	{
-		((Ñ::Expresión*)nodo)->muestra();
+		((Ñ::OpSumaResta*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
 	{
@@ -330,9 +352,9 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::LlamaFunción*)nodo)->muestra();
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_AFIRMA)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
 	{
-		((Ñ::Afirma*)nodo)->muestra();
+		((Ñ::Expresión*)nodo)->muestra();
 	}
 
 	ajuste--;

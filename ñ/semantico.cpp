@@ -12,7 +12,7 @@ std::map<std::string, Ñ::Símbolo> tablaSímbolos;
 {
     Ñ::Resultado resultado;
 
-    if(nodos->categoría != Ñ::CategoríaNodo::NODO_AFIRMA)
+    if(nodos->categoría != Ñ::CategoríaNodo::NODO_EXPRESIÓN)
     {
         resultado.error("SEMÁNTICO :: El nodo raíz no es una asignación");
         return resultado;

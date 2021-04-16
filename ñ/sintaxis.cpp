@@ -13,16 +13,17 @@ uint32_t cursor;
 std::vector<Ñ::Lexema*> lexemas;
 
 bool notación(std::string carácter);
-Ñ::Literal* literal();
-Ñ::Tipo* tipo();
-Ñ::Identificador* identificador();
-Ñ::Factor* factor();
-Ñ::Término* término();
-Ñ::Expresión* expresión();
-Ñ::DeclaraVariable* declaraVariable();
-Ñ::Asigna* asigna();
-Ñ::LlamaFunción* llamaFunción();
-Ñ::Afirma* afirma();
+Ñ::Nodo* literal();
+Ñ::Nodo* tipo();
+Ñ::Nodo* identificador();
+Ñ::Nodo* factor();
+Ñ::Nodo* opMultiplicaciónDivisión();
+Ñ::Nodo* opSumaResta();
+Ñ::Nodo* ladoDerechoAsignación();
+Ñ::Nodo* declaraVariable();
+Ñ::Nodo* asigna();
+Ñ::Nodo* llamaFunción();
+Ñ::Nodo* expresión();
 Ñ::Nodo* Ñ::analizaSintaxis(std::vector<Ñ::Lexema*> _lexemas);
 
 
@@ -49,7 +50,7 @@ bool notación(std::string carácter)
 	return false;
 }
 
-Ñ::Literal* literal()
+Ñ::Nodo* literal()
 {
 	//std::cout << "literal()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
@@ -63,23 +64,48 @@ bool notación(std::string carácter)
 		l = new Ñ::Literal();
 		l->dato = lexemas[cursor]->contenido;
 		cursor++;
-		return l;
+		return (Ñ::Nodo*)l;
 	}
 	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_TEXTO)
 	{
 		l = new Ñ::Literal();
 		l->dato = lexemas[cursor]->contenido;
 		cursor++;
-		return l;
+		return (Ñ::Nodo*)l;
 	}
 
 	cursor = c;
 	return nullptr;
 }
 
-Ñ::Expresión* expresión()
+Ñ::Nodo* ladoDerechoAsignación()
 {
-	//std::cout << "expresión()" << std::endl;
+	//std::cout << "opSumaResta()" << std::endl;
+	//std::cout << "cursor[" << cursor << "]" << std::endl;
+
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Nodo* op = opSumaResta();
+		
+		if(op->ramas.size() == 1)
+		{
+			return op->ramas[0];
+		}
+		else
+		{
+			return op;
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* opSumaResta()
+{
+	//std::cout << "opSumaResta()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
 
 	uint32_t c = cursor;
@@ -88,10 +114,9 @@ bool notación(std::string carácter)
 	{
 		std::string operación;
 
-		Ñ::Expresión* e;
-		Ñ::Término* t;
+		Ñ::Nodo* opMulDiv;
 
-		if(t = término())
+		if(opMulDiv = opMultiplicaciónDivisión())
 		{
 			if(notación("+"))
 			{
@@ -101,25 +126,23 @@ bool notación(std::string carácter)
 			{
 				operación = "-";
 			}
-			else
+			else // No es una operación, devuelvo opMulDiv directamente
 			{
-				e = new Ñ::Expresión();
-				((Ñ::Nodo*)e)->ramas.push_back((Ñ::Nodo*)t);
-				return e;
+				return opMulDiv;
 			}
 			
 			//std::cout << "[operación:" << operación << "]" << std::endl;
 			
-			if(Ñ::Expresión* e2 = expresión())
+			if(Ñ::Nodo* e2 = opSumaResta())
 			{
-				e = new Ñ::Expresión();
-				e->operación = operación;
-				((Ñ::Nodo*)e)->ramas.push_back((Ñ::Nodo*)(e2));
-				((Ñ::Nodo*)e)->ramas.push_back((Ñ::Nodo*)(t));
-				return e;
+				Ñ::OpSumaResta* opSumRes = new Ñ::OpSumaResta();
+				opSumRes->operación = operación;
+				((Ñ::Nodo*)opSumRes)->ramas.push_back(e2);
+				((Ñ::Nodo*)opSumRes)->ramas.push_back(opMulDiv);
+				return ((Ñ::Nodo*)opSumRes);
 			}
 
-			delete t;
+			delete opMulDiv;
 			cursor = c;
 			return nullptr;
 		}
@@ -129,9 +152,9 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Término* término()
+Ñ::Nodo* opMultiplicaciónDivisión()
 {
-	//std::cout << "término()" << std::endl;
+	//std::cout << "opMultiplicaciónDivisión()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
 
 	uint32_t c = cursor;
@@ -140,10 +163,9 @@ bool notación(std::string carácter)
 	{
 		std::string operación;
 
-		Ñ::Término* t;
-		Ñ::Factor* f;
+		Ñ::Nodo* fac;
 
-		if(f = factor())
+		if(fac = factor())
 		{
 			if(notación("*"))
 			{
@@ -153,25 +175,23 @@ bool notación(std::string carácter)
 			{
 				operación = "/";
 			}
-			else
+			else // No es una operación, devuelvo factor directamente
 			{
-				t = new Ñ::Término();
-				((Ñ::Nodo*)t)->ramas.push_back((Ñ::Nodo*)(f));
-				return t;
+				return fac;
 			}
 			
 			//std::cout << "[operación:" << operación << "]" << std::endl;
 			
-			if(Ñ::Término* t2 = término())
+			if(Ñ::Nodo* opMulDiv2 = opMultiplicaciónDivisión())
 			{
-				t = new Ñ::Término();
-				t->operación = operación;
-				((Ñ::Nodo*)t)->ramas.push_back((Ñ::Nodo*)(t2));
-				((Ñ::Nodo*)t)->ramas.push_back((Ñ::Nodo*)(f));
-				return t;
+				Ñ::OpMultiplicaciónDivisión* opMulDiv = new Ñ::OpMultiplicaciónDivisión();
+				opMulDiv->operación = operación;
+				((Ñ::Nodo*)opMulDiv)->ramas.push_back(opMulDiv2);
+				((Ñ::Nodo*)opMulDiv)->ramas.push_back(fac);
+				return ((Ñ::Nodo*)opMulDiv);
 			}
 
-			delete f;
+			delete fac;
 			cursor = c;
 			return nullptr;
 		}
@@ -181,7 +201,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Factor* factor()
+Ñ::Nodo* factor()
 {
 	//std::cout << "factor()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
@@ -192,30 +212,26 @@ bool notación(std::string carácter)
 	{
 		std::string factor;
 
-		if(Ñ::Literal* l = literal())
+		if(Ñ::Nodo* lit = literal())
 		{
 			//std::cout << "[subexpresión]" << std::endl;
-			Ñ::Factor* f = new Ñ::Factor();
-			((Ñ::Nodo*)f)->ramas.push_back((Ñ::Nodo*)(l));
-			return f;
+			return lit;
 		}
 		else if(notación("("))
 		{
-			Ñ::Factor* f;
-			Ñ::Expresión* e;
+			Ñ::Factor* fac;
+			Ñ::Nodo* lda;
 
-			if(e = expresión())
+			if(lda = ladoDerechoAsignación())
 			{
 				if(notación(")"))
 				{
 					//std::cout << "[subexpresión]" << std::endl;
-					f = new Ñ::Factor();
-					((Ñ::Nodo*)f)->ramas.push_back((Ñ::Nodo*)(e));
-					return f;
+					return lda;
 				}
 				else
 				{
-					delete e;
+					delete lda;
 					cursor = c;
 					return nullptr;
 				}
@@ -224,19 +240,15 @@ bool notación(std::string carácter)
 			cursor = c;
 			return nullptr;
 		}
-		else if(Ñ::LlamaFunción* fn = llamaFunción())
+		else if(Ñ::Nodo* fn = llamaFunción())
 		{
 			//std::cout << "[subexpresión]" << std::endl;
-			Ñ::Factor* f = new Ñ::Factor();
-			((Ñ::Nodo*)f)->ramas.push_back((Ñ::Nodo*)(fn));
-			return f;
+			return fn;
 		}
-		else if(Ñ::Identificador* id = identificador())
+		else if(Ñ::Nodo* id = identificador())
 		{
 			//std::cout << "[subexpresión]" << std::endl;
-			Ñ::Factor* f = new Ñ::Factor();
-			((Ñ::Nodo*)f)->ramas.push_back((Ñ::Nodo*)(id));
-			return f;
+			return id;
 		}
 		else
 		{
@@ -249,7 +261,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Identificador* identificador()
+Ñ::Nodo* identificador()
 {
 	//std::cout << "tipo()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
@@ -265,7 +277,7 @@ bool notación(std::string carácter)
 			Ñ::Identificador* id = new Ñ::Identificador();
 			id->id = lexemas[cursor]->contenido;
 			cursor++;
-			return id;
+			return (Ñ::Nodo*)id;
 		}
 	}
 
@@ -273,7 +285,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Tipo* tipo()
+Ñ::Nodo* tipo()
 {
 	//std::cout << "tipo()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
@@ -335,7 +347,7 @@ bool notación(std::string carácter)
 				Ñ::Tipo* t = new Ñ::Tipo();
 				t->tipo = tipo;
 				t->vector = true;
-				return t;
+				return (Ñ::Nodo*)t;
 			}
 			else
 			{
@@ -350,14 +362,14 @@ bool notación(std::string carácter)
 		Ñ::Tipo* t = new Ñ::Tipo();
 		t->tipo = tipo;
 		t->vector = false;
-		return t;
+		return (Ñ::Nodo*)t;
 	}
 
 	cursor = c;
 	return nullptr;
 }
 
-Ñ::DeclaraVariable* declaraVariable()
+Ñ::Nodo* declaraVariable()
 {
 	//std::cout << "declaraVariable()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
@@ -366,7 +378,7 @@ bool notación(std::string carácter)
 
 	if(cursor < lexemas.size())
 	{
-		Ñ::Tipo* t;
+		Ñ::Nodo* t;
 		std::string v;
 
 		if(t = tipo())
@@ -402,16 +414,16 @@ bool notación(std::string carácter)
 		//std::cout << "preparando una declaración de variable" << std::endl;
 
 		Ñ::DeclaraVariable* dvar = new Ñ::DeclaraVariable();
-		((Ñ::Nodo*)dvar)->ramas.push_back((Ñ::Nodo*)(t));
+		((Ñ::Nodo*)dvar)->ramas.push_back(t);
 		dvar->variable = v;
-		return dvar;
+		return ((Ñ::Nodo*)dvar);
 	}
 
 	cursor = c;
 	return nullptr;
 }
 
-Ñ::Asigna* asigna()
+Ñ::Nodo* asigna()
 {
 	//std::cout << "asigna() - cursor[" << cursor << "]" << std::endl;
 
@@ -421,7 +433,7 @@ bool notación(std::string carácter)
 	{
 		//std::cout << "cursor[" << cursor << "]" << std::endl;
 
-		if(Ñ::DeclaraVariable* dv = declaraVariable())
+		if(Ñ::Nodo* dv = declaraVariable())
 		{
 			//std::cout << "Declara variable - cursor[" << cursor << "]" << std::endl;
 
@@ -440,15 +452,15 @@ bool notación(std::string carácter)
 
 				//std::cout << "Sí es asignación" << std::endl;
 
-				if(Ñ::Expresión* ex = expresión())
+				if(Ñ::Nodo* lda = ladoDerechoAsignación())
 				{
-					//std::cout << "Expresión - cursor[" << cursor << "]" << std::endl;
+					//std::cout << "LadoDerechoAsignación - cursor[" << cursor << "]" << std::endl;
 
 					Ñ::Asigna* a = new Ñ::Asigna();
-					((Ñ::Nodo*)a)->ramas.push_back((Ñ::Nodo*)dv);
-					((Ñ::Nodo*)a)->ramas.push_back((Ñ::Nodo*)ex);
+					((Ñ::Nodo*)a)->ramas.push_back(dv);
+					((Ñ::Nodo*)a)->ramas.push_back(lda);
 
-					return a;
+					return ((Ñ::Nodo*)a);
 				}
 
 				//std::cout << "no es una asignación a una declaración" << std::endl;
@@ -456,7 +468,7 @@ bool notación(std::string carácter)
 			
 			delete dv;
 		}
-		else if(Ñ::Identificador* id = identificador())
+		else if(Ñ::Nodo* id = identificador())
 		{
 			//std::cout << "Identificador - cursor[" << cursor << "]" << std::endl;
 
@@ -475,15 +487,15 @@ bool notación(std::string carácter)
 
 				//std::cout << "Sí es asignación" << std::endl;
 
-				if(Ñ::Expresión* ex = expresión())
+				if(Ñ::Nodo* lda = ladoDerechoAsignación())
 				{
-					//std::cout << "Expresión - cursor[" << cursor << "]" << std::endl;
+					//std::cout << "LadoDerechoAsignación - cursor[" << cursor << "]" << std::endl;
 
 					Ñ::Asigna* a = new Ñ::Asigna();
-					((Ñ::Nodo*)a)->ramas.push_back((Ñ::Nodo*)id);
-					((Ñ::Nodo*)a)->ramas.push_back((Ñ::Nodo*)ex);
+					((Ñ::Nodo*)a)->ramas.push_back(id);
+					((Ñ::Nodo*)a)->ramas.push_back(lda);
 
-					return a;
+					return ((Ñ::Nodo*)a);
 				}
 
 				//std::cout << "no es una asignación" << std::endl;
@@ -497,7 +509,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::LlamaFunción* llamaFunción()
+Ñ::Nodo* llamaFunción()
 {
 	//std::cout << "ejecutaFunción()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
@@ -534,29 +546,29 @@ bool notación(std::string carácter)
 		
 		Ñ::LlamaFunción* fn = new Ñ::LlamaFunción();
 		fn->función = función;
-		return fn;
+		return (Ñ::Nodo*)fn;
 	}
 
 	cursor = c;
 	return nullptr;
 }
 
-Ñ::Afirma* afirma()
+Ñ::Nodo* expresión()
 {
-	//std::cout << "afirma()" << std::endl;
+	//std::cout << "expresión()" << std::endl;
 	//std::cout << "cursor[" << cursor << "]" << std::endl;
 
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
 	{
-		if(Ñ::Asigna* as = asigna())
+		if(Ñ::Nodo* as = asigna())
 		{
 			if(notación(";"))
 			{
-				Ñ::Afirma* af = new Ñ::Afirma();
-				((Ñ::Nodo*)af)->ramas.push_back((Ñ::Nodo*)as);
-				return af;
+				Ñ::Expresión* af = new Ñ::Expresión();
+				((Ñ::Nodo*)af)->ramas.push_back(as);
+				return ((Ñ::Nodo*)af);
 			}
 			else
 			{
@@ -564,13 +576,13 @@ bool notación(std::string carácter)
 			}
 		}
 		
-		if(Ñ::LlamaFunción* fn = llamaFunción())
+		if(Ñ::Nodo* fn = llamaFunción())
 		{
 			if(notación(";"))
 			{
-				Ñ::Afirma* af = new Ñ::Afirma();
-				((Ñ::Nodo*)af)->ramas.push_back((Ñ::Nodo*)fn);
-				return af;
+				Ñ::Expresión* af = new Ñ::Expresión();
+				((Ñ::Nodo*)af)->ramas.push_back(fn);
+				return ((Ñ::Nodo*)af);
 			}
 			else
 			{
@@ -578,13 +590,13 @@ bool notación(std::string carácter)
 			}
 		}
 		
-		if(Ñ::DeclaraVariable* dv = declaraVariable())
+		if(Ñ::Nodo* dv = declaraVariable())
 		{
 			if(notación(";"))
 			{
-				Ñ::Afirma* af = new Ñ::Afirma();
-				((Ñ::Nodo*)af)->ramas.push_back((Ñ::Nodo*)dv);
-				return af;
+				Ñ::Expresión* af = new Ñ::Expresión();
+				((Ñ::Nodo*)af)->ramas.push_back(dv);
+				return ((Ñ::Nodo*)af);
 			}
 			else
 			{
@@ -601,5 +613,5 @@ bool notación(std::string carácter)
 {
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)afirma();
+	return (Ñ::Nodo*)expresión();
 }

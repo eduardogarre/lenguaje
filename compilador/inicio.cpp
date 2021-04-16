@@ -71,13 +71,12 @@ void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>
 		return;
 	}
 
-	//muestraLexemas(lexemas);
-
 	nodos = Ñ::analizaSintaxis(lexemas);
 
 	if(nodos == nullptr)
 	{
 		Ñ::errorConsola(u8"Error durante el análisis sintáctico, comando incorrecto.");
+		muestraLexemas(lexemas);
 		return;
 	}
 
@@ -98,8 +97,6 @@ void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>
 			std::cout << resultado.mensaje() << std::endl;
 		}
 	}
-
-	//Ñ::muestraTablaSímbolos(tablaSímbolos);
 
 	delete nodos;
 }

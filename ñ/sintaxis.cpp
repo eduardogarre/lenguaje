@@ -19,6 +19,7 @@ bool notación(std::string carácter);
 Ñ::Nodo* factor();
 Ñ::Nodo* opMultiplicaciónDivisión();
 Ñ::Nodo* opSumaResta();
+Ñ::Nodo* ladoIzquierdoAsignación();
 Ñ::Nodo* ladoDerechoAsignación();
 Ñ::Nodo* declaraVariable();
 Ñ::Nodo* asigna();
@@ -29,9 +30,6 @@ bool notación(std::string carácter);
 
 bool notación(std::string carácter)
 {
-	//std::cout << "notación(\"" << carácter << "\")" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-	
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
@@ -52,9 +50,6 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* literal()
 {
-	//std::cout << "literal()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-	
 	uint32_t c = cursor;
 
 	Ñ::Literal* l;
@@ -78,11 +73,28 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Nodo* ladoIzquierdoAsignación()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		if(Ñ::Nodo* dv = declaraVariable())
+		{
+			return dv;
+		}
+		else if(Ñ::Nodo* id = identificador())
+		{
+			return id;
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* ladoDerechoAsignación()
 {
-	//std::cout << "opSumaResta()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
@@ -105,9 +117,6 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* opSumaResta()
 {
-	//std::cout << "opSumaResta()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
@@ -131,8 +140,6 @@ bool notación(std::string carácter)
 				return opMulDiv;
 			}
 			
-			//std::cout << "[operación:" << operación << "]" << std::endl;
-			
 			if(Ñ::Nodo* e2 = opSumaResta())
 			{
 				Ñ::OpSumaResta* opSumRes = new Ñ::OpSumaResta();
@@ -154,9 +161,6 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* opMultiplicaciónDivisión()
 {
-	//std::cout << "opMultiplicaciónDivisión()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
@@ -179,9 +183,6 @@ bool notación(std::string carácter)
 			{
 				return fac;
 			}
-			
-			//std::cout << "[operación:" << operación << "]" << std::endl;
-			
 			if(Ñ::Nodo* opMulDiv2 = opMultiplicaciónDivisión())
 			{
 				Ñ::OpMultiplicaciónDivisión* opMulDiv = new Ñ::OpMultiplicaciónDivisión();
@@ -203,9 +204,6 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* factor()
 {
-	//std::cout << "factor()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
@@ -214,7 +212,6 @@ bool notación(std::string carácter)
 
 		if(Ñ::Nodo* lit = literal())
 		{
-			//std::cout << "[subexpresión]" << std::endl;
 			return lit;
 		}
 		else if(notación("("))
@@ -225,7 +222,6 @@ bool notación(std::string carácter)
 			{
 				if(notación(")"))
 				{
-					//std::cout << "[subexpresión]" << std::endl;
 					return lda;
 				}
 				else
@@ -241,12 +237,10 @@ bool notación(std::string carácter)
 		}
 		else if(Ñ::Nodo* fn = llamaFunción())
 		{
-			//std::cout << "[subexpresión]" << std::endl;
 			return fn;
 		}
 		else if(Ñ::Nodo* id = identificador())
 		{
-			//std::cout << "[subexpresión]" << std::endl;
 			return id;
 		}
 		else
@@ -262,17 +256,12 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* identificador()
 {
-	//std::cout << "tipo()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
 	{
 		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
-			
-
 			Ñ::Identificador* id = new Ñ::Identificador();
 			id->id = lexemas[cursor]->contenido;
 			cursor++;
@@ -286,9 +275,6 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* tipo()
 {
-	//std::cout << "tipo()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
@@ -370,9 +356,6 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* declaraVariable()
 {
-	//std::cout << "declaraVariable()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
@@ -399,7 +382,6 @@ bool notación(std::string carácter)
 
 		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
-			//std::cout << "reconocido un tipo" << std::endl;
 			v = lexemas[cursor]->contenido;
 			cursor++;
 		}
@@ -409,8 +391,6 @@ bool notación(std::string carácter)
 			cursor = c;
 			return nullptr;
 		}
-
-		//std::cout << "preparando una declaración de variable" << std::endl;
 
 		Ñ::DeclaraVariable* dvar = new Ñ::DeclaraVariable();
 		((Ñ::Nodo*)dvar)->ramas.push_back(t);
@@ -424,83 +404,32 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* asigna()
 {
-	//std::cout << "asigna() - cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
 	{
-		//std::cout << "cursor[" << cursor << "]" << std::endl;
-
-		if(Ñ::Nodo* dv = declaraVariable())
+		if(Ñ::Nodo* lia = ladoIzquierdoAsignación())
 		{
-			//std::cout << "Declara variable - cursor[" << cursor << "]" << std::endl;
-
 			if(notación("="))
 			{
-				//std::cout << "Asigna? - cursor[" << cursor << "]" << std::endl;
-
 				if(notación("=")) // "=="
 				{
-					//std::cout << "Realmente comparador - cursor[" << cursor << "]" << std::endl;
-					//std::cout << "deshaciendo" << std::endl;
-					delete dv;
+					delete lia;
 					cursor = c;
 					return nullptr;
 				}
-
-				//std::cout << "Sí es asignación" << std::endl;
-
+				
 				if(Ñ::Nodo* lda = ladoDerechoAsignación())
 				{
-					//std::cout << "LadoDerechoAsignación - cursor[" << cursor << "]" << std::endl;
-
 					Ñ::Asigna* a = new Ñ::Asigna();
-					((Ñ::Nodo*)a)->ramas.push_back(dv);
+					((Ñ::Nodo*)a)->ramas.push_back(lia);
 					((Ñ::Nodo*)a)->ramas.push_back(lda);
 
 					return ((Ñ::Nodo*)a);
 				}
-
-				//std::cout << "no es una asignación a una declaración" << std::endl;
 			}
 			
-			delete dv;
-		}
-		else if(Ñ::Nodo* id = identificador())
-		{
-			//std::cout << "Identificador - cursor[" << cursor << "]" << std::endl;
-
-			if(notación("="))
-			{
-				//std::cout << "Asigna? - cursor[" << cursor << "]" << std::endl;
-
-				if(notación("=")) // "=="
-				{
-					//std::cout << "Realmente comparador - cursor[" << cursor << "]" << std::endl;
-					//std::cout << "deshaciendo" << std::endl;
-					delete id;
-					cursor = c;
-					return nullptr;
-				}
-
-				//std::cout << "Sí es asignación" << std::endl;
-
-				if(Ñ::Nodo* lda = ladoDerechoAsignación())
-				{
-					//std::cout << "LadoDerechoAsignación - cursor[" << cursor << "]" << std::endl;
-
-					Ñ::Asigna* a = new Ñ::Asigna();
-					((Ñ::Nodo*)a)->ramas.push_back(id);
-					((Ñ::Nodo*)a)->ramas.push_back(lda);
-
-					return ((Ñ::Nodo*)a);
-				}
-
-				//std::cout << "no es una asignación" << std::endl;
-			}
-			
-			delete id;
+			delete lia;
 		}
 	}
 
@@ -510,9 +439,6 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* llamaFunción()
 {
-	//std::cout << "ejecutaFunción()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
@@ -554,9 +480,6 @@ bool notación(std::string carácter)
 
 Ñ::Nodo* expresión()
 {
-	//std::cout << "expresión()" << std::endl;
-	//std::cout << "cursor[" << cursor << "]" << std::endl;
-
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())

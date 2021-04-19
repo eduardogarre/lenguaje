@@ -1040,6 +1040,12 @@ namespace Ñ
                 }
                 cursor_léxico = c;
 
+                if(texto(cmd))
+                {
+                    continue;
+                }
+                cursor_léxico = c;
+
                 if(notación(cmd))
                 {
                     continue;
@@ -1059,12 +1065,6 @@ namespace Ñ
                 cursor_léxico = c;
 
                 if(identificador(cmd))
-                {
-                    continue;
-                }
-                cursor_léxico = c;
-
-                if(texto(cmd))
                 {
                     continue;
                 }

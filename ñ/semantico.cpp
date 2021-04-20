@@ -10,25 +10,17 @@
 {
     Ñ::Resultado resultado;
 
-    if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
     {
-        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos);
-        
-        if( tablaSímbolos->count(fn->función) == 0 )
+        for(Ñ::Nodo* n : nodos->ramas)
         {
-            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() no está en la tabla de símbolos");
-            return resultado;
-        }
-        else
-        {
-            Ñ::Símbolo s = tablaSímbolos->at(fn->función);
-            if(!s.esFunciónEjecutable() && !s.esFunciónImplementada())
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
             {
-                resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() está en la tabla de símbolos pero sin implementación");
-                return resultado;
+                return rResuelveSímbolos;
             }
         }
-
+        
         resultado.éxito();
         return resultado;
     }
@@ -50,7 +42,7 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
     {
         for(Ñ::Nodo* n : nodos->ramas)
         {
@@ -61,6 +53,74 @@
             }
         }
         
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+    {
+        std::string nombre = ((Ñ::Identificador*)nodos)->id;
+        if(tablaSímbolos->count(nombre) > 0 )
+        {
+            resultado.éxito();
+            return resultado;
+        }
+        else
+        {
+            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" no se había declarado previamente");
+            return resultado;
+        }
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+    {
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+    {
+        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos);
+        
+        if( tablaSímbolos->count(fn->función) == 0 )
+        {
+            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() no está en la tabla de símbolos");
+            return resultado;
+        }
+        else
+        {
+            Ñ::Símbolo s = tablaSímbolos->at(fn->función);
+            if(!s.esFunciónEjecutable() && !s.esFunciónImplementada())
+            {
+                resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() está en la tabla de símbolos pero sin implementación");
+                return resultado;
+            }
+        }
 
         resultado.éxito();
         return resultado;

@@ -56,7 +56,14 @@ void Ñ::Símbolo::ejecutaFunción(Ñ::Argumentos* args)
 {
     if(_categoría == CategoríaSímbolo::FUNCIÓN && _ejecutable && _ejecuta)
     {
-        _ejecuta(args);
+        if(args == nullptr)
+        {
+            _ejecuta(_args);
+        }
+        else
+        {
+            _ejecuta(args);
+        }
     }
 }
 

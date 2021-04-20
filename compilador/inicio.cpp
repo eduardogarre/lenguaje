@@ -139,6 +139,7 @@ void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>
 	if(resultado.error())
 	{
 		std::cout << resultado.mensaje() << std::endl;
+		
 		muestraNodos(nodos);
 	}
 	else

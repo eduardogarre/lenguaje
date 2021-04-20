@@ -332,6 +332,11 @@ void Ñ::borraNodos(Ñ::Nodo* nodos)
 
 void Ñ::muestraNodos(Ñ::Nodo* nodo)
 {
+	if(nodo == nullptr)
+	{
+		return;
+	}
+	
 	ajuste++;
 
 	if(nodo->categoría == Ñ::CategoríaNodo::NODO_VACÍO)

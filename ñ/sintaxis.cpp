@@ -532,7 +532,10 @@ bool notación(std::string carácter)
 
 		Ñ::LlamaFunción* fn = new Ñ::LlamaFunción();
 		fn->función = función;
-		((Ñ::Nodo*)fn)->ramas.push_back(args);
+		if(args != nullptr)
+		{
+			((Ñ::Nodo*)fn)->ramas.push_back(args);
+		}
 		return (Ñ::Nodo*)fn;
 	}
 

@@ -11,7 +11,16 @@
         Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos->ramas[0]);
         Ñ::Símbolo s = tablaSímbolos->at(fn->función);
         
-        s.ejecutaFunción();
+        Ñ::Argumentos* args;
+        if(((Ñ::Nodo*)(nodos->ramas[0]))->ramas.size() < 1)
+        {
+            args = nullptr;
+        }
+        else
+        {
+            args = (Ñ::Argumentos*)(((Ñ::Nodo*)(nodos->ramas[0]))->ramas[0]);
+        }
+        s.ejecutaFunción(args);
         
         resultado.éxito();
         return resultado;

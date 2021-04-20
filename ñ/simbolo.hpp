@@ -28,7 +28,7 @@ namespace Ñ
 
         void declaraVariable(Ñ::Nodo* tipo);
 
-        void ejecutaFunción();
+        void ejecutaFunción(Ñ::Argumentos* args);
         void añadeEjecución(void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args = nullptr);
         void borraEjecución();
 

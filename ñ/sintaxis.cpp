@@ -513,7 +513,7 @@ bool notación(std::string carácter)
 		{
 			args = argumentos();
 
-			std::cout << "CURSOR INTERNO: " << cursor << std::endl;
+			//std::cout << "CURSOR INTERNO: " << cursor << std::endl;
 
 			if(args == nullptr)
 			{

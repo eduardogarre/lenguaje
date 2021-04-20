@@ -32,7 +32,30 @@ void apaga(Ñ::Argumentos* args)
 
 void escribe(Ñ::Argumentos* args)
 {
-    std::cout << "hola" << std::endl;
+	if(args == nullptr)
+	{
+		return;
+	}
+	else if(((Ñ::Nodo*)args)->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
+	{
+		if(((Ñ::Nodo*)args)->ramas.size() == 0)
+		{
+			return;
+		}
+		else if(((Ñ::Nodo*)args)->ramas.size() == 1)
+		{
+			Ñ::Nodo* arg = ((Ñ::Nodo*)args)->ramas[0];
+			if(arg == nullptr)
+			{
+				return;
+			}
+			else if(arg->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+			{
+				std::string dato = ((Ñ::Literal*)arg)->dato;
+				std::cout << dato;
+			}
+		}
+	}
 }
 
 void tabla(Ñ::Argumentos* args)

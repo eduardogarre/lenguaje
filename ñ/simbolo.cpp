@@ -52,11 +52,11 @@ void Ñ::Símbolo::declaraVariable(Ñ::Nodo* tipo)
     _tipo = (Ñ::Nodo*)(t);
 }
 
-void Ñ::Símbolo::ejecutaFunción()
+void Ñ::Símbolo::ejecutaFunción(Ñ::Argumentos* args)
 {
     if(_categoría == CategoríaSímbolo::FUNCIÓN && _ejecutable && _ejecuta)
     {
-        _ejecuta(_args);
+        _ejecuta(args);
     }
 }
 

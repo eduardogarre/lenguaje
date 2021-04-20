@@ -1,36 +1,50 @@
 #include <iostream>
 
 #include "interpreta.hpp"
+#include "nodo.hpp"
 
 Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
-    if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
     {
-        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos->ramas[0]);
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = interpretaNodos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+    {
+        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)nodos;
         Ñ::Símbolo s = tablaSímbolos->at(fn->función);
         
         Ñ::Argumentos* args;
-        if(((Ñ::Nodo*)(nodos->ramas[0]))->ramas.size() < 1)
+        if(nodos->ramas.size() < 1)
         {
             args = nullptr;
         }
         else
         {
-            args = (Ñ::Argumentos*)(((Ñ::Nodo*)(nodos->ramas[0]))->ramas[0]);
+            args = (Ñ::Argumentos*)(nodos->ramas[0]);
         }
         s.ejecutaFunción(args);
         
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
     {
-        auto declvar = nodos->ramas[0];
-        std::string nombre = ((Ñ::DeclaraVariable*)declvar)->variable;
+        std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
 
-        auto tipo = (declvar->ramas[0]);
+        auto tipo = (nodos->ramas[0]);
         std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
 
         // Añado la variable a la tabla de símbolos

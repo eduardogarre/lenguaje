@@ -10,49 +10,60 @@
 {
     Ñ::Resultado resultado;
 
-    if( nodos->ramas.size() > 0)
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
-        if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos);
+        
+        if( tablaSímbolos->count(fn->función) == 0 )
         {
-            Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos->ramas[0]);
-            
-            if( tablaSímbolos->count(fn->función) == 0 )
-            {
-                resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() no está en la tabla de símbolos");
-                return resultado;
-            }
-            else
-            {
-                Ñ::Símbolo s = tablaSímbolos->at(fn->función);
-                if(!s.esFunciónEjecutable() && !s.esFunciónImplementada())
-                {
-                    resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() está en la tabla de símbolos pero sin implementación");
-                    return resultado;
-                }
-            }
-
-            resultado.éxito();
+            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() no está en la tabla de símbolos");
             return resultado;
         }
-        else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+        else
         {
-            auto declvar = nodos->ramas[0];
-            std::string nombre = ((Ñ::DeclaraVariable*)declvar)->variable;
-            if(tablaSímbolos->count(nombre) > 0 )
+            Ñ::Símbolo s = tablaSímbolos->at(fn->función);
+            if(!s.esFunciónEjecutable() && !s.esFunciónImplementada())
             {
-                resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" ya se había declarado previamente");
+                resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() está en la tabla de símbolos pero sin implementación");
                 return resultado;
             }
+        }
 
-            if( declvar->ramas.size() != 1)
-            {
-                resultado.error("RESOLUCIÓN DE SÍMBOLOS :: Árbol de la declaración de variable mal construido");
-                return resultado;
-            }
-
-            resultado.éxito();
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+    {
+        std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
+        if(tablaSímbolos->count(nombre) > 0 )
+        {
+            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" ya se había declarado previamente");
             return resultado;
         }
+
+        if( nodos->ramas.size() != 1)
+        {
+            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: Árbol de la declaración de variable mal construido");
+            return resultado;
+        }
+
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+
+        resultado.éxito();
+        return resultado;
     }
 
     resultado.error("RESOLUCIÓN DE SÍMBOLOS :: No reconozco el árbol de nodos");
@@ -63,46 +74,63 @@
 {
     Ñ::Resultado resultado;
     
-    if( nodos->ramas.size() > 0)
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
-        if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+    {
+        std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
+        if(nodos->categoría == Ñ::CategoríaNodo::NODO_TIPO)
         {
-            resultado.éxito();
-            return resultado;
-        }
-        else if(nodos->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
-        {
-            auto declvar = nodos->ramas[0];
-            std::string nombre = ((Ñ::DeclaraVariable*)declvar)->variable;
-            if(declvar->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_TIPO)
+            if(nodos->ramas.size() != 1)
             {
-                auto tipo = (declvar->ramas[0]);
-                std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
-
-                if( cadenaTipo == "bool" ||
-                    cadenaTipo == "ent" ||
-                    cadenaTipo == "nat" ||
-                    cadenaTipo == "real" ||
-                    cadenaTipo == "txt" )
-                {
-                    resultado.éxito();
-                    return resultado;
-                }
-                else
-                {
-                    resultado.error("COMPROBACIÓN DE TIPOS :: Tipo desconocido");
-                    return resultado;
-                }
-            }
-            else
-            {
-                resultado.error("COMPROBACIÓN DE TIPOS :: La declaración de variable no contiene tipo");
+                resultado.error("COMPROBACIÓN DE TIPOS :: Esperaba un tipo para la declaración");
                 return resultado;
             }
 
-            resultado.éxito();
+            auto tipo = (nodos->ramas[0]);
+            std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
+
+            if( cadenaTipo == "bool" ||
+                cadenaTipo == "ent" ||
+                cadenaTipo == "nat" ||
+                cadenaTipo == "real" ||
+                cadenaTipo == "txt" )
+            {
+                resultado.éxito();
+                return resultado;
+            }
+            else
+            {
+                resultado.error("COMPROBACIÓN DE TIPOS :: Tipo desconocido");
+                return resultado;
+            }
+        }
+        else
+        {
+            resultado.error("COMPROBACIÓN DE TIPOS :: La declaración de variable no contiene tipo");
             return resultado;
         }
+
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+
+        resultado.éxito();
+        return resultado;
     }
 
     resultado.error("COMPROBACIÓN DE TIPOS :: No reconozco el árbol de nodos");

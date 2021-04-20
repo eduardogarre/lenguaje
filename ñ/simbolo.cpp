@@ -52,6 +52,23 @@ void Ñ::Símbolo::declaraVariable(Ñ::Nodo* tipo)
     _tipo = (Ñ::Nodo*)(t);
 }
 
+void Ñ::Símbolo::defineVariable(Ñ::Nodo* valor)
+{
+    _categoría = CategoríaSímbolo::VARIABLE;
+
+    if(valor->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+    {
+        Ñ::Literal* v = new Ñ::Literal();
+        v->dato = ((Ñ::Literal*)valor)->dato;
+        _valor = (Ñ::Nodo*)v;
+    }
+}
+
+Ñ::Nodo* Ñ::Símbolo::valor()
+{
+    return _valor;
+}
+
 void Ñ::Símbolo::ejecutaFunción(Ñ::Argumentos* args)
 {
     if(_categoría == CategoríaSímbolo::FUNCIÓN && _ejecutable && _ejecuta)
@@ -121,7 +138,15 @@ void Ñ::Símbolo::muestra()
     }
     else if(_categoría == Ñ::CategoríaSímbolo::VARIABLE)
     {
-        std::cout << "[VARIABLE] ";
+        if((Ñ::Literal*)_valor != nullptr)
+        {
+            std::cout << "[VARIABLE :: \"" + ((Ñ::Literal*)_valor)->dato + "\"] ";
+        }
+        else
+        {
+            std::cout << "[VARIABLE] ";
+        }
+        
         muestraNodos(_tipo);
     }
     else if(_categoría == Ñ::CategoríaSímbolo::FUNCIÓN)

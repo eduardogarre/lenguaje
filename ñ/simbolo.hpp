@@ -27,6 +27,8 @@ namespace Ñ
         bool esVariable();
 
         void declaraVariable(Ñ::Nodo* tipo);
+        void defineVariable(Ñ::Nodo* valor);
+        Ñ::Nodo* valor();
 
         void ejecutaFunción(Ñ::Argumentos* args);
         void añadeEjecución(void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args = nullptr);
@@ -44,6 +46,7 @@ namespace Ñ
         bool _implementada = false;
         
         Ñ::Nodo* _tipo;
+        Ñ::Nodo* _valor;
         Ñ::Nodo* _implementación;
 
         void (*_ejecuta)(Ñ::Argumentos* args);

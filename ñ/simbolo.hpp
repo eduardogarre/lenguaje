@@ -27,15 +27,15 @@ namespace Ñ
         bool esVariable();
 
         void declaraVariable(Ñ::Nodo* tipo);
-        void defineVariable(Ñ::Nodo* valor);
-        Ñ::Nodo* valor();
+        void asignaValor(Ñ::Nodo* valor);
+        Ñ::Nodo* obténValor();
 
         void ejecutaFunción(Ñ::Argumentos* args);
         void añadeEjecución(void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args = nullptr);
         void borraEjecución();
 
-        Ñ::Nodo* implementación();
-        void implementación(Ñ::Nodo* impl);
+        Ñ::Nodo* obténImplementación();
+        void añadeImplementación(Ñ::Nodo* impl);
         void borraImplementación();
 
         void muestra();
@@ -43,11 +43,10 @@ namespace Ñ
     private:
         CategoríaSímbolo _categoría;
         bool _ejecutable = false;
-        bool _implementada = false;
+        bool _definida = false;
         
         Ñ::Nodo* _tipo;
-        Ñ::Nodo* _valor;
-        Ñ::Nodo* _implementación;
+        Ñ::Nodo* _definición;
 
         void (*_ejecuta)(Ñ::Argumentos* args);
         Ñ::Argumentos * _args;

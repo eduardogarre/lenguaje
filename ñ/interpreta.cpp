@@ -61,14 +61,14 @@
         if(rLda.resultado()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
         {
             std::string id = ((Ñ::Identificador*)(rLia.resultado()))->id;
-            (*tablaSímbolos)[id].defineVariable(rLda.resultado());
+            (*tablaSímbolos)[id].asignaValor(rLda.resultado());
         }
         else if(rLda.resultado()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
         {
             std::string idLda = ((Ñ::Identificador*)rLda.resultado())->id;
             Ñ::Símbolo s = tablaSímbolos->at(idLda);
             std::string idLia = ((Ñ::Identificador*)(rLia.resultado()))->id;
-            (*tablaSímbolos)[idLia].defineVariable(s.valor());
+            (*tablaSímbolos)[idLia].asignaValor(s.obténValor());
         }
 
         resultado.éxito();

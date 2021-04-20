@@ -6,9 +6,10 @@
 {
     _categoría = CategoríaSímbolo::VACÍO;
     _ejecutable = false;
-    _implementada = false;
+    _definida = false;
 
-    _implementación = nullptr;
+    _definición = nullptr;
+    _tipo = nullptr;
 }
 
 Ñ::Símbolo::~Símbolo()
@@ -28,7 +29,7 @@ bool Ñ::Símbolo::esFunciónEjecutable()
 
 bool Ñ::Símbolo::esFunciónImplementada()
 {
-    return _implementada;
+    return _definida;
 }
 
 bool Ñ::Símbolo::esVariable()
@@ -52,7 +53,7 @@ void Ñ::Símbolo::declaraVariable(Ñ::Nodo* tipo)
     _tipo = (Ñ::Nodo*)(t);
 }
 
-void Ñ::Símbolo::defineVariable(Ñ::Nodo* valor)
+void Ñ::Símbolo::asignaValor(Ñ::Nodo* valor)
 {
     _categoría = CategoríaSímbolo::VARIABLE;
 
@@ -60,13 +61,13 @@ void Ñ::Símbolo::defineVariable(Ñ::Nodo* valor)
     {
         Ñ::Literal* v = new Ñ::Literal();
         v->dato = ((Ñ::Literal*)valor)->dato;
-        _valor = (Ñ::Nodo*)v;
+        _definición = (Ñ::Nodo*)v;
     }
 }
 
-Ñ::Nodo* Ñ::Símbolo::valor()
+Ñ::Nodo* Ñ::Símbolo::obténValor()
 {
-    return _valor;
+    return _definición;
 }
 
 void Ñ::Símbolo::ejecutaFunción(Ñ::Argumentos* args)
@@ -106,11 +107,11 @@ void Ñ::Símbolo::borraEjecución()
     _ejecuta = nullptr;
 }
 
-Ñ::Nodo* Ñ::Símbolo::implementación()
+Ñ::Nodo* Ñ::Símbolo::obténImplementación()
 {
-    if(_implementada)
+    if(_definida)
     {
-        return _implementación;
+        return _definición;
     }
     else
     {
@@ -118,16 +119,16 @@ void Ñ::Símbolo::borraEjecución()
     }
 }
 
-void Ñ::Símbolo::implementación(Ñ::Nodo* impl)
+void Ñ::Símbolo::añadeImplementación(Ñ::Nodo* impl)
 {
-    _implementada = true;
-    _implementación = impl;
+    _definida = true;
+    _definición = impl;
 }
 
 void Ñ::Símbolo::borraImplementación()
 {
-    _implementada = false;
-    _implementación = nullptr;
+    _definida = false;
+    _definición = nullptr;
 }
 
 void Ñ::Símbolo::muestra()
@@ -138,15 +139,15 @@ void Ñ::Símbolo::muestra()
     }
     else if(_categoría == Ñ::CategoríaSímbolo::VARIABLE)
     {
-        if((Ñ::Literal*)_valor != nullptr)
+        if((Ñ::Literal*)_definición != nullptr)
         {
-            std::cout << "[VARIABLE :: \"" + ((Ñ::Literal*)_valor)->dato + "\"] ";
+            std::cout << "[VARIABLE :: \"" + ((Ñ::Literal*)_definición)->dato + "\"] ";
         }
         else
         {
             std::cout << "[VARIABLE] ";
         }
-        
+
         muestraNodos(_tipo);
     }
     else if(_categoría == Ñ::CategoríaSímbolo::FUNCIÓN)
@@ -161,10 +162,10 @@ void Ñ::Símbolo::muestra()
             std::cout << " [----------]";
         }
 
-        if(_implementada)
+        if(_definida)
         {
             std::cout << " [implementada]" << std::endl << " ";
-            muestraNodos(_implementación);
+            muestraNodos(_definición);
         }
         else
         {

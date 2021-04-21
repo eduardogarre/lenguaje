@@ -194,4 +194,5 @@ namespace Ñ
 
     void borraNodos(Ñ::Nodo* nodos);
     void muestraNodos(Nodo* nodo);
+    Nodo* duplicaNodo(Nodo* nodo);
 }

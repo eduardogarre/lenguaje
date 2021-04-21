@@ -1,5 +1,6 @@
 ﻿rm obra -Force -Recurse -ErrorAction SilentlyContinue
 rm proyecto -Force -Recurse -ErrorAction SilentlyContinue
+rm build -Force -Recurse -ErrorAction SilentlyContinue
 
 mkdir obra
 mkdir proyecto
@@ -9,7 +10,7 @@ cmake ..
 cmake --build .
 cd ..
 
-rm obra -Force -Recurse -ErrorAction SilentlyContinue
+#rm obra -Force -Recurse -ErrorAction SilentlyContinue
 
 mv ./proyecto/compilador.exe ./proyecto/ñ.exe
 
@@ -18,4 +19,5 @@ echo ""
 echo "Ejecutando ñ"
 echo ""
 
-proyecto/ñ.exe
+./proyecto/pruebas.exe
+#./proyecto/ñ.exe

@@ -394,3 +394,76 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 
 	ajuste--;
 }
+
+
+Ñ::Nodo* Ñ::duplicaNodo(Ñ::Nodo* nodo)
+{
+	if(nodo == nullptr)
+	{
+		return nullptr;
+	}
+
+	Ñ::Nodo* duplicado = nullptr;
+
+	// Creo los nodos
+	if(nodo->categoría == Ñ::CategoríaNodo::NODO_VACÍO)
+	{
+		duplicado = new Ñ::Nodo();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::Literal(*(Ñ::Literal*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TIPO)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::Tipo(*(Ñ::Tipo*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::Identificador(*(Ñ::Identificador*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::Factor(*(Ñ::Factor*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::OpMultiplicaciónDivisión(*(Ñ::OpMultiplicaciónDivisión*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::OpSumaResta(*(Ñ::OpSumaResta*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::Asigna(*(Ñ::Asigna*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::DeclaraVariable(*(Ñ::DeclaraVariable*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTO)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::Argumento(*(Ñ::Argumento*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::Argumentos(*(Ñ::Argumentos*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::LlamaFunción(*(Ñ::LlamaFunción*)nodo));
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+	{
+		duplicado = (Ñ::Nodo*)(new Ñ::Expresión(*(Ñ::Expresión*)nodo));
+	}
+
+	// Ahora duplico las ramas del nodo
+	for(auto r : nodo->ramas)
+	{
+		duplicado->ramas.push_back(duplicaNodo(r));
+	}
+
+	return duplicado;
+}

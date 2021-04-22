@@ -14,8 +14,8 @@ pipeline {
 	stages {
         stage('Construye') {
             steps {
-                cmake arguments: '', installation: 'InSearchPath'
-                cmakeBuild buildType: 'Release', cleanBuild: true, installation: 'InSearchPath', steps: [[withCmake: true]]
+                sh label: 'EjecutaCMake', script: 'cmake ..'
+                sh label: 'EjecutaCMakeBuild', script: 'cmake --build . --parallel=$(nproc)'
             }
         }
 
@@ -25,7 +25,7 @@ pipeline {
             }
             steps {
                 //ctest 'InSearchPath'
-                sh label: 'GuionGoogleTest', script: 'proyecto/pruebas --gtest_output=xml:proyecto/resultado.xml'
+                sh label: 'EjecutaGoogleTest', script: 'proyecto/pruebas --gtest_output=xml:proyecto/resultado.xml'
                 
             }
         }

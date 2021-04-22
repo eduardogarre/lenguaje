@@ -3,7 +3,7 @@
 
 #include <vector>
 
-TEST(PruebasLéxico, CadenaVacía)
+TEST(PruebasLexico, CadenaVacia)
 {
     std::vector<Ñ::Lexema*> lexemas;
 
@@ -22,7 +22,7 @@ TEST(PruebasLéxico, CadenaVacía)
     for(auto l : lexemas) { delete l; }
 }
 
-TEST(PruebasLéxico, Números)
+TEST(PruebasLexico, Numeros)
 {
     std::vector<Ñ::Lexema*> lexemas;
 
@@ -110,7 +110,7 @@ TEST(PruebasLéxico, Números)
     for(auto l : lexemas) { delete l; }
 }
 
-TEST(PruebasLéxico, PalabrasReservadas)
+TEST(PruebasLexico, PalabrasReservadas)
 {
     std::vector<Ñ::Lexema*> lexemas;
 
@@ -395,7 +395,7 @@ TEST(PruebasLéxico, PalabrasReservadas)
     for(auto l : lexemas) { delete l; }
 }
 
-TEST(PruebasLéxico, Identificadores)
+TEST(PruebasLexico, Identificadores)
 {
     std::vector<Ñ::Lexema*> lexemas;
 

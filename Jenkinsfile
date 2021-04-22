@@ -25,7 +25,7 @@ pipeline {
             }
             steps {
                 //ctest 'InSearchPath'
-                sh label: 'GuionGoogleTest', returnStatus: true, script: './proyecto/pruebas --gtest_output=xml:"./proyecto/resultado.xml"'
+                sh label: 'GuionGoogleTest', returnStatus: true, script: './proyecto/pruebas --gtest_output=xml:proyecto/resultado.xml'
                 
             }
         }

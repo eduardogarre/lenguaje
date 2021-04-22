@@ -32,6 +32,8 @@ pipeline {
             }
             post {
                 always {
+                    sh script:'pwd'
+                    sh script:'ls'
                     junit testResults: './proyecto/resultado.xml', allowEmptyResults: false
                 }
             }

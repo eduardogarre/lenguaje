@@ -649,6 +649,7 @@ TEST(PruebasLexico, Identificadores)
     for(auto l : lexemas) { delete l; }
 }
 
+/*
 TEST(PruebasLexico, Notacion)
 {
     std::vector<Ñ::Lexema*> lexemas;
@@ -1102,3 +1103,4 @@ TEST(PruebasLexico, Notacion)
 
     for(auto l : lexemas) { delete l; }
 }
+*/

@@ -30,10 +30,10 @@ pipeline {
                 sh label: 'EjecutaGoogleTest', script: 'proyecto/pruebas --gtest_output=xml:proyecto/resultado.xml'
                 
             }
-        }
-        post {
-            always {
-                junit testResults: './proyecto/resultado.xml', allowEmptyResults: false
+            post {
+                always {
+                    junit testResults: './proyecto/resultado.xml', allowEmptyResults: false
+                }
             }
         }
 

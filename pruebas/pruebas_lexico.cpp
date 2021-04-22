@@ -1,6 +1,4 @@
-#include "gtest/gtest.h"
-
-#define EVALUANDO_PRUEBAS 1
+#include "pruebas.hpp"
 
 #include "ñ/lexico.hpp"
 

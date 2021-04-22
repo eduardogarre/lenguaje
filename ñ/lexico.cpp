@@ -217,7 +217,7 @@ namespace Ñ
     {
         //std::cout << "esalfa(" << c << ")" << std::endl;
         
-        if(!esdígito(c) && !esespacio(c) && !espuntuación(c))
+        if(!esdígito(c) && !esespacio(c) && !espuntuación(c) && c.size() != 0)
         {
             return true;
         }
@@ -235,7 +235,7 @@ namespace Ñ
     {
         //std::cout << "esalfanum(" << c << ")" << std::endl;
         
-        if(!esespacio(c) && !espuntuación(c))
+        if(!esespacio(c) && !espuntuación(c) && c.size() != 0)
         {
             return true;
         }

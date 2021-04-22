@@ -14,8 +14,9 @@ pipeline {
 	stages {
         stage('Construye') {
             steps {
-                sh label: 'EjecutaCMake', script: 'cmake ..'
-                sh label: 'EjecutaCMakeBuild', script: 'cmake --build . --parallel=$(nproc)'
+                sh label: 'ConstruyeObra', script: 'mkdir obra'
+                sh label: 'EjecutaCMake', script: 'cmake -S . -B obra'
+                sh label: 'EjecutaCMakeBuild', script: 'cmake --build obra --parallel=$(nproc)'
             }
         }
 

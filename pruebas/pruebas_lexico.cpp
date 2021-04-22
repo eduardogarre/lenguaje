@@ -59,6 +59,7 @@ TEST(PruebasLexico, espuntuación)
     EXPECT_TRUE(Ñ::espuntuación("+"));
     EXPECT_TRUE(Ñ::espuntuación("/"));
     EXPECT_TRUE(Ñ::espuntuación("*"));
+    EXPECT_TRUE(Ñ::espuntuación("\""));
     EXPECT_TRUE(Ñ::espuntuación("'"));
     EXPECT_TRUE(Ñ::espuntuación("|"));
     EXPECT_TRUE(Ñ::espuntuación("@"));
@@ -90,6 +91,7 @@ TEST(PruebasLexico, espuntuación)
     EXPECT_TRUE(Ñ::espuntuación(u8"+"));
     EXPECT_TRUE(Ñ::espuntuación(u8"/"));
     EXPECT_TRUE(Ñ::espuntuación(u8"*"));
+    EXPECT_TRUE(Ñ::espuntuación(u8"\""));
     EXPECT_TRUE(Ñ::espuntuación(u8"'"));
     EXPECT_TRUE(Ñ::espuntuación(u8"|"));
     EXPECT_TRUE(Ñ::espuntuación(u8"@"));

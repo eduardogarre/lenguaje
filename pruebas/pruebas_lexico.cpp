@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../ñ/lexico.hpp"
+#include "ñ/lexico.hpp"
 
 #include <vector>
 

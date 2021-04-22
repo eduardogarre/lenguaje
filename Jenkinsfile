@@ -14,7 +14,7 @@ pipeline {
 	stages {
         stage('Construye') {
             steps {
-                cmake arguments: '--parallel=4', installation: 'InSearchPath'
+                cmake arguments: ' --parallel=4', installation: 'InSearchPath'
                 cmakeBuild buildType: 'Release', cleanBuild: true, installation: 'InSearchPath', steps: [[withCmake: true]]
             }
         }

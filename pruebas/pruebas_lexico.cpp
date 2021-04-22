@@ -14,6 +14,56 @@ TEST(PruebasLexico, siguienteCarácter)
 
 }
 
+TEST(PruebasLexico, esespacio)
+{
+    EXPECT_TRUE(Ñ::esespacio("\n"));
+    EXPECT_TRUE(Ñ::esespacio("\r"));
+    EXPECT_TRUE(Ñ::esespacio("\r\n"));
+    EXPECT_TRUE(Ñ::esespacio(" "));
+    EXPECT_TRUE(Ñ::esespacio("\t"));
+    EXPECT_TRUE(Ñ::esespacio(u8" "));
+    EXPECT_TRUE(Ñ::esespacio(u8"\t"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2028"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2029"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u000D"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u000A"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u000D\u000A"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u0085"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u0020"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u00A0"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u1680"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2000"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2001"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2002"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2003"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2004"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2005"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2006"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2007"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2008"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2009"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u200A"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u202F"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u205F"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u3000"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2028"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u2029"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u0009"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u000B"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u000C"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u000D"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u000A"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u000D\u000A"));
+    EXPECT_TRUE(Ñ::esespacio(u8"\u0085"));
+    
+    EXPECT_FALSE(Ñ::esespacio("n"));
+    EXPECT_FALSE(Ñ::esespacio("r"));
+    EXPECT_FALSE(Ñ::esespacio(""));
+    EXPECT_FALSE(Ñ::esespacio("1"));
+    EXPECT_FALSE(Ñ::esespacio("\\"));
+    EXPECT_FALSE(Ñ::esespacio(","));
+}
+
 TEST(PruebasLexico, esdígito)
 {
     EXPECT_TRUE(Ñ::esdígito("0"));
@@ -141,56 +191,6 @@ TEST(PruebasLexico, esnuevalínea)
     EXPECT_FALSE(Ñ::esnuevalínea("1"));
     EXPECT_FALSE(Ñ::esnuevalínea("\\"));
     EXPECT_FALSE(Ñ::esnuevalínea(","));
-}
-
-TEST(PruebasLexico, esespacio)
-{
-    EXPECT_TRUE(Ñ::esespacio("\n"));
-    EXPECT_TRUE(Ñ::esespacio("\r"));
-    EXPECT_TRUE(Ñ::esespacio("\r\n"));
-    EXPECT_TRUE(Ñ::esespacio(" "));
-    EXPECT_TRUE(Ñ::esespacio("\t"));
-    EXPECT_TRUE(Ñ::esespacio(u8" "));
-    EXPECT_TRUE(Ñ::esespacio(u8"\t"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2028"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2029"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000D"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000D\u000A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u0085"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u0020"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u00A0"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u1680"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2000"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2001"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2002"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2003"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2004"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2005"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2006"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2007"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2008"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2009"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u200A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u202F"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u205F"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u3000"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2028"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2029"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u0009"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000B"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000C"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000D"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000D\u000A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u0085"));
-    
-    EXPECT_FALSE(Ñ::esespacio("n"));
-    EXPECT_FALSE(Ñ::esespacio("r"));
-    EXPECT_FALSE(Ñ::esespacio(""));
-    EXPECT_FALSE(Ñ::esespacio("1"));
-    EXPECT_FALSE(Ñ::esespacio("\\"));
-    EXPECT_FALSE(Ñ::esespacio(","));
 }
 
 TEST(PruebasLexico, CadenaVacia)

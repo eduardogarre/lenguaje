@@ -14,6 +14,7 @@ pipeline {
 	stages {
         stage('Construye') {
             steps {
+                sh label: 'ConstruyeObra', script: 'rm -rf obra'
                 sh label: 'ConstruyeObra', script: 'mkdir obra'
                 sh label: 'EjecutaCMake', script: 'cmake -S . -B obra'
                 sh label: 'EjecutaCMakeBuild', script: 'cmake --build obra --parallel=$(nproc)'
@@ -28,6 +29,11 @@ pipeline {
                 //ctest 'InSearchPath'
                 sh label: 'EjecutaGoogleTest', script: 'proyecto/pruebas --gtest_output=xml:proyecto/resultado.xml'
                 
+            }
+        }
+        post {
+            always {
+                junit testResults: './proyecto/resultado.xml', allowEmptyResults: false
             }
         }
 
@@ -51,10 +57,4 @@ pipeline {
         //    }
         //}
 	}
-
-    post {
-        success {
-            junit testResults: './proyecto/resultado.xml', allowEmptyResults: false
-        }
-    }
 }

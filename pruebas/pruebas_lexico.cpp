@@ -455,3 +455,457 @@ TEST(PruebasLexico, Identificadores)
 
     for(auto l : lexemas) { delete l; }
 }
+
+TEST(PruebasLexico, Notacion)
+{
+    std::vector<Ñ::Lexema*> lexemas;
+
+    // Punto
+    lexemas = Ñ::analizaLéxico(u8".");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8".");
+    EXPECT_EQ(lexemas[0]->contenido, ".");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Coma
+    lexemas = Ñ::analizaLéxico(u8",");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8",");
+    EXPECT_EQ(lexemas[0]->contenido, ",");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Dos puntos
+    lexemas = Ñ::analizaLéxico(u8":");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8":");
+    EXPECT_EQ(lexemas[0]->contenido, ":");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Punto y coma
+    lexemas = Ñ::analizaLéxico(u8";");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8";");
+    EXPECT_EQ(lexemas[0]->contenido, ";");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Guión
+    lexemas = Ñ::analizaLéxico(u8"-");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"-");
+    EXPECT_EQ(lexemas[0]->contenido, "-");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Suma
+    lexemas = Ñ::analizaLéxico(u8"+");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"+");
+    EXPECT_EQ(lexemas[0]->contenido, "+");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Barra
+    lexemas = Ñ::analizaLéxico(u8"/");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"/");
+    EXPECT_EQ(lexemas[0]->contenido, "/");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Barra invertida
+    lexemas = Ñ::analizaLéxico(u8"\\");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"\\");
+    EXPECT_EQ(lexemas[0]->contenido, "\\");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Asterisco
+    lexemas = Ñ::analizaLéxico(u8"*");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"*");
+    EXPECT_EQ(lexemas[0]->contenido, "*");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Comilla simple
+    lexemas = Ñ::analizaLéxico(u8"'");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"'");
+    EXPECT_EQ(lexemas[0]->contenido, "'");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Barra vertical
+    lexemas = Ñ::analizaLéxico(u8"|");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"|");
+    EXPECT_EQ(lexemas[0]->contenido, "|");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Arroba
+    lexemas = Ñ::analizaLéxico(u8"@");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"@");
+    EXPECT_EQ(lexemas[0]->contenido, "@");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Euro
+    lexemas = Ñ::analizaLéxico(u8"€");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"€");
+    EXPECT_EQ(lexemas[0]->contenido, "€");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Dólar
+    lexemas = Ñ::analizaLéxico(u8"$");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"$");
+    EXPECT_EQ(lexemas[0]->contenido, "$");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Porciento
+    lexemas = Ñ::analizaLéxico(u8"%");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"%");
+    EXPECT_EQ(lexemas[0]->contenido, "%");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // et
+    lexemas = Ñ::analizaLéxico(u8"&");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"&");
+    EXPECT_EQ(lexemas[0]->contenido, "&");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Abre paréntesis
+    lexemas = Ñ::analizaLéxico(u8"(");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"(");
+    EXPECT_EQ(lexemas[0]->contenido, "(");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Cierra paréntesis)
+    lexemas = Ñ::analizaLéxico(u8")");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8")");
+    EXPECT_EQ(lexemas[0]->contenido, ")");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Igual
+    lexemas = Ñ::analizaLéxico(u8"=");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"=");
+    EXPECT_EQ(lexemas[0]->contenido, "=");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Abre interrogación
+    lexemas = Ñ::analizaLéxico(u8"¿");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"¿");
+    EXPECT_EQ(lexemas[0]->contenido, "¿");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Cierra interrogación
+    lexemas = Ñ::analizaLéxico(u8"?");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"?");
+    EXPECT_EQ(lexemas[0]->contenido, "?");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Abre exclamación
+    lexemas = Ñ::analizaLéxico(u8"¡");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"¡");
+    EXPECT_EQ(lexemas[0]->contenido, "¡");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Cierra exclamación
+    lexemas = Ñ::analizaLéxico(u8"!");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"!");
+    EXPECT_EQ(lexemas[0]->contenido, "!");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Abre corchete
+    lexemas = Ñ::analizaLéxico(u8"[");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"[");
+    EXPECT_EQ(lexemas[0]->contenido, "[");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Cierra corchete
+    lexemas = Ñ::analizaLéxico(u8"]");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"]");
+    EXPECT_EQ(lexemas[0]->contenido, "]");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Abre llave
+    lexemas = Ñ::analizaLéxico(u8"{");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"{");
+    EXPECT_EQ(lexemas[0]->contenido, "{");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Cierra llave
+    lexemas = Ñ::analizaLéxico(u8"}");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"}");
+    EXPECT_EQ(lexemas[0]->contenido, "}");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Caret / acento circunflejo
+    lexemas = Ñ::analizaLéxico(u8"^");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"^");
+    EXPECT_EQ(lexemas[0]->contenido, "^");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Menor que
+    lexemas = Ñ::analizaLéxico(u8"<");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"<");
+    EXPECT_EQ(lexemas[0]->contenido, "<");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+
+    // Mayor que
+    lexemas = Ñ::analizaLéxico(u8">");
+    EXPECT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8">");
+    EXPECT_EQ(lexemas[0]->contenido, ">");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+}

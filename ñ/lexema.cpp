@@ -4,10 +4,7 @@
 #include "apoyo.hpp"
 #include "lexema.hpp"
 
-Ñ::Lexema::Lexema()
-{
-
-}
+Ñ::Lexema::Lexema() {}
 
 void Ñ::muestraLexemas(std::vector<Ñ::Lexema*> _lexemas)
 {

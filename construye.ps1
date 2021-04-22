@@ -21,9 +21,9 @@ echo ""
 
 ./proyecto/pruebas.exe
 
-echo ""
-echo ""
-echo "Ejecuto ñ"
-echo ""
-
-./proyecto/ñ.exe
+#echo ""
+#echo ""
+#echo "Ejecuto ñ"
+#echo ""
+#
+#./proyecto/ñ.exe

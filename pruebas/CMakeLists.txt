@@ -24,12 +24,10 @@ target_link_libraries(pruebas gtest_main lenguaje)
 
 add_test(NAME pruebas COMMAND pruebas)
 
-set(DIRECTIVA_PRUEBAS EVALUANDO_PRUEBAS)
-
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /utf-8 /D${DIRECTIVA_PRUEBAS}=1")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /utf-8")
 elseif(CMAKE_COMPILER_IS_GNUC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -D${DIRECTIVA_PRUEBAS}=1")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 
 set_target_properties(pruebas PROPERTIES

@@ -27,7 +27,7 @@ pipeline {
             }
             steps {
                 //ctest 'InSearchPath'
-                sh label: 'EjecutaGoogleTest', script: 'proyecto/pruebas --gtest_output=xml:proyecto/resultado.xml'
+                sh label: 'EjecutaGoogleTest', script: 'proyecto/pruebas --gtest_output=xml:resultado.xml'
                 
             }
             post {

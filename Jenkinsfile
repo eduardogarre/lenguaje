@@ -24,7 +24,9 @@ pipeline {
                 environment name: 'EJECUTA_COMPROBACIONES', value: 'true'
             }
             steps {
-                ctest 'InSearchPath'
+                //ctest 'InSearchPath'
+                sh label: 'GuionGoogleTest', returnStatus: true, script: './proyecto/pruebas --gtest_output=xml:"./proyecto/resultado.xml"'
+                
             }
         }
 
@@ -48,4 +50,10 @@ pipeline {
         //    }
         //}
 	}
+
+    post {
+        success {
+            junit testResults: './proyecto/resultado.xml', allowEmptyResults: false
+        }
+    }
 }

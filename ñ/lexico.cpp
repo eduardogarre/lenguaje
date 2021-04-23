@@ -11,6 +11,16 @@
 
 namespace Ñ
 {
+
+// Compilación condicional: si estamos en pruebas ya hemos declarado las funciones en la cabecera
+#ifndef EVALUANDO_PRUEBAS
+    bool esdígito(std::string c);
+    bool espuntuación(std::string c);
+    bool esnuevalínea(std::string c);
+    bool esespacio(std::string c);
+    bool esalfa(std::string c);
+    bool esalfanum(std::string c);
+#endif
     void Léxico::incrementaCursor(std::string txt)
     {
         int paso = std::mblen(txt.c_str() + cursor_léxico, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor_léxico));
@@ -37,215 +47,6 @@ namespace Ñ
         }
 
         return c;
-    }
-
-    bool Léxico::esdígito(std::string c)
-    {
-        //std::cout << "esdígito(" << c << ")" << std::endl;
-        
-        bool resultado = false;
-
-        if( c == u8"\u0030" || // 0
-            c == u8"\u0031" || // 1
-            c == u8"\u0032" || // 2
-            c == u8"\u0033" || // 3
-            c == u8"\u0034" || // 4
-            c == u8"\u0035" || // 5
-            c == u8"\u0036" || // 6
-            c == u8"\u0037" || // 7
-            c == u8"\u0038" || // 8
-            c == u8"\u0039"    // 9
-        )
-        {
-            resultado = true;
-        }
-
-
-        return resultado;
-    }
-
-    bool Léxico::espuntuación(std::string c)
-    {
-        //std::cout << "espuntuación(" << c << ")" << std::endl;
-        
-        bool resultado = false;
-
-        if( c == u8"." ||
-            c == u8"," ||
-            c == u8":" ||
-            c == u8";" ||
-            c == u8"-" ||
-            c == u8"+" ||
-            c == u8"/" ||
-            c == u8"*" ||
-            c == u8"'" ||
-            c == u8"\"" ||
-            c == u8"|" ||
-            c == u8"@" ||
-            c == u8"\u20AC" ||
-            c == u8"€" ||
-            c == u8"$" ||
-            c == u8"%" ||
-            c == u8"&" ||
-            c == u8"(" ||
-            c == u8")" ||
-            c == u8"=" ||
-            c == u8"¿" ||
-            c == u8"?" ||
-            c == u8"¡" ||
-            c == u8"!" ||
-            c == u8"[" ||
-            c == u8"]" ||
-            c == u8"{" ||
-            c == u8"}" ||
-            c == u8"^" ||
-            c == u8"<" ||
-            c == u8">" ||
-            c == u8"\\"||
-            c == "." ||
-            c == "," ||
-            c == ":" ||
-            c == ";" ||
-            c == "-" ||
-            c == "+" ||
-            c == "/" ||
-            c == "*" ||
-            c == "'" ||
-            c == "\"" ||
-            c == "|" ||
-            c == "@" ||
-            c == "\u20AC" ||
-            c == "€" ||
-            c == "$" ||
-            c == "%" ||
-            c == "&" ||
-            c == "(" ||
-            c == ")" ||
-            c == "=" ||
-            c == "¿" ||
-            c == "?" ||
-            c == "¡" ||
-            c == "!" ||
-            c == "[" ||
-            c == "]" ||
-            c == "{" ||
-            c == "}" ||
-            c == "^" ||
-            c == "<" ||
-            c == ">" ||
-            c == "\\"
-        )
-        {
-            resultado = true;
-        }
-
-
-        return resultado;
-    }
-
-    bool Léxico::esnuevalínea(std::string c)
-    {
-        //std::cout << "esnuevalínea(" << c << ")" << std::endl;
-        
-        bool resultado = false;
-
-        if( c == u8"\u2028" || // Line Separator
-            c == u8"\u2029" || // Paragraph Separator
-
-            c == u8"\u000D" || // Carriage return
-            c == u8"\u000A" || // Line feed
-            c == u8"\u000D\u000A" || // Carriage return + Line feed
-            c == u8"\u0085" // Next line
-        )
-        {
-            resultado = true;
-        }
-
-
-        return resultado;
-    }
-
-    bool Léxico::esespacio(std::string c)
-    {
-        //std::cout << "esespacio(" << c << ")" << std::endl;
-        
-        bool resultado = false;
-
-        if( 
-            // Categoría UNICODE - Space Separator
-            c == u8"\u0020" || // Space (SP)
-            c == u8"\u00A0" || // No-Break Space (NBSP)
-            c == u8"\u1680" || // Ogham Space Mark
-            c == u8"\u2000" || // En Quad
-            c == u8"\u2001" || // Em Quad
-            c == u8"\u2002" || // En Space
-            c == u8"\u2003" || // Em Space
-            c == u8"\u2004" || // Three-Per-Em Space
-            c == u8"\u2005" || // Four-Per-Em Space
-            c == u8"\u2006" || // Six-Per-Em Space
-            c == u8"\u2007" || // Figure Space
-            c == u8"\u2008" || // Punctuation Space
-            c == u8"\u2009" || // Thin Space
-            c == u8"\u200A" || // Hair Space
-            c == u8"\u202F" || // Narrow No-Break Space (NNBSP)
-            c == u8"\u205F" || // Medium Mathematical Space (MMSP)
-            c == u8"\u3000" || // Ideographic Space
-            // Categoría UNICODE - Line Separator
-            c == u8"\u2028" || // Line Separator
-            // Categoría UNICODE - Paragraph Separator
-            c == u8"\u2029" || // Paragraph Separator
-
-            c == u8"\u0009" || // Horizontal tab
-            c == u8"\u000B" || // Vertical tab
-            c == u8"\u000C" || // Form feed
-
-            c == u8"\u000D" || // Carriage return
-            c == u8"\u000A" || // Line feed
-            c == u8"\u000D\u000A" || // Carriage return + Line feed
-            c == u8"\u0085" // Next line
-        )
-        {
-            resultado = true;
-        }
-
-
-        return resultado;
-    }
-
-    bool Léxico::esalfa(std::string c)
-    {
-        //std::cout << "esalfa(" << c << ")" << std::endl;
-        
-        if(!esdígito(c) && !esespacio(c) && !espuntuación(c) && c.size() != 0)
-        {
-            return true;
-        }
-        else if(c == u8"_")
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    bool Léxico::esalfanum(std::string c)
-    {
-        //std::cout << "esalfanum(" << c << ")" << std::endl;
-        
-        if(!esespacio(c) && !espuntuación(c) && c.size() != 0)
-        {
-            return true;
-        }
-        else if(c == u8"_")
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     bool Léxico::nuevaLínea(std::string txt)
@@ -305,7 +106,7 @@ namespace Ñ
 
             std::string carácter = siguienteCarácter(txt);
 
-            while(esespacio(carácter))
+            while(Ñ::esespacio(carácter))
             {
                 resultado = true;
                 
@@ -349,7 +150,7 @@ namespace Ñ
 
             std::string carácter = siguienteCarácter(txt);
 
-            if(espuntuación(carácter))
+            if(Ñ::espuntuación(carácter))
             {
 
                 Ñ::Lexema* l = new Ñ::Lexema();
@@ -400,7 +201,7 @@ namespace Ñ
 
             std::string carácter = siguienteCarácter(txt);
 
-            while(esalfa(carácter))
+            while(Ñ::esalfa(carácter))
             {
                 //std::cout << "_nombre:: isalpha(" << carácter << ")" << std::endl;
                 
@@ -413,7 +214,7 @@ namespace Ñ
                     incrementaCursor(txt);
                     carácter = siguienteCarácter(txt);
                     //std::cout << "_nombre:: isalpha(" << carácter << ")" << std::endl;
-                } while(esalfanum(carácter));
+                } while(Ñ::esalfanum(carácter));
             }
 
             //std::cout << "_nombre:: [" << resultado << "]" << std::endl;
@@ -530,7 +331,7 @@ namespace Ñ
                 carácter = siguienteCarácter(txt);
             }
                 
-            while(esdígito(carácter) && (cursor_léxico < (txt.length()-1)))
+            while(Ñ::esdígito(carácter) && (cursor_léxico < (txt.length()-1)))
             {
                 resultado = true;
                 incrementaCursor(txt);
@@ -556,7 +357,7 @@ namespace Ñ
                 resultado = true;
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
-            } while(esdígito(carácter) && (cursor_léxico < (txt.length()-1)));
+            } while(Ñ::esdígito(carácter) && (cursor_léxico < (txt.length()-1)));
 
             std::string e = "e";
             std::string E = "E";
@@ -581,7 +382,7 @@ namespace Ñ
                 carácter = siguienteCarácter(txt);
             }
 
-            while(esdígito(carácter) && (cursor_léxico < (txt.length()-1)))
+            while(Ñ::esdígito(carácter) && (cursor_léxico < (txt.length()-1)))
             {
                 resultado = true;
                 incrementaCursor(txt);
@@ -643,7 +444,7 @@ namespace Ñ
                 carácter = siguienteCarácter(txt);
             }
                 
-            while(esdígito(carácter))
+            while(Ñ::esdígito(carácter))
             {
                 //std::cout << ":: añado dígito entero" << std::endl;
                 resultado = true;
@@ -674,7 +475,7 @@ namespace Ñ
             incrementaCursor(txt);
             carácter = siguienteCarácter(txt);
                 
-            if(!esdígito(carácter))
+            if(!Ñ::esdígito(carácter))
             {
                 //std::cout << ":: Salida -> no es un dígito" << std::endl;
                 cursor_léxico = c;
@@ -692,7 +493,7 @@ namespace Ñ
                 }
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
-            } while(esdígito(carácter));
+            } while(Ñ::esdígito(carácter));
 
             if(resultado)
             {
@@ -749,7 +550,7 @@ namespace Ñ
                 carácter = siguienteCarácter(txt);
             }
 
-            if(esdígito(carácter))
+            if(Ñ::esdígito(carácter))
             {
                 resultado = true;
                 do {
@@ -759,7 +560,7 @@ namespace Ñ
                     }
                     incrementaCursor(txt);
                     carácter = siguienteCarácter(txt);
-                } while(esdígito(carácter));
+                } while(Ñ::esdígito(carácter));
             }
 
             if(resultado)
@@ -1101,5 +902,214 @@ namespace Ñ
         fin->contenido = "";
         lexemas.push_back(fin);
         return lexemas;
+    }
+
+    bool esdígito(std::string c)
+    {
+        //std::cout << "esdígito(" << c << ")" << std::endl;
+        
+        bool resultado = false;
+
+        if( c == u8"\u0030" || // 0
+            c == u8"\u0031" || // 1
+            c == u8"\u0032" || // 2
+            c == u8"\u0033" || // 3
+            c == u8"\u0034" || // 4
+            c == u8"\u0035" || // 5
+            c == u8"\u0036" || // 6
+            c == u8"\u0037" || // 7
+            c == u8"\u0038" || // 8
+            c == u8"\u0039"    // 9
+        )
+        {
+            resultado = true;
+        }
+
+
+        return resultado;
+    }
+
+    bool espuntuación(std::string c)
+    {
+        //std::cout << "espuntuación(" << c << ")" << std::endl;
+        
+        bool resultado = false;
+
+        if( c == u8"." ||
+            c == u8"," ||
+            c == u8":" ||
+            c == u8";" ||
+            c == u8"-" ||
+            c == u8"+" ||
+            c == u8"/" ||
+            c == u8"*" ||
+            c == u8"'" ||
+            c == u8"\"" ||
+            c == u8"|" ||
+            c == u8"@" ||
+            c == u8"\u20AC" ||
+            c == u8"€" ||
+            c == u8"$" ||
+            c == u8"%" ||
+            c == u8"&" ||
+            c == u8"(" ||
+            c == u8")" ||
+            c == u8"=" ||
+            c == u8"¿" ||
+            c == u8"?" ||
+            c == u8"¡" ||
+            c == u8"!" ||
+            c == u8"[" ||
+            c == u8"]" ||
+            c == u8"{" ||
+            c == u8"}" ||
+            c == u8"^" ||
+            c == u8"<" ||
+            c == u8">" ||
+            c == u8"\\"||
+            c == "." ||
+            c == "," ||
+            c == ":" ||
+            c == ";" ||
+            c == "-" ||
+            c == "+" ||
+            c == "/" ||
+            c == "*" ||
+            c == "'" ||
+            c == "\"" ||
+            c == "|" ||
+            c == "@" ||
+            c == "\u20AC" ||
+            c == "€" ||
+            c == "$" ||
+            c == "%" ||
+            c == "&" ||
+            c == "(" ||
+            c == ")" ||
+            c == "=" ||
+            c == "¿" ||
+            c == "?" ||
+            c == "¡" ||
+            c == "!" ||
+            c == "[" ||
+            c == "]" ||
+            c == "{" ||
+            c == "}" ||
+            c == "^" ||
+            c == "<" ||
+            c == ">" ||
+            c == "\\"
+        )
+        {
+            resultado = true;
+        }
+
+
+        return resultado;
+    }
+
+    bool esnuevalínea(std::string c)
+    {
+        //std::cout << "esnuevalínea(" << c << ")" << std::endl;
+        
+        bool resultado = false;
+
+        if( c == u8"\u2028" || // Line Separator
+            c == u8"\u2029" || // Paragraph Separator
+
+            c == u8"\u000D" || // Carriage return
+            c == u8"\u000A" || // Line feed
+            c == u8"\u000D\u000A" || // Carriage return + Line feed
+            c == u8"\u0085" // Next line
+        )
+        {
+            resultado = true;
+        }
+
+
+        return resultado;
+    }
+
+    bool esespacio(std::string c)
+    {
+        //std::cout << "esespacio(" << c << ")" << std::endl;
+        
+        bool resultado = false;
+
+        if( 
+            // Categoría UNICODE - Space Separator
+            c == u8"\u0020" || // Space (SP)
+            c == u8"\u00A0" || // No-Break Space (NBSP)
+            c == u8"\u1680" || // Ogham Space Mark
+            c == u8"\u2000" || // En Quad
+            c == u8"\u2001" || // Em Quad
+            c == u8"\u2002" || // En Space
+            c == u8"\u2003" || // Em Space
+            c == u8"\u2004" || // Three-Per-Em Space
+            c == u8"\u2005" || // Four-Per-Em Space
+            c == u8"\u2006" || // Six-Per-Em Space
+            c == u8"\u2007" || // Figure Space
+            c == u8"\u2008" || // Punctuation Space
+            c == u8"\u2009" || // Thin Space
+            c == u8"\u200A" || // Hair Space
+            c == u8"\u202F" || // Narrow No-Break Space (NNBSP)
+            c == u8"\u205F" || // Medium Mathematical Space (MMSP)
+            c == u8"\u3000" || // Ideographic Space
+            // Categoría UNICODE - Line Separator
+            c == u8"\u2028" || // Line Separator
+            // Categoría UNICODE - Paragraph Separator
+            c == u8"\u2029" || // Paragraph Separator
+
+            c == u8"\u0009" || // Horizontal tab
+            c == u8"\u000B" || // Vertical tab
+            c == u8"\u000C" || // Form feed
+
+            c == u8"\u000D" || // Carriage return
+            c == u8"\u000A" || // Line feed
+            c == u8"\u000D\u000A" || // Carriage return + Line feed
+            c == u8"\u0085" // Next line
+        )
+        {
+            resultado = true;
+        }
+
+
+        return resultado;
+    }
+
+    bool esalfa(std::string c)
+    {
+        //std::cout << "esalfa(" << c << ")" << std::endl;
+        
+        if(!esdígito(c) && !esespacio(c) && !espuntuación(c) && c.size() != 0)
+        {
+            return true;
+        }
+        else if(c == u8"_")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    bool esalfanum(std::string c)
+    {
+        //std::cout << "esalfanum(" << c << ")" << std::endl;
+        
+        if(!esespacio(c) && !espuntuación(c) && c.size() != 0)
+        {
+            return true;
+        }
+        else if(c == u8"_")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

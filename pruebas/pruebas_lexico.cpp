@@ -426,7 +426,7 @@ TEST(PruebasLexico, CadenaVacia)
 
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"");
-    EXPECT_EQ(lexemas.size(), 1);
+    ASSERT_EQ(lexemas.size(), 1);
     EXPECT_EQ(lexemas[0]->contenido, u8"");
     EXPECT_EQ(lexemas[0]->contenido, "");
     EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
@@ -435,7 +435,7 @@ TEST(PruebasLexico, CadenaVacia)
 
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza("");
-    EXPECT_EQ(lexemas.size(), 1);
+    ASSERT_EQ(lexemas.size(), 1);
     EXPECT_EQ(lexemas[0]->contenido, u8"");
     EXPECT_EQ(lexemas[0]->contenido, "");
     EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
@@ -451,7 +451,7 @@ TEST(PruebasLexico, Numeros)
     // Número Natural
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"1");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"1");
     EXPECT_EQ(lexemas[0]->contenido, "1");
@@ -468,7 +468,7 @@ TEST(PruebasLexico, Numeros)
     // Número Real
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"3.14159268");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"3.14159268");
     EXPECT_EQ(lexemas[0]->contenido, "3.14159268");
@@ -485,7 +485,7 @@ TEST(PruebasLexico, Numeros)
     // Número Científico
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"6.023e23");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"6.023e23");
     EXPECT_EQ(lexemas[0]->contenido, "6.023e23");
@@ -500,7 +500,7 @@ TEST(PruebasLexico, Numeros)
     
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"6.023E23");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"6.023E23");
     EXPECT_EQ(lexemas[0]->contenido, "6.023E23");
@@ -515,7 +515,7 @@ TEST(PruebasLexico, Numeros)
 
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"6.023e-23");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"6.023e-23");
     EXPECT_EQ(lexemas[0]->contenido, "6.023e-23");
@@ -530,7 +530,7 @@ TEST(PruebasLexico, Numeros)
     
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"6.023E-23");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"6.023E-23");
     EXPECT_EQ(lexemas[0]->contenido, "6.023E-23");
@@ -552,7 +552,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // cierto
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"cierto");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"cierto");
     EXPECT_EQ(lexemas[0]->contenido, "cierto");
@@ -568,7 +568,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // falso
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"falso");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"falso");
     EXPECT_EQ(lexemas[0]->contenido, "falso");
@@ -584,7 +584,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // var
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"var");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"var");
     EXPECT_EQ(lexemas[0]->contenido, "var");
@@ -600,7 +600,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // bool
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"bool");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"bool");
     EXPECT_EQ(lexemas[0]->contenido, "bool");
@@ -616,7 +616,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // entero
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"entero");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"entero");
     EXPECT_EQ(lexemas[0]->contenido, "entero");
@@ -632,7 +632,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // ent8
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"ent8");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent8");
     EXPECT_EQ(lexemas[0]->contenido, "ent8");
@@ -648,7 +648,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // ent16
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"ent16");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent16");
     EXPECT_EQ(lexemas[0]->contenido, "ent16");
@@ -664,7 +664,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // ent32
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"ent32");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent32");
     EXPECT_EQ(lexemas[0]->contenido, "ent32");
@@ -680,7 +680,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // ent64
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"ent64");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent64");
     EXPECT_EQ(lexemas[0]->contenido, "ent64");
@@ -696,7 +696,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // natural
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"natural");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"natural");
     EXPECT_EQ(lexemas[0]->contenido, "natural");
@@ -712,7 +712,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // nat8
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"nat8");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat8");
     EXPECT_EQ(lexemas[0]->contenido, "nat8");
@@ -728,7 +728,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // nat8
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"nat8");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat8");
     EXPECT_EQ(lexemas[0]->contenido, "nat8");
@@ -744,7 +744,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // nat16
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"nat16");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat16");
     EXPECT_EQ(lexemas[0]->contenido, "nat16");
@@ -760,7 +760,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // nat32
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"nat32");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat32");
     EXPECT_EQ(lexemas[0]->contenido, "nat32");
@@ -776,7 +776,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // nat64
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"nat64");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat64");
     EXPECT_EQ(lexemas[0]->contenido, "nat64");
@@ -792,7 +792,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // real
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"real");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"real");
     EXPECT_EQ(lexemas[0]->contenido, "real");
@@ -808,7 +808,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // rea16
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"rea16");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"rea16");
     EXPECT_EQ(lexemas[0]->contenido, "rea16");
@@ -824,7 +824,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // rea32
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"rea32");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"rea32");
     EXPECT_EQ(lexemas[0]->contenido, "rea32");
@@ -840,7 +840,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // rea64
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"rea64");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"rea64");
     EXPECT_EQ(lexemas[0]->contenido, "rea64");
@@ -856,7 +856,7 @@ TEST(PruebasLexico, PalabrasReservadas)
     // txt
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"txt");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"txt");
     EXPECT_EQ(lexemas[0]->contenido, "txt");
@@ -878,7 +878,7 @@ TEST(PruebasLexico, Identificadores)
     // identificador
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"identificador");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"identificador");
     EXPECT_EQ(lexemas[0]->contenido, "identificador");
@@ -894,7 +894,7 @@ TEST(PruebasLexico, Identificadores)
     // _nombre
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"_nombre");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"_nombre");
     EXPECT_EQ(lexemas[0]->contenido, "_nombre");
@@ -910,7 +910,7 @@ TEST(PruebasLexico, Identificadores)
     // prueba1234
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"prueba1234");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"prueba1234");
     EXPECT_EQ(lexemas[0]->contenido, "prueba1234");
@@ -926,7 +926,7 @@ TEST(PruebasLexico, Identificadores)
     // variable_de_prueba
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"variable_de_prueba");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"variable_de_prueba");
     EXPECT_EQ(lexemas[0]->contenido, "variable_de_prueba");
@@ -948,7 +948,7 @@ TEST(PruebasLexico, Notacion)
     // Punto
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8".");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8".");
     EXPECT_EQ(lexemas[0]->contenido, ".");
@@ -965,7 +965,7 @@ TEST(PruebasLexico, Notacion)
     // Coma
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8",");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8",");
     EXPECT_EQ(lexemas[0]->contenido, ",");
@@ -982,7 +982,7 @@ TEST(PruebasLexico, Notacion)
     // Dos puntos
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8":");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8":");
     EXPECT_EQ(lexemas[0]->contenido, ":");
@@ -999,7 +999,7 @@ TEST(PruebasLexico, Notacion)
     // Punto y coma
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8";");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8";");
     EXPECT_EQ(lexemas[0]->contenido, ";");
@@ -1016,7 +1016,7 @@ TEST(PruebasLexico, Notacion)
     // Guión
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"-");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"-");
     EXPECT_EQ(lexemas[0]->contenido, "-");
@@ -1033,7 +1033,7 @@ TEST(PruebasLexico, Notacion)
     // Suma
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"+");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"+");
     EXPECT_EQ(lexemas[0]->contenido, "+");
@@ -1050,7 +1050,7 @@ TEST(PruebasLexico, Notacion)
     // Barra
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"/");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"/");
     EXPECT_EQ(lexemas[0]->contenido, "/");
@@ -1067,7 +1067,7 @@ TEST(PruebasLexico, Notacion)
     // Barra invertida
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"\\");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"\\");
     EXPECT_EQ(lexemas[0]->contenido, "\\");
@@ -1084,7 +1084,7 @@ TEST(PruebasLexico, Notacion)
     // Asterisco
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"*");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"*");
     EXPECT_EQ(lexemas[0]->contenido, "*");
@@ -1101,7 +1101,7 @@ TEST(PruebasLexico, Notacion)
     // Comilla simple
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"'");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"'");
     EXPECT_EQ(lexemas[0]->contenido, "'");
@@ -1118,7 +1118,7 @@ TEST(PruebasLexico, Notacion)
     // Barra vertical
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"|");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"|");
     EXPECT_EQ(lexemas[0]->contenido, "|");
@@ -1135,7 +1135,7 @@ TEST(PruebasLexico, Notacion)
     // Arroba
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"@");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"@");
     EXPECT_EQ(lexemas[0]->contenido, "@");
@@ -1152,7 +1152,7 @@ TEST(PruebasLexico, Notacion)
     // Euro
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"€");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"€");
     EXPECT_EQ(lexemas[0]->contenido, u8"\u20AC");
@@ -1167,7 +1167,7 @@ TEST(PruebasLexico, Notacion)
 
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"\u20AC");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"\u20AC");
     EXPECT_EQ(lexemas[0]->contenido, u8"€");
@@ -1184,7 +1184,7 @@ TEST(PruebasLexico, Notacion)
     // Dólar
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"$");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"$");
     EXPECT_EQ(lexemas[0]->contenido, "$");
@@ -1201,7 +1201,7 @@ TEST(PruebasLexico, Notacion)
     // Porciento
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"%");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"%");
     EXPECT_EQ(lexemas[0]->contenido, "%");
@@ -1218,7 +1218,7 @@ TEST(PruebasLexico, Notacion)
     // et
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"&");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"&");
     EXPECT_EQ(lexemas[0]->contenido, "&");
@@ -1235,7 +1235,7 @@ TEST(PruebasLexico, Notacion)
     // Abre paréntesis
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"(");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"(");
     EXPECT_EQ(lexemas[0]->contenido, "(");
@@ -1252,7 +1252,7 @@ TEST(PruebasLexico, Notacion)
     // Cierra paréntesis)
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8")");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8")");
     EXPECT_EQ(lexemas[0]->contenido, ")");
@@ -1269,7 +1269,7 @@ TEST(PruebasLexico, Notacion)
     // Igual
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"=");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"=");
     EXPECT_EQ(lexemas[0]->contenido, "=");
@@ -1286,7 +1286,7 @@ TEST(PruebasLexico, Notacion)
     // Abre interrogación
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"¿");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"¿");
     EXPECT_EQ(lexemas[0]->contenido, "¿");
@@ -1303,7 +1303,7 @@ TEST(PruebasLexico, Notacion)
     // Cierra interrogación
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"?");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"?");
     EXPECT_EQ(lexemas[0]->contenido, "?");
@@ -1320,7 +1320,7 @@ TEST(PruebasLexico, Notacion)
     // Abre exclamación
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"¡");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"¡");
     EXPECT_EQ(lexemas[0]->contenido, "¡");
@@ -1337,7 +1337,7 @@ TEST(PruebasLexico, Notacion)
     // Cierra exclamación
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"!");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"!");
     EXPECT_EQ(lexemas[0]->contenido, "!");
@@ -1354,7 +1354,7 @@ TEST(PruebasLexico, Notacion)
     // Abre corchete
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"[");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"[");
     EXPECT_EQ(lexemas[0]->contenido, "[");
@@ -1371,7 +1371,7 @@ TEST(PruebasLexico, Notacion)
     // Cierra corchete
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"]");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"]");
     EXPECT_EQ(lexemas[0]->contenido, "]");
@@ -1388,7 +1388,7 @@ TEST(PruebasLexico, Notacion)
     // Abre llave
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"{");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"{");
     EXPECT_EQ(lexemas[0]->contenido, "{");
@@ -1405,7 +1405,7 @@ TEST(PruebasLexico, Notacion)
     // Cierra llave
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"}");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"}");
     EXPECT_EQ(lexemas[0]->contenido, "}");
@@ -1422,7 +1422,7 @@ TEST(PruebasLexico, Notacion)
     // Caret / acento circunflejo
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"^");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"^");
     EXPECT_EQ(lexemas[0]->contenido, "^");
@@ -1439,7 +1439,7 @@ TEST(PruebasLexico, Notacion)
     // Menor que
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"<");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"<");
     EXPECT_EQ(lexemas[0]->contenido, "<");
@@ -1456,7 +1456,7 @@ TEST(PruebasLexico, Notacion)
     // Mayor que
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8">");
-    EXPECT_EQ(lexemas.size(), 2);
+    ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8">");
     EXPECT_EQ(lexemas[0]->contenido, ">");
@@ -1478,7 +1478,7 @@ TEST(PruebasLexico, MultiplesLexemas)
     // Declaración de variable
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"nat32 a;");
-    EXPECT_EQ(lexemas.size(), 4);
+    ASSERT_EQ(lexemas.size(), 4);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat32");
     EXPECT_EQ(lexemas[0]->contenido, "nat32");
@@ -1502,7 +1502,7 @@ TEST(PruebasLexico, MultiplesLexemas)
     // Declaración y asignación de variable
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"ent8 b = 288;");
-    EXPECT_EQ(lexemas.size(), 6);
+    ASSERT_EQ(lexemas.size(), 6);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent8");
     EXPECT_EQ(lexemas[0]->contenido, "ent8");
@@ -1534,7 +1534,7 @@ TEST(PruebasLexico, MultiplesLexemas)
     // Declaración de una variable y asignación del resultado de una función
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"rea64 c = aleatorio();");
-    EXPECT_EQ(lexemas.size(), 8);
+    ASSERT_EQ(lexemas.size(), 8);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"rea64");
     EXPECT_EQ(lexemas[0]->contenido, "rea64");
@@ -1574,7 +1574,7 @@ TEST(PruebasLexico, MultiplesLexemas)
     // Llamada a una función con un argumento
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"escribe(\"hola, mundo\n\");");
-    EXPECT_EQ(lexemas.size(), 6);
+    ASSERT_EQ(lexemas.size(), 6);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"escribe");
     EXPECT_EQ(lexemas[0]->contenido, "escribe");

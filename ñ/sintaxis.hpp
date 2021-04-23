@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "lexema.hpp"
 #include "nodo.hpp"
 
 namespace Ñ

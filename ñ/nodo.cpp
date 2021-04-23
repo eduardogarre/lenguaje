@@ -412,57 +412,103 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::Literal(*(Ñ::Literal*)nodo));
+		Ñ::Literal* n = (Ñ::Literal*)nodo;
+		Ñ::Literal* l = new Ñ::Literal();
+		l->dato = n->dato;
+
+		duplicado = (Ñ::Nodo*)l;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TIPO)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::Tipo(*(Ñ::Tipo*)nodo));
+		Ñ::Tipo* n = (Ñ::Tipo*)nodo;
+		Ñ::Tipo* t = new Ñ::Tipo();
+		t->tipo = n->tipo;
+		t->vector = n->vector;
+
+		duplicado = (Ñ::Nodo*)t;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::Identificador(*(Ñ::Identificador*)nodo));
+		Ñ::Identificador* n = (Ñ::Identificador*)nodo;
+		Ñ::Identificador* i = new Ñ::Identificador();
+		i->id = n->id;
+
+		duplicado = (Ñ::Nodo*)i;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::Factor(*(Ñ::Factor*)nodo));
+		Ñ::Factor* n = (Ñ::Factor*)nodo;
+		Ñ::Factor* f = new Ñ::Factor();
+		f->factor = n->factor;
+
+		duplicado = (Ñ::Nodo*)f;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::OpMultiplicaciónDivisión(*(Ñ::OpMultiplicaciónDivisión*)nodo));
+		Ñ::OpMultiplicaciónDivisión* n = (Ñ::OpMultiplicaciónDivisión*)nodo;
+		Ñ::OpMultiplicaciónDivisión* o = new Ñ::OpMultiplicaciónDivisión();
+		o->operación = n->operación;
+
+		duplicado = (Ñ::Nodo*)o;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::OpSumaResta(*(Ñ::OpSumaResta*)nodo));
+		Ñ::OpSumaResta* n = (Ñ::OpSumaResta*)nodo;
+		Ñ::OpSumaResta* o = new Ñ::OpSumaResta();
+		o->operación = n->operación;
+
+		duplicado = (Ñ::Nodo*)o;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::Asigna(*(Ñ::Asigna*)nodo));
+		Ñ::Asigna* a = new Ñ::Asigna();
+		duplicado = (Ñ::Nodo*)a;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::DeclaraVariable(*(Ñ::DeclaraVariable*)nodo));
+		Ñ::DeclaraVariable* n = (Ñ::DeclaraVariable*)nodo;
+		Ñ::DeclaraVariable* d = new Ñ::DeclaraVariable();
+		d->variable = n->variable;
+
+		duplicado = (Ñ::Nodo*)d;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTO)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::Argumento(*(Ñ::Argumento*)nodo));
+		Ñ::Argumento* a = new Ñ::Argumento();
+		duplicado = (Ñ::Nodo*)a;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::Argumentos(*(Ñ::Argumentos*)nodo));
+		Ñ::Argumentos* a = new Ñ::Argumentos();
+		duplicado = (Ñ::Nodo*)a;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::LlamaFunción(*(Ñ::LlamaFunción*)nodo));
+		Ñ::LlamaFunción* n = (Ñ::LlamaFunción*)nodo;
+		Ñ::LlamaFunción* f = new Ñ::LlamaFunción();
+		f->función = n->función;
+
+		duplicado = (Ñ::Nodo*)f;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
 	{
-		duplicado = (Ñ::Nodo*)(new Ñ::Expresión(*(Ñ::Expresión*)nodo));
+		Ñ::Expresión* e = new Ñ::Expresión();
+		duplicado = (Ñ::Nodo*)e;
+	}
+	else
+	{
+		std::cout << "Error, no he reconocido el nodo. Devuelvo nullptr." << std::endl;
+		return nullptr;
 	}
 
 	// Ahora duplico las ramas del nodo
 	for(auto r : nodo->ramas)
 	{
-		duplicado->ramas.push_back(duplicaNodo(r));
+		Ñ::Nodo* n = duplicaNodo(r);
+		if(n != nullptr)
+		{
+			duplicado->ramas.push_back(n);
+		}
 	}
 
 	return duplicado;

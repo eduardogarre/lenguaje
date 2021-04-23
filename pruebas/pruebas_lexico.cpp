@@ -1328,3 +1328,128 @@ TEST(PruebasLexico, Notacion)
     for(auto l : lexemas) { delete l; }
 }
 */
+
+TEST(PruebasLexico, MultiplesLexemas)
+{
+    std::vector<Ñ::Lexema*> lexemas;
+
+    // Declaración de variable
+    lexemas = Ñ::analizaLéxico(u8"nat32 a;");
+    EXPECT_EQ(lexemas.size(), 4);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"nat32");
+    EXPECT_EQ(lexemas[0]->contenido, "nat32");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_RESERVADO);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"a");
+    EXPECT_EQ(lexemas[1]->contenido, "a");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR);
+
+    EXPECT_EQ(lexemas[2]->contenido, u8";");
+    EXPECT_EQ(lexemas[2]->contenido, ";");
+    EXPECT_EQ(lexemas[2]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[3]->contenido, u8"");
+    EXPECT_EQ(lexemas[3]->contenido, "");
+    EXPECT_EQ(lexemas[3]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+    // Declaración y asignación de variable
+    lexemas = Ñ::analizaLéxico(u8"ent8 b = 288;");
+    EXPECT_EQ(lexemas.size(), 6);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"ent8");
+    EXPECT_EQ(lexemas[0]->contenido, "ent8");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_RESERVADO);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"b");
+    EXPECT_EQ(lexemas[1]->contenido, "b");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR);
+
+    EXPECT_EQ(lexemas[2]->contenido, u8"=");
+    EXPECT_EQ(lexemas[2]->contenido, "=");
+    EXPECT_EQ(lexemas[2]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[3]->contenido, u8"288");
+    EXPECT_EQ(lexemas[3]->contenido, "288");
+    EXPECT_EQ(lexemas[3]->categoría, Ñ::CategoríaLexema::LEXEMA_NÚMERO);
+
+    EXPECT_EQ(lexemas[4]->contenido, u8";");
+    EXPECT_EQ(lexemas[4]->contenido, ";");
+    EXPECT_EQ(lexemas[4]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[5]->contenido, u8"");
+    EXPECT_EQ(lexemas[5]->contenido, "");
+    EXPECT_EQ(lexemas[5]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+    // Declaración de una variable y asignación del resultado de una función
+    lexemas = Ñ::analizaLéxico(u8"rea64 c = aleatorio();");
+    EXPECT_EQ(lexemas.size(), 8);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"rea64");
+    EXPECT_EQ(lexemas[0]->contenido, "rea64");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_RESERVADO);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"c");
+    EXPECT_EQ(lexemas[1]->contenido, "c");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR);
+
+    EXPECT_EQ(lexemas[2]->contenido, u8"=");
+    EXPECT_EQ(lexemas[2]->contenido, "=");
+    EXPECT_EQ(lexemas[2]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[3]->contenido, u8"aleatorio");
+    EXPECT_EQ(lexemas[3]->contenido, "aleatorio");
+    EXPECT_EQ(lexemas[3]->categoría, Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR);
+
+    EXPECT_EQ(lexemas[4]->contenido, u8"(");
+    EXPECT_EQ(lexemas[4]->contenido, "(");
+    EXPECT_EQ(lexemas[4]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[5]->contenido, u8")");
+    EXPECT_EQ(lexemas[5]->contenido, ")");
+    EXPECT_EQ(lexemas[5]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[6]->contenido, u8";");
+    EXPECT_EQ(lexemas[6]->contenido, ";");
+    EXPECT_EQ(lexemas[6]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[7]->contenido, u8"");
+    EXPECT_EQ(lexemas[7]->contenido, "");
+    EXPECT_EQ(lexemas[7]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+
+    // Llamada a una función con un argumento
+    lexemas = Ñ::analizaLéxico(u8"escribe(\"hola, mundo\n\");");
+    EXPECT_EQ(lexemas.size(), 6);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"escribe");
+    EXPECT_EQ(lexemas[0]->contenido, "escribe");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"(");
+    EXPECT_EQ(lexemas[1]->contenido, "(");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[2]->contenido, u8"hola, mundo\n");
+    EXPECT_EQ(lexemas[2]->contenido, "hola, mundo\n");
+    EXPECT_EQ(lexemas[2]->categoría, Ñ::CategoríaLexema::LEXEMA_TEXTO);
+
+    EXPECT_EQ(lexemas[3]->contenido, u8")");
+    EXPECT_EQ(lexemas[3]->contenido, ")");
+    EXPECT_EQ(lexemas[3]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[4]->contenido, u8";");
+    EXPECT_EQ(lexemas[4]->contenido, ";");
+    EXPECT_EQ(lexemas[4]->categoría, Ñ::CategoríaLexema::LEXEMA_NOTACIÓN);
+
+    EXPECT_EQ(lexemas[5]->contenido, u8"");
+    EXPECT_EQ(lexemas[5]->contenido, "");
+    EXPECT_EQ(lexemas[5]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+}

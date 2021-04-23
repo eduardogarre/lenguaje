@@ -116,8 +116,10 @@ void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>
 {
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
+
+	Ñ::Léxico léxico;
 	
-	lexemas = Ñ::analizaLéxico(comando);
+	lexemas = léxico.analiza(comando);
 
 	if(lexemas.empty())
 	{

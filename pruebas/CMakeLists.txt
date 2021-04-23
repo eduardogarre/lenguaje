@@ -20,7 +20,7 @@ set(CABECERAS_GTEST "../obra/_deps/googletest-src/googletest/include/")
 add_executable(pruebas ${CODIGO_PRUEBAS})
 
 target_include_directories(pruebas PRIVATE ${CABECERAS_GTEST})
-target_link_libraries(pruebas gtest_main lenguaje)
+target_link_libraries(pruebas LINK_PUBLIC gtest_main lenguaje)
 
 add_test(NAME pruebas COMMAND pruebas)
 

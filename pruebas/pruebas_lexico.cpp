@@ -4,7 +4,7 @@
 
 #include <vector>
 
-
+/*
 TEST(PruebasLexico, incrementaCursor)
 {
 
@@ -17,434 +17,454 @@ TEST(PruebasLexico, siguienteCarácter)
 
 TEST(PruebasLexico, esdígito)
 {
-    EXPECT_TRUE(Ñ::esdígito("0"));
-    EXPECT_TRUE(Ñ::esdígito("1"));
-    EXPECT_TRUE(Ñ::esdígito("2"));
-    EXPECT_TRUE(Ñ::esdígito("3"));
-    EXPECT_TRUE(Ñ::esdígito("4"));
-    EXPECT_TRUE(Ñ::esdígito("5"));
-    EXPECT_TRUE(Ñ::esdígito("6"));
-    EXPECT_TRUE(Ñ::esdígito("7"));
-    EXPECT_TRUE(Ñ::esdígito("8"));
-    EXPECT_TRUE(Ñ::esdígito("9"));
-    EXPECT_TRUE(Ñ::esdígito("0"));
-    EXPECT_TRUE(Ñ::esdígito("0"));
+	Ñ::Léxico* léxico = new Ñ::Léxico();
 
-    EXPECT_FALSE(Ñ::esdígito(""));
-    EXPECT_FALSE(Ñ::esdígito("a"));
-    EXPECT_FALSE(Ñ::esdígito(","));
-    EXPECT_FALSE(Ñ::esdígito("_"));
-    EXPECT_FALSE(Ñ::esdígito("!"));
-    EXPECT_FALSE(Ñ::esdígito("natural"));
-    EXPECT_FALSE(Ñ::esdígito("ent32"));
-    EXPECT_FALSE(Ñ::esdígito("real64"));
-    EXPECT_FALSE(Ñ::esdígito("x86"));
-    EXPECT_FALSE(Ñ::esdígito("\\"));
-    EXPECT_FALSE(Ñ::esdígito("?"));
-    EXPECT_FALSE(Ñ::esdígito(" "));
-    EXPECT_FALSE(Ñ::esdígito("\n"));
-    EXPECT_FALSE(Ñ::esdígito("\t"));
-    EXPECT_FALSE(Ñ::esdígito("\r"));
+    EXPECT_TRUE(léxico->esdígito("0"));
+    EXPECT_TRUE(léxico->esdígito("1"));
+    EXPECT_TRUE(léxico->esdígito("2"));
+    EXPECT_TRUE(léxico->esdígito("3"));
+    EXPECT_TRUE(léxico->esdígito("4"));
+    EXPECT_TRUE(léxico->esdígito("5"));
+    EXPECT_TRUE(léxico->esdígito("6"));
+    EXPECT_TRUE(léxico->esdígito("7"));
+    EXPECT_TRUE(léxico->esdígito("8"));
+    EXPECT_TRUE(léxico->esdígito("9"));
+    EXPECT_TRUE(léxico->esdígito("0"));
+    EXPECT_TRUE(léxico->esdígito("0"));
+
+    EXPECT_FALSE(léxico->esdígito(""));
+    EXPECT_FALSE(léxico->esdígito("a"));
+    EXPECT_FALSE(léxico->esdígito(","));
+    EXPECT_FALSE(léxico->esdígito("_"));
+    EXPECT_FALSE(léxico->esdígito("!"));
+    EXPECT_FALSE(léxico->esdígito("natural"));
+    EXPECT_FALSE(léxico->esdígito("ent32"));
+    EXPECT_FALSE(léxico->esdígito("real64"));
+    EXPECT_FALSE(léxico->esdígito("x86"));
+    EXPECT_FALSE(léxico->esdígito("\\"));
+    EXPECT_FALSE(léxico->esdígito("?"));
+    EXPECT_FALSE(léxico->esdígito(" "));
+    EXPECT_FALSE(léxico->esdígito("\n"));
+    EXPECT_FALSE(léxico->esdígito("\t"));
+    EXPECT_FALSE(léxico->esdígito("\r"));
 }
 
 TEST(PruebasLexico, espuntuación)
 {
-    EXPECT_TRUE(Ñ::espuntuación("."));
-    EXPECT_TRUE(Ñ::espuntuación(","));
-    EXPECT_TRUE(Ñ::espuntuación(":"));
-    EXPECT_TRUE(Ñ::espuntuación(";"));
-    EXPECT_TRUE(Ñ::espuntuación("-"));
-    EXPECT_TRUE(Ñ::espuntuación("+"));
-    EXPECT_TRUE(Ñ::espuntuación("/"));
-    EXPECT_TRUE(Ñ::espuntuación("*"));
-    EXPECT_TRUE(Ñ::espuntuación("\""));
-    EXPECT_TRUE(Ñ::espuntuación("'"));
-    EXPECT_TRUE(Ñ::espuntuación("|"));
-    EXPECT_TRUE(Ñ::espuntuación("@"));
-    EXPECT_TRUE(Ñ::espuntuación("€"));
-    EXPECT_TRUE(Ñ::espuntuación("$"));
-    EXPECT_TRUE(Ñ::espuntuación("%"));
-    EXPECT_TRUE(Ñ::espuntuación("&"));
-    EXPECT_TRUE(Ñ::espuntuación("("));
-    EXPECT_TRUE(Ñ::espuntuación(")"));
-    EXPECT_TRUE(Ñ::espuntuación("="));
-    EXPECT_TRUE(Ñ::espuntuación("¿"));
-    EXPECT_TRUE(Ñ::espuntuación("?"));
-    EXPECT_TRUE(Ñ::espuntuación("¡"));
-    EXPECT_TRUE(Ñ::espuntuación("!"));
-    EXPECT_TRUE(Ñ::espuntuación("["));
-    EXPECT_TRUE(Ñ::espuntuación("]"));
-    EXPECT_TRUE(Ñ::espuntuación("{"));
-    EXPECT_TRUE(Ñ::espuntuación("}"));
-    EXPECT_TRUE(Ñ::espuntuación("^"));
-    EXPECT_TRUE(Ñ::espuntuación("<"));
-    EXPECT_TRUE(Ñ::espuntuación(">"));
-    EXPECT_TRUE(Ñ::espuntuación("\\"));
+	Ñ::Léxico* léxico = new Ñ::Léxico();
+
+    EXPECT_TRUE(léxico->espuntuación("."));
+    EXPECT_TRUE(léxico->espuntuación(","));
+    EXPECT_TRUE(léxico->espuntuación(":"));
+    EXPECT_TRUE(léxico->espuntuación(";"));
+    EXPECT_TRUE(léxico->espuntuación("-"));
+    EXPECT_TRUE(léxico->espuntuación("+"));
+    EXPECT_TRUE(léxico->espuntuación("/"));
+    EXPECT_TRUE(léxico->espuntuación("*"));
+    EXPECT_TRUE(léxico->espuntuación("\""));
+    EXPECT_TRUE(léxico->espuntuación("'"));
+    EXPECT_TRUE(léxico->espuntuación("|"));
+    EXPECT_TRUE(léxico->espuntuación("@"));
+    EXPECT_TRUE(léxico->espuntuación("€"));
+    EXPECT_TRUE(léxico->espuntuación("$"));
+    EXPECT_TRUE(léxico->espuntuación("%"));
+    EXPECT_TRUE(léxico->espuntuación("&"));
+    EXPECT_TRUE(léxico->espuntuación("("));
+    EXPECT_TRUE(léxico->espuntuación(")"));
+    EXPECT_TRUE(léxico->espuntuación("="));
+    EXPECT_TRUE(léxico->espuntuación("¿"));
+    EXPECT_TRUE(léxico->espuntuación("?"));
+    EXPECT_TRUE(léxico->espuntuación("¡"));
+    EXPECT_TRUE(léxico->espuntuación("!"));
+    EXPECT_TRUE(léxico->espuntuación("["));
+    EXPECT_TRUE(léxico->espuntuación("]"));
+    EXPECT_TRUE(léxico->espuntuación("{"));
+    EXPECT_TRUE(léxico->espuntuación("}"));
+    EXPECT_TRUE(léxico->espuntuación("^"));
+    EXPECT_TRUE(léxico->espuntuación("<"));
+    EXPECT_TRUE(léxico->espuntuación(">"));
+    EXPECT_TRUE(léxico->espuntuación("\\"));
     
-    EXPECT_TRUE(Ñ::espuntuación(u8"."));
-    EXPECT_TRUE(Ñ::espuntuación(u8","));
-    EXPECT_TRUE(Ñ::espuntuación(u8":"));
-    EXPECT_TRUE(Ñ::espuntuación(u8";"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"-"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"+"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"/"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"*"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"\""));
-    EXPECT_TRUE(Ñ::espuntuación(u8"'"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"|"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"@"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"€"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"$"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"%"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"&"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"("));
-    EXPECT_TRUE(Ñ::espuntuación(u8")"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"="));
-    EXPECT_TRUE(Ñ::espuntuación(u8"¿"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"?"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"¡"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"!"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"["));
-    EXPECT_TRUE(Ñ::espuntuación(u8"]"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"{"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"}"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"^"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"<"));
-    EXPECT_TRUE(Ñ::espuntuación(u8">"));
-    EXPECT_TRUE(Ñ::espuntuación(u8"\\"));
+    EXPECT_TRUE(léxico->espuntuación(u8"."));
+    EXPECT_TRUE(léxico->espuntuación(u8","));
+    EXPECT_TRUE(léxico->espuntuación(u8":"));
+    EXPECT_TRUE(léxico->espuntuación(u8";"));
+    EXPECT_TRUE(léxico->espuntuación(u8"-"));
+    EXPECT_TRUE(léxico->espuntuación(u8"+"));
+    EXPECT_TRUE(léxico->espuntuación(u8"/"));
+    EXPECT_TRUE(léxico->espuntuación(u8"*"));
+    EXPECT_TRUE(léxico->espuntuación(u8"\""));
+    EXPECT_TRUE(léxico->espuntuación(u8"'"));
+    EXPECT_TRUE(léxico->espuntuación(u8"|"));
+    EXPECT_TRUE(léxico->espuntuación(u8"@"));
+    EXPECT_TRUE(léxico->espuntuación(u8"€"));
+    EXPECT_TRUE(léxico->espuntuación(u8"$"));
+    EXPECT_TRUE(léxico->espuntuación(u8"%"));
+    EXPECT_TRUE(léxico->espuntuación(u8"&"));
+    EXPECT_TRUE(léxico->espuntuación(u8"("));
+    EXPECT_TRUE(léxico->espuntuación(u8")"));
+    EXPECT_TRUE(léxico->espuntuación(u8"="));
+    EXPECT_TRUE(léxico->espuntuación(u8"¿"));
+    EXPECT_TRUE(léxico->espuntuación(u8"?"));
+    EXPECT_TRUE(léxico->espuntuación(u8"¡"));
+    EXPECT_TRUE(léxico->espuntuación(u8"!"));
+    EXPECT_TRUE(léxico->espuntuación(u8"["));
+    EXPECT_TRUE(léxico->espuntuación(u8"]"));
+    EXPECT_TRUE(léxico->espuntuación(u8"{"));
+    EXPECT_TRUE(léxico->espuntuación(u8"}"));
+    EXPECT_TRUE(léxico->espuntuación(u8"^"));
+    EXPECT_TRUE(léxico->espuntuación(u8"<"));
+    EXPECT_TRUE(léxico->espuntuación(u8">"));
+    EXPECT_TRUE(léxico->espuntuación(u8"\\"));
     
-    EXPECT_FALSE(Ñ::espuntuación("1"));
-    EXPECT_FALSE(Ñ::espuntuación("9"));
-    EXPECT_FALSE(Ñ::espuntuación("a"));
-    EXPECT_FALSE(Ñ::espuntuación("natural"));
-    EXPECT_FALSE(Ñ::espuntuación("_nat16"));
-    EXPECT_FALSE(Ñ::espuntuación(" "));
-    EXPECT_FALSE(Ñ::espuntuación("\n"));
-    EXPECT_FALSE(Ñ::espuntuación("\t"));
-    EXPECT_FALSE(Ñ::espuntuación("\r"));
+    EXPECT_FALSE(léxico->espuntuación("1"));
+    EXPECT_FALSE(léxico->espuntuación("9"));
+    EXPECT_FALSE(léxico->espuntuación("a"));
+    EXPECT_FALSE(léxico->espuntuación("natural"));
+    EXPECT_FALSE(léxico->espuntuación("_nat16"));
+    EXPECT_FALSE(léxico->espuntuación(" "));
+    EXPECT_FALSE(léxico->espuntuación("\n"));
+    EXPECT_FALSE(léxico->espuntuación("\t"));
+    EXPECT_FALSE(léxico->espuntuación("\r"));
 }
 
 TEST(PruebasLexico, esnuevalínea)
 {
-    EXPECT_TRUE(Ñ::esnuevalínea("\n"));
-    EXPECT_TRUE(Ñ::esnuevalínea("\r"));
-    EXPECT_TRUE(Ñ::esnuevalínea("\r\n"));
-    EXPECT_TRUE(Ñ::esnuevalínea(u8"\u2028"));
-    EXPECT_TRUE(Ñ::esnuevalínea(u8"\u2029"));
-    EXPECT_TRUE(Ñ::esnuevalínea(u8"\u000D"));
-    EXPECT_TRUE(Ñ::esnuevalínea(u8"\u000A"));
-    EXPECT_TRUE(Ñ::esnuevalínea(u8"\u000D\u000A"));
-    EXPECT_TRUE(Ñ::esnuevalínea(u8"\u0085"));
+	Ñ::Léxico* léxico = new Ñ::Léxico();
+
+    EXPECT_TRUE(léxico->esnuevalínea("\n"));
+    EXPECT_TRUE(léxico->esnuevalínea("\r"));
+    EXPECT_TRUE(léxico->esnuevalínea("\r\n"));
+    EXPECT_TRUE(léxico->esnuevalínea(u8"\u2028"));
+    EXPECT_TRUE(léxico->esnuevalínea(u8"\u2029"));
+    EXPECT_TRUE(léxico->esnuevalínea(u8"\u000D"));
+    EXPECT_TRUE(léxico->esnuevalínea(u8"\u000A"));
+    EXPECT_TRUE(léxico->esnuevalínea(u8"\u000D\u000A"));
+    EXPECT_TRUE(léxico->esnuevalínea(u8"\u0085"));
     
-    EXPECT_FALSE(Ñ::esnuevalínea("\t"));
-    EXPECT_FALSE(Ñ::esnuevalínea(" "));
-    EXPECT_FALSE(Ñ::esnuevalínea("n"));
-    EXPECT_FALSE(Ñ::esnuevalínea("r"));
-    EXPECT_FALSE(Ñ::esnuevalínea(""));
-    EXPECT_FALSE(Ñ::esnuevalínea("1"));
-    EXPECT_FALSE(Ñ::esnuevalínea("\\"));
-    EXPECT_FALSE(Ñ::esnuevalínea(","));
+    EXPECT_FALSE(léxico->esnuevalínea("\t"));
+    EXPECT_FALSE(léxico->esnuevalínea(" "));
+    EXPECT_FALSE(léxico->esnuevalínea("n"));
+    EXPECT_FALSE(léxico->esnuevalínea("r"));
+    EXPECT_FALSE(léxico->esnuevalínea(""));
+    EXPECT_FALSE(léxico->esnuevalínea("1"));
+    EXPECT_FALSE(léxico->esnuevalínea("\\"));
+    EXPECT_FALSE(léxico->esnuevalínea(","));
 }
 
 TEST(PruebasLexico, esespacio)
 {
-    EXPECT_TRUE(Ñ::esespacio("\n"));
-    EXPECT_TRUE(Ñ::esespacio("\r"));
-    EXPECT_TRUE(Ñ::esespacio("\r\n"));
-    EXPECT_TRUE(Ñ::esespacio(" "));
-    EXPECT_TRUE(Ñ::esespacio("\t"));
-    EXPECT_TRUE(Ñ::esespacio(u8" "));
-    EXPECT_TRUE(Ñ::esespacio(u8"\t"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2028"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2029"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000D"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000D\u000A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u0085"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u0020"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u00A0"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u1680"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2000"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2001"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2002"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2003"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2004"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2005"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2006"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2007"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2008"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2009"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u200A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u202F"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u205F"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u3000"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2028"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u2029"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u0009"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000B"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000C"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000D"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u000D\u000A"));
-    EXPECT_TRUE(Ñ::esespacio(u8"\u0085"));
+	Ñ::Léxico* léxico = new Ñ::Léxico();
+
+    EXPECT_TRUE(léxico->esespacio("\n"));
+    EXPECT_TRUE(léxico->esespacio("\r"));
+    EXPECT_TRUE(léxico->esespacio("\r\n"));
+    EXPECT_TRUE(léxico->esespacio(" "));
+    EXPECT_TRUE(léxico->esespacio("\t"));
+    EXPECT_TRUE(léxico->esespacio(u8" "));
+    EXPECT_TRUE(léxico->esespacio(u8"\t"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2028"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2029"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u000D"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u000A"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u000D\u000A"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u0085"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u0020"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u00A0"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u1680"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2000"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2001"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2002"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2003"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2004"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2005"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2006"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2007"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2008"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2009"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u200A"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u202F"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u205F"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u3000"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2028"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u2029"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u0009"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u000B"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u000C"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u000D"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u000A"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u000D\u000A"));
+    EXPECT_TRUE(léxico->esespacio(u8"\u0085"));
     
-    EXPECT_FALSE(Ñ::esespacio("n"));
-    EXPECT_FALSE(Ñ::esespacio("r"));
-    EXPECT_FALSE(Ñ::esespacio(""));
-    EXPECT_FALSE(Ñ::esespacio("1"));
-    EXPECT_FALSE(Ñ::esespacio("\\"));
-    EXPECT_FALSE(Ñ::esespacio(","));
+    EXPECT_FALSE(léxico->esespacio("n"));
+    EXPECT_FALSE(léxico->esespacio("r"));
+    EXPECT_FALSE(léxico->esespacio(""));
+    EXPECT_FALSE(léxico->esespacio("1"));
+    EXPECT_FALSE(léxico->esespacio("\\"));
+    EXPECT_FALSE(léxico->esespacio(","));
 }
 
 TEST(PruebasLexico, esalfa)
 {
-    EXPECT_TRUE(Ñ::esalfa("a"));
-    EXPECT_TRUE(Ñ::esalfa("e"));
-    EXPECT_TRUE(Ñ::esalfa("i"));
-    EXPECT_TRUE(Ñ::esalfa("o"));
-    EXPECT_TRUE(Ñ::esalfa("u"));
-    EXPECT_TRUE(Ñ::esalfa("A"));
-    EXPECT_TRUE(Ñ::esalfa("E"));
-    EXPECT_TRUE(Ñ::esalfa("I"));
-    EXPECT_TRUE(Ñ::esalfa("O"));
-    EXPECT_TRUE(Ñ::esalfa("U"));
-    EXPECT_TRUE(Ñ::esalfa("á"));
-    EXPECT_TRUE(Ñ::esalfa("ë"));
-    EXPECT_TRUE(Ñ::esalfa("î"));
-    EXPECT_TRUE(Ñ::esalfa("õ"));
-    EXPECT_TRUE(Ñ::esalfa("ù"));
-    EXPECT_TRUE(Ñ::esalfa("Á"));
-    EXPECT_TRUE(Ñ::esalfa("Ë"));
-    EXPECT_TRUE(Ñ::esalfa("Î"));
-    EXPECT_TRUE(Ñ::esalfa("Õ"));
-    EXPECT_TRUE(Ñ::esalfa("Ù"));
-    EXPECT_TRUE(Ñ::esalfa("ñ"));
-    EXPECT_TRUE(Ñ::esalfa("Ñ"));
-    EXPECT_TRUE(Ñ::esalfa("ç"));
-    EXPECT_TRUE(Ñ::esalfa("Ç"));
-    EXPECT_TRUE(Ñ::esalfa("_"));
-    EXPECT_TRUE(Ñ::esalfa("B"));
-    EXPECT_TRUE(Ñ::esalfa("c"));
-    EXPECT_TRUE(Ñ::esalfa("f"));
-    EXPECT_TRUE(Ñ::esalfa("W"));
-    EXPECT_TRUE(Ñ::esalfa("z"));
+	Ñ::Léxico* léxico = new Ñ::Léxico();
+
+    EXPECT_TRUE(léxico->esalfa("a"));
+    EXPECT_TRUE(léxico->esalfa("e"));
+    EXPECT_TRUE(léxico->esalfa("i"));
+    EXPECT_TRUE(léxico->esalfa("o"));
+    EXPECT_TRUE(léxico->esalfa("u"));
+    EXPECT_TRUE(léxico->esalfa("A"));
+    EXPECT_TRUE(léxico->esalfa("E"));
+    EXPECT_TRUE(léxico->esalfa("I"));
+    EXPECT_TRUE(léxico->esalfa("O"));
+    EXPECT_TRUE(léxico->esalfa("U"));
+    EXPECT_TRUE(léxico->esalfa("á"));
+    EXPECT_TRUE(léxico->esalfa("ë"));
+    EXPECT_TRUE(léxico->esalfa("î"));
+    EXPECT_TRUE(léxico->esalfa("õ"));
+    EXPECT_TRUE(léxico->esalfa("ù"));
+    EXPECT_TRUE(léxico->esalfa("Á"));
+    EXPECT_TRUE(léxico->esalfa("Ë"));
+    EXPECT_TRUE(léxico->esalfa("Î"));
+    EXPECT_TRUE(léxico->esalfa("Õ"));
+    EXPECT_TRUE(léxico->esalfa("Ù"));
+    EXPECT_TRUE(léxico->esalfa("ñ"));
+    EXPECT_TRUE(léxico->esalfa("Ñ"));
+    EXPECT_TRUE(léxico->esalfa("ç"));
+    EXPECT_TRUE(léxico->esalfa("Ç"));
+    EXPECT_TRUE(léxico->esalfa("_"));
+    EXPECT_TRUE(léxico->esalfa("B"));
+    EXPECT_TRUE(léxico->esalfa("c"));
+    EXPECT_TRUE(léxico->esalfa("f"));
+    EXPECT_TRUE(léxico->esalfa("W"));
+    EXPECT_TRUE(léxico->esalfa("z"));
     
-    EXPECT_FALSE(Ñ::esalfa(""));
-    EXPECT_FALSE(Ñ::esalfa("\\"));
-    EXPECT_FALSE(Ñ::esalfa(","));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2028"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2029"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u000D"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u000A"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u000D\u000A"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u0085"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u0020"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u00A0"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u1680"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2000"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2001"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2002"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2003"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2004"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2005"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2006"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2007"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2008"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2009"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u200A"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u202F"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u205F"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u3000"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2028"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u2029"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u0009"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u000B"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u000C"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u000D"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u000A"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u000D\u000A"));
-    EXPECT_FALSE(Ñ::esalfa(u8"\u0085"));
-    EXPECT_FALSE(Ñ::esalfa("."));
-    EXPECT_FALSE(Ñ::esalfa(","));
-    EXPECT_FALSE(Ñ::esalfa(":"));
-    EXPECT_FALSE(Ñ::esalfa(";"));
-    EXPECT_FALSE(Ñ::esalfa("-"));
-    EXPECT_FALSE(Ñ::esalfa("+"));
-    EXPECT_FALSE(Ñ::esalfa("/"));
-    EXPECT_FALSE(Ñ::esalfa("*"));
-    EXPECT_FALSE(Ñ::esalfa("'"));
-    EXPECT_FALSE(Ñ::esalfa("|"));
-    EXPECT_FALSE(Ñ::esalfa("@"));
-    EXPECT_FALSE(Ñ::esalfa("€"));
-    EXPECT_FALSE(Ñ::esalfa("$"));
-    EXPECT_FALSE(Ñ::esalfa("%"));
-    EXPECT_FALSE(Ñ::esalfa("&"));
-    EXPECT_FALSE(Ñ::esalfa("("));
-    EXPECT_FALSE(Ñ::esalfa(")"));
-    EXPECT_FALSE(Ñ::esalfa("="));
-    EXPECT_FALSE(Ñ::esalfa("¿"));
-    EXPECT_FALSE(Ñ::esalfa("?"));
-    EXPECT_FALSE(Ñ::esalfa("¡"));
-    EXPECT_FALSE(Ñ::esalfa("!"));
-    EXPECT_FALSE(Ñ::esalfa("["));
-    EXPECT_FALSE(Ñ::esalfa("]"));
-    EXPECT_FALSE(Ñ::esalfa("{"));
-    EXPECT_FALSE(Ñ::esalfa("}"));
-    EXPECT_FALSE(Ñ::esalfa("^"));
-    EXPECT_FALSE(Ñ::esalfa("<"));
-    EXPECT_FALSE(Ñ::esalfa(">"));
-    EXPECT_FALSE(Ñ::esalfa("\\"));
-    EXPECT_FALSE(Ñ::esalfa("0"));
-    EXPECT_FALSE(Ñ::esalfa("1"));
-    EXPECT_FALSE(Ñ::esalfa("2"));
-    EXPECT_FALSE(Ñ::esalfa("3"));
-    EXPECT_FALSE(Ñ::esalfa("4"));
-    EXPECT_FALSE(Ñ::esalfa("5"));
-    EXPECT_FALSE(Ñ::esalfa("6"));
-    EXPECT_FALSE(Ñ::esalfa("7"));
-    EXPECT_FALSE(Ñ::esalfa("8"));
-    EXPECT_FALSE(Ñ::esalfa("9"));
-    EXPECT_FALSE(Ñ::esalfa("0"));
-    EXPECT_FALSE(Ñ::esalfa("0"));
+    EXPECT_FALSE(léxico->esalfa(""));
+    EXPECT_FALSE(léxico->esalfa("\\"));
+    EXPECT_FALSE(léxico->esalfa(","));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2028"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2029"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u000D"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u000A"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u000D\u000A"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u0085"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u0020"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u00A0"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u1680"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2000"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2001"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2002"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2003"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2004"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2005"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2006"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2007"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2008"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2009"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u200A"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u202F"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u205F"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u3000"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2028"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u2029"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u0009"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u000B"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u000C"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u000D"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u000A"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u000D\u000A"));
+    EXPECT_FALSE(léxico->esalfa(u8"\u0085"));
+    EXPECT_FALSE(léxico->esalfa("."));
+    EXPECT_FALSE(léxico->esalfa(","));
+    EXPECT_FALSE(léxico->esalfa(":"));
+    EXPECT_FALSE(léxico->esalfa(";"));
+    EXPECT_FALSE(léxico->esalfa("-"));
+    EXPECT_FALSE(léxico->esalfa("+"));
+    EXPECT_FALSE(léxico->esalfa("/"));
+    EXPECT_FALSE(léxico->esalfa("*"));
+    EXPECT_FALSE(léxico->esalfa("'"));
+    EXPECT_FALSE(léxico->esalfa("|"));
+    EXPECT_FALSE(léxico->esalfa("@"));
+    EXPECT_FALSE(léxico->esalfa("€"));
+    EXPECT_FALSE(léxico->esalfa("$"));
+    EXPECT_FALSE(léxico->esalfa("%"));
+    EXPECT_FALSE(léxico->esalfa("&"));
+    EXPECT_FALSE(léxico->esalfa("("));
+    EXPECT_FALSE(léxico->esalfa(")"));
+    EXPECT_FALSE(léxico->esalfa("="));
+    EXPECT_FALSE(léxico->esalfa("¿"));
+    EXPECT_FALSE(léxico->esalfa("?"));
+    EXPECT_FALSE(léxico->esalfa("¡"));
+    EXPECT_FALSE(léxico->esalfa("!"));
+    EXPECT_FALSE(léxico->esalfa("["));
+    EXPECT_FALSE(léxico->esalfa("]"));
+    EXPECT_FALSE(léxico->esalfa("{"));
+    EXPECT_FALSE(léxico->esalfa("}"));
+    EXPECT_FALSE(léxico->esalfa("^"));
+    EXPECT_FALSE(léxico->esalfa("<"));
+    EXPECT_FALSE(léxico->esalfa(">"));
+    EXPECT_FALSE(léxico->esalfa("\\"));
+    EXPECT_FALSE(léxico->esalfa("0"));
+    EXPECT_FALSE(léxico->esalfa("1"));
+    EXPECT_FALSE(léxico->esalfa("2"));
+    EXPECT_FALSE(léxico->esalfa("3"));
+    EXPECT_FALSE(léxico->esalfa("4"));
+    EXPECT_FALSE(léxico->esalfa("5"));
+    EXPECT_FALSE(léxico->esalfa("6"));
+    EXPECT_FALSE(léxico->esalfa("7"));
+    EXPECT_FALSE(léxico->esalfa("8"));
+    EXPECT_FALSE(léxico->esalfa("9"));
+    EXPECT_FALSE(léxico->esalfa("0"));
+    EXPECT_FALSE(léxico->esalfa("0"));
 }
 
 TEST(PruebasLexico, esalfanum)
 {
-    EXPECT_TRUE(Ñ::esalfanum("a"));
-    EXPECT_TRUE(Ñ::esalfanum("e"));
-    EXPECT_TRUE(Ñ::esalfanum("i"));
-    EXPECT_TRUE(Ñ::esalfanum("o"));
-    EXPECT_TRUE(Ñ::esalfanum("u"));
-    EXPECT_TRUE(Ñ::esalfanum("A"));
-    EXPECT_TRUE(Ñ::esalfanum("E"));
-    EXPECT_TRUE(Ñ::esalfanum("I"));
-    EXPECT_TRUE(Ñ::esalfanum("O"));
-    EXPECT_TRUE(Ñ::esalfanum("U"));
-    EXPECT_TRUE(Ñ::esalfanum("á"));
-    EXPECT_TRUE(Ñ::esalfanum("ë"));
-    EXPECT_TRUE(Ñ::esalfanum("î"));
-    EXPECT_TRUE(Ñ::esalfanum("õ"));
-    EXPECT_TRUE(Ñ::esalfanum("ù"));
-    EXPECT_TRUE(Ñ::esalfanum("Á"));
-    EXPECT_TRUE(Ñ::esalfanum("Ë"));
-    EXPECT_TRUE(Ñ::esalfanum("Î"));
-    EXPECT_TRUE(Ñ::esalfanum("Õ"));
-    EXPECT_TRUE(Ñ::esalfanum("Ù"));
-    EXPECT_TRUE(Ñ::esalfanum("ñ"));
-    EXPECT_TRUE(Ñ::esalfanum("Ñ"));
-    EXPECT_TRUE(Ñ::esalfanum("ç"));
-    EXPECT_TRUE(Ñ::esalfanum("Ç"));
-    EXPECT_TRUE(Ñ::esalfanum("_"));
-    EXPECT_TRUE(Ñ::esalfanum("B"));
-    EXPECT_TRUE(Ñ::esalfanum("c"));
-    EXPECT_TRUE(Ñ::esalfanum("f"));
-    EXPECT_TRUE(Ñ::esalfanum("W"));
-    EXPECT_TRUE(Ñ::esalfanum("z"));
-    EXPECT_TRUE(Ñ::esalfanum("0"));
-    EXPECT_TRUE(Ñ::esalfanum("1"));
-    EXPECT_TRUE(Ñ::esalfanum("2"));
-    EXPECT_TRUE(Ñ::esalfanum("3"));
-    EXPECT_TRUE(Ñ::esalfanum("4"));
-    EXPECT_TRUE(Ñ::esalfanum("5"));
-    EXPECT_TRUE(Ñ::esalfanum("6"));
-    EXPECT_TRUE(Ñ::esalfanum("7"));
-    EXPECT_TRUE(Ñ::esalfanum("8"));
-    EXPECT_TRUE(Ñ::esalfanum("9"));
-    EXPECT_TRUE(Ñ::esalfanum("0"));
-    EXPECT_TRUE(Ñ::esalfanum("0"));
+	Ñ::Léxico* léxico = new Ñ::Léxico();
+
+    EXPECT_TRUE(léxico->esalfanum("a"));
+    EXPECT_TRUE(léxico->esalfanum("e"));
+    EXPECT_TRUE(léxico->esalfanum("i"));
+    EXPECT_TRUE(léxico->esalfanum("o"));
+    EXPECT_TRUE(léxico->esalfanum("u"));
+    EXPECT_TRUE(léxico->esalfanum("A"));
+    EXPECT_TRUE(léxico->esalfanum("E"));
+    EXPECT_TRUE(léxico->esalfanum("I"));
+    EXPECT_TRUE(léxico->esalfanum("O"));
+    EXPECT_TRUE(léxico->esalfanum("U"));
+    EXPECT_TRUE(léxico->esalfanum("á"));
+    EXPECT_TRUE(léxico->esalfanum("ë"));
+    EXPECT_TRUE(léxico->esalfanum("î"));
+    EXPECT_TRUE(léxico->esalfanum("õ"));
+    EXPECT_TRUE(léxico->esalfanum("ù"));
+    EXPECT_TRUE(léxico->esalfanum("Á"));
+    EXPECT_TRUE(léxico->esalfanum("Ë"));
+    EXPECT_TRUE(léxico->esalfanum("Î"));
+    EXPECT_TRUE(léxico->esalfanum("Õ"));
+    EXPECT_TRUE(léxico->esalfanum("Ù"));
+    EXPECT_TRUE(léxico->esalfanum("ñ"));
+    EXPECT_TRUE(léxico->esalfanum("Ñ"));
+    EXPECT_TRUE(léxico->esalfanum("ç"));
+    EXPECT_TRUE(léxico->esalfanum("Ç"));
+    EXPECT_TRUE(léxico->esalfanum("_"));
+    EXPECT_TRUE(léxico->esalfanum("B"));
+    EXPECT_TRUE(léxico->esalfanum("c"));
+    EXPECT_TRUE(léxico->esalfanum("f"));
+    EXPECT_TRUE(léxico->esalfanum("W"));
+    EXPECT_TRUE(léxico->esalfanum("z"));
+    EXPECT_TRUE(léxico->esalfanum("0"));
+    EXPECT_TRUE(léxico->esalfanum("1"));
+    EXPECT_TRUE(léxico->esalfanum("2"));
+    EXPECT_TRUE(léxico->esalfanum("3"));
+    EXPECT_TRUE(léxico->esalfanum("4"));
+    EXPECT_TRUE(léxico->esalfanum("5"));
+    EXPECT_TRUE(léxico->esalfanum("6"));
+    EXPECT_TRUE(léxico->esalfanum("7"));
+    EXPECT_TRUE(léxico->esalfanum("8"));
+    EXPECT_TRUE(léxico->esalfanum("9"));
+    EXPECT_TRUE(léxico->esalfanum("0"));
+    EXPECT_TRUE(léxico->esalfanum("0"));
     
-    EXPECT_FALSE(Ñ::esalfanum(""));
-    EXPECT_FALSE(Ñ::esalfanum("\\"));
-    EXPECT_FALSE(Ñ::esalfanum(","));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2028"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2029"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u000D"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u000A"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u000D\u000A"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u0085"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u0020"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u00A0"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u1680"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2000"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2001"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2002"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2003"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2004"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2005"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2006"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2007"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2008"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2009"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u200A"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u202F"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u205F"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u3000"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2028"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u2029"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u0009"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u000B"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u000C"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u000D"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u000A"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u000D\u000A"));
-    EXPECT_FALSE(Ñ::esalfanum(u8"\u0085"));
-    EXPECT_FALSE(Ñ::esalfanum("."));
-    EXPECT_FALSE(Ñ::esalfanum(","));
-    EXPECT_FALSE(Ñ::esalfanum(":"));
-    EXPECT_FALSE(Ñ::esalfanum(";"));
-    EXPECT_FALSE(Ñ::esalfanum("-"));
-    EXPECT_FALSE(Ñ::esalfanum("+"));
-    EXPECT_FALSE(Ñ::esalfanum("/"));
-    EXPECT_FALSE(Ñ::esalfanum("*"));
-    EXPECT_FALSE(Ñ::esalfanum("'"));
-    EXPECT_FALSE(Ñ::esalfanum("|"));
-    EXPECT_FALSE(Ñ::esalfanum("@"));
-    EXPECT_FALSE(Ñ::esalfanum("€"));
-    EXPECT_FALSE(Ñ::esalfanum("$"));
-    EXPECT_FALSE(Ñ::esalfanum("%"));
-    EXPECT_FALSE(Ñ::esalfanum("&"));
-    EXPECT_FALSE(Ñ::esalfanum("("));
-    EXPECT_FALSE(Ñ::esalfanum(")"));
-    EXPECT_FALSE(Ñ::esalfanum("="));
-    EXPECT_FALSE(Ñ::esalfanum("¿"));
-    EXPECT_FALSE(Ñ::esalfanum("?"));
-    EXPECT_FALSE(Ñ::esalfanum("¡"));
-    EXPECT_FALSE(Ñ::esalfanum("!"));
-    EXPECT_FALSE(Ñ::esalfanum("["));
-    EXPECT_FALSE(Ñ::esalfanum("]"));
-    EXPECT_FALSE(Ñ::esalfanum("{"));
-    EXPECT_FALSE(Ñ::esalfanum("}"));
-    EXPECT_FALSE(Ñ::esalfanum("^"));
-    EXPECT_FALSE(Ñ::esalfanum("<"));
-    EXPECT_FALSE(Ñ::esalfanum(">"));
-    EXPECT_FALSE(Ñ::esalfanum("\\"));
+    EXPECT_FALSE(léxico->esalfanum(""));
+    EXPECT_FALSE(léxico->esalfanum("\\"));
+    EXPECT_FALSE(léxico->esalfanum(","));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2028"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2029"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u000D"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u000A"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u000D\u000A"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u0085"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u0020"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u00A0"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u1680"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2000"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2001"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2002"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2003"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2004"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2005"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2006"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2007"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2008"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2009"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u200A"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u202F"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u205F"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u3000"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2028"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u2029"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u0009"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u000B"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u000C"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u000D"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u000A"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u000D\u000A"));
+    EXPECT_FALSE(léxico->esalfanum(u8"\u0085"));
+    EXPECT_FALSE(léxico->esalfanum("."));
+    EXPECT_FALSE(léxico->esalfanum(","));
+    EXPECT_FALSE(léxico->esalfanum(":"));
+    EXPECT_FALSE(léxico->esalfanum(";"));
+    EXPECT_FALSE(léxico->esalfanum("-"));
+    EXPECT_FALSE(léxico->esalfanum("+"));
+    EXPECT_FALSE(léxico->esalfanum("/"));
+    EXPECT_FALSE(léxico->esalfanum("*"));
+    EXPECT_FALSE(léxico->esalfanum("'"));
+    EXPECT_FALSE(léxico->esalfanum("|"));
+    EXPECT_FALSE(léxico->esalfanum("@"));
+    EXPECT_FALSE(léxico->esalfanum("€"));
+    EXPECT_FALSE(léxico->esalfanum("$"));
+    EXPECT_FALSE(léxico->esalfanum("%"));
+    EXPECT_FALSE(léxico->esalfanum("&"));
+    EXPECT_FALSE(léxico->esalfanum("("));
+    EXPECT_FALSE(léxico->esalfanum(")"));
+    EXPECT_FALSE(léxico->esalfanum("="));
+    EXPECT_FALSE(léxico->esalfanum("¿"));
+    EXPECT_FALSE(léxico->esalfanum("?"));
+    EXPECT_FALSE(léxico->esalfanum("¡"));
+    EXPECT_FALSE(léxico->esalfanum("!"));
+    EXPECT_FALSE(léxico->esalfanum("["));
+    EXPECT_FALSE(léxico->esalfanum("]"));
+    EXPECT_FALSE(léxico->esalfanum("{"));
+    EXPECT_FALSE(léxico->esalfanum("}"));
+    EXPECT_FALSE(léxico->esalfanum("^"));
+    EXPECT_FALSE(léxico->esalfanum("<"));
+    EXPECT_FALSE(léxico->esalfanum(">"));
+    EXPECT_FALSE(léxico->esalfanum("\\"));
 }
+*/
 
 TEST(PruebasLexico, CadenaVacia)
 {
+    Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
-    lexemas = Ñ::analizaLéxico(u8"");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"");
     EXPECT_EQ(lexemas.size(), 1);
     EXPECT_EQ(lexemas[0]->contenido, u8"");
     EXPECT_EQ(lexemas[0]->contenido, "");
     EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
-    lexemas = Ñ::analizaLéxico("");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza("");
     EXPECT_EQ(lexemas.size(), 1);
     EXPECT_EQ(lexemas[0]->contenido, u8"");
     EXPECT_EQ(lexemas[0]->contenido, "");
     EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 }
 
 TEST(PruebasLexico, Numeros)
 {
+    Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
     // Número Natural
-    lexemas = Ñ::analizaLéxico(u8"1");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"1");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"1");
@@ -456,10 +476,12 @@ TEST(PruebasLexico, Numeros)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Número Real
-    lexemas = Ñ::analizaLéxico(u8"3.14159268");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"3.14159268");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"3.14159268");
@@ -471,10 +493,12 @@ TEST(PruebasLexico, Numeros)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Número Científico
-    lexemas = Ñ::analizaLéxico(u8"6.023e23");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"6.023e23");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"6.023e23");
@@ -486,8 +510,10 @@ TEST(PruebasLexico, Numeros)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
     
-    lexemas = Ñ::analizaLéxico(u8"6.023E23");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"6.023E23");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"6.023E23");
@@ -499,8 +525,10 @@ TEST(PruebasLexico, Numeros)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
-    lexemas = Ñ::analizaLéxico(u8"6.023e-23");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"6.023e-23");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"6.023e-23");
@@ -512,8 +540,10 @@ TEST(PruebasLexico, Numeros)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
     
-    lexemas = Ñ::analizaLéxico(u8"6.023E-23");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"6.023E-23");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"6.023E-23");
@@ -525,14 +555,17 @@ TEST(PruebasLexico, Numeros)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 }
 
 TEST(PruebasLexico, PalabrasReservadas)
 {
+    Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
     // cierto
-    lexemas = Ñ::analizaLéxico(u8"cierto");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"cierto");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"cierto");
@@ -544,9 +577,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // falso
-    lexemas = Ñ::analizaLéxico(u8"falso");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"falso");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"falso");
@@ -558,9 +593,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // var
-    lexemas = Ñ::analizaLéxico(u8"var");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"var");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"var");
@@ -572,9 +609,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // bool
-    lexemas = Ñ::analizaLéxico(u8"bool");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"bool");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"bool");
@@ -586,9 +625,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // entero
-    lexemas = Ñ::analizaLéxico(u8"entero");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"entero");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"entero");
@@ -600,9 +641,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // ent8
-    lexemas = Ñ::analizaLéxico(u8"ent8");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"ent8");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent8");
@@ -614,9 +657,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // ent16
-    lexemas = Ñ::analizaLéxico(u8"ent16");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"ent16");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent16");
@@ -628,9 +673,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // ent32
-    lexemas = Ñ::analizaLéxico(u8"ent32");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"ent32");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent32");
@@ -642,9 +689,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // ent64
-    lexemas = Ñ::analizaLéxico(u8"ent64");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"ent64");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent64");
@@ -656,9 +705,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // natural
-    lexemas = Ñ::analizaLéxico(u8"natural");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"natural");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"natural");
@@ -670,9 +721,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // nat8
-    lexemas = Ñ::analizaLéxico(u8"nat8");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"nat8");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat8");
@@ -684,9 +737,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // nat8
-    lexemas = Ñ::analizaLéxico(u8"nat8");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"nat8");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat8");
@@ -698,9 +753,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // nat16
-    lexemas = Ñ::analizaLéxico(u8"nat16");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"nat16");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat16");
@@ -712,9 +769,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // nat32
-    lexemas = Ñ::analizaLéxico(u8"nat32");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"nat32");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat32");
@@ -726,9 +785,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // nat64
-    lexemas = Ñ::analizaLéxico(u8"nat64");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"nat64");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat64");
@@ -740,9 +801,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // real
-    lexemas = Ñ::analizaLéxico(u8"real");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"real");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"real");
@@ -754,9 +817,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // rea16
-    lexemas = Ñ::analizaLéxico(u8"rea16");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"rea16");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"rea16");
@@ -768,9 +833,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // rea32
-    lexemas = Ñ::analizaLéxico(u8"rea32");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"rea32");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"rea32");
@@ -782,9 +849,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // rea64
-    lexemas = Ñ::analizaLéxico(u8"rea64");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"rea64");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"rea64");
@@ -796,9 +865,11 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // txt
-    lexemas = Ñ::analizaLéxico(u8"txt");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"txt");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"txt");
@@ -810,14 +881,17 @@ TEST(PruebasLexico, PalabrasReservadas)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 }
 
 TEST(PruebasLexico, Identificadores)
 {
+    Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
     // identificador
-    lexemas = Ñ::analizaLéxico(u8"identificador");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"identificador");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"identificador");
@@ -829,9 +903,11 @@ TEST(PruebasLexico, Identificadores)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // _nombre
-    lexemas = Ñ::analizaLéxico(u8"_nombre");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"_nombre");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"_nombre");
@@ -843,9 +919,11 @@ TEST(PruebasLexico, Identificadores)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // prueba1234
-    lexemas = Ñ::analizaLéxico(u8"prueba1234");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"prueba1234");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"prueba1234");
@@ -857,9 +935,11 @@ TEST(PruebasLexico, Identificadores)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // variable_de_prueba
-    lexemas = Ñ::analizaLéxico(u8"variable_de_prueba");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"variable_de_prueba");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"variable_de_prueba");
@@ -871,15 +951,17 @@ TEST(PruebasLexico, Identificadores)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 }
 
-/*
 TEST(PruebasLexico, Notacion)
 {
+    Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
     // Punto
-    lexemas = Ñ::analizaLéxico(u8".");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8".");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8".");
@@ -891,10 +973,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Coma
-    lexemas = Ñ::analizaLéxico(u8",");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8",");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8",");
@@ -906,10 +990,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Dos puntos
-    lexemas = Ñ::analizaLéxico(u8":");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8":");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8":");
@@ -921,10 +1007,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Punto y coma
-    lexemas = Ñ::analizaLéxico(u8";");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8";");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8";");
@@ -936,10 +1024,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Guión
-    lexemas = Ñ::analizaLéxico(u8"-");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"-");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"-");
@@ -951,10 +1041,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Suma
-    lexemas = Ñ::analizaLéxico(u8"+");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"+");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"+");
@@ -966,10 +1058,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Barra
-    lexemas = Ñ::analizaLéxico(u8"/");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"/");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"/");
@@ -981,10 +1075,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Barra invertida
-    lexemas = Ñ::analizaLéxico(u8"\\");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"\\");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"\\");
@@ -996,10 +1092,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Asterisco
-    lexemas = Ñ::analizaLéxico(u8"*");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"*");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"*");
@@ -1011,10 +1109,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Comilla simple
-    lexemas = Ñ::analizaLéxico(u8"'");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"'");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"'");
@@ -1026,10 +1126,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Barra vertical
-    lexemas = Ñ::analizaLéxico(u8"|");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"|");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"|");
@@ -1041,10 +1143,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Arroba
-    lexemas = Ñ::analizaLéxico(u8"@");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"@");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"@");
@@ -1056,10 +1160,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Euro
-    lexemas = Ñ::analizaLéxico(u8"€");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"€");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"€");
@@ -1071,10 +1177,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Dólar
-    lexemas = Ñ::analizaLéxico(u8"$");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"$");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"$");
@@ -1086,10 +1194,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Porciento
-    lexemas = Ñ::analizaLéxico(u8"%");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"%");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"%");
@@ -1101,10 +1211,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // et
-    lexemas = Ñ::analizaLéxico(u8"&");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"&");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"&");
@@ -1116,10 +1228,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Abre paréntesis
-    lexemas = Ñ::analizaLéxico(u8"(");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"(");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"(");
@@ -1131,10 +1245,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Cierra paréntesis)
-    lexemas = Ñ::analizaLéxico(u8")");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8")");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8")");
@@ -1146,10 +1262,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Igual
-    lexemas = Ñ::analizaLéxico(u8"=");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"=");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"=");
@@ -1161,10 +1279,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Abre interrogación
-    lexemas = Ñ::analizaLéxico(u8"¿");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"¿");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"¿");
@@ -1176,10 +1296,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Cierra interrogación
-    lexemas = Ñ::analizaLéxico(u8"?");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"?");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"?");
@@ -1191,10 +1313,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Abre exclamación
-    lexemas = Ñ::analizaLéxico(u8"¡");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"¡");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"¡");
@@ -1206,10 +1330,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Cierra exclamación
-    lexemas = Ñ::analizaLéxico(u8"!");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"!");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"!");
@@ -1221,10 +1347,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Abre corchete
-    lexemas = Ñ::analizaLéxico(u8"[");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"[");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"[");
@@ -1236,10 +1364,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Cierra corchete
-    lexemas = Ñ::analizaLéxico(u8"]");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"]");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"]");
@@ -1251,10 +1381,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Abre llave
-    lexemas = Ñ::analizaLéxico(u8"{");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"{");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"{");
@@ -1266,10 +1398,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Cierra llave
-    lexemas = Ñ::analizaLéxico(u8"}");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"}");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"}");
@@ -1281,10 +1415,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Caret / acento circunflejo
-    lexemas = Ñ::analizaLéxico(u8"^");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"^");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"^");
@@ -1296,10 +1432,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Menor que
-    lexemas = Ñ::analizaLéxico(u8"<");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"<");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"<");
@@ -1311,10 +1449,12 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
 
     // Mayor que
-    lexemas = Ñ::analizaLéxico(u8">");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8">");
     EXPECT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8">");
@@ -1326,15 +1466,17 @@ TEST(PruebasLexico, Notacion)
     EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 }
-*/
 
 TEST(PruebasLexico, MultiplesLexemas)
 {
+    Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
     // Declaración de variable
-    lexemas = Ñ::analizaLéxico(u8"nat32 a;");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"nat32 a;");
     EXPECT_EQ(lexemas.size(), 4);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"nat32");
@@ -1354,9 +1496,11 @@ TEST(PruebasLexico, MultiplesLexemas)
     EXPECT_EQ(lexemas[3]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // Declaración y asignación de variable
-    lexemas = Ñ::analizaLéxico(u8"ent8 b = 288;");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"ent8 b = 288;");
     EXPECT_EQ(lexemas.size(), 6);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"ent8");
@@ -1384,9 +1528,11 @@ TEST(PruebasLexico, MultiplesLexemas)
     EXPECT_EQ(lexemas[5]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // Declaración de una variable y asignación del resultado de una función
-    lexemas = Ñ::analizaLéxico(u8"rea64 c = aleatorio();");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"rea64 c = aleatorio();");
     EXPECT_EQ(lexemas.size(), 8);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"rea64");
@@ -1422,9 +1568,11 @@ TEST(PruebasLexico, MultiplesLexemas)
     EXPECT_EQ(lexemas[7]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 
     // Llamada a una función con un argumento
-    lexemas = Ñ::analizaLéxico(u8"escribe(\"hola, mundo\n\");");
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"escribe(\"hola, mundo\n\");");
     EXPECT_EQ(lexemas.size(), 6);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"escribe");
@@ -1452,4 +1600,5 @@ TEST(PruebasLexico, MultiplesLexemas)
     EXPECT_EQ(lexemas[5]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
+    delete léxico;
 }

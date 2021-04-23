@@ -11,10 +11,7 @@
 
 namespace Ñ
 {
-    int cursor_léxico = 0;
-    std::vector<Ñ::Lexema*> lexemas;
-
-    void incrementaCursor(std::string txt)
+    void Léxico::incrementaCursor(std::string txt)
     {
         int paso = std::mblen(txt.c_str() + cursor_léxico, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor_léxico));
 
@@ -26,7 +23,7 @@ namespace Ñ
         }
     }
 
-    std::string siguienteCarácter(std::string txt)
+    std::string Léxico::siguienteCarácter(std::string txt)
     {
         int paso = std::mblen(txt.c_str() + cursor_léxico, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor_léxico));
         std::string c = "";
@@ -42,7 +39,7 @@ namespace Ñ
         return c;
     }
 
-    bool esdígito(std::string c)
+    bool Léxico::esdígito(std::string c)
     {
         //std::cout << "esdígito(" << c << ")" << std::endl;
         
@@ -67,7 +64,7 @@ namespace Ñ
         return resultado;
     }
 
-    bool espuntuación(std::string c)
+    bool Léxico::espuntuación(std::string c)
     {
         //std::cout << "espuntuación(" << c << ")" << std::endl;
         
@@ -144,7 +141,7 @@ namespace Ñ
         return resultado;
     }
 
-    bool esnuevalínea(std::string c)
+    bool Léxico::esnuevalínea(std::string c)
     {
         //std::cout << "esnuevalínea(" << c << ")" << std::endl;
         
@@ -166,7 +163,7 @@ namespace Ñ
         return resultado;
     }
 
-    bool esespacio(std::string c)
+    bool Léxico::esespacio(std::string c)
     {
         //std::cout << "esespacio(" << c << ")" << std::endl;
         
@@ -213,7 +210,7 @@ namespace Ñ
         return resultado;
     }
 
-    bool esalfa(std::string c)
+    bool Léxico::esalfa(std::string c)
     {
         //std::cout << "esalfa(" << c << ")" << std::endl;
         
@@ -231,7 +228,7 @@ namespace Ñ
         }
     }
 
-    bool esalfanum(std::string c)
+    bool Léxico::esalfanum(std::string c)
     {
         //std::cout << "esalfanum(" << c << ")" << std::endl;
         
@@ -249,7 +246,7 @@ namespace Ñ
         }
     }
 
-    bool nuevaLínea(std::string txt)
+    bool Léxico::nuevaLínea(std::string txt)
     {
         try {
             //std::cout << "nuevaLínea(" << txt << ")" << std::endl;
@@ -297,7 +294,7 @@ namespace Ñ
         }
     }
 
-    bool espacio(std::string txt)
+    bool Léxico::espacio(std::string txt)
     {
         try {
             //std::cout << "espacio(" << txt << ")" << std::endl;
@@ -343,7 +340,7 @@ namespace Ñ
         }
     }
 
-    bool notación(std::string txt)
+    bool Léxico::notación(std::string txt)
     {
         try {
             //std::cout << "notación(" << txt << ")" << std::endl;
@@ -390,7 +387,7 @@ namespace Ñ
         }
     }
 
-    bool _nombre(std::string txt)
+    bool Léxico::_nombre(std::string txt)
     {
         try {
             //std::cout << "_nombre(" << txt << ")" << std::endl;
@@ -442,7 +439,7 @@ namespace Ñ
         }
     }
 
-    bool reservada(std::string txt)
+    bool Léxico::reservada(std::string txt)
     {
         try {
             //std::cout << "reservada(" << txt << ")" << std::endl;
@@ -514,7 +511,7 @@ namespace Ñ
         }
     }
 
-    bool _notacióncientífica(std::string txt)
+    bool Léxico::_notacióncientífica(std::string txt)
     {
         try {
             //std::cout << "notacióncientífica(" << txt << ")" << std::endl;
@@ -626,7 +623,7 @@ namespace Ñ
         }
     }
 
-    bool _númerodecimales(std::string txt)
+    bool Léxico::_númerodecimales(std::string txt)
     {
         try {
             //std::cout << "_númerodecimales(" << txt << ")" << std::endl;
@@ -733,7 +730,7 @@ namespace Ñ
         }
     }
 
-    bool _número(std::string txt)
+    bool Léxico::_número(std::string txt)
     {
         try {
             //std::cout << "_número(" << txt << ")" << std::endl;
@@ -800,7 +797,7 @@ namespace Ñ
         }
     }
 
-    bool número(std::string txt)
+    bool Léxico::número(std::string txt)
     {
         try {
             //std::cout << "número(" << txt << ")" << std::endl;
@@ -843,7 +840,7 @@ namespace Ñ
         }
     }
 
-    bool texto(std::string txt)
+    bool Léxico::texto(std::string txt)
     {
         try {
             //std::cout << "texto(" << txt << ")" << std::endl;
@@ -951,7 +948,7 @@ namespace Ñ
         }
     }
 
-    bool identificador(std::string txt)
+    bool Léxico::identificador(std::string txt)
     {
         try {
             //std::cout << "identificador(" << txt << ")" << std::endl;
@@ -1009,7 +1006,7 @@ namespace Ñ
         }
     }
 
-    std::vector<Ñ::Lexema*> analizaLéxico(std::string comando)
+    std::vector<Ñ::Lexema*> Léxico::analiza(std::string comando)
     {
         std::vector<Ñ::Lexema*> vacía;
         if(!lexemas.empty())

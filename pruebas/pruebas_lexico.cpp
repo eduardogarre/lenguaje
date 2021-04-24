@@ -1470,6 +1470,78 @@ TEST(PruebasLexico, Notacion)
     delete léxico;
 }
 
+TEST(PruebasLexico, Reservada)
+{
+    Ñ::Léxico* léxico;
+    std::vector<Ñ::Lexema*> lexemas;
+
+    // Reservada
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"");
+    ASSERT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"");
+    EXPECT_EQ(lexemas[0]->contenido, "");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+    delete léxico;
+}
+
+TEST(PruebasLexico, Números)
+{
+    Ñ::Léxico* léxico;
+    std::vector<Ñ::Lexema*> lexemas;
+
+    // Reservada
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"");
+    ASSERT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"");
+    EXPECT_EQ(lexemas[0]->contenido, "");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+    delete léxico;
+}
+
+TEST(PruebasLexico, Texto)
+{
+    Ñ::Léxico* léxico;
+    std::vector<Ñ::Lexema*> lexemas;
+
+    // Reservada
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"");
+    ASSERT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"");
+    EXPECT_EQ(lexemas[0]->contenido, "");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+    delete léxico;
+}
+
+TEST(PruebasLexico, Comentarios)
+{
+    Ñ::Léxico* léxico;
+    std::vector<Ñ::Lexema*> lexemas;
+
+    // Reservada
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"");
+    ASSERT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"");
+    EXPECT_EQ(lexemas[0]->contenido, "");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+    delete léxico;
+}
+
 TEST(PruebasLexico, MultiplesLexemas)
 {
     Ñ::Léxico* léxico;

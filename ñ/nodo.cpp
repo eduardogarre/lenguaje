@@ -395,7 +395,7 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	ajuste--;
 }
 
-bool Ñ::sonNodosIguales(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
+bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 {
 	if(nodo1 == nodo2)
 	{
@@ -405,30 +405,44 @@ bool Ñ::sonNodosIguales(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		return false;
 	}
+	else if(nodo1->ramas.size() != nodo2->ramas.size())
+	{
+		return false;
+	}
 	else if(nodo1->categoría == nodo2->categoría)
 	{
-			Ñ::Literal* l1;
-			Ñ::Literal* l2;
-			Ñ::Identificador* id1;
-			Ñ::Identificador* id2;
-			Ñ::Tipo* t1;
-			Ñ::Tipo* t2;
-			Ñ::OpSumaResta* osr1;
-			Ñ::OpSumaResta* osr2;
-			Ñ::OpMultiplicaciónDivisión* omd1;
-			Ñ::OpMultiplicaciónDivisión* omd2;
-			Ñ::Factor* fx1;
-			Ñ::Factor* fx2;
-			Ñ::DeclaraVariable* dv1;
-			Ñ::DeclaraVariable* dv2;
-			Ñ::Asigna* as1;
-			Ñ::Asigna* as2;
-			Ñ::Argumento* ar1;
-			Ñ::Argumento* ar2;
-			Ñ::Argumentos* ars1;
-			Ñ::Argumentos* ars2;
-			Ñ::LlamaFunción* lfn1;
-			Ñ::LlamaFunción* lfn2;
+		for(int i = 0; i < nodo1->ramas.size(); i++)
+		{
+			bool resultado = Ñ::sonÁrbolesDuplicados(nodo1->ramas[i], nodo2->ramas[i]);
+			if(!resultado)
+			{
+				return false;
+			}
+		}
+	
+		Ñ::Literal* l1;
+		Ñ::Literal* l2;
+		Ñ::Identificador* id1;
+		Ñ::Identificador* id2;
+		Ñ::Tipo* t1;
+		Ñ::Tipo* t2;
+		Ñ::OpSumaResta* osr1;
+		Ñ::OpSumaResta* osr2;
+		Ñ::OpMultiplicaciónDivisión* omd1;
+		Ñ::OpMultiplicaciónDivisión* omd2;
+		Ñ::Factor* fx1;
+		Ñ::Factor* fx2;
+		Ñ::DeclaraVariable* dv1;
+		Ñ::DeclaraVariable* dv2;
+		Ñ::Asigna* as1;
+		Ñ::Asigna* as2;
+		Ñ::Argumento* ar1;
+		Ñ::Argumento* ar2;
+		Ñ::Argumentos* ars1;
+		Ñ::Argumentos* ars2;
+		Ñ::LlamaFunción* lfn1;
+		Ñ::LlamaFunción* lfn2;
+
 		switch (nodo1->categoría)
 		{
 		case Ñ::CategoríaNodo::NODO_VACÍO:

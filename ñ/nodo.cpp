@@ -395,6 +395,176 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	ajuste--;
 }
 
+bool Ñ::sonNodosIguales(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
+{
+	if(nodo1 == nodo2)
+	{
+		return false;
+	}
+	if(nodo1 == nullptr || nodo1 == NULL || nodo2 == nullptr || nodo2 == NULL)
+	{
+		return false;
+	}
+	else if(nodo1->categoría == nodo2->categoría)
+	{
+			Ñ::Literal* l1;
+			Ñ::Literal* l2;
+			Ñ::Identificador* id1;
+			Ñ::Identificador* id2;
+			Ñ::Tipo* t1;
+			Ñ::Tipo* t2;
+			Ñ::OpSumaResta* osr1;
+			Ñ::OpSumaResta* osr2;
+			Ñ::OpMultiplicaciónDivisión* omd1;
+			Ñ::OpMultiplicaciónDivisión* omd2;
+			Ñ::Factor* fx1;
+			Ñ::Factor* fx2;
+			Ñ::DeclaraVariable* dv1;
+			Ñ::DeclaraVariable* dv2;
+			Ñ::Asigna* as1;
+			Ñ::Asigna* as2;
+			Ñ::Argumento* ar1;
+			Ñ::Argumento* ar2;
+			Ñ::Argumentos* ars1;
+			Ñ::Argumentos* ars2;
+			Ñ::LlamaFunción* lfn1;
+			Ñ::LlamaFunción* lfn2;
+		switch (nodo1->categoría)
+		{
+		case Ñ::CategoríaNodo::NODO_VACÍO:
+			return true;
+			break;
+
+		case Ñ::CategoríaNodo::NODO_LITERAL:
+			l1 = (Ñ::Literal*)nodo1;
+			l2 = (Ñ::Literal*)nodo2;
+			if(l1->dato == l2->dato)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
+			id1 = (Ñ::Identificador*)nodo1;
+			id2 = (Ñ::Identificador*)nodo2;
+			if(id1->id == id2->id)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_TIPO:
+			t1 = (Ñ::Tipo*)nodo1;
+			t2 = (Ñ::Tipo*)nodo2;
+			if(t1->tipo == t2->tipo && t1->vector == t2->vector)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA:
+			osr1 = (Ñ::OpSumaResta*)nodo1;
+			osr2 = (Ñ::OpSumaResta*)nodo2;
+			if(osr1->operación == osr2->operación)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN:
+			omd1 = (Ñ::OpMultiplicaciónDivisión*)nodo1;
+			omd2 = (Ñ::OpMultiplicaciónDivisión*)nodo2;
+			if(omd1->operación == omd2->operación)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_FACTOR:
+			fx1 = (Ñ::Factor*)nodo1;
+			fx2 = (Ñ::Factor*)nodo2;
+			if(fx1->factor == fx2->factor)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
+			dv1 = (Ñ::DeclaraVariable*)nodo1;
+			dv2 = (Ñ::DeclaraVariable*)nodo2;
+			if(dv1->variable == dv2->variable)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_ASIGNA:
+			return true;
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_ARGUMENTO:
+			return true;
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_ARGUMENTOS:
+			return true;
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN:
+			lfn1 = (Ñ::LlamaFunción*)nodo1;
+			lfn2 = (Ñ::LlamaFunción*)nodo2;
+			if(lfn1->función == lfn2->función)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_EXPRESIÓN:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
 
 Ñ::Nodo* Ñ::duplicaNodo(Ñ::Nodo* nodo)
 {

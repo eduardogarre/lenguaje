@@ -15,11 +15,9 @@ FetchContent_MakeAvailable(googletest)
 
 # Now simply link against gtest or gtest_main as needed. Eg
 file(GLOB_RECURSE CODIGO_PRUEBAS CONFIGURE_DEPENDS "./*.hpp" "./*.cpp")
-set(CABECERAS_GTEST "../obra/_deps/googletest-src/googletest/include/")
 
 add_executable(pruebas ${CODIGO_PRUEBAS})
 
-target_include_directories(pruebas PRIVATE ${CABECERAS_GTEST})
 target_link_libraries(pruebas LINK_PUBLIC gtest_main lenguaje)
 
 add_test(NAME pruebas COMMAND pruebas)

@@ -4,7 +4,7 @@
 
 #include <vector>
 
-TEST(PruebasNodo, sonÁrbolesDuplicados)
+TEST(PruebasNodo, sonArbolesDuplicados)
 {
     Ñ::Nodo* n1;
     Ñ::Nodo* n2;
@@ -661,7 +661,7 @@ TEST(PruebasNodo, sonÁrbolesDuplicados)
     delete n4, n3, n2, n1;
 }
 
-TEST(PruebasNodo, duplicaÁrbol)
+TEST(PruebasNodo, duplicaArbol)
 {
     Ñ::Nodo* n1;
     Ñ::Nodo* n2;

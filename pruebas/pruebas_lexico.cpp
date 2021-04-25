@@ -14,7 +14,7 @@ TEST(PruebasLexico, siguienteCarácter)
 
 }
 
-TEST(PruebasLexico, esdígito)
+TEST(PruebasLexico, esdigito)
 {
     EXPECT_TRUE(Ñ::esdígito("0"));
     EXPECT_TRUE(Ñ::esdígito("1"));
@@ -46,7 +46,7 @@ TEST(PruebasLexico, esdígito)
     EXPECT_FALSE(Ñ::esdígito("\r"));
 }
 
-TEST(PruebasLexico, espuntuación)
+TEST(PruebasLexico, espuntuacion)
 {
     EXPECT_TRUE(Ñ::espuntuación("."));
     EXPECT_TRUE(Ñ::espuntuación(","));
@@ -123,7 +123,7 @@ TEST(PruebasLexico, espuntuación)
     EXPECT_FALSE(Ñ::espuntuación("\r"));
 }
 
-TEST(PruebasLexico, esnuevalínea)
+TEST(PruebasLexico, esnuevalinea)
 {
     EXPECT_TRUE(Ñ::esnuevalínea("\n"));
     EXPECT_TRUE(Ñ::esnuevalínea("\r"));
@@ -1471,24 +1471,6 @@ TEST(PruebasLexico, Notacion)
 }
 
 TEST(PruebasLexico, Reservada)
-{
-    Ñ::Léxico* léxico;
-    std::vector<Ñ::Lexema*> lexemas;
-
-    // Reservada
-	léxico = new Ñ::Léxico();
-    lexemas = léxico->analiza(u8"");
-    ASSERT_EQ(lexemas.size(), 2);
-
-    EXPECT_EQ(lexemas[0]->contenido, u8"");
-    EXPECT_EQ(lexemas[0]->contenido, "");
-    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
-
-    for(auto l : lexemas) { delete l; }
-    delete léxico;
-}
-
-TEST(PruebasLexico, Números)
 {
     Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;

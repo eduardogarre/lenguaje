@@ -665,7 +665,6 @@ TEST(PruebasNodo, duplicaArbol)
 {
     Ñ::Nodo* n1;
     Ñ::Nodo* n2;
-    Ñ::Nodo* n3;
     Ñ::Nodo* r;
 
     n1 = new Ñ::Nodo();

@@ -580,7 +580,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	}
 }
 
-Ñ::Nodo* Ñ::duplicaNodo(Ñ::Nodo* nodo)
+Ñ::Nodo* Ñ::duplicaÁrbol(Ñ::Nodo* nodo)
 {
 	if(nodo == nullptr)
 	{
@@ -688,7 +688,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	// Ahora duplico las ramas del nodo
 	for(auto r : nodo->ramas)
 	{
-		Ñ::Nodo* n = duplicaNodo(r);
+		Ñ::Nodo* n = duplicaÁrbol(r);
 		if(n != nullptr)
 		{
 			duplicado->ramas.push_back(n);

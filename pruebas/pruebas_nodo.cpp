@@ -660,3 +660,116 @@ TEST(PruebasNodo, sonÁrbolesDuplicados)
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, n2));
     delete n4, n3, n2, n1;
 }
+
+TEST(PruebasNodo, duplicaÁrbol)
+{
+    Ñ::Nodo* n1;
+    Ñ::Nodo* n2;
+    Ñ::Nodo* n3;
+    Ñ::Nodo* r;
+
+    n1 = new Ñ::Nodo();
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = new Ñ::Nodo();
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::Literal());
+    ((Ñ::Literal*)n2)->dato = "prueba";
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::Identificador());
+    ((Ñ::Identificador*)n2)->id = "prueba";
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::Tipo());
+    ((Ñ::Tipo*)n2)->tipo = "prueba";
+    ((Ñ::Tipo*)n2)->vector = true;
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::OpSumaResta());
+    ((Ñ::OpSumaResta*)n2)->operación = "prueba";
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::OpMultiplicaciónDivisión());
+    ((Ñ::OpMultiplicaciónDivisión*)n2)->operación = "prueba";
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::Factor());
+    ((Ñ::Factor*)n2)->factor = "prueba";
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::DeclaraVariable());
+    ((Ñ::DeclaraVariable*)n2)->variable = "prueba";
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::Asigna());
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::Argumento());
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::Argumentos());
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::LlamaFunción());
+    ((Ñ::LlamaFunción*)n2)->función = "prueba";
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+    
+    n1 = new Ñ::Nodo();
+    n2 = (Ñ::Nodo*)(new Ñ::Expresión());
+    n1->ramas.push_back(n2);
+    r = Ñ::duplicaÁrbol(n1);
+    EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));
+    delete r, n2, n1;
+}

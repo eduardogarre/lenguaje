@@ -185,5 +185,5 @@ namespace Ñ
     void borraNodos(Ñ::Nodo* nodos);
     void muestraNodos(Nodo* nodo);
     bool sonÁrbolesDuplicados(Nodo* nodo1, Nodo* nodo2);
-    Nodo* duplicaNodo(Nodo* nodo);
+    Nodo* duplicaÁrbol(Nodo* nodo);
 }

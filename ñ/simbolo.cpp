@@ -59,9 +59,7 @@ void Ñ::Símbolo::asignaValor(Ñ::Nodo* valor)
 
     if(valor->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
     {
-        Ñ::Literal* v = new Ñ::Literal();
-        v->dato = ((Ñ::Literal*)valor)->dato;
-        _definición = (Ñ::Nodo*)v;
+        _definición = duplicaÁrbol(valor);
     }
 }
 

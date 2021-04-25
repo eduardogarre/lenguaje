@@ -27,7 +27,7 @@ pipeline {
                 environment name: 'ANALISIS_ESTATICO', value: 'true'
             }
             steps {
-                sh label: '', returnStatus: true, script: 'valgrind --leak-check=yes --track-origins=yes proyecto/ñ'
+                sh label: '', returnStatus: true, script: 'ls'
             }
         }
 

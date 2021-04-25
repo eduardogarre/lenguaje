@@ -27,7 +27,7 @@ pipeline {
                 environment name: 'ANALISIS_ESTATICO', value: 'true'
             }
             steps {
-                sh label: '', returnStatus: true, script: 'echo "apaga();" | valgrind --leak-check=yes --track-origins=yes proyecto/compilador'
+                sh label: '', returnStatus: true, script: 'echo "apaga();" | valgrind --leak-check=yes --track-origins=yes -v -v proyecto/compilador'
             }
         }
 

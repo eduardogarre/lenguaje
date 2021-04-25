@@ -320,8 +320,6 @@ TEST(PruebasSintaxis, LlamadasFuncionesConArgumento)
 
     r = Ñ::analizaSintaxis(l);
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n, r));
-    Ñ::muestraNodos(n);
-    Ñ::muestraNodos(r);
 
     l.clear();
     delete r, n2, n1, n, l5, l4, l3, l2, l1;

@@ -27,7 +27,7 @@ pipeline {
                 environment name: 'ANALISIS_ESTATICO', value: 'true'
             }
             steps {
-                sh label: '', returnStatus: true, script: 'ls'
+                sh label: '', returnStatus: true, script: 'ls proyecto'
             }
         }
 

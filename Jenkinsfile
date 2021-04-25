@@ -22,6 +22,15 @@ pipeline {
             }
         }
 
+        stage('Analiza') {
+            when {
+                environment name: 'ANALISIS_ESTATICO', value: 'true'
+            }
+            steps {
+                sh label: '', returnStatus: true, script: 'valgrind --leak-check=yes --track-origins=yes proyecto/ñ'
+            }
+        }
+
         stage('Prueba') {
             when {
                 environment name: 'EJECUTA_COMPROBACIONES', value: 'true'
@@ -35,15 +44,6 @@ pipeline {
                 always {
                     junit testResults: 'resultado.xml', allowEmptyResults: false
                 }
-            }
-        }
-
-        stage('Analiza') {
-            when {
-                environment name: 'ANALISIS_ESTATICO', value: 'true'
-            }
-            steps {
-                sh label: '', returnStatus: true, script: 'valgrind --leak-check=yes --track-origins=yes proyecto/ñ'
             }
         }
 

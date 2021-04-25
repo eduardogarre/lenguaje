@@ -940,7 +940,7 @@ TEST(PruebasLexico, Identificadores)
     delete léxico;
 }
 
-TEST(PruebasLexico, Notacion)
+TEST(PruebasLexico, Notaciones)
 {
     Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
@@ -1470,7 +1470,7 @@ TEST(PruebasLexico, Notacion)
     delete léxico;
 }
 
-TEST(PruebasLexico, Reservada)
+TEST(PruebasLexico, Reservadas)
 {
     Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
@@ -1487,7 +1487,7 @@ TEST(PruebasLexico, Reservada)
     delete léxico;
 }
 
-TEST(PruebasLexico, Texto)
+TEST(PruebasLexico, Textos)
 {
     Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;

@@ -6,7 +6,7 @@
 
 #include <vector>
 
-TEST(PruebasSintaxis, literal)
+TEST(PruebasSintaxis, Declaraciones)
 {
     Ñ::Nodo* r;
     std::vector<Ñ::Lexema*> l;
@@ -14,23 +14,10 @@ TEST(PruebasSintaxis, literal)
     Ñ::Lexema* l2;
     Ñ::Lexema* l3;
     Ñ::Lexema* l4;
-    Ñ::Lexema* l5;
-    Ñ::Lexema* l6;
-    Ñ::Lexema* l7;
-    Ñ::Lexema* l8;
-    Ñ::Lexema* l9;
     Ñ::Nodo* n;
     Ñ::Nodo* n1;
     Ñ::Nodo* n2;
-    Ñ::Nodo* n3;
-    Ñ::Nodo* n4;
-    Ñ::Nodo* n5;
-    Ñ::Nodo* n6;
-    Ñ::Nodo* n7;
-    Ñ::Nodo* n8;
-    Ñ::Nodo* n9;
     
-    // Declaración
     l1 = new Ñ::Lexema();
     l1->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
     l1->contenido = "natural";
@@ -64,8 +51,23 @@ TEST(PruebasSintaxis, literal)
 
     l.clear();
     delete r, n2, n1, n, l4, l3, l2, l1;
+}
+
+TEST(PruebasSintaxis, Asignaciones)
+{
+    Ñ::Nodo* r;
+    std::vector<Ñ::Lexema*> l;
+    Ñ::Lexema* l1;
+    Ñ::Lexema* l2;
+    Ñ::Lexema* l3;
+    Ñ::Lexema* l4;
+    Ñ::Lexema* l5;
+    Ñ::Nodo* n;
+    Ñ::Nodo* n1;
+    Ñ::Nodo* n2;
+    Ñ::Nodo* n3;
     
-    // Asignación
+    // Asignación de Número
     l1 = new Ñ::Lexema();
     l1->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
     l1->contenido = "b";
@@ -106,7 +108,7 @@ TEST(PruebasSintaxis, literal)
     l.clear();
     delete r, n3, n2, n1, n, l5, l4, l3, l2, l1;
     
-    // Asignación
+    // Asignación de texto
     l1 = new Ñ::Lexema();
     l1->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
     l1->contenido = "c";
@@ -146,8 +148,24 @@ TEST(PruebasSintaxis, literal)
 
     l.clear();
     delete r, n3, n2, n1, n, l5, l4, l3, l2, l1;
+}
+
+TEST(PruebasSintaxis, DeclaracionesYAsignaciones)
+{
+    Ñ::Nodo* r;
+    std::vector<Ñ::Lexema*> l;
+    Ñ::Lexema* l1;
+    Ñ::Lexema* l2;
+    Ñ::Lexema* l3;
+    Ñ::Lexema* l4;
+    Ñ::Lexema* l5;
+    Ñ::Lexema* l6;
+    Ñ::Nodo* n;
+    Ñ::Nodo* n1;
+    Ñ::Nodo* n2;
+    Ñ::Nodo* n3;
+    Ñ::Nodo* n4;
     
-    // Declaración y asignación
     l1 = new Ñ::Lexema();
     l1->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
     l1->contenido = "natural";
@@ -196,8 +214,20 @@ TEST(PruebasSintaxis, literal)
 
     l.clear();
     delete r, n4, n3, n2, n1, n, l6, l5, l4, l3, l2, l1;
+}
+
+TEST(PruebasSintaxis, LlamadasFunciones)
+{
+    Ñ::Nodo* r;
+    std::vector<Ñ::Lexema*> l;
+    Ñ::Lexema* l1;
+    Ñ::Lexema* l2;
+    Ñ::Lexema* l3;
+    Ñ::Lexema* l4;
+    Ñ::Lexema* l5;
+    Ñ::Nodo* n;
+    Ñ::Nodo* n1;
     
-    // Llama función
     l1 = new Ñ::Lexema();
     l1->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
     l1->contenido = "apaga";
@@ -231,9 +261,24 @@ TEST(PruebasSintaxis, literal)
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n, r));
 
     l.clear();
-    delete r, n2, n1, n, l5, l4, l3, l2, l1;
+    delete r, n1, n, l5, l4, l3, l2, l1;
+}
+
+TEST(PruebasSintaxis, LlamadasFuncionesConArgumento)
+{
+    Ñ::Nodo* r;
+    std::vector<Ñ::Lexema*> l;
+    Ñ::Lexema* l1;
+    Ñ::Lexema* l2;
+    Ñ::Lexema* l3;
+    Ñ::Lexema* l4;
+    Ñ::Lexema* l5;
+    Ñ::Lexema* l6;
+    Ñ::Nodo* n;
+    Ñ::Nodo* n1;
+    Ñ::Nodo* n2;
+    Ñ::Nodo* n3;
     
-    // Llama función con argumento
     l1 = new Ñ::Lexema();
     l1->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
     l1->contenido = "escribe";

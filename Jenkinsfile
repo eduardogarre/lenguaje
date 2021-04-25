@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh label: 'ConstruyeObra', script: 'rm -rf obra'
                 sh label: 'ConstruyeObra', script: 'mkdir obra'
-                sh label: 'EjecutaCMake', script: 'cmake CXXFLAGS="-g" -S . -B obra'
+                sh label: 'EjecutaCMake', script: 'cmake CXXFLAGS="-ggdb3" -S . -B obra'
                 sh label: 'EjecutaCMakeBuild', script: 'cmake --build obra --parallel=$(nproc)'
             }
         }
@@ -27,7 +27,7 @@ pipeline {
                 environment name: 'ANALISIS_ESTATICO', value: 'true'
             }
             steps {
-                sh label: '', returnStatus: true, script: 'echo "apaga();" | valgrind --leak-check=yes --track-origins=yes -v -v proyecto/compilador'
+                sh label: '', returnStatus: true, script: 'echo "apaga();" | valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -v -v proyecto/compilador'
             }
         }
 

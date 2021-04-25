@@ -1475,7 +1475,6 @@ TEST(PruebasLexico, Reservada)
     Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
-    // Reservada
 	léxico = new Ñ::Léxico();
     lexemas = léxico->analiza(u8"");
     ASSERT_EQ(lexemas.size(), 2);
@@ -1493,14 +1492,50 @@ TEST(PruebasLexico, Texto)
     Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
-    // Reservada
+    // Cadena vacía
 	léxico = new Ñ::Léxico();
-    lexemas = léxico->analiza(u8"");
+    lexemas = léxico->analiza(u8"\"\"");
     ASSERT_EQ(lexemas.size(), 2);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"");
     EXPECT_EQ(lexemas[0]->contenido, "");
-    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_TEXTO);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+    delete léxico;
+
+    // Cadena aleatoria
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"\"prueba\"");
+    ASSERT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"prueba");
+    EXPECT_EQ(lexemas[0]->contenido, "prueba");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_TEXTO);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+    delete léxico;
+
+    // Caracteres de escape
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"\"hola, mundo\\n\\r\\t\"");
+    ASSERT_EQ(lexemas.size(), 2);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"hola, mundo\n\r\t");
+    EXPECT_EQ(lexemas[0]->contenido, "hola, mundo\n\r\t");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_TEXTO);
+
+    EXPECT_EQ(lexemas[1]->contenido, u8"");
+    EXPECT_EQ(lexemas[1]->contenido, "");
+    EXPECT_EQ(lexemas[1]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
 
     for(auto l : lexemas) { delete l; }
     delete léxico;
@@ -1511,10 +1546,24 @@ TEST(PruebasLexico, Comentarios)
     Ñ::Léxico* léxico;
     std::vector<Ñ::Lexema*> lexemas;
 
-    // Reservada
+    // Comenarios de una línea
 	léxico = new Ñ::Léxico();
-    lexemas = léxico->analiza(u8"");
-    ASSERT_EQ(lexemas.size(), 2);
+    lexemas = léxico->analiza(u8"// comentario de prueba\n");
+    ASSERT_EQ(lexemas.size(), 1);
+
+    EXPECT_EQ(lexemas[0]->contenido, u8"");
+    EXPECT_EQ(lexemas[0]->contenido, "");
+    EXPECT_EQ(lexemas[0]->categoría, Ñ::CategoríaLexema::LEXEMA_FIN);
+
+    for(auto l : lexemas) { delete l; }
+    delete léxico;
+
+    /* Comentarios
+       de múltiples
+       líneas */
+	léxico = new Ñ::Léxico();
+    lexemas = léxico->analiza(u8"/* Comentarios\n\tde múltiples\n\tlíneas */\n");
+    ASSERT_EQ(lexemas.size(), 1);
 
     EXPECT_EQ(lexemas[0]->contenido, u8"");
     EXPECT_EQ(lexemas[0]->contenido, "");

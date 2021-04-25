@@ -23,27 +23,27 @@ namespace Ñ
 #endif
     void Léxico::incrementaCursor(std::string txt)
     {
-        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor_léxico));
+        int paso = std::mblen(txt.c_str() + cursor, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor));
 
-        //std::cout << "incrementaCursor(" << txt << ") - paso:" << paso << "  - cursor_léxico:" << cursor_léxico << "  - txt.size():" << txt.size() << std::endl;
+        //std::cout << "incrementaCursor(" << txt << ") - paso:" << paso << "  - cursor:" << cursor << "  - txt.size():" << txt.size() << std::endl;
 
-        if(txt.size() > cursor_léxico && paso <= txt.size() - cursor_léxico)
+        if(txt.size() > cursor && paso <= txt.size() - cursor)
         {
-            cursor_léxico += paso;
+            cursor += paso;
         }
     }
 
     std::string Léxico::siguienteCarácter(std::string txt)
     {
-        int paso = std::mblen(txt.c_str() + cursor_léxico, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor_léxico));
+        int paso = std::mblen(txt.c_str() + cursor, std::min((int)MB_CUR_MAX, (int)txt.size() - cursor));
         std::string c = "";
 
-        //std::cout << "siguienteCarácter(" << txt << ") - paso:" << paso << "  - cursor_léxico:" << cursor_léxico << "  - txt.size():" << txt.size() << std::endl;
+        //std::cout << "siguienteCarácter(" << txt << ") - paso:" << paso << "  - cursor:" << cursor << "  - txt.size():" << txt.size() << std::endl;
         
 
-        if(txt.size() > cursor_léxico && paso <= txt.size() - cursor_léxico)
+        if(txt.size() > cursor && paso <= txt.size() - cursor)
         {
-            c = txt.substr(cursor_léxico, paso);
+            c = txt.substr(cursor, paso);
         }
 
         return c;
@@ -55,7 +55,7 @@ namespace Ñ
             //std::cout << "nuevaLínea(" << txt << ")" << std::endl;
 
             bool resultado = false;
-            int c = cursor_léxico;
+            int c = cursor;
 
             std::string carácter = "";
 
@@ -70,7 +70,7 @@ namespace Ñ
             }
             else
             {
-                cursor_léxico = c;
+                cursor = c;
                 return false;
             }
 
@@ -110,7 +110,7 @@ namespace Ñ
             {
                 resultado = true;
                 
-                if(cursor_léxico == (txt.length() - 1))
+                if(cursor == (txt.length() - 1))
                 {
                     return false;
                 }
@@ -197,7 +197,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor_léxico;
+            int c = cursor;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -207,7 +207,7 @@ namespace Ñ
                 
                 resultado = true;
                 do {
-                    if(cursor_léxico == (txt.length()+1))
+                    if(cursor == (txt.length()+1))
                     {
                         return true;
                     }
@@ -249,11 +249,11 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor_léxico;
+            int c = cursor;
 
             if(_nombre(txt))
             {
-                std::string s = txt.substr(c, cursor_léxico-c);
+                std::string s = txt.substr(c, cursor-c);
 
                 if( (s == "cierto")
                  || (s == "falso")
@@ -287,7 +287,7 @@ namespace Ñ
                 }
                 else
                 {
-                    cursor_léxico = c;
+                    cursor = c;
                 }
             }
 
@@ -321,7 +321,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor_léxico;
+            int c = cursor;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -331,7 +331,7 @@ namespace Ñ
                 carácter = siguienteCarácter(txt);
             }
                 
-            while(Ñ::esdígito(carácter) && (cursor_léxico < (txt.length()-1)))
+            while(Ñ::esdígito(carácter) && (cursor < (txt.length()-1)))
             {
                 resultado = true;
                 incrementaCursor(txt);
@@ -340,13 +340,13 @@ namespace Ñ
 
             if(carácter != ".")
             {
-                cursor_léxico = c;
+                cursor = c;
                 return false;
             }
             
-            if(cursor_léxico == (txt.length()-1))
+            if(cursor == (txt.length()-1))
             {
-                cursor_léxico = c;
+                cursor = c;
                 return false;
             }
 
@@ -357,32 +357,32 @@ namespace Ñ
                 resultado = true;
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
-            } while(Ñ::esdígito(carácter) && (cursor_léxico < (txt.length()-1)));
+            } while(Ñ::esdígito(carácter) && (cursor < (txt.length()-1)));
 
             std::string e = "e";
             std::string E = "E";
             if((carácter != e) && (carácter != E))
             {
-                cursor_léxico = c;
+                cursor = c;
                 return false;
             }
             
-            if(cursor_léxico == (txt.length()-1))
+            if(cursor == (txt.length()-1))
             {
-                cursor_léxico = c;
+                cursor = c;
                 return false;
             }
 
             incrementaCursor(txt);
             carácter = siguienteCarácter(txt);
             
-            if(cursor_léxico < (txt.length() - 1) && (carácter == "-") || (carácter == "+") )
+            if(cursor < (txt.length() - 1) && (carácter == "-") || (carácter == "+") )
             {
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
             }
 
-            while(Ñ::esdígito(carácter) && (cursor_léxico < (txt.length()-1)))
+            while(Ñ::esdígito(carácter) && (cursor < (txt.length()-1)))
             {
                 resultado = true;
                 incrementaCursor(txt);
@@ -391,7 +391,7 @@ namespace Ñ
 
             if(resultado)
             {
-                std::string s = txt.substr(c, cursor_léxico-c);
+                std::string s = txt.substr(c, cursor-c);
 
                 //double n = to!double(s);
 
@@ -433,7 +433,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor_léxico;
+            int c = cursor;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -448,10 +448,10 @@ namespace Ñ
             {
                 //std::cout << ":: añado dígito entero" << std::endl;
                 resultado = true;
-                if(cursor_léxico == (txt.length()-1))
+                if(cursor == (txt.length()-1))
                 {
                     //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                    cursor_léxico = c;
+                    cursor = c;
                     return false;
                 }
                 incrementaCursor(txt);
@@ -461,14 +461,14 @@ namespace Ñ
             if(carácter != ".")
             {
                 //std::cout << ":: Salida -> falta el punto decimal" << std::endl;
-                cursor_léxico = c;
+                cursor = c;
                 return false;
             }
             
-            if(cursor_léxico == (txt.length()-1))
+            if(cursor == (txt.length()-1))
             {
                 //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                cursor_léxico = c;
+                cursor = c;
                 return false;
             }
             
@@ -478,17 +478,17 @@ namespace Ñ
             if(!Ñ::esdígito(carácter))
             {
                 //std::cout << ":: Salida -> no es un dígito" << std::endl;
-                cursor_léxico = c;
+                cursor = c;
                 return false;
             }
 
             do {
                 //std::cout << ":: añado dígito decimal" << std::endl;
                 resultado = true;
-                if(cursor_léxico == (txt.length()-1))
+                if(cursor == (txt.length()-1))
                 {
                     //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                    cursor_léxico = c;
+                    cursor = c;
                     return false;
                 }
                 incrementaCursor(txt);
@@ -498,7 +498,7 @@ namespace Ñ
             if(resultado)
             {
                 //std::cout << ":: resultado" << std::endl;
-                std::string s = txt.substr(c, cursor_léxico-c);
+                std::string s = txt.substr(c, cursor-c);
 
                 //double n = to!double(s);
 
@@ -540,7 +540,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor_léxico;
+            int c = cursor;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -554,7 +554,7 @@ namespace Ñ
             {
                 resultado = true;
                 do {
-                    if(cursor_léxico == (txt.length()+1))
+                    if(cursor == (txt.length()+1))
                     {
                         return true;
                     }
@@ -565,7 +565,7 @@ namespace Ñ
 
             if(resultado)
             {
-                std::string s = txt.substr(c, cursor_léxico-c);
+                std::string s = txt.substr(c, cursor-c);
 
                 //int n = to!int(s);
 
@@ -654,13 +654,13 @@ namespace Ñ
             {
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
-                int c = cursor_léxico;
+                int c = cursor;
 
                 std::string texto;
 
                 Ñ::Lexema* l = new Ñ::Lexema();
 
-                while((carácter != "\"") && (cursor_léxico < txt.length()-1))
+                while((carácter != "\"") && (cursor < txt.length()-1))
                 {
                     if(carácter == "\\")
                     {
@@ -709,7 +709,7 @@ namespace Ñ
 
                 if(carácter != "\"")
                 {
-                    cursor_léxico = c;
+                    cursor = c;
                     Ñ::errorConsola(u8"Error, esperaba un cierre de comilla doble [\"]");
                 }
 
@@ -756,19 +756,19 @@ namespace Ñ
         try {
             //std::cout << "identificador(" << txt << ")" << std::endl;
             
-            int c = cursor_léxico;
+            int c = cursor;
 
             //std::cout << "c: " << c << std::endl;
-            //std::cout << "cursor: " << cursor_léxico << std::endl;
+            //std::cout << "cursor: " << cursor << std::endl;
 
             bool resultado = _nombre(txt);
 
             //std::cout << "c: " << c << std::endl;
-            //std::cout << "cursor: " << cursor_léxico << std::endl;
+            //std::cout << "cursor: " << cursor << std::endl;
             
             if(resultado)
             {
-                std::string texto = txt.substr(c, cursor_léxico-c);
+                std::string texto = txt.substr(c, cursor-c);
 
                 //std::cout << "identificador->contenido" << texto << std::endl;
 
@@ -822,53 +822,53 @@ namespace Ñ
 
             std::string cmd = comando + " ";
 
-            cursor_léxico = 0;
+            cursor = 0;
 
-            while(cursor_léxico <= cmd.length())
+            while(cursor <= cmd.length())
             {
-                //std::cout << "cursor: " << cursor_léxico << std::endl;
-                int c = cursor_léxico;
+                //std::cout << "cursor: " << cursor << std::endl;
+                int c = cursor;
                 if(nuevaLínea(cmd))
                 {
                     continue;
                 }
-                cursor_léxico = c;
+                cursor = c;
                 
                 if(espacio(cmd))
                 {
                     continue;
                 }
-                cursor_léxico = c;
+                cursor = c;
 
                 if(texto(cmd))
                 {
                     continue;
                 }
-                cursor_léxico = c;
+                cursor = c;
 
                 if(notación(cmd))
                 {
                     continue;
                 }
-                cursor_léxico = c;
+                cursor = c;
 
                 if(reservada(cmd))
                 {
                     continue;
                 }
-                cursor_léxico = c;
+                cursor = c;
 
                 if(número(cmd))
                 {
                     continue;
                 }
-                cursor_léxico = c;
+                cursor = c;
 
                 if(identificador(cmd))
                 {
                     continue;
                 }
-                cursor_léxico = c;
+                cursor = c;
 
                 break;
             }

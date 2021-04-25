@@ -434,12 +434,6 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::Factor* fx2;
 		Ñ::DeclaraVariable* dv1;
 		Ñ::DeclaraVariable* dv2;
-		Ñ::Asigna* as1;
-		Ñ::Asigna* as2;
-		Ñ::Argumento* ar1;
-		Ñ::Argumento* ar2;
-		Ñ::Argumentos* ars1;
-		Ñ::Argumentos* ars2;
 		Ñ::LlamaFunción* lfn1;
 		Ñ::LlamaFunción* lfn2;
 

@@ -3,7 +3,7 @@
 
 #include "nodos.hpp"
 
-NTablaSímbolos::NTablaSímbolos(std::map<std::string, Ñ::Símbolo>* tabla) : tablaSímbolos(tabla)
+NTablaSímbolos::NTablaSímbolos(Ñ::TablaSímbolos* tabla) : tablaSímbolos(tabla)
 {
 	categoría = Ñ::CategoríaNodo::NODO_EXPANDIDO;
 }

@@ -9,9 +9,9 @@
 class NTablaSímbolos : Ñ::Nodo
 {
 public:
-	std::map<std::string, Ñ::Símbolo>* tablaSímbolos;
+	Ñ::TablaSímbolos* tablaSímbolos;
 
-	NTablaSímbolos(std::map<std::string, Ñ::Símbolo>* tabla);
+	NTablaSímbolos(Ñ::TablaSímbolos* tabla);
 	NTablaSímbolos(const NTablaSímbolos& nodo);
 	~NTablaSímbolos();
 

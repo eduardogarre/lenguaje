@@ -1,12 +1,11 @@
 #include <iostream>
-#include <map>
 
 #include "nodo.hpp"
 #include "resultado.hpp"
 #include "semantico.hpp"
-#include "simbolo.hpp"
+#include "tablasimbolos.hpp"
 
-Ñ::Resultado resuelveSímbolos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
+Ñ::Resultado resuelveSímbolos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
@@ -27,7 +26,7 @@
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
     {
         std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
-        if(tablaSímbolos->count(nombre) > 0 )
+        if(!tablaSímbolos->identificadorDisponible(nombre))
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" ya se había declarado previamente");
             return resultado;
@@ -87,7 +86,7 @@
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
     {
         std::string nombre = ((Ñ::Identificador*)nodos)->id;
-        if(tablaSímbolos->count(nombre) > 0 )
+        if(!tablaSímbolos->identificadorDisponible(nombre))
         {
             resultado.éxito();
             return resultado;
@@ -107,19 +106,10 @@
     {
         Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos);
         
-        if( tablaSímbolos->count(fn->función) == 0 )
+        if(tablaSímbolos->identificadorDisponible(fn->función))
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() no está en la tabla de símbolos");
             return resultado;
-        }
-        else
-        {
-            Ñ::Símbolo s = tablaSímbolos->at(fn->función);
-            if(!s.esFunciónEjecutable() && !s.esFunciónImplementada())
-            {
-                resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() está en la tabla de símbolos pero sin implementación");
-                return resultado;
-            }
         }
 
         resultado.éxito();
@@ -130,7 +120,7 @@
     return resultado;
 }
 
-Ñ::Resultado compruebaTipos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
+Ñ::Resultado compruebaTipos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
     
@@ -197,7 +187,7 @@
     return resultado;
 }
 
-Ñ::Resultado Ñ::analizaSemántica(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
+Ñ::Resultado Ñ::analizaSemántica(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 

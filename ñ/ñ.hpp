@@ -7,5 +7,5 @@
 #include "resultado.hpp"
 #include "salida.hpp"
 #include "semantico.hpp"
-#include "simbolo.hpp"
+#include "tablasimbolos.hpp"
 #include "sintaxis.hpp"

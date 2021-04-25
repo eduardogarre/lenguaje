@@ -80,39 +80,36 @@ void tabla(Ñ::Argumentos* args)
 			else if(arg->categoría == Ñ::CategoríaNodo::NODO_EXPANDIDO)
 			{
 				auto tablaSímbolos = ((NTablaSímbolos*)arg)->tablaSímbolos;
-				Ñ::muestraTablaSímbolos(*tablaSímbolos);
+				tablaSímbolos->muestra();
 			}
 		}
 	}
 }
 
-std::map<std::string, Ñ::Símbolo>* creaTablaSímbolos()
+Ñ::TablaSímbolos* creaTablaSímbolos()
 {
-	return new std::map<std::string, Ñ::Símbolo>();
+	return new Ñ::TablaSímbolos;
 }
 
-void llenaTablaSímbolos(std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
+void llenaTablaSímbolos(Ñ::TablaSímbolos* tablaSímbolos)
 {
-	// Añado una función sin argumentos
-    Ñ::Símbolo s1;
-    s1.añadeEjecución(escribe);
-    (*tablaSímbolos)["escribe"] = s1;
+	// Añado una función
+	tablaSímbolos->declaraFunción("escribe");
+	tablaSímbolos->defineFunciónEjecutable("escribe", escribe);
 
-	// Añado una función sin argumentos
-	Ñ::Símbolo s2;
-	s2.añadeEjecución(apaga);
-	(*tablaSímbolos)["apaga"] = s2;
+	// Añado una función
+	tablaSímbolos->declaraFunción("apaga");
+	tablaSímbolos->defineFunciónEjecutable("apaga", apaga);
 
-	// Añado una función con un único argumento, ntabla
-	Ñ::Símbolo s3;
-	Ñ::Argumentos* args = new Ñ::Argumentos();
+	// Añado una función con un argumento prefijado, ntabla
+	tablaSímbolos->declaraFunción("tabla");
 	NTablaSímbolos* ntabla = new NTablaSímbolos(tablaSímbolos);
+	Ñ::Argumentos* args = new Ñ::Argumentos();
 	((Ñ::Nodo*)args)->ramas.push_back((Ñ::Nodo*)ntabla);
-	s3.añadeEjecución(tabla, (Ñ::Nodo*)args);
-	(*tablaSímbolos)["tabla"] = s3;
+	tablaSímbolos->defineFunciónEjecutable("tabla", tabla, (Ñ::Nodo*)args);
 }
 
-void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
+void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 {
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
@@ -159,7 +156,7 @@ void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>
 
 int main()
 {
-	std::map<std::string, Ñ::Símbolo>* tablaSímbolos = creaTablaSímbolos();
+	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
 	llenaTablaSímbolos(tablaSímbolos);
 
 	while (EJECUTA_INTÉRPRETE)

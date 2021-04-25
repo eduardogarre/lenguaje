@@ -4,7 +4,7 @@
 #include "interpreta.hpp"
 #include "nodo.hpp"
 
-Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, std::map<std::string, Ñ::Símbolo>* tablaSímbolos)
+Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
@@ -30,9 +30,7 @@
         std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
 
         // Añado la variable a la tabla de símbolos
-        Ñ::Símbolo s;
-        s.declaraVariable(tipo);
-        (*tablaSímbolos)[nombre] = s;
+        tablaSímbolos->declaraVariable(nombre, tipo);
 
         Ñ::Identificador* id = new Ñ::Identificador();
         id->id = nombre;
@@ -70,17 +68,22 @@
         if(rLda.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
         {
             std::string id = ((Ñ::Identificador*)(rLia.nodo()))->id;
-            (*tablaSímbolos)[id].asignaValor(rLda.nodo());
+            tablaSímbolos->ponValor(id, rLda.nodo());
         }
         else if(rLda.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
         {
             Ñ::Identificador* idLia = ((Ñ::Identificador*)rLia.nodo());
             Ñ::Identificador* idLda = ((Ñ::Identificador*)rLda.nodo());
 
-            Ñ::Símbolo s = tablaSímbolos->at(idLda->id);
-            Ñ::Nodo* valor = s.obténValor();
+            Ñ::Resultado rLda = tablaSímbolos->leeValor(idLda->id);
+            if(rLda.error())
+            {
+                return rLda;
+            }
+
+            Ñ::Nodo* valor = rLda.nodo();
             Ñ::Nodo* valorTmp = duplicaÁrbol(valor);
-            (*tablaSímbolos)[idLia->id].asignaValor(valorTmp);
+            tablaSímbolos->ponValor(idLia->id, valorTmp);
             delete valorTmp;
         }
 
@@ -90,6 +93,30 @@
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
     {
+        Ñ::Nodo* op0;
+        Ñ::Nodo* op1;
+
+        Ñ::Resultado r0 = interpretaNodos(nodos->ramas[0], tablaSímbolos);
+        if(r0.error())
+        {
+            return r0;
+        }
+        else if(r0.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+        {
+            op0 = r0.nodo();
+        }
+        else if(r0.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+        {
+            op0 = r0.nodo();
+        }
+
+        Ñ::Resultado r1 = interpretaNodos(nodos->ramas[1], tablaSímbolos);
+        if(r1.error())
+        {
+            delete r0.nodo();
+            return r1;
+        }
+
         resultado.error("Pendiente de implementar");
         return resultado;
     }
@@ -101,7 +128,6 @@
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
         Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)nodos;
-        Ñ::Símbolo s = tablaSímbolos->at(fn->función);
         
         Ñ::Argumentos* args;
         if(nodos->ramas.size() < 1)
@@ -112,7 +138,8 @@
         {
             args = (Ñ::Argumentos*)(nodos->ramas[0]);
         }
-        s.ejecutaFunción(args);
+
+        tablaSímbolos->ejecutaFunción(fn->función, (Ñ::Nodo*)args);
         
         resultado.éxito();
         return resultado;

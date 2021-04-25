@@ -38,7 +38,7 @@ pipeline {
             }
         }
 
-        stage('Analiza') {
+        stage('Valgrind') {
             runValgrind (
                 childSilentAfterFork: true,
                 excludePattern: '',

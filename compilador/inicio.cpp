@@ -171,5 +171,7 @@ int main()
 		std::this_thread::yield();
 	}
 
+	delete tablaSímbolos;
+
 	return 0;
 }

@@ -16,6 +16,8 @@ namespace Ñ
         std::map<std::string, Símbolo*> _tabla;
 
     public:
+        ~TablaSímbolos();
+        
         bool identificadorDisponible(std::string id);
         Resultado declaraFunción(std::string id);
         Resultado defineFunciónEjecutable(std::string id, void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args = nullptr);

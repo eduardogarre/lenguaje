@@ -389,3 +389,13 @@ void Ñ::TablaSímbolos::muestra()
         valor->muestra();
     }
 }
+
+Ñ::TablaSímbolos::~TablaSímbolos()
+{
+    for (auto [clave, valor] : _tabla)
+    {
+        delete valor;
+    }
+    
+    _tabla.clear();
+}

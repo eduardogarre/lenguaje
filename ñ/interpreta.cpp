@@ -57,6 +57,15 @@
     {
         Ñ::Resultado rLia = interpretaNodos(nodos->ramas[0], tablaSímbolos);
         Ñ::Resultado rLda = interpretaNodos(nodos->ramas[1], tablaSímbolos);
+
+        if(rLia.error())
+        {
+            return rLia;
+        }
+        if(rLda.error())
+        {
+            return rLda;
+        }
         
         if(rLda.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
         {
@@ -77,6 +86,16 @@
 
         resultado.éxito();
         resultado.nodo(rLia.nodo());
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
+    {
+        resultado.error("Pendiente de implementar");
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
+    {
+        resultado.error("Pendiente de implementar");
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)

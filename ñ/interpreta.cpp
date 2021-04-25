@@ -4,6 +4,59 @@
 #include "interpreta.hpp"
 #include "nodo.hpp"
 
+namespace Ñ
+{
+    Ñ::Resultado resuelveArgumentos(Ñ::Argumentos* args, Ñ::TablaSímbolos* tablaSímbolos)
+    {
+        Ñ::Resultado resultado;
+        if(args == nullptr)
+        {
+            resultado.éxito();
+            resultado.nodo(nullptr);
+            return resultado;
+        }
+
+        Ñ::Argumentos* argumentos = new Ñ::Argumentos();
+
+        for(auto a : ((Ñ::Nodo*)args)->ramas)
+        {
+            Ñ::Nodo* n;
+
+            if(a->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+            {
+                Ñ::Identificador* id = (Ñ::Identificador*)a;
+                if(tablaSímbolos->identificadorDisponible(id->id))
+                {
+                    delete argumentos;
+                    resultado.error("He recibido como argumento un identificador inexistente");
+                    return resultado;
+                }
+                else
+                {
+                    Ñ::Resultado r = tablaSímbolos->leeValor(id->id);
+                    if(r.error())
+                    {
+                        delete argumentos;
+                        return r;
+                    }
+
+                    n = Ñ::duplicaÁrbol(r.nodo());
+                    ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
+                }
+            }
+            else
+            {
+                n = Ñ::duplicaÁrbol(a);
+                ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
+            }
+        }
+
+        resultado.éxito();
+        resultado.nodo((Ñ::Nodo*)argumentos);
+        return resultado;
+    }
+}
+
 Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
@@ -139,7 +192,14 @@
             args = (Ñ::Argumentos*)(nodos->ramas[0]);
         }
 
-        tablaSímbolos->ejecutaFunción(fn->función, (Ñ::Nodo*)args);
+        Ñ::Resultado rArgs = resuelveArgumentos(args, tablaSímbolos);
+        if(rArgs.error())
+        {
+            return rArgs;
+        }
+        Ñ::Nodo* argsResueltos = rArgs.nodo();
+
+        tablaSímbolos->ejecutaFunción(fn->función, argsResueltos);
         
         resultado.éxito();
         return resultado;

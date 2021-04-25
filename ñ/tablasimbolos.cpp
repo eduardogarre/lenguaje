@@ -138,13 +138,13 @@ void Ñ::Símbolo::ejecutaFunción(Ñ::Argumentos* args)
 {
     if(_categoría == CategoríaSímbolo::FUNCIÓN && _ejecutable && _ejecuta)
     {
-        if(args == nullptr)
+        if(_args == nullptr)
         {
-            _ejecuta(_args);
+            _ejecuta(args);
         }
         else
         {
-            _ejecuta(args);
+            _ejecuta(_args);
         }
     }
 }

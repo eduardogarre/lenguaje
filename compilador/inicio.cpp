@@ -40,26 +40,37 @@ void escribe(Ñ::Argumentos* args)
 	{
 		if(((Ñ::Nodo*)args)->ramas.size() == 0)
 		{
+			delete args;
 			return;
 		}
-		else if(((Ñ::Nodo*)args)->ramas.size() == 1)
+		else if(((Ñ::Nodo*)args)->ramas.size() > 0)
 		{
-			Ñ::Nodo* arg = ((Ñ::Nodo*)args)->ramas[0];
-			if(arg == nullptr)
+			for(auto arg : ((Ñ::Nodo*)args)->ramas)
 			{
-				return;
+				if(arg == nullptr)
+				{
+					continue;
+				}
+				else if(arg->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+				{
+					std::string dato = ((Ñ::Literal*)arg)->dato;
+					std::cout << dato;
+				}
+				else
+				{
+					std::cout << "He recibido un Ñ::Nodo* que no es un Literal" << std::endl;
+					std::cout << "categoría :: " << arg->categoría << std::endl;
+				}
 			}
-			else if(arg->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
-			{
-				std::string dato = ((Ñ::Literal*)arg)->dato;
-				std::cout << dato;
-			}
+			delete args;
 		}
 	}
 }
 
 void tabla(Ñ::Argumentos* args)
 {
+	std::cout << "Ejecutando tabla()" << std::endl;
+	
 	if(args == nullptr)
 	{
 		return;

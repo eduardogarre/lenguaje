@@ -151,6 +151,11 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 		}
 	}
 
+	for(auto l : lexemas)
+	{
+		delete l;
+	}
+	lexemas.clear();
 	delete nodos;
 }
 

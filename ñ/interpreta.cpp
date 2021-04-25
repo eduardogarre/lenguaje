@@ -72,6 +72,7 @@
             Ñ::Nodo* valor = s.obténValor();
             Ñ::Nodo* valorTmp = duplicaÁrbol(valor);
             (*tablaSímbolos)[idLia->id].asignaValor(valorTmp);
+            delete valorTmp;
         }
 
         resultado.éxito();

@@ -118,6 +118,7 @@ void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>
 	Ñ::Nodo* nodos;
 
 	Ñ::Léxico léxico;
+	Ñ::Sintaxis sintaxis;
 	
 	lexemas = léxico.analiza(comando);
 
@@ -127,7 +128,7 @@ void _interpretaComando(std::string comando, std::map<std::string, Ñ::Símbolo>
 		return;
 	}
 
-	nodos = Ñ::analizaSintaxis(lexemas);
+	nodos = sintaxis.analiza(lexemas);
 
 	if(nodos == nullptr)
 	{

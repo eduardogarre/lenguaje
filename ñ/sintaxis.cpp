@@ -8,30 +8,7 @@
 #include "salida.hpp"
 #include "sintaxis.hpp"
 
-uint32_t cursor;
-
-std::vector<Ñ::Lexema*> lexemas;
-// Compilación condicional: si estamos en pruebas, ya se han expuesto las funciones privadas del módulo
-#ifndef EVALUANDO_PRUEBAS
-bool notación(std::string carácter);
-Ñ::Nodo* literal();
-Ñ::Nodo* tipo();
-Ñ::Nodo* identificador();
-Ñ::Nodo* factor();
-Ñ::Nodo* opMultiplicaciónDivisión();
-Ñ::Nodo* opSumaResta();
-Ñ::Nodo* ladoIzquierdoAsignación();
-Ñ::Nodo* ladoDerechoAsignación();
-Ñ::Nodo* declaraVariable();
-Ñ::Nodo* asigna();
-Ñ::Nodo* argumento();
-Ñ::Nodo* argumentos();
-Ñ::Nodo* llamaFunción();
-Ñ::Nodo* expresión();
-Ñ::Nodo* Ñ::analizaSintaxis(std::vector<Ñ::Lexema*> _lexemas);
-#endif
-
-bool notación(std::string carácter)
+bool Ñ::Sintaxis::notación(std::string carácter)
 {
 	uint32_t c = cursor;
 
@@ -51,7 +28,7 @@ bool notación(std::string carácter)
 	return false;
 }
 
-Ñ::Nodo* literal()
+Ñ::Nodo* Ñ::Sintaxis::literal()
 {
 	uint32_t c = cursor;
 
@@ -76,7 +53,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* ladoIzquierdoAsignación()
+Ñ::Nodo* Ñ::Sintaxis::ladoIzquierdoAsignación()
 {
 	uint32_t c = cursor;
 
@@ -96,7 +73,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* ladoDerechoAsignación()
+Ñ::Nodo* Ñ::Sintaxis::ladoDerechoAsignación()
 {
 	uint32_t c = cursor;
 
@@ -118,7 +95,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* opSumaResta()
+Ñ::Nodo* Ñ::Sintaxis::opSumaResta()
 {
 	uint32_t c = cursor;
 
@@ -162,7 +139,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* opMultiplicaciónDivisión()
+Ñ::Nodo* Ñ::Sintaxis::opMultiplicaciónDivisión()
 {
 	uint32_t c = cursor;
 
@@ -205,7 +182,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* factor()
+Ñ::Nodo* Ñ::Sintaxis::factor()
 {
 	uint32_t c = cursor;
 
@@ -257,7 +234,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* identificador()
+Ñ::Nodo* Ñ::Sintaxis::identificador()
 {
 	uint32_t c = cursor;
 
@@ -276,7 +253,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* tipo()
+Ñ::Nodo* Ñ::Sintaxis::tipo()
 {
 	uint32_t c = cursor;
 
@@ -357,7 +334,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* declaraVariable()
+Ñ::Nodo* Ñ::Sintaxis::declaraVariable()
 {
 	uint32_t c = cursor;
 
@@ -405,7 +382,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* asigna()
+Ñ::Nodo* Ñ::Sintaxis::asigna()
 {
 	uint32_t c = cursor;
 
@@ -440,7 +417,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* argumento()
+Ñ::Nodo* Ñ::Sintaxis::argumento()
 {
 	uint32_t c = cursor;
 
@@ -453,7 +430,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* argumentos()
+Ñ::Nodo* Ñ::Sintaxis::argumentos()
 {
 	uint32_t c = cursor;
 
@@ -483,7 +460,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* llamaFunción()
+Ñ::Nodo* Ñ::Sintaxis::llamaFunción()
 {
 	uint32_t c = cursor;
 
@@ -544,7 +521,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* expresión()
+Ñ::Nodo* Ñ::Sintaxis::expresión()
 {
 	uint32_t c = cursor;
 
@@ -597,7 +574,7 @@ bool notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::analizaSintaxis(std::vector<Ñ::Lexema*> _lexemas)
+Ñ::Nodo* Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas)
 {
 	cursor = 0;
 	lexemas = _lexemas;

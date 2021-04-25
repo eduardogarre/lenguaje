@@ -8,6 +8,8 @@
 
 TEST(PruebasSintaxis, Declaraciones)
 {
+    Ñ::Sintaxis sintaxis;
+
     Ñ::Nodo* r;
     std::vector<Ñ::Lexema*> l;
     Ñ::Lexema* l1;
@@ -46,7 +48,7 @@ TEST(PruebasSintaxis, Declaraciones)
     n1->ramas.push_back(n2);
     n->ramas.push_back(n1);
 
-    r = Ñ::analizaSintaxis(l);
+    r = sintaxis.analiza(l);
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n, r));
 
     l.clear();
@@ -55,6 +57,8 @@ TEST(PruebasSintaxis, Declaraciones)
 
 TEST(PruebasSintaxis, Asignaciones)
 {
+    Ñ::Sintaxis sintaxis;
+    
     Ñ::Nodo* r;
     std::vector<Ñ::Lexema*> l;
     Ñ::Lexema* l1;
@@ -102,7 +106,7 @@ TEST(PruebasSintaxis, Asignaciones)
     n1->ramas.push_back(n3);
     n->ramas.push_back(n1);
 
-    r = Ñ::analizaSintaxis(l);
+    r = sintaxis.analiza(l);
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n, r));
 
     l.clear();
@@ -143,7 +147,7 @@ TEST(PruebasSintaxis, Asignaciones)
     n1->ramas.push_back(n3);
     n->ramas.push_back(n1);
 
-    r = Ñ::analizaSintaxis(l);
+    r = sintaxis.analiza(l);
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n, r));
 
     l.clear();
@@ -152,6 +156,8 @@ TEST(PruebasSintaxis, Asignaciones)
 
 TEST(PruebasSintaxis, DeclaracionesYAsignaciones)
 {
+    Ñ::Sintaxis sintaxis;
+    
     Ñ::Nodo* r;
     std::vector<Ñ::Lexema*> l;
     Ñ::Lexema* l1;
@@ -209,7 +215,7 @@ TEST(PruebasSintaxis, DeclaracionesYAsignaciones)
     n1->ramas.push_back(n4);
     n->ramas.push_back(n1);
 
-    r = Ñ::analizaSintaxis(l);
+    r = sintaxis.analiza(l);
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n, r));
 
     l.clear();
@@ -218,6 +224,8 @@ TEST(PruebasSintaxis, DeclaracionesYAsignaciones)
 
 TEST(PruebasSintaxis, LlamadasFunciones)
 {
+    Ñ::Sintaxis sintaxis;
+    
     Ñ::Nodo* r;
     std::vector<Ñ::Lexema*> l;
     Ñ::Lexema* l1;
@@ -257,7 +265,7 @@ TEST(PruebasSintaxis, LlamadasFunciones)
     ((Ñ::LlamaFunción*)n1)->función = "apaga";
     n->ramas.push_back(n1);
 
-    r = Ñ::analizaSintaxis(l);
+    r = sintaxis.analiza(l);
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n, r));
 
     l.clear();
@@ -266,6 +274,8 @@ TEST(PruebasSintaxis, LlamadasFunciones)
 
 TEST(PruebasSintaxis, LlamadasFuncionesConArgumento)
 {
+    Ñ::Sintaxis sintaxis;
+    
     Ñ::Nodo* r;
     std::vector<Ñ::Lexema*> l;
     Ñ::Lexema* l1;
@@ -318,7 +328,7 @@ TEST(PruebasSintaxis, LlamadasFuncionesConArgumento)
     n1->ramas.push_back(n2);
     n->ramas.push_back(n1);
 
-    r = Ñ::analizaSintaxis(l);
+    r = sintaxis.analiza(l);
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n, r));
 
     l.clear();

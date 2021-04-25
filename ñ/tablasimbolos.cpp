@@ -44,11 +44,11 @@ namespace Ñ
         bool _ejecutable = false;
         bool _definida = false;
         
-        Ñ::Nodo* _tipo;
-        Ñ::Nodo* _definición;
+        Ñ::Nodo* _tipo = nullptr;
+        Ñ::Nodo* _definición = nullptr;
 
         void (*_ejecuta)(Ñ::Argumentos* args);
-        Ñ::Argumentos * _args;
+        Ñ::Argumentos * _args = nullptr;
     };
 }
 
@@ -64,7 +64,23 @@ namespace Ñ
 
 Ñ::Símbolo::~Símbolo()
 {
-
+    if(_tipo != nullptr)
+    {
+        delete _tipo;
+        _tipo = nullptr;
+    }
+    
+    if(_definición != nullptr)
+    {
+        delete _definición;
+        _definición = nullptr;
+    }
+    
+    if(_args != nullptr)
+    {
+        delete _args;
+        _args = nullptr;
+    }
 }
 
 bool Ñ::Símbolo::esFunción()
@@ -396,6 +412,6 @@ void Ñ::TablaSímbolos::muestra()
     {
         delete valor;
     }
-    
+
     _tabla.clear();
 }

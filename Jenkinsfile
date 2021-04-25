@@ -8,7 +8,7 @@ pipeline {
 
 	parameters {
 		booleanParam name: 'EJECUTA_COMPROBACIONES', defaultValue: true, description: '¿Hago Pruebas?'
-		//booleanParam name: 'ANALISIS_ESTATICO', defaultValue: true, description: '¿Analizo el codigo?'
+		booleanParam name: 'ANALISIS_ESTATICO', defaultValue: true, description: '¿Analizo el codigo?'
 		//booleanParam name: 'INSTALA', defaultValue: true, description: '¿Instalo los artefactos?'
 	}
 
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh label: 'ConstruyeObra', script: 'rm -rf obra'
                 sh label: 'ConstruyeObra', script: 'mkdir obra'
-                sh label: 'EjecutaCMake', script: 'cmake -S . -B obra'
+                sh label: 'EjecutaCMake', script: 'cmake CXXFLAGS="-g" -S . -B obra'
                 sh label: 'EjecutaCMakeBuild', script: 'cmake --build obra --parallel=$(nproc)'
             }
         }
@@ -38,15 +38,14 @@ pipeline {
             }
         }
 
-        //stage('Analiza') {
-        //    when {
-        //        environment name: 'ANALISIS_ESTATICO', value: 'true'
-        //    }
-        //    steps {
-        //        sh label: '', returnStatus: true, script: 'cppcheck . --xml --language=c++ --suppressions-list=suppressions.txt 2> cppcheck-result.xml'
-        //        publishCppcheck allowNoReport: true, ignoreBlankFiles: true, pattern: '**/cppcheck-result.xml'
-        //    }
-        //}
+        stage('Analiza') {
+            when {
+                environment name: 'ANALISIS_ESTATICO', value: 'true'
+            }
+            steps {
+                sh label: '', returnStatus: true, script: 'valgrind --leak-check=yes --track-origins=yes proyecto/ñ'
+            }
+        }
 
         //stage('Instala') {
         //    when {

@@ -38,19 +38,19 @@
         id->id = nombre;
         
         resultado.éxito();
-        resultado.resultado((Ñ::Nodo*)id);
+        resultado.nodo((Ñ::Nodo*)id);
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
     {
         resultado.éxito();
-        resultado.resultado(nodos);
+        resultado.nodo(nodos);
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
     {
         resultado.éxito();
-        resultado.resultado(nodos);
+        resultado.nodo(nodos);
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
@@ -58,21 +58,22 @@
         Ñ::Resultado rLia = interpretaNodos(nodos->ramas[0], tablaSímbolos);
         Ñ::Resultado rLda = interpretaNodos(nodos->ramas[1], tablaSímbolos);
         
-        if(rLda.resultado()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+        if(rLda.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
         {
-            std::string id = ((Ñ::Identificador*)(rLia.resultado()))->id;
-            (*tablaSímbolos)[id].asignaValor(rLda.resultado());
+            std::string id = ((Ñ::Identificador*)(rLia.nodo()))->id;
+            (*tablaSímbolos)[id].asignaValor(rLda.nodo());
         }
-        else if(rLda.resultado()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+        else if(rLda.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
         {
-            std::string idLda = ((Ñ::Identificador*)rLda.resultado())->id;
+            std::string idLda = ((Ñ::Identificador*)rLda.nodo())->id;
             Ñ::Símbolo s = tablaSímbolos->at(idLda);
-            std::string idLia = ((Ñ::Identificador*)(rLia.resultado()))->id;
+            std::string idLia = ((Ñ::Identificador*)(rLia.nodo()))->id;
+
             (*tablaSímbolos)[idLia].asignaValor(s.obténValor());
         }
 
         resultado.éxito();
-        resultado.resultado(rLia.resultado());
+        resultado.nodo(rLia.nodo());
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)

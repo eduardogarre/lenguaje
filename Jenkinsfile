@@ -38,45 +38,6 @@ pipeline {
             }
         }
 
-        stage('Valgrind') {
-            runValgrind (
-                childSilentAfterFork: true,
-                excludePattern: '',
-                generateSuppressions: true,
-                ignoreExitCode: true,
-                includePattern: 'proyecto/ñ',
-                outputDirectory: '',
-                outputFileEnding: '.memcheck',
-                programOptions: '',
-                removeOldReports: true,
-                suppressionFiles: '',
-                tool: [$class: 'ValgrindToolMemcheck',
-                    leakCheckLevel: 'full',
-                    showReachable: true,
-                    trackOrigins: true,
-                    undefinedValueErrors: true],
-                traceChildren: true,
-                valgrindExecutable: '',
-                valgrindOptions: '',
-                workingDirectory: ''
-            )
-
-            publishValgrind (
-                failBuildOnInvalidReports: false,
-                failBuildOnMissingReports: false,
-                failThresholdDefinitelyLost: '',
-                failThresholdInvalidReadWrite: '',
-                failThresholdTotal: '',
-                pattern: '*.memcheck',
-                publishResultsForAbortedBuilds: false,
-                publishResultsForFailedBuilds: false,
-                sourceSubstitutionPaths: '',
-                unstableThresholdDefinitelyLost: '',
-                unstableThresholdInvalidReadWrite: '',
-                unstableThresholdTotal: ''
-            )
-        }
-
         //stage('Analiza') {
         //    when {
         //        environment name: 'ANALISIS_ESTATICO', value: 'true'

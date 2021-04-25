@@ -65,11 +65,13 @@
         }
         else if(rLda.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
         {
-            std::string idLda = ((Ñ::Identificador*)rLda.nodo())->id;
-            Ñ::Símbolo s = tablaSímbolos->at(idLda);
-            std::string idLia = ((Ñ::Identificador*)(rLia.nodo()))->id;
+            Ñ::Identificador* idLia = ((Ñ::Identificador*)rLia.nodo());
+            Ñ::Identificador* idLda = ((Ñ::Identificador*)rLda.nodo());
 
-            (*tablaSímbolos)[idLia].asignaValor(s.obténValor());
+            Ñ::Símbolo s = tablaSímbolos->at(idLda->id);
+            Ñ::Nodo* valor = s.obténValor();
+            Ñ::Nodo* valorTmp = duplicaÁrbol(valor);
+            (*tablaSímbolos)[idLia->id].asignaValor(valorTmp);
         }
 
         resultado.éxito();

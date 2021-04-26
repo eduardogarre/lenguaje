@@ -69,8 +69,6 @@ void escribe(Ñ::Argumentos* args)
 
 void tabla(Ñ::Argumentos* args)
 {
-	std::cout << "Ejecutando tabla()" << std::endl;
-	
 	if(args == nullptr)
 	{
 		return;

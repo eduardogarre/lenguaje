@@ -55,6 +55,37 @@ namespace Ñ
         resultado.nodo((Ñ::Nodo*)argumentos);
         return resultado;
     }
+
+    Ñ::Resultado resuelveIdentificador(Ñ::Nodo* n, Ñ::TablaSímbolos* tablaSímbolos)
+    {
+        Ñ::Resultado resultado;
+
+        if(n->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+        {
+            Ñ::Identificador* id = (Ñ::Identificador*)n;
+            if(tablaSímbolos->identificadorDisponible(id->id))
+            {
+                resultado.error("He recibido como argumento un identificador inexistente");
+                return resultado;
+            }
+            else
+            {
+                Ñ::Resultado r = tablaSímbolos->leeValor(id->id);
+                if(r.error())
+                {
+                    return r;
+                }
+
+                n = Ñ::duplicaÁrbol(r.nodo());
+                resultado.éxito();
+                resultado.nodo(n);
+                return resultado;
+            }
+        }
+
+        resultado.error("El nodo no es un identificador");
+        return resultado;
+    }
 }
 
 Ñ::Resultado Ñ::interpretaNodos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
@@ -146,8 +177,10 @@ namespace Ñ
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
     {
-        Ñ::Nodo* op0;
-        Ñ::Nodo* op1;
+        Ñ::Nodo* op0 = nullptr;
+        Ñ::Nodo* op1 = nullptr;
+        bool op0tmp = false;
+        bool op1tmp = false;
 
         Ñ::Resultado r0 = interpretaNodos(nodos->ramas[0], tablaSímbolos);
         if(r0.error())
@@ -160,17 +193,80 @@ namespace Ñ
         }
         else if(r0.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
         {
-            op0 = r0.nodo();
+            Ñ::Resultado rOp = resuelveIdentificador(r0.nodo(), tablaSímbolos);
+            if(rOp.error())
+            {
+                return rOp;
+            }
+
+            op0 = rOp.nodo();
+            op0tmp = true;
         }
 
         Ñ::Resultado r1 = interpretaNodos(nodos->ramas[1], tablaSímbolos);
         if(r1.error())
         {
-            delete r0.nodo();
+            if(op0tmp)
+            {
+                delete op0;
+            }
             return r1;
         }
+        else if(r1.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+        {
+            op1 = r1.nodo();
+        }
+        else if(r1.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+        {
+            Ñ::Resultado rOp = resuelveIdentificador(r1.nodo(), tablaSímbolos);
+            if(rOp.error())
+            {
+                if(op0tmp)
+                {
+                    delete op0;
+                }
+                return rOp;
+            }
 
-        resultado.error("Pendiente de implementar");
+            op1 = rOp.nodo();
+            op1tmp = true;
+        }
+
+        // PENDIENTE DE IMPLEMENTAR TIPOS
+        // POR EL MOMENTO FIJO LITERALES NATURALES
+        int64_t l0 = std::atoi(((Ñ::Literal*)op0)->dato.c_str());
+        int64_t l1 = std::atoi(((Ñ::Literal*)op1)->dato.c_str());
+        int64_t res = 0;
+
+        if(((Ñ::OpSumaResta*)nodos)->operación == "+")
+        {
+            res = l0 + l1;
+            Ñ::Literal* literal = new Ñ::Literal();
+            literal->dato = std::to_string(res);
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)literal);
+        }
+        else if(((Ñ::OpSumaResta*)nodos)->operación == "-")
+        {
+            res = -(l0 - l1); // Los hijos están invertidos en el árbol
+            Ñ::Literal* literal = new Ñ::Literal();
+            literal->dato = std::to_string(res);
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)literal);
+        }
+        else
+        {
+            resultado.error("Operación desconocida");
+        }
+        
+        if(op0tmp)
+        {
+            delete op0;
+        }
+        if(op1tmp)
+        {
+            delete op1;
+        }
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)

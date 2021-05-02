@@ -173,7 +173,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 		Ñ::Nodo* fac;
 
-		if(fac = factor())
+		if(fac = primario())
 		{
 			if(notación("*"))
 			{
@@ -183,7 +183,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 			{
 				operación = "/";
 			}
-			else // No es una operación, devuelvo factor directamente
+			else // No es una operación, devuelvo primario directamente
 			{
 				return fac;
 			}
@@ -206,13 +206,13 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::factor()
+Ñ::Nodo* Ñ::Sintaxis::primario()
 {
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
 	{
-		std::string factor;
+		std::string primario;
 
 		if(Ñ::Nodo* lit = literal())
 		{

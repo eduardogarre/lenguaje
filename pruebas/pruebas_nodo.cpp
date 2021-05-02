@@ -101,17 +101,17 @@ TEST(PruebasNodo, sonArbolesDuplicados)
     delete omd1, omd2;
     
 
-    Ñ::Factor* fx1 = new Ñ::Factor();
-    Ñ::Factor* fx2 = new Ñ::Factor();
+    Ñ::Primario* fx1 = new Ñ::Primario();
+    Ñ::Primario* fx2 = new Ñ::Primario();
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados((Ñ::Nodo*)fx1, (Ñ::Nodo*)fx2));
     EXPECT_FALSE(Ñ::sonÁrbolesDuplicados((Ñ::Nodo*)fx1, (Ñ::Nodo*)fx1));
-    fx1->factor = "288";
+    fx1->primario = "288";
     EXPECT_FALSE(Ñ::sonÁrbolesDuplicados((Ñ::Nodo*)fx1, (Ñ::Nodo*)fx2));
-    fx2->factor = "288";
+    fx2->primario = "288";
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados((Ñ::Nodo*)fx1, (Ñ::Nodo*)fx2));
-    fx1->factor = "prueba";
+    fx1->primario = "prueba";
     EXPECT_FALSE(Ñ::sonÁrbolesDuplicados((Ñ::Nodo*)fx1, (Ñ::Nodo*)fx2));
-    fx2->factor = "prueba";
+    fx2->primario = "prueba";
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados((Ñ::Nodo*)fx1, (Ñ::Nodo*)fx2));
     delete fx1, fx2;
     
@@ -417,8 +417,8 @@ TEST(PruebasNodo, sonArbolesDuplicados)
     
     n1 = new Ñ::Nodo();
     n2 = new Ñ::Nodo();
-    n3 = (Ñ::Nodo*)(new Ñ::Factor());
-    n4 = (Ñ::Nodo*)(new Ñ::Factor());
+    n3 = (Ñ::Nodo*)(new Ñ::Primario());
+    n4 = (Ñ::Nodo*)(new Ñ::Primario());
     n1->ramas.push_back(n3);
     EXPECT_FALSE(Ñ::sonÁrbolesDuplicados(n1, n2));
     n2->ramas.push_back(n4);
@@ -427,7 +427,7 @@ TEST(PruebasNodo, sonArbolesDuplicados)
 
     n1 = new Ñ::Nodo();
     n2 = new Ñ::Nodo();
-    n3 = (Ñ::Nodo*)(new Ñ::Factor());
+    n3 = (Ñ::Nodo*)(new Ñ::Primario());
     n4 = new Ñ::Nodo();
     n1->ramas.push_back(n3);
     n2->ramas.push_back(n4);
@@ -436,10 +436,10 @@ TEST(PruebasNodo, sonArbolesDuplicados)
 
     n1 = new Ñ::Nodo();
     n2 = new Ñ::Nodo();
-    n3 = (Ñ::Nodo*)(new Ñ::Factor());
-    n4 = (Ñ::Nodo*)(new Ñ::Factor());
-    ((Ñ::Factor*)n3)->factor = "prueba";
-    ((Ñ::Factor*)n4)->factor = "prueba";
+    n3 = (Ñ::Nodo*)(new Ñ::Primario());
+    n4 = (Ñ::Nodo*)(new Ñ::Primario());
+    ((Ñ::Primario*)n3)->primario = "prueba";
+    ((Ñ::Primario*)n4)->primario = "prueba";
     n1->ramas.push_back(n3);
     EXPECT_FALSE(Ñ::sonÁrbolesDuplicados(n1, n2));
     n2->ramas.push_back(n4);
@@ -448,10 +448,10 @@ TEST(PruebasNodo, sonArbolesDuplicados)
 
     n1 = new Ñ::Nodo();
     n2 = new Ñ::Nodo();
-    n3 = (Ñ::Nodo*)(new Ñ::Factor());
-    n4 = (Ñ::Nodo*)(new Ñ::Factor());
-    ((Ñ::Factor*)n3)->factor = "asdf";
-    ((Ñ::Factor*)n4)->factor = "prueba";
+    n3 = (Ñ::Nodo*)(new Ñ::Primario());
+    n4 = (Ñ::Nodo*)(new Ñ::Primario());
+    ((Ñ::Primario*)n3)->primario = "asdf";
+    ((Ñ::Primario*)n4)->primario = "prueba";
     n1->ramas.push_back(n3);
     EXPECT_FALSE(Ñ::sonÁrbolesDuplicados(n1, n2));
     n2->ramas.push_back(n4);
@@ -721,8 +721,8 @@ TEST(PruebasNodo, duplicaArbol)
     delete r, n2, n1;
     
     n1 = new Ñ::Nodo();
-    n2 = (Ñ::Nodo*)(new Ñ::Factor());
-    ((Ñ::Factor*)n2)->factor = "prueba";
+    n2 = (Ñ::Nodo*)(new Ñ::Primario());
+    ((Ñ::Primario*)n2)->primario = "prueba";
     n1->ramas.push_back(n2);
     r = Ñ::duplicaÁrbol(n1);
     EXPECT_TRUE(Ñ::sonÁrbolesDuplicados(n1, r));

@@ -164,22 +164,22 @@ void Ñ::OpMultiplicaciónDivisión::muestra()
 	}
 }
 
-Ñ::Factor::Factor() : Ñ::Nodo()
+Ñ::Primario::Primario() : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
+	categoría = Ñ::CategoríaNodo::NODO_PRIMARIO;
 }
 
-Ñ::Factor::Factor(const Ñ::Factor& nodo) : Ñ::Nodo()
+Ñ::Primario::Primario(const Ñ::Primario& nodo) : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
+	categoría = Ñ::CategoríaNodo::NODO_PRIMARIO;
 }
 
-Ñ::Factor::~Factor() {}
+Ñ::Primario::~Primario() {}
 
-void Ñ::Factor::muestra()
+void Ñ::Primario::muestra()
 {
 	imprimeAjuste();
-	std::cout << "(NODO_FACTOR) [" + factor + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_PRIMARIO) [" + primario + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -355,9 +355,9 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::Identificador*)nodo)->muestra();
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PRIMARIO)
 	{
-		((Ñ::Factor*)nodo)->muestra();
+		((Ñ::Primario*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
 	{
@@ -430,8 +430,8 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::OpSumaResta* osr2;
 		Ñ::OpMultiplicaciónDivisión* omd1;
 		Ñ::OpMultiplicaciónDivisión* omd2;
-		Ñ::Factor* fx1;
-		Ñ::Factor* fx2;
+		Ñ::Primario* fx1;
+		Ñ::Primario* fx2;
 		Ñ::DeclaraVariable* dv1;
 		Ñ::DeclaraVariable* dv2;
 		Ñ::LlamaFunción* lfn1;
@@ -508,10 +508,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			}
 			break;
 		
-		case Ñ::CategoríaNodo::NODO_FACTOR:
-			fx1 = (Ñ::Factor*)nodo1;
-			fx2 = (Ñ::Factor*)nodo2;
-			if(fx1->factor == fx2->factor)
+		case Ñ::CategoríaNodo::NODO_PRIMARIO:
+			fx1 = (Ñ::Primario*)nodo1;
+			fx2 = (Ñ::Primario*)nodo2;
+			if(fx1->primario == fx2->primario)
 			{
 				return true;
 			}
@@ -613,11 +613,11 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 
 		duplicado = (Ñ::Nodo*)i;
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PRIMARIO)
 	{
-		Ñ::Factor* n = (Ñ::Factor*)nodo;
-		Ñ::Factor* f = new Ñ::Factor();
-		f->factor = n->factor;
+		Ñ::Primario* n = (Ñ::Primario*)nodo;
+		Ñ::Primario* f = new Ñ::Primario();
+		f->primario = n->primario;
 
 		duplicado = (Ñ::Nodo*)f;
 	}

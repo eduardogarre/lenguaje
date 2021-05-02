@@ -17,7 +17,7 @@ namespace Ñ
 
         NODO_OP_SUMA_RESTA,
         NODO_OP_MULTIPLICACIÓN_DIVISIÓN,
-        NODO_FACTOR,
+        NODO_PRIMARIO,
 
         NODO_DECLARA_VARIABLE,
         NODO_ASIGNA,
@@ -105,14 +105,14 @@ namespace Ñ
         void muestra();
     };
 
-    class Factor : Nodo
+    class Primario : Nodo
     {
     public:
-        std::string factor;
+        std::string primario;
 
-        Factor();
-        Factor(const Ñ::Factor& nodo);
-        ~Factor();
+        Primario();
+        Primario(const Ñ::Primario& nodo);
+        ~Primario();
 
         void muestra();
     };

@@ -257,6 +257,7 @@ namespace Ñ
 
                 if( (s == "cierto")
                  || (s == "falso")
+                 || (s == "nulo")
                  || (s == "var")
                  || (s == "bool")
                  || (s == "entero")

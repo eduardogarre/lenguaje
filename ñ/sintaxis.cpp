@@ -48,6 +48,30 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		cursor++;
 		return (Ñ::Nodo*)l;
 	}
+	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+	{
+		if(lexemas[cursor]->contenido == "cierto")
+		{
+			l = new Ñ::Literal();
+			l->dato = lexemas[cursor]->contenido;
+			cursor++;
+			return (Ñ::Nodo*)l;
+		}
+		else if(lexemas[cursor]->contenido == "falso")
+		{
+			l = new Ñ::Literal();
+			l->dato = lexemas[cursor]->contenido;
+			cursor++;
+			return (Ñ::Nodo*)l;
+		}
+		else if(lexemas[cursor]->contenido == "nulo")
+		{
+			l = new Ñ::Literal();
+			l->dato = lexemas[cursor]->contenido;
+			cursor++;
+			return (Ñ::Nodo*)l;
+		}
+	}
 
 	cursor = c;
 	return nullptr;

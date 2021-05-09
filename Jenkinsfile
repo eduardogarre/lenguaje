@@ -28,6 +28,7 @@ pipeline {
             }
             steps {
                 sh label: '', returnStatus: true, script: 'echo "apaga();" | valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -v proyecto/compilador'
+                sh label: '', returnStatus: true, script: 'valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -v proyecto/pruebas'
             }
         }
 

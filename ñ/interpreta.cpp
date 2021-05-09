@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "interpreta.hpp"
@@ -6,6 +7,128 @@
 
 namespace Ñ
 {
+    Ñ::Resultado sumaLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
+    {
+        std::string d1 = ((Ñ::Literal*)n1)->dato;
+        std::string d2 = ((Ñ::Literal*)n2)->dato;
+
+        int32_t i1 = std::atoi(d1.c_str());
+        int32_t i2 = std::atoi(d2.c_str());
+
+        Ñ::Literal* l = new Ñ::Literal;
+        l->dato = std::to_string(i1 + i2);
+        Ñ::Resultado r;
+        r.éxito();
+        r.nodo((Ñ::Nodo*)l);
+        return r;
+    }
+    
+    Ñ::Resultado restaLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
+    {
+        std::string d1 = ((Ñ::Literal*)n1)->dato;
+        std::string d2 = ((Ñ::Literal*)n2)->dato;
+
+        int32_t i1 = std::atoi(d1.c_str());
+        int32_t i2 = std::atoi(d2.c_str());
+
+        Ñ::Literal* l = new Ñ::Literal;
+        l->dato = std::to_string(i1 - i2);
+        Ñ::Resultado r;
+        r.éxito();
+        r.nodo((Ñ::Nodo*)l);
+        return r;
+    }
+    
+    Ñ::Resultado multiplicaLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
+    {
+        std::string d1 = ((Ñ::Literal*)n1)->dato;
+        std::string d2 = ((Ñ::Literal*)n2)->dato;
+
+        int32_t i1 = std::atoi(d1.c_str());
+        int32_t i2 = std::atoi(d2.c_str());
+
+        Ñ::Literal* l = new Ñ::Literal;
+        l->dato = std::to_string(i1 * i2);
+        Ñ::Resultado r;
+        r.éxito();
+        r.nodo((Ñ::Nodo*)l);
+        return r;
+    }
+    
+    Ñ::Resultado divideLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
+    {
+        std::string d1 = ((Ñ::Literal*)n1)->dato;
+        std::string d2 = ((Ñ::Literal*)n2)->dato;
+
+        int32_t i1 = std::atoi(d1.c_str());
+        int32_t i2 = std::atoi(d2.c_str());
+
+        Ñ::Literal* l = new Ñ::Literal;
+        l->dato = std::to_string(i1 / i2);
+        Ñ::Resultado r;
+        r.éxito();
+        r.nodo((Ñ::Nodo*)l);
+        return r;
+    }
+
+    Ñ::Resultado obténLiteral(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
+    {
+        Ñ::Resultado resultado;
+        Ñ::Nodo* n;
+
+        if(nodo->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+        {
+            std::string id = ((Ñ::Identificador*)(nodo))->id;
+            Ñ::Resultado rid = tablaSímbolos->leeValor(id);
+            if(rid.error())
+            {
+                return rid;
+            }
+            else
+            {
+                n = duplicaÁrbol(rid.nodo());
+            }
+        }
+        else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+        {
+            n = duplicaÁrbol(nodo);
+        }
+        else
+        {
+            Ñ::Resultado r = interpretaNodos(nodo, tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+            {
+                std::string id = ((Ñ::Identificador*)(r.nodo()))->id;
+                Ñ::Resultado rid = tablaSímbolos->leeValor(id);
+                if(rid.error())
+                {
+                    return rid;
+                }
+                else
+                {
+                    n = duplicaÁrbol(rid.nodo());
+                }
+            }
+            else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+            {
+                n = duplicaÁrbol(nodo);
+            }
+            else
+            {
+                resultado.error("He recibido un nodo de categoría " + std::to_string(nodo->categoría));
+                return resultado;
+            }
+        }
+        
+        resultado.éxito();
+        resultado.nodo(n);
+        return resultado;
+    }
+
     Ñ::Resultado resuelveArgumentos(Ñ::Argumentos* args, Ñ::TablaSímbolos* tablaSímbolos)
     {
         Ñ::Resultado resultado;
@@ -44,10 +167,54 @@ namespace Ñ
                     ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
                 }
             }
+            else if(a->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+            {
+                n = duplicaÁrbol(a);
+                ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
+            }
             else
             {
-                n = Ñ::duplicaÁrbol(a);
-                ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
+                Ñ::Resultado r = interpretaNodos(a, tablaSímbolos);
+                if(r.error())
+                {
+                    delete argumentos;
+                    return r;
+                }
+
+                if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+                {
+                    Ñ::Identificador* id = (Ñ::Identificador*)(r.nodo());
+                    if(tablaSímbolos->identificadorDisponible(id->id))
+                    {
+                        delete argumentos;
+                        resultado.error("He recibido como argumento un identificador inexistente");
+                        return resultado;
+                    }
+                    else
+                    {
+                        Ñ::Resultado r = tablaSímbolos->leeValor(id->id);
+                        if(r.error())
+                        {
+                            delete argumentos;
+                            return r;
+                        }
+
+                        n = Ñ::duplicaÁrbol(r.nodo());
+                        ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
+                    }
+                }
+                else if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+                {
+                    n = duplicaÁrbol(r.nodo());
+                    ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
+                }
+                else
+                {
+                    delete argumentos;
+                    resultado.error("He recibido como argumento un árbol que no consigo interpretar");
+                    muestraNodos(r.nodo());
+                    return resultado;
+                }
             }
         }
 
@@ -126,13 +293,13 @@ namespace Ñ
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
     {
         resultado.éxito();
-        resultado.nodo(nodos);
+        resultado.nodo(duplicaÁrbol(nodos));
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
     {
         resultado.éxito();
-        resultado.nodo(nodos);
+        resultado.nodo(duplicaÁrbol(nodos));
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
@@ -175,104 +342,319 @@ namespace Ñ
         resultado.nodo(rLia.nodo());
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
-    {
-        Ñ::Nodo* op0 = nullptr;
-        Ñ::Nodo* op1 = nullptr;
-        bool op0tmp = false;
-        bool op1tmp = false;
-
-        Ñ::Resultado r0 = interpretaNodos(nodos->ramas[0], tablaSímbolos);
-        if(r0.error())
-        {
-            return r0;
-        }
-        else if(r0.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
-        {
-            op0 = r0.nodo();
-        }
-        else if(r0.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
-        {
-            Ñ::Resultado rOp = resuelveIdentificador(r0.nodo(), tablaSímbolos);
-            if(rOp.error())
-            {
-                return rOp;
-            }
-
-            op0 = rOp.nodo();
-            op0tmp = true;
-        }
-
-        Ñ::Resultado r1 = interpretaNodos(nodos->ramas[1], tablaSímbolos);
-        if(r1.error())
-        {
-            if(op0tmp)
-            {
-                delete op0;
-            }
-            return r1;
-        }
-        else if(r1.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
-        {
-            op1 = r1.nodo();
-        }
-        else if(r1.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
-        {
-            Ñ::Resultado rOp = resuelveIdentificador(r1.nodo(), tablaSímbolos);
-            if(rOp.error())
-            {
-                if(op0tmp)
-                {
-                    delete op0;
-                }
-                return rOp;
-            }
-
-            op1 = rOp.nodo();
-            op1tmp = true;
-        }
-
-        // PENDIENTE DE IMPLEMENTAR TIPOS
-        // POR EL MOMENTO FIJO LITERALES NATURALES
-        int64_t l0 = std::atoi(((Ñ::Literal*)op0)->dato.c_str());
-        int64_t l1 = std::atoi(((Ñ::Literal*)op1)->dato.c_str());
-        int64_t res = 0;
-
-        if(((Ñ::OpSumaResta*)nodos)->operación == "+")
-        {
-            res = l0 + l1;
-            Ñ::Literal* literal = new Ñ::Literal();
-            literal->dato = std::to_string(res);
-            resultado.éxito();
-            resultado.nodo((Ñ::Nodo*)literal);
-        }
-        else if(((Ñ::OpSumaResta*)nodos)->operación == "-")
-        {
-            res = -(l0 - l1); // Los hijos están invertidos en el árbol
-            Ñ::Literal* literal = new Ñ::Literal();
-            literal->dato = std::to_string(res);
-            resultado.éxito();
-            resultado.nodo((Ñ::Nodo*)literal);
-        }
-        else
-        {
-            resultado.error("Operación desconocida");
-        }
-        
-        if(op0tmp)
-        {
-            delete op0;
-        }
-        if(op1tmp)
-        {
-            delete op1;
-        }
-        return resultado;
-    }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_BINARIA)
     {
         resultado.error("Pendiente de implementar");
         return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
+    {
+        if(nodos->ramas.size() == 1)
+        {
+            Ñ::Nodo* n1;
+            Ñ::Resultado r = interpretaNodos(nodos->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            Ñ::Resultado rn = obténLiteral(r.nodo(), tablaSímbolos);
+            if(rn.error())
+            {
+                return rn;
+            }
+            else
+            {
+                n1 = rn.nodo();
+            }
+            delete r.nodo();
+            Ñ::Literal* lit = (Ñ::Literal*)n1;
+            Ñ::OperaciónUnaria* op = (Ñ::OperaciónUnaria*)nodos;
+            if(op->operación == "!")
+            {
+                if(lit->dato == "cierto")
+                {
+                    lit->dato = "falso";
+                }
+                else if(lit->dato == "falso")
+                {
+                    lit->dato = "cierto";
+                }
+                else
+                {
+                    resultado.error("Has intentado aplicar la operación lógica NO a un valor que no es booleano");
+                    return resultado;
+                }
+
+                resultado.éxito();
+                resultado.nodo(n1);
+                return resultado;
+            }
+            else if(op->operación == "-")
+            {
+                int32_t núm = std::strtol(lit->dato.c_str(), nullptr, 10);
+                núm *= -1;
+                lit->dato = std::to_string(núm);
+
+                resultado.éxito();
+                resultado.nodo(n1);
+                return resultado;
+            }
+
+            resultado.éxito();
+            resultado.nodo(n1);
+            return resultado;
+        }
+        else
+        {
+            resultado.error("El nodo Ñ::Igualdad tenía " + std::to_string(nodos->ramas.size()) + " ramas");
+            return resultado;
+        }
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
+    {
+        if(nodos->ramas.size() == 1)
+        {
+            Ñ::Resultado r = interpretaNodos(nodos->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            Ñ::Nodo* n = duplicaÁrbol(r.nodo());
+            delete r.nodo();
+            resultado.éxito();
+            resultado.nodo(n);
+            return resultado;
+        }
+        else if(nodos->ramas.size() > 1)
+        {
+            resultado.error("Pendiente de implementar operaciones de igualdad");
+            return resultado;
+        }
+        else
+        {
+            resultado.error("El nodo Ñ::Igualdad tenía " + std::to_string(nodos->ramas.size()) + " ramas");
+            return resultado;
+        }
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_COMPARACIÓN)
+    {
+        if(nodos->ramas.size() == 1)
+        {
+            Ñ::Resultado r = interpretaNodos(nodos->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            Ñ::Nodo* n = duplicaÁrbol(r.nodo());
+            delete r.nodo();
+            resultado.éxito();
+            resultado.nodo(n);
+            return resultado;
+        }
+        else if(nodos->ramas.size() > 1)
+        {
+            resultado.error("Pendiente de implementar operaciones de comparación");
+            return resultado;
+        }
+        else
+        {
+            resultado.error("El nodo Ñ::Comparación tenía " + std::to_string(nodos->ramas.size()) + " ramas");
+            return resultado;
+        }
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_TÉRMINO)
+    {
+        if(nodos->ramas.size() == 1)
+        {
+            Ñ::Resultado r = interpretaNodos(nodos->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            Ñ::Nodo* n = duplicaÁrbol(r.nodo());
+            delete r.nodo();
+            resultado.éxito();
+            resultado.nodo(n);
+            return resultado;
+        }
+        else if(nodos->ramas.size() > 1)
+        {
+            Ñ::Nodo* n1;
+            Ñ::Resultado r = interpretaNodos(nodos->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            Ñ::Resultado rn = obténLiteral(r.nodo(), tablaSímbolos);
+            if(rn.error())
+            {
+                return rn;
+            }
+            else
+            {
+                n1 = rn.nodo();
+            }
+            delete r.nodo();
+
+            for(int i = 1; i < nodos->ramas.size(); i++)
+            {
+                if(nodos->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                {
+                    resultado.error("Término no ha recibido una operación válida");
+                    return resultado;
+                }
+                Ñ::Nodo* op = nodos->ramas[i];
+                if(op->ramas.size() != 1)
+                {
+                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    return resultado;
+                }
+                std::string operación = ((Ñ::OperaciónBinaria*)op)->operación;
+                Ñ::Nodo* n2;
+                Ñ::Resultado rn2 = interpretaNodos(op->ramas[0], tablaSímbolos);
+                
+                if(rn2.error())
+                {
+                    return rn2;
+                }
+                else
+                {
+                    rn2 = obténLiteral(rn2.nodo(), tablaSímbolos);
+                    if(rn2.error())
+                    {
+                        return rn2;
+                    }
+                    n2 = rn2.nodo();
+                }
+
+                if(operación == "+")
+                {
+                    Ñ::Resultado rop = sumaLiteralesEnteros(n1, n2);
+                    delete n2, n1;
+                    if(rop.error())
+                    {
+                        return rop;
+                    }
+                    n1 = rop.nodo();
+                }
+                else if(operación == "-")
+                {
+                    Ñ::Resultado rop = restaLiteralesEnteros(n1, n2);
+                    delete n2, n1;
+                    if(rop.error())
+                    {
+                        return rop;
+                    }
+                    n1 = rop.nodo();
+                }
+            }
+
+            resultado.éxito();
+            resultado.nodo(n1);
+            return resultado;
+        }
+        else
+        {
+            resultado.error("El nodo Ñ::Término tenía " + std::to_string(nodos->ramas.size()) + " ramas");
+            return resultado;
+        }
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
+    {
+        if(nodos->ramas.size() == 1)
+        {
+            Ñ::Resultado r = interpretaNodos(nodos->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            Ñ::Nodo* n = duplicaÁrbol(r.nodo());
+            delete r.nodo();
+            resultado.éxito();
+            resultado.nodo(n);
+            return resultado;
+        }
+        else if(nodos->ramas.size() > 1)
+        {
+            Ñ::Nodo* n1;
+            Ñ::Resultado r = interpretaNodos(nodos->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            Ñ::Resultado rn = obténLiteral(r.nodo(), tablaSímbolos);
+            if(rn.error())
+            {
+                return rn;
+            }
+            else
+            {
+                n1 = rn.nodo();
+            }
+            delete r.nodo();
+
+            for(int i = 1; i < nodos->ramas.size(); i++)
+            {
+                if(nodos->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                {
+                    resultado.error("Factor no ha recibido una operación válida");
+                    return resultado;
+                }
+                Ñ::Nodo* op = nodos->ramas[i];
+                if(op->ramas.size() != 1)
+                {
+                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    return resultado;
+                }
+                std::string operación = ((Ñ::OperaciónBinaria*)op)->operación;
+                Ñ::Nodo* n2;
+                Ñ::Resultado rn2 = interpretaNodos(op->ramas[0], tablaSímbolos);
+
+                if(rn2.error())
+                {
+                    return rn2;
+                }
+                else
+                {
+                    rn2 = obténLiteral(rn2.nodo(), tablaSímbolos);
+                    if(rn2.error())
+                    {
+                        return rn2;
+                    }
+                    n2 = rn2.nodo();
+                }
+
+                if(operación == "*")
+                {
+                    Ñ::Resultado rop = multiplicaLiteralesEnteros(n1, n2);
+                    delete n2, n1;
+                    if(rop.error())
+                    {
+                        return rop;
+                    }
+                    n1 = rop.nodo();
+                }
+                else if(operación == "/")
+                {
+                    Ñ::Resultado rop = divideLiteralesEnteros(n1, n2);
+                    delete n2, n1;
+                    if(rop.error())
+                    {
+                        return rop;
+                    }
+                    n1 = rop.nodo();
+                }
+            }
+
+            resultado.éxito();
+            resultado.nodo(n1);
+            return resultado;
+        }
+        else
+        {
+            resultado.error("El nodo Ñ::Factor tenía " + std::to_string(nodos->ramas.size()) + " ramas");
+            return resultado;
+        }
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {

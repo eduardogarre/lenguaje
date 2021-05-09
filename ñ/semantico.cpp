@@ -55,7 +55,7 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
     {
         for(Ñ::Nodo* n : nodos->ramas)
         {
@@ -69,7 +69,35 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_COMPARACIÓN)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_TÉRMINO)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
     {
         for(Ñ::Nodo* n : nodos->ramas)
         {
@@ -96,6 +124,34 @@
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" no se había declarado previamente");
             return resultado;
         }
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_BINARIA)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
     {

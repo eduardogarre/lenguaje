@@ -15,8 +15,14 @@ namespace Ñ
         NODO_TIPO,
         NODO_IDENTIFICADOR,
 
-        NODO_OP_SUMA_RESTA,
-        NODO_OP_MULTIPLICACIÓN_DIVISIÓN,
+        NODO_LADO_IZQUIERDO_ASIGNACIÓN,
+        NODO_LADO_DERECHO_ASIGNACIÓN,
+        NODO_IGUALDAD,
+        NODO_COMPARACIÓN,
+        NODO_TÉRMINO,
+        NODO_FACTOR,
+        NODO_OP_BINARIA,
+        NODO_OP_UNARIA,
         NODO_PRIMARIO,
 
         NODO_DECLARA_VARIABLE,
@@ -81,26 +87,86 @@ namespace Ñ
         void muestra();
     };
 
-    class OpSumaResta : Nodo
+    class LadoIzquierdoAsignación : Nodo
     {
     public:
-        std::string operación;
-
-        OpSumaResta();
-        OpSumaResta(const Ñ::OpSumaResta& nodo);
-        ~OpSumaResta();
+        LadoIzquierdoAsignación();
+        LadoIzquierdoAsignación(const Ñ::LadoIzquierdoAsignación& nodo);
+        ~LadoIzquierdoAsignación();
 
         void muestra();
     };
 
-    class OpMultiplicaciónDivisión : Nodo
+    class LadoDerechoAsignación : Nodo
+    {
+    public:
+        LadoDerechoAsignación();
+        LadoDerechoAsignación(const Ñ::LadoDerechoAsignación& nodo);
+        ~LadoDerechoAsignación();
+
+        void muestra();
+    };
+
+    class Igualdad : Nodo
+    {
+    public:
+        Igualdad();
+        Igualdad(const Ñ::Igualdad& nodo);
+        ~Igualdad();
+
+        void muestra();
+    };
+
+    class Comparación : Nodo
+    {
+    public:
+        Comparación();
+        Comparación(const Ñ::Comparación& nodo);
+        ~Comparación();
+
+        void muestra();
+    };
+
+    class Término : Nodo
+    {
+    public:
+        Término();
+        Término(const Ñ::Término& nodo);
+        ~Término();
+
+        void muestra();
+    };
+
+    class Factor : Nodo
+    {
+    public:
+        Factor();
+        Factor(const Ñ::Factor& nodo);
+        ~Factor();
+
+        void muestra();
+    };
+
+    class OperaciónBinaria : Nodo
     {
     public:
         std::string operación;
 
-        OpMultiplicaciónDivisión();
-        OpMultiplicaciónDivisión(const Ñ::OpMultiplicaciónDivisión& nodo);
-        ~OpMultiplicaciónDivisión();
+        OperaciónBinaria();
+        OperaciónBinaria(const Ñ::OperaciónBinaria& nodo);
+        ~OperaciónBinaria();
+
+        void muestra();
+    };
+
+    class OperaciónUnaria : Nodo
+    {
+    public:
+        std::string operación;
+
+        OperaciónUnaria();
+        OperaciónUnaria(const Ñ::OperaciónUnaria& nodo);
+        ~OperaciónUnaria();
 
         void muestra();
     };

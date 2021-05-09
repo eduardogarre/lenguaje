@@ -109,8 +109,8 @@ TEST(PruebasFuncionales, definicionesVariables)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("b"));
-    rValor = tablaSímbolos->leeValor("b");
+    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("c"));
+    rValor = tablaSímbolos->leeValor("c");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
     ASSERT_EQ(valor->categoría, Ñ::CategoríaNodo::NODO_LITERAL);

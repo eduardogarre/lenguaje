@@ -23,8 +23,11 @@ namespace Ñ
         Ñ::Nodo* tipo();
         Ñ::Nodo* identificador();
         Ñ::Nodo* primario();
-        Ñ::Nodo* opMultiplicaciónDivisión();
-        Ñ::Nodo* opSumaResta();
+        Ñ::Nodo* operaciónUnaria();
+        Ñ::Nodo* factor();
+        Ñ::Nodo* término();
+        Ñ::Nodo* comparación();
+        Ñ::Nodo* igualdad();
         Ñ::Nodo* ladoIzquierdoAsignación();
         Ñ::Nodo* ladoDerechoAsignación();
         Ñ::Nodo* declaraVariable();

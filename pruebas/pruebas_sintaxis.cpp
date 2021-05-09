@@ -70,6 +70,10 @@ TEST(PruebasSintaxis, Asignaciones)
     Ñ::Nodo* n1;
     Ñ::Nodo* n2;
     Ñ::Nodo* n3;
+    Ñ::Nodo* n4;
+    Ñ::Nodo* n5;
+    Ñ::Nodo* n6;
+    Ñ::Nodo* n7;
     
     // Asignación de Número
     l1 = new Ñ::Lexema();
@@ -100,9 +104,17 @@ TEST(PruebasSintaxis, Asignaciones)
     n1 = (Ñ::Nodo*)(new Ñ::Asigna());
     n2 = (Ñ::Nodo*)(new Ñ::Identificador());
     ((Ñ::Identificador*)n2)->id = "b";
-    n3 = (Ñ::Nodo*)(new Ñ::Literal());
-    ((Ñ::Literal*)n3)->dato = "288";
+    n3 = (Ñ::Nodo*)(new Ñ::Igualdad());
+    n4 = (Ñ::Nodo*)(new Ñ::Comparación());
+    n5 = (Ñ::Nodo*)(new Ñ::Término());
+    n6 = (Ñ::Nodo*)(new Ñ::Factor());
+    n7 = (Ñ::Nodo*)(new Ñ::Literal());
+    ((Ñ::Literal*)n7)->dato = "288";
     n1->ramas.push_back(n2);
+    n6->ramas.push_back(n7);
+    n5->ramas.push_back(n6);
+    n4->ramas.push_back(n5);
+    n3->ramas.push_back(n4);
     n1->ramas.push_back(n3);
     n->ramas.push_back(n1);
 
@@ -141,9 +153,17 @@ TEST(PruebasSintaxis, Asignaciones)
     n1 = (Ñ::Nodo*)(new Ñ::Asigna());
     n2 = (Ñ::Nodo*)(new Ñ::Identificador());
     ((Ñ::Identificador*)n2)->id = "c";
-    n3 = (Ñ::Nodo*)(new Ñ::Literal());
-    ((Ñ::Literal*)n3)->dato = "prueba";
+    n3 = (Ñ::Nodo*)(new Ñ::Igualdad());
+    n4 = (Ñ::Nodo*)(new Ñ::Comparación());
+    n5 = (Ñ::Nodo*)(new Ñ::Término());
+    n6 = (Ñ::Nodo*)(new Ñ::Factor());
+    n7 = (Ñ::Nodo*)(new Ñ::Literal());
+    ((Ñ::Literal*)n7)->dato = "prueba";
     n1->ramas.push_back(n2);
+    n6->ramas.push_back(n7);
+    n5->ramas.push_back(n6);
+    n4->ramas.push_back(n5);
+    n3->ramas.push_back(n4);
     n1->ramas.push_back(n3);
     n->ramas.push_back(n1);
 
@@ -171,6 +191,10 @@ TEST(PruebasSintaxis, DeclaracionesYAsignaciones)
     Ñ::Nodo* n2;
     Ñ::Nodo* n3;
     Ñ::Nodo* n4;
+    Ñ::Nodo* n5;
+    Ñ::Nodo* n6;
+    Ñ::Nodo* n7;
+    Ñ::Nodo* n8;
     
     l1 = new Ñ::Lexema();
     l1->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
@@ -208,10 +232,18 @@ TEST(PruebasSintaxis, DeclaracionesYAsignaciones)
     n3 = (Ñ::Nodo*)(new Ñ::Tipo());
     ((Ñ::Tipo*)n3)->tipo = "natural";
     ((Ñ::Tipo*)n3)->vector = false;
-    n4 = (Ñ::Nodo*)(new Ñ::Literal());
-    ((Ñ::Literal*)n4)->dato = "288";
+    n4 = (Ñ::Nodo*)(new Ñ::Igualdad());
+    n5 = (Ñ::Nodo*)(new Ñ::Comparación());
+    n6 = (Ñ::Nodo*)(new Ñ::Término());
+    n7 = (Ñ::Nodo*)(new Ñ::Factor());
+    n8 = (Ñ::Nodo*)(new Ñ::Literal());
+    ((Ñ::Literal*)n8)->dato = "288";
     n2->ramas.push_back(n3);
     n1->ramas.push_back(n2);
+    n7->ramas.push_back(n8);
+    n6->ramas.push_back(n7);
+    n5->ramas.push_back(n6);
+    n4->ramas.push_back(n5);
     n1->ramas.push_back(n4);
     n->ramas.push_back(n1);
 
@@ -288,6 +320,10 @@ TEST(PruebasSintaxis, LlamadasFuncionesConArgumento)
     Ñ::Nodo* n1;
     Ñ::Nodo* n2;
     Ñ::Nodo* n3;
+    Ñ::Nodo* n4;
+    Ñ::Nodo* n5;
+    Ñ::Nodo* n6;
+    Ñ::Nodo* n7;
     
     l1 = new Ñ::Lexema();
     l1->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
@@ -322,8 +358,16 @@ TEST(PruebasSintaxis, LlamadasFuncionesConArgumento)
     n1 = (Ñ::Nodo*)(new Ñ::LlamaFunción());
     ((Ñ::LlamaFunción*)n1)->función = "escribe";
     n2 = (Ñ::Nodo*)(new Ñ::Argumentos());
-    n3 = (Ñ::Nodo*)(new Ñ::Literal());
-    ((Ñ::Literal*)n3)->dato = "hola, mundo\n";
+    n3 = (Ñ::Nodo*)(new Ñ::Igualdad());
+    n4 = (Ñ::Nodo*)(new Ñ::Comparación());
+    n5 = (Ñ::Nodo*)(new Ñ::Término());
+    n6 = (Ñ::Nodo*)(new Ñ::Factor());
+    n7 = (Ñ::Nodo*)(new Ñ::Literal());
+    ((Ñ::Literal*)n7)->dato = "hola, mundo\n";
+    n6->ramas.push_back(n7);
+    n5->ramas.push_back(n6);
+    n4->ramas.push_back(n5);
+    n3->ramas.push_back(n4);
     n2->ramas.push_back(n3);
     n1->ramas.push_back(n2);
     n->ramas.push_back(n1);

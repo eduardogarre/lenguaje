@@ -118,22 +118,137 @@ void Ñ::Identificador::muestra()
 	}
 }
 
-Ñ::OpSumaResta::OpSumaResta() : Ñ::Nodo()
+Ñ::LadoIzquierdoAsignación::LadoIzquierdoAsignación() : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA;
+	categoría = Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN;
 }
 
-Ñ::OpSumaResta::OpSumaResta(const Ñ::OpSumaResta& nodo) : Ñ::Nodo()
+Ñ::LadoIzquierdoAsignación::LadoIzquierdoAsignación(const Ñ::LadoIzquierdoAsignación& nodo) : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA;
+	categoría = Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN;
 }
 
-Ñ::OpSumaResta::~OpSumaResta() {}
+Ñ::LadoIzquierdoAsignación::~LadoIzquierdoAsignación() {}
 
-void Ñ::OpSumaResta::muestra()
+void Ñ::LadoIzquierdoAsignación::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_OP_SUMA_RESTA) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_LADO_IZQUIERDO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	// Queda imprimir los hijos
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::LadoDerechoAsignación::LadoDerechoAsignación() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
+}
+
+Ñ::LadoDerechoAsignación::LadoDerechoAsignación(const Ñ::LadoDerechoAsignación& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
+}
+
+Ñ::LadoDerechoAsignación::~LadoDerechoAsignación() {}
+
+void Ñ::LadoDerechoAsignación::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_LADO_DERECHO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	// Queda imprimir los hijos
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::OperaciónBinaria::OperaciónBinaria() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_OP_BINARIA;
+}
+
+Ñ::OperaciónBinaria::OperaciónBinaria(const Ñ::OperaciónBinaria& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_OP_BINARIA;
+}
+
+Ñ::OperaciónBinaria::~OperaciónBinaria() {}
+
+void Ñ::OperaciónBinaria::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_OP_BINARIA) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	// Queda imprimir los hijos
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::Igualdad::Igualdad() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_IGUALDAD;
+}
+
+Ñ::Igualdad::Igualdad(const Ñ::Igualdad& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_IGUALDAD;
+}
+
+Ñ::Igualdad::~Igualdad() {}
+
+void Ñ::Igualdad::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_IGUALDAD) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	// Queda imprimir los hijos
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::Comparación::Comparación() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_COMPARACIÓN;
+}
+
+Ñ::Comparación::Comparación(const Ñ::Comparación& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_COMPARACIÓN;
+}
+
+Ñ::Comparación::~Comparación() {}
+
+void Ñ::Comparación::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_COMPARACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	// Queda imprimir los hijos
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::Término::Término() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
+}
+
+Ñ::Término::Término(const Ñ::Término& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
+}
+
+Ñ::Término::~Término() {}
+
+void Ñ::Término::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_TÉRMINO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos, los términos
 	for(auto rama : ramas)
 	{
@@ -141,23 +256,46 @@ void Ñ::OpSumaResta::muestra()
 	}
 }
 
-Ñ::OpMultiplicaciónDivisión::OpMultiplicaciónDivisión() : Ñ::Nodo()
+Ñ::Factor::Factor() : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN;
+	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
 }
 
-Ñ::OpMultiplicaciónDivisión::OpMultiplicaciónDivisión(const Ñ::OpMultiplicaciónDivisión& nodo) : Ñ::Nodo()
+Ñ::Factor::Factor(const Ñ::Factor& nodo) : Ñ::Nodo()
 {
-	categoría = Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN;
+	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
 }
 
-Ñ::OpMultiplicaciónDivisión::~OpMultiplicaciónDivisión() {}
+Ñ::Factor::~Factor() {}
 
-void Ñ::OpMultiplicaciónDivisión::muestra()
+void Ñ::Factor::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_OP_MULTIPLICACIÓN_DIVISIÓN) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_FACTOR) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos, los factores
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::OperaciónUnaria::OperaciónUnaria() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_OP_UNARIA;
+}
+
+Ñ::OperaciónUnaria::OperaciónUnaria(const Ñ::OperaciónUnaria& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_OP_UNARIA;
+}
+
+Ñ::OperaciónUnaria::~OperaciónUnaria() {}
+
+void Ñ::OperaciónUnaria::muestra()
+{
+	imprimeAjuste();
+	std::cout << "(NODO_OP_UNARIA) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
@@ -355,17 +493,41 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::Identificador*)nodo)->muestra();
 	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
+	{
+		((Ñ::OperaciónUnaria*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_BINARIA)
+	{
+		((Ñ::OperaciónBinaria*)nodo)->muestra();
+	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PRIMARIO)
 	{
 		((Ñ::Primario*)nodo)->muestra();
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TÉRMINO)
 	{
-		((Ñ::OpMultiplicaciónDivisión*)nodo)->muestra();
+		((Ñ::Término*)nodo)->muestra();
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
 	{
-		((Ñ::OpSumaResta*)nodo)->muestra();
+		((Ñ::Factor*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_COMPARACIÓN)
+	{
+		((Ñ::Comparación*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
+	{
+		((Ñ::Igualdad*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN)
+	{
+		((Ñ::LadoDerechoAsignación*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN)
+	{
+		((Ñ::LadoIzquierdoAsignación*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
 	{
@@ -426,12 +588,24 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::Identificador* id2;
 		Ñ::Tipo* t1;
 		Ñ::Tipo* t2;
-		Ñ::OpSumaResta* osr1;
-		Ñ::OpSumaResta* osr2;
-		Ñ::OpMultiplicaciónDivisión* omd1;
-		Ñ::OpMultiplicaciónDivisión* omd2;
-		Ñ::Primario* fx1;
-		Ñ::Primario* fx2;
+		Ñ::LadoIzquierdoAsignación* lia1;
+		Ñ::LadoIzquierdoAsignación* lia2;
+		Ñ::LadoDerechoAsignación* lda1;
+		Ñ::LadoDerechoAsignación* lda2;
+		Ñ::Igualdad* ig1;
+		Ñ::Igualdad* ig2;
+		Ñ::Comparación* cm1;
+		Ñ::Comparación* cm2;
+		Ñ::Término* tr1;
+		Ñ::Término* tr2;
+		Ñ::Factor* fc1;
+		Ñ::Factor* fc2;
+		Ñ::OperaciónBinaria* b1;
+		Ñ::OperaciónBinaria* b2;
+		Ñ::OperaciónUnaria* u1;
+		Ñ::OperaciónUnaria* u2;
+		Ñ::Primario* pr1;
+		Ñ::Primario* pr2;
 		Ñ::DeclaraVariable* dv1;
 		Ñ::DeclaraVariable* dv2;
 		Ñ::LlamaFunción* lfn1;
@@ -481,11 +655,35 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 				return false;
 			}
 			break;
+
+		case Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN:
+			return true;
+			break;
+
+		case Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN:
+			return true;
+			break;
+
+		case Ñ::CategoríaNodo::NODO_IGUALDAD:
+			return true;
+			break;
+
+		case Ñ::CategoríaNodo::NODO_COMPARACIÓN:
+			return true;
+			break;
 		
-		case Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA:
-			osr1 = (Ñ::OpSumaResta*)nodo1;
-			osr2 = (Ñ::OpSumaResta*)nodo2;
-			if(osr1->operación == osr2->operación)
+		case Ñ::CategoríaNodo::NODO_TÉRMINO:
+			return true;
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_FACTOR:
+			return true;
+			break;
+
+		case Ñ::CategoríaNodo::NODO_OP_BINARIA:
+			b1 = (Ñ::OperaciónBinaria*)nodo1;
+			b2 = (Ñ::OperaciónBinaria*)nodo2;
+			if(b1->operación == b2->operación)
 			{
 				return true;
 			}
@@ -495,10 +693,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			}
 			break;
 		
-		case Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN:
-			omd1 = (Ñ::OpMultiplicaciónDivisión*)nodo1;
-			omd2 = (Ñ::OpMultiplicaciónDivisión*)nodo2;
-			if(omd1->operación == omd2->operación)
+		case Ñ::CategoríaNodo::NODO_OP_UNARIA:
+			u1 = (Ñ::OperaciónUnaria*)nodo1;
+			u2 = (Ñ::OperaciónUnaria*)nodo2;
+			if(u1->operación == u2->operación)
 			{
 				return true;
 			}
@@ -509,9 +707,9 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			break;
 		
 		case Ñ::CategoríaNodo::NODO_PRIMARIO:
-			fx1 = (Ñ::Primario*)nodo1;
-			fx2 = (Ñ::Primario*)nodo2;
-			if(fx1->primario == fx2->primario)
+			pr1 = (Ñ::Primario*)nodo1;
+			pr2 = (Ñ::Primario*)nodo2;
+			if(pr1->primario == pr2->primario)
 			{
 				return true;
 			}
@@ -613,27 +811,69 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 
 		duplicado = (Ñ::Nodo*)i;
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PRIMARIO)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_BINARIA)
 	{
-		Ñ::Primario* n = (Ñ::Primario*)nodo;
-		Ñ::Primario* f = new Ñ::Primario();
-		f->primario = n->primario;
-
-		duplicado = (Ñ::Nodo*)f;
-	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_MULTIPLICACIÓN_DIVISIÓN)
-	{
-		Ñ::OpMultiplicaciónDivisión* n = (Ñ::OpMultiplicaciónDivisión*)nodo;
-		Ñ::OpMultiplicaciónDivisión* o = new Ñ::OpMultiplicaciónDivisión();
+		Ñ::OperaciónBinaria* n = (Ñ::OperaciónBinaria*)nodo;
+		Ñ::OperaciónBinaria* o = new Ñ::OperaciónBinaria();
 		o->operación = n->operación;
 
 		duplicado = (Ñ::Nodo*)o;
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_SUMA_RESTA)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
 	{
-		Ñ::OpSumaResta* n = (Ñ::OpSumaResta*)nodo;
-		Ñ::OpSumaResta* o = new Ñ::OpSumaResta();
+		Ñ::OperaciónUnaria* n = (Ñ::OperaciónUnaria*)nodo;
+		Ñ::OperaciónUnaria* o = new Ñ::OperaciónUnaria();
 		o->operación = n->operación;
+
+		duplicado = (Ñ::Nodo*)o;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PRIMARIO)
+	{
+		Ñ::Primario* n = (Ñ::Primario*)nodo;
+		Ñ::Primario* p = new Ñ::Primario();
+		p->primario = n->primario;
+
+		duplicado = (Ñ::Nodo*)p;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
+	{
+		Ñ::Factor* n = (Ñ::Factor*)nodo;
+		Ñ::Factor* o = new Ñ::Factor();
+
+		duplicado = (Ñ::Nodo*)o;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TÉRMINO)
+	{
+		Ñ::Término* n = (Ñ::Término*)nodo;
+		Ñ::Término* o = new Ñ::Término();
+
+		duplicado = (Ñ::Nodo*)o;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_COMPARACIÓN)
+	{
+		Ñ::Comparación* n = (Ñ::Comparación*)nodo;
+		Ñ::Comparación* o = new Ñ::Comparación();
+
+		duplicado = (Ñ::Nodo*)o;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
+	{
+		Ñ::Igualdad* n = (Ñ::Igualdad*)nodo;
+		Ñ::Igualdad* o = new Ñ::Igualdad();
+
+		duplicado = (Ñ::Nodo*)o;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN)
+	{
+		Ñ::LadoDerechoAsignación* n = (Ñ::LadoDerechoAsignación*)nodo;
+		Ñ::LadoDerechoAsignación* o = new Ñ::LadoDerechoAsignación();
+
+		duplicado = (Ñ::Nodo*)o;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN)
+	{
+		Ñ::LadoIzquierdoAsignación* n = (Ñ::LadoIzquierdoAsignación*)nodo;
+		Ñ::LadoIzquierdoAsignación* o = new Ñ::LadoIzquierdoAsignación();
 
 		duplicado = (Ñ::Nodo*)o;
 	}

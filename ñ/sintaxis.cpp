@@ -103,15 +103,79 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 	if(cursor < lexemas.size())
 	{
-		Ñ::Nodo* op = opSumaResta();
+		Ñ::Nodo* ig = igualdad();
 		
-		if(op->ramas.size() == 1)
+		return ig;
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* Ñ::Sintaxis::igualdad()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Nodo* cmp1;
+
+		if(cmp1 = comparación())
 		{
-			return op->ramas[0];
-		}
-		else
-		{
-			return op;
+			Ñ::Nodo* ig = (Ñ::Nodo*)(new Ñ::Igualdad);
+			ig->ramas.push_back(cmp1);
+
+			while(true)
+			{
+				std::string operación;
+				uint32_t cN = cursor;
+
+				if(notación("!"))
+				{
+					if(notación("="))
+					{
+						operación = "!=";
+					}
+					else
+					{
+						cursor = cN;
+						break;
+					}
+				}
+				else if(notación("="))
+				{
+					if(notación("="))
+					{
+						operación = "==";
+					}
+					else
+					{
+						cursor = cN;
+						break;
+					}
+				}
+				else
+				{
+					cursor = cN;
+					break;
+				}
+
+				if(Ñ::Nodo* cmpN = comparación())
+				{
+					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria);
+					((Ñ::OperaciónBinaria*)op)->operación = operación;
+					op->ramas.push_back(cmpN);
+					ig->ramas.push_back(op);
+				}
+				else
+				{
+					delete ig;
+					cursor = cN;
+					return nullptr;
+				}
+			}
+
+			return ig;
 		}
 	}
 
@@ -119,43 +183,68 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::opSumaResta()
+Ñ::Nodo* Ñ::Sintaxis::comparación()
 {
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
 	{
-		std::string operación;
+		Ñ::Nodo* t1;
 
-		Ñ::Nodo* opMulDiv;
-
-		if(opMulDiv = opMultiplicaciónDivisión())
+		if(t1 = término())
 		{
-			if(notación("+"))
+			Ñ::Nodo* cmp = (Ñ::Nodo*)(new Ñ::Comparación);
+			cmp->ramas.push_back(t1);
+
+			while(true)
 			{
-				operación = "+";
-			}
-			else if(notación("-"))
-			{
-				operación = "-";
-			}
-			else // No es una operación, devuelvo opMulDiv directamente
-			{
-				return opMulDiv;
-			}
-			
-			if(Ñ::Nodo* e2 = opSumaResta())
-			{
-				Ñ::OpSumaResta* opSumRes = new Ñ::OpSumaResta();
-				opSumRes->operación = operación;
-				((Ñ::Nodo*)opSumRes)->ramas.push_back(e2);
-				((Ñ::Nodo*)opSumRes)->ramas.push_back(opMulDiv);
-				return ((Ñ::Nodo*)opSumRes);
+				std::string operación;
+				uint32_t cN = cursor;
+
+				if(notación(">"))
+				{
+					if(notación("="))
+					{
+						operación = ">=";
+					}
+					else
+					{
+						operación = ">";
+					}
+				}
+				else if(notación("<"))
+				{
+					if(notación("="))
+					{
+						operación = "<=";
+					}
+					else
+					{
+						operación = "<";
+					}
+				}
+				else
+				{
+					cursor = cN;
+					break;
+				}
+
+				if(Ñ::Nodo* tN = término())
+				{
+					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria);
+					((Ñ::OperaciónBinaria*)op)->operación = operación;
+					op->ramas.push_back(tN);
+					cmp->ramas.push_back(op);
+				}
+				else
+				{
+					delete cmp;
+					cursor = cN;
+					return nullptr;
+				}
 			}
 
-			delete opMulDiv;
-			cursor = c;
-			return nullptr;
+			return cmp;
 		}
 	}
 
@@ -163,42 +252,145 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::opMultiplicaciónDivisión()
+Ñ::Nodo* Ñ::Sintaxis::término()
 {
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
 	{
-		std::string operación;
+		Ñ::Nodo* f1;
 
-		Ñ::Nodo* fac;
-
-		if(fac = primario())
+		if(f1 = factor())
 		{
-			if(notación("*"))
+			Ñ::Nodo* t = (Ñ::Nodo*)(new Ñ::Término);
+			t->ramas.push_back(f1);
+
+			while(true)
 			{
-				operación = "*";
-			}
-			else if(notación("/"))
-			{
-				operación = "/";
-			}
-			else // No es una operación, devuelvo primario directamente
-			{
-				return fac;
-			}
-			if(Ñ::Nodo* opMulDiv2 = opMultiplicaciónDivisión())
-			{
-				Ñ::OpMultiplicaciónDivisión* opMulDiv = new Ñ::OpMultiplicaciónDivisión();
-				opMulDiv->operación = operación;
-				((Ñ::Nodo*)opMulDiv)->ramas.push_back(opMulDiv2);
-				((Ñ::Nodo*)opMulDiv)->ramas.push_back(fac);
-				return ((Ñ::Nodo*)opMulDiv);
+				std::string operación;
+				uint32_t cN = cursor;
+
+				if(notación("+"))
+				{
+					operación = "+";
+				}
+				else if(notación("-"))
+				{
+					operación = "-";
+				}
+				else // No es una operación, devuelvo opMulDiv directamente
+				{
+					cursor = cN;
+					break;
+				}
+				
+				if(Ñ::Nodo* fN = factor())
+				{
+					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria);
+					((Ñ::OperaciónBinaria*)op)->operación = operación;
+					op->ramas.push_back(fN);
+					t->ramas.push_back(op);
+				}
+				else
+				{
+					delete t;
+					cursor = cN;
+					return nullptr;
+				}
 			}
 
-			delete fac;
-			cursor = c;
-			return nullptr;
+			return t;
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* Ñ::Sintaxis::factor()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Nodo* u1;
+
+		if(u1 = operaciónUnaria())
+		{
+			Ñ::Nodo* f = (Ñ::Nodo*)(new Ñ::Factor);
+			f->ramas.push_back(u1);
+
+			while(true)
+			{
+				std::string operación;
+				uint32_t cN = cursor;
+
+				if(notación("*"))
+				{
+					operación = "*";
+				}
+				else if(notación("/"))
+				{
+					operación = "/";
+				}
+				else
+				{
+					cursor = cN;
+					break;
+				}
+
+				if(Ñ::Nodo* uN = operaciónUnaria())
+				{
+					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria);
+					((Ñ::OperaciónBinaria*)op)->operación = operación;
+					op->ramas.push_back(uN);
+					f->ramas.push_back(op);
+				}
+				else
+				{
+					delete f;
+					cursor = cN;
+					return nullptr;
+				}
+			}
+
+			return f;
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* Ñ::Sintaxis::operaciónUnaria()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		if(notación("!"))
+		{
+			if(Ñ::Nodo* u = operaciónUnaria())
+			{
+				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria;
+				op->operación = "!";
+				((Ñ::Nodo*)op)->ramas.push_back(u);
+				return (Ñ::Nodo*)op;
+			}
+		}
+		else if(notación("-"))
+		{
+			if(Ñ::Nodo* u = operaciónUnaria())
+			{
+				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria;
+				op->operación = "-";
+				((Ñ::Nodo*)op)->ramas.push_back(u);
+				return (Ñ::Nodo*)op;
+			}
+		}
+		else if(Ñ::Nodo* p = primario())
+		{
+			return p;
 		}
 	}
 

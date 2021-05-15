@@ -14,8 +14,11 @@ namespace Ñ
     {
     private:
         std::map<std::string, Símbolo*> _tabla;
+        TablaSímbolos* _superior;
 
     public:
+        TablaSímbolos();
+        TablaSímbolos(TablaSímbolos* tablaSuperior);
         ~TablaSímbolos();
         
         bool identificadorDisponible(std::string id);

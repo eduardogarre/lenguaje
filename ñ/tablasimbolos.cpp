@@ -239,6 +239,16 @@ void Ñ::Símbolo::muestra()
 
 }
 
+Ñ::TablaSímbolos::TablaSímbolos()
+{
+    _superior = nullptr;
+}
+
+Ñ::TablaSímbolos::TablaSímbolos(Ñ::TablaSímbolos* tablaSuperior)
+{
+    _superior = tablaSuperior;
+}
+
 bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 {
     if(_tabla.count(id) == 0 )
@@ -254,6 +264,12 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 Ñ::Resultado Ñ::TablaSímbolos::declaraFunción(std::string id)
 {
     Ñ::Resultado resultado;
+
+    if(_superior != nullptr)
+    {
+        resultado.error("Intentas declarar una función dentro de un bloque. Las funciones deben declararse en el espacio global.");
+        return resultado;
+    }
 
     if(!identificadorDisponible(id))
     {
@@ -272,6 +288,12 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 Ñ::Resultado Ñ::TablaSímbolos::defineFunciónEjecutable(std::string id, void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args)
 {
     Ñ::Resultado resultado;
+
+    if(_superior != nullptr)
+    {
+        resultado.error("Intentas definir una función dentro de un bloque. Las funciones deben definirse en el espacio global.");
+        return resultado;
+    }
 
     if(identificadorDisponible(id))
     {
@@ -307,6 +329,11 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 Ñ::Resultado Ñ::TablaSímbolos::ejecutaFunción(std::string id, Ñ::Nodo* args)
 {
     Ñ::Resultado resultado;
+
+    if(_superior != nullptr)
+    {
+        return _superior->ejecutaFunción(id, args);
+    }
 
     if(identificadorDisponible(id))
     {
@@ -381,8 +408,15 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 
     if(identificadorDisponible(id))
     {
-        resultado.error("El identificador no se ha declarado");
-        return resultado;
+        if(_superior != nullptr)
+        {
+            return _superior->leeValor(id);
+        }
+        else
+        {
+            resultado.error("El identificador no se ha declarado");
+            return resultado;
+        }
     }
 
     Ñ::Símbolo* s = _tabla[id];

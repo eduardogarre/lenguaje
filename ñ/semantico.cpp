@@ -9,7 +9,25 @@
 {
     Ñ::Resultado resultado;
 
-    if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+    {
+        Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, subTabla);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+
+        delete subTabla;
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
     {
         for(Ñ::Nodo* n : nodos->ramas)
         {
@@ -36,6 +54,12 @@
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: Árbol de la declaración de variable mal construido");
             return resultado;
+        }
+
+        Ñ::Resultado r = tablaSímbolos->declaraVariable(nombre, nodos->ramas[0]);
+        if(r.error())
+        {
+            return r;
         }
 
         resultado.éxito();
@@ -180,66 +204,7 @@
 {
     Ñ::Resultado resultado;
     
-    if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
-    {
-        resultado.éxito();
-        return resultado;
-    }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
-    {
-        std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
-        if(nodos->categoría == Ñ::CategoríaNodo::NODO_TIPO)
-        {
-            if(nodos->ramas.size() != 1)
-            {
-                resultado.error("COMPROBACIÓN DE TIPOS :: Esperaba un tipo para la declaración");
-                return resultado;
-            }
-
-            auto tipo = (nodos->ramas[0]);
-            std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
-
-            if( cadenaTipo == "bool" ||
-                cadenaTipo == "ent" ||
-                cadenaTipo == "nat" ||
-                cadenaTipo == "real" ||
-                cadenaTipo == "txt" )
-            {
-                resultado.éxito();
-                return resultado;
-            }
-            else
-            {
-                resultado.error("COMPROBACIÓN DE TIPOS :: Tipo desconocido");
-                return resultado;
-            }
-        }
-        else
-        {
-            resultado.error("COMPROBACIÓN DE TIPOS :: La declaración de variable no contiene tipo");
-            return resultado;
-        }
-
-        resultado.éxito();
-        return resultado;
-    }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
-    {
-        for(Ñ::Nodo* n : nodos->ramas)
-        {
-            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
-            if(rResuelveSímbolos.error())
-            {
-                return rResuelveSímbolos;
-            }
-        }
-        
-
-        resultado.éxito();
-        return resultado;
-    }
-
-    resultado.error("COMPROBACIÓN DE TIPOS :: No reconozco el árbol de nodos");
+    resultado.éxito();
     return resultado;
 }
 
@@ -249,7 +214,7 @@
 
     if(nodos->categoría != Ñ::CategoríaNodo::NODO_EXPRESIÓN)
     {
-        resultado.error("SEMÁNTICO :: El nodo raíz no es una asignación");
+        resultado.error("SEMÁNTICO :: El nodo raíz no es una expresión");
         return resultado;
     }
 

@@ -34,7 +34,9 @@ namespace Ñ
         NODO_DEFINE_FUNCIÓN,
         NODO_LLAMA_FUNCIÓN,
 
-        NODO_EXPRESIÓN
+        NODO_EXPRESIÓN,
+
+        NODO_BLOQUE
     };
 
     class Nodo
@@ -240,10 +242,19 @@ namespace Ñ
     class Expresión : Nodo
     {
     public:
-
         Expresión();
         Expresión(const Ñ::Expresión& nodo);
         ~Expresión();
+
+        void muestra();
+    };
+
+    class Bloque : Nodo
+    {
+    public:
+        Bloque();
+        Bloque(const Ñ::Bloque& nodo);
+        ~Bloque();
 
         void muestra();
     };

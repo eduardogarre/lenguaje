@@ -790,6 +790,41 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::bloque()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		if(!notación("{"))
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		Ñ::Nodo* b = (Ñ::Nodo*)(new Ñ::Bloque);
+
+		while(Ñ::Nodo* n = expresión())
+		{
+			b->ramas.push_back(n);
+		}
+
+		if(notación("}"))
+		{
+			return b;
+		}
+		else
+		{
+			delete b;
+			cursor = c;
+			return nullptr;
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas)
 {
 	cursor = 0;

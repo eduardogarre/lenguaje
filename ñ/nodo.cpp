@@ -458,6 +458,28 @@ void Ñ::Expresión::muestra()
 	}
 }
 
+Ñ::Bloque::Bloque() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_BLOQUE;
+}
+
+Ñ::Bloque::Bloque(const Ñ::Bloque& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_BLOQUE;
+}
+
+Ñ::Bloque::~Bloque() {}
+
+void Ñ::Bloque::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_BLOQUE) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 void Ñ::borraNodos(Ñ::Nodo* nodos)
 {
 	for(auto rama : nodos->ramas)
@@ -552,6 +574,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
 	{
 		((Ñ::Expresión*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+	{
+		((Ñ::Bloque*)nodo)->muestra();
 	}
 
 	ajuste--;
@@ -761,6 +787,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			return true;
 			break;
 		
+		case Ñ::CategoríaNodo::NODO_BLOQUE:
+			return true;
+			break;
+		
 		default:
 			return false;
 			break;
@@ -912,6 +942,11 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		Ñ::Expresión* e = new Ñ::Expresión();
 		duplicado = (Ñ::Nodo*)e;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+	{
+		Ñ::Bloque* b = new Ñ::Bloque();
+		duplicado = (Ñ::Nodo*)b;
 	}
 	else
 	{

@@ -259,7 +259,25 @@ namespace Ñ
 {
     Ñ::Resultado resultado;
 
-    if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+    {
+        Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos = interpretaNodos(n, subTabla);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+
+        delete subTabla;
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
     {
         for(Ñ::Nodo* n : nodos->ramas)
         {

@@ -829,5 +829,5 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 {
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)expresión();
+	return (Ñ::Nodo*)bloque();
 }

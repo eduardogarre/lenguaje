@@ -251,9 +251,16 @@ void Ñ::Símbolo::muestra()
 
 bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 {
-    if(_tabla.count(id) == 0 )
+    if(_tabla.count(id) == 0)
     {
-        return true;
+        if(_superior != nullptr)
+        {
+            return _superior->identificadorDisponible(id);
+        }
+        else
+        {
+            return true;
+        }
     }
     else
     {

@@ -212,11 +212,11 @@
 {
     Ñ::Resultado resultado;
 
-    if(nodos->categoría != Ñ::CategoríaNodo::NODO_EXPRESIÓN)
-    {
-        resultado.error("SEMÁNTICO :: El nodo raíz no es una expresión");
-        return resultado;
-    }
+    //if(nodos->categoría != Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    //{
+    //    resultado.error("SEMÁNTICO :: El nodo raíz no es una expresión");
+    //    return resultado;
+    //}
 
     if(nodos->ramas.size() < 1)
     {

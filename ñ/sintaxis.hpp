@@ -40,5 +40,6 @@ namespace Ñ
 
     public:
         Ñ::Nodo* analiza(std::vector<Ñ::Lexema*> _lexemas);
+        Ñ::Nodo* analizaComando(std::vector<Ñ::Lexema*> _lexemas);
     };
 }

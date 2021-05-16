@@ -1,4 +1,7 @@
 #include <cctype>
+#include <exception>
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -119,7 +122,57 @@ void llenaTablaSímbolos(Ñ::TablaSímbolos* tablaSímbolos)
 	tablaSímbolos->defineFunciónEjecutable("tabla", tabla, (Ñ::Nodo*)args);
 }
 
-void _interpretaCódigo(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
+void _interpretaArchivo(std::string código, Ñ::TablaSímbolos* tablaSímbolos)
+{
+	std::vector<Ñ::Lexema*> lexemas;
+	Ñ::Nodo* nodos;
+
+	Ñ::Léxico léxico;
+	Ñ::Sintaxis sintaxis;
+	
+	lexemas = léxico.analiza(código);
+
+	if(lexemas.empty())
+	{
+		Ñ::errorConsola(u8"Error durante el análisis léxico, código incorrecto.");
+		return;
+	}
+
+	nodos = sintaxis.analiza(lexemas);
+
+	if(nodos == nullptr)
+	{
+		Ñ::errorConsola(u8"Error durante el análisis sintáctico, código incorrecto.");
+		muestraLexemas(lexemas);
+		return;
+	}
+
+	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolos);
+
+	if(resultado.error())
+	{
+		std::cout << resultado.mensaje() << std::endl;
+		muestraNodos(nodos);
+	}
+	else
+	{
+		auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
+		if(resultado.error())
+		{
+			std::cout << resultado.mensaje() << std::endl;
+			muestraNodos(nodos);
+		}
+	}
+
+	for(auto l : lexemas)
+	{
+		delete l;
+	}
+	lexemas.clear();
+	delete nodos;
+}
+
+void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 {
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
@@ -135,7 +188,7 @@ void _interpretaCódigo(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 		return;
 	}
 
-	nodos = sintaxis.analiza(lexemas);
+	nodos = sintaxis.analizaComando(lexemas);
 
 	if(nodos == nullptr)
 	{
@@ -169,7 +222,19 @@ void _interpretaCódigo(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	delete nodos;
 }
 
-int ejecutaIntérpreteEnLínea()
+int interpretaArchivo(std::string txt)
+{
+	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
+	llenaTablaSímbolos(tablaSímbolos);
+
+	_interpretaArchivo(txt, tablaSímbolos);
+
+	delete tablaSímbolos;
+
+	return 0;
+}
+
+int interpretaEnLínea()
 {
 	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
 	llenaTablaSímbolos(tablaSímbolos);
@@ -181,7 +246,7 @@ int ejecutaIntérpreteEnLínea()
 		{
 			continue;
 		}
-		_interpretaCódigo(comando, tablaSímbolos);
+		_interpretaComando(comando, tablaSímbolos);
 	}
 
 	delete tablaSímbolos;
@@ -189,31 +254,88 @@ int ejecutaIntérpreteEnLínea()
 	return 0;
 }
 
+static const char VERSIÓN[] = u8R"(Ñ 0.1)";
+
 static const char USO[] =
-R"(Compilador Ñ.
+u8R"(Compilador Ñ.
 
     Usage:
+	  ñ
+	  ñ <archivo>
       ñ (-a | --ayuda)
-      ñ --version
+      ñ (-v | --version)
 
     Options:
       -a --ayuda    Muestra este mensaje
-      --version     Muestra versión.
+      -v --version  Muestra versión.
 )";
+
+void muestraAyuda()
+{
+	std::cout << USO << std::endl;
+}
+
+void muestraVersión()
+{
+	std::cout << VERSIÓN << std::endl;
+}
+
+std::string leeArchivo(std::filesystem::path archivo)
+{
+    // Open the stream to 'lock' the file.
+    std::ifstream arc(archivo, std::ios::in | std::ios::binary);
+
+    // Obtain the size of the file.
+    const auto tamaño = std::filesystem::file_size(archivo);
+
+    // Create a buffer.
+    std::string resultado(tamaño, '\0');
+
+    // Read the whole file into the buffer.
+    arc.read(resultado.data(), tamaño);
+
+    return resultado;
+}
 
 int main(int argc, char** argv)
 {
-    std::map<std::string, docopt::value> args
-        = docopt::docopt(USO,
-                         { argv + 1, argv + argc },
-                         false,               // show help if requested
-                         "Compilador Ñ 0.1");  // version string
+    std::map<std::string, docopt::value> args;
+	args = docopt::docopt(USO, { argv + 1, argv + argc }, false);
 
-    for(auto const& arg : args) {
-        std::cout << arg.first <<  arg.second << std::endl;
-    }
+	if(args["--ayuda"].isBool())
+	{
+		if(args["--ayuda"].asBool() == true)
+		{
+			muestraAyuda();
+			return 0;
+		}
+	}
 
-	return 0;
+	if(args["--version"].isBool())
+	{
+		if(args["--version"].asBool() == true)
+		{
+			muestraVersión();
+			return 0;
+		}
+	}
 
-	//return ejecutaIntérpreteEnLínea();
+	if(args["<archivo>"].isString())
+	{
+		std::string archivo = args["<archivo>"].asString();
+		std::string contenido = "";
+
+		std::cout << "Abre archivo " << archivo << std::endl;
+		try{
+			contenido = leeArchivo(archivo);
+		}
+		catch (std::exception& e)
+		{
+			std::cout << "Error al leer el archivo" << '\n';
+		}
+
+		return interpretaArchivo(contenido);
+	}
+
+	return interpretaEnLínea();
 }

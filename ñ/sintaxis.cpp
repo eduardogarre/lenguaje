@@ -831,3 +831,10 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	lexemas = _lexemas;
 	return (Ñ::Nodo*)bloque();
 }
+
+Ñ::Nodo* Ñ::Sintaxis::analizaComando(std::vector<Ñ::Lexema*> _lexemas)
+{
+	cursor = 0;
+	lexemas = _lexemas;
+	return (Ñ::Nodo*)expresión();
+}

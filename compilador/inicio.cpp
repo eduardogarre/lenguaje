@@ -4,6 +4,7 @@
 #include <thread>
 #include <vector>
 
+#include "docopt.h"
 #include "ñ/ñ.hpp"
 
 // Extiendo nodos para pasar argumentos
@@ -188,7 +189,31 @@ int ejecutaIntérpreteEnLínea()
 	return 0;
 }
 
+static const char USO[] =
+R"(Compilador Ñ.
+
+    Usage:
+      ñ (-a | --ayuda)
+      ñ --version
+
+    Options:
+      -a --ayuda    Muestra este mensaje
+      --version     Muestra versión.
+)";
+
 int main(int argc, char** argv)
 {
-	return ejecutaIntérpreteEnLínea();
+    std::map<std::string, docopt::value> args
+        = docopt::docopt(USO,
+                         { argv + 1, argv + argc },
+                         false,               // show help if requested
+                         "Compilador Ñ 0.1");  // version string
+
+    for(auto const& arg : args) {
+        std::cout << arg.first <<  arg.second << std::endl;
+    }
+
+	return 0;
+
+	//return ejecutaIntérpreteEnLínea();
 }

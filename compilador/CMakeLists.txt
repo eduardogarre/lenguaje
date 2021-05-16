@@ -16,7 +16,7 @@ endif()
 add_executable(compilador ${CODIGO_COMPILADOR})
 
 # enlaza el ejecutable "compilador" con la biblioteca "lenguaje"
-target_link_libraries(compilador LINK_PUBLIC lenguaje)
+target_link_libraries(compilador LINK_PUBLIC lenguaje docopt_s)
 
 set_target_properties(compilador PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG  "../../proyecto/"

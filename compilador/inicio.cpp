@@ -118,7 +118,7 @@ void llenaTablaSímbolos(Ñ::TablaSímbolos* tablaSímbolos)
 	tablaSímbolos->defineFunciónEjecutable("tabla", tabla, (Ñ::Nodo*)args);
 }
 
-void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
+void _interpretaCódigo(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 {
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
@@ -168,7 +168,7 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	delete nodos;
 }
 
-int main()
+int ejecutaIntérpreteEnLínea()
 {
 	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
 	llenaTablaSímbolos(tablaSímbolos);
@@ -180,12 +180,15 @@ int main()
 		{
 			continue;
 		}
-		_interpretaComando(comando, tablaSímbolos);
-
-		std::this_thread::yield();
+		_interpretaCódigo(comando, tablaSímbolos);
 	}
 
 	delete tablaSímbolos;
 
 	return 0;
+}
+
+int main(int argc, char** argv)
+{
+	return ejecutaIntérpreteEnLínea();
 }

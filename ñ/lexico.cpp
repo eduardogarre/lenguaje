@@ -61,20 +61,18 @@ namespace Ñ
 
             carácter = siguienteCarácter(txt);
 
-            if(carácter == "\n")
+            if(esnuevalínea(carácter))
             {
                 
                 resultado = true;
                 incrementaCursor(txt);
-                carácter = siguienteCarácter(txt);
+                return resultado;
             }
             else
             {
                 cursor = c;
                 return false;
             }
-
-            return resultado;
         }
         catch(const std::runtime_error& re)
         {
@@ -161,7 +159,6 @@ namespace Ñ
                 lexemas.push_back(l);
 
                 incrementaCursor(txt);
-                carácter = siguienteCarácter(txt);
                 return true;
             }
             else
@@ -715,7 +712,6 @@ namespace Ñ
                 }
 
                 incrementaCursor(txt);
-                carácter = siguienteCarácter(txt);
 
                 //std::cout << "Creo nuevo lexema" << std::endl;
                 lexemas.push_back(l);

@@ -898,11 +898,43 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::módulo()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Nodo* m = (Ñ::Nodo*)(new Ñ::Módulo);
+
+		while(true)
+		{
+			Ñ::Nodo* n;
+			if(n = defineFunción())
+			{
+				m->ramas.push_back(n);
+			}
+			else if(n = expresión())
+			{
+				m->ramas.push_back(n);
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		return m;
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas)
 {
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)defineFunción();
+	return (Ñ::Nodo*)módulo();
 }
 
 Ñ::Nodo* Ñ::Sintaxis::analizaComando(std::vector<Ñ::Lexema*> _lexemas)

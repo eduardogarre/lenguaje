@@ -259,7 +259,29 @@ namespace Ñ
 {
     Ñ::Resultado resultado;
 
-    if(nodos->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos;
+            if(n == nullptr)
+            {
+                rResuelveSímbolos.error("He recibido un nodo nulo");
+                return rResuelveSímbolos;
+            }
+
+            rResuelveSímbolos = interpretaNodos(n, tablaSímbolos);
+
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
     {
         Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
         resultado = Ñ::interpretaNodos(nodos->ramas[2], subTabla);

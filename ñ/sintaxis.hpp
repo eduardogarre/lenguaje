@@ -38,6 +38,7 @@ namespace Ñ
         Ñ::Nodo* expresión();
         Ñ::Nodo* bloque();
         Ñ::Nodo* defineFunción();
+        Ñ::Nodo* módulo();
 
     public:
         Ñ::Nodo* analiza(std::vector<Ñ::Lexema*> _lexemas);

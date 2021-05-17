@@ -36,7 +36,9 @@ namespace Ñ
 
         NODO_EXPRESIÓN,
 
-        NODO_BLOQUE
+        NODO_BLOQUE,
+
+        NODO_MÓDULO
     };
 
     class Nodo
@@ -267,6 +269,18 @@ namespace Ñ
         DefineFunción();
         DefineFunción(const Ñ::DefineFunción& nodo);
         ~DefineFunción();
+
+        void muestra();
+    };
+
+    class Módulo : Nodo
+    {
+    public:
+        std::string módulo;
+
+        Módulo();
+        Módulo(const Ñ::Módulo& nodo);
+        ~Módulo();
 
         void muestra();
     };

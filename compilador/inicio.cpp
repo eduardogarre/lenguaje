@@ -1,4 +1,5 @@
 #include <cctype>
+#include <cstdlib>
 #include <exception>
 #include <filesystem>
 #include <fstream>
@@ -32,6 +33,7 @@ std::string _esperaComando()
 void apaga(Ñ::Argumentos* args)
 {
 	EJECUTA_INTÉRPRETE = false;
+	std::exit(0);
 }
 
 void escribe(Ñ::Argumentos* args)

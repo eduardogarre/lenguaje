@@ -9,20 +9,64 @@
 {
     Ñ::Resultado resultado;
 
-    if(nodos->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
     {
-        Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
-
         for(Ñ::Nodo* n : nodos->ramas)
         {
-            Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, subTabla);
+            Ñ::Resultado rResuelveSímbolos;
+            if(n == nullptr)
+            {
+                rResuelveSímbolos.error("He recibido un nodo nulo");
+                return rResuelveSímbolos;
+            }
+
+            if(n->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+            {
+                Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+                rResuelveSímbolos = resuelveSímbolos(n, subTabla);
+                delete subTabla;
+            }
+            else
+            {
+                rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            }
+
             if(rResuelveSímbolos.error())
             {
                 return rResuelveSímbolos;
             }
         }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos;
+            if(n == nullptr)
+            {
+                rResuelveSímbolos.error("He recibido un nodo nulo");
+                return rResuelveSímbolos;
+            }
 
-        delete subTabla;
+            if(n->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+            {
+                Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+                rResuelveSímbolos = resuelveSímbolos(n, subTabla);
+                delete subTabla;
+            }
+            else
+            {
+                rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            }
+
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
         
         resultado.éxito();
         return resultado;
@@ -182,6 +226,11 @@
         resultado.éxito();
         return resultado;
     }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_TIPO)
+    {
+        resultado.éxito();
+        return resultado;
+    }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
         Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos);
@@ -192,6 +241,11 @@
             return resultado;
         }
 
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_VACÍO)
+    {
         resultado.éxito();
         return resultado;
     }

@@ -480,6 +480,28 @@ void Ñ::Bloque::muestra()
 	}
 }
 
+Ñ::DefineFunción::DefineFunción() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN;
+}
+
+Ñ::DefineFunción::DefineFunción(const Ñ::DefineFunción& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN;
+}
+
+Ñ::DefineFunción::~DefineFunción() {}
+
+void Ñ::DefineFunción::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_DEFINE_FUNCIÓN) [" + función + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 void Ñ::borraNodos(Ñ::Nodo* nodos)
 {
 	for(auto rama : nodos->ramas)
@@ -579,6 +601,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::Bloque*)nodo)->muestra();
 	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
+	{
+		((Ñ::DefineFunción*)nodo)->muestra();
+	}
 
 	ajuste--;
 }
@@ -636,6 +662,8 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::DeclaraVariable* dv2;
 		Ñ::LlamaFunción* lfn1;
 		Ñ::LlamaFunción* lfn2;
+		Ñ::DefineFunción* dfn1;
+		Ñ::DefineFunción* dfn2;
 
 		switch (nodo1->categoría)
 		{
@@ -789,6 +817,19 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		
 		case Ñ::CategoríaNodo::NODO_BLOQUE:
 			return true;
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN:
+			dfn1 = (Ñ::DefineFunción*)nodo1;
+			dfn2 = (Ñ::DefineFunción*)nodo2;
+			if(dfn1->función == dfn2->función)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 			break;
 		
 		default:
@@ -947,6 +988,14 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		Ñ::Bloque* b = new Ñ::Bloque();
 		duplicado = (Ñ::Nodo*)b;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
+	{
+		Ñ::DefineFunción* n = (Ñ::DefineFunción*)nodo;
+		Ñ::DefineFunción* f = new Ñ::DefineFunción();
+		f->función = n->función;
+
+		duplicado = (Ñ::Nodo*)f;
 	}
 	else
 	{

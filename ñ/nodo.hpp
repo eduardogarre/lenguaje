@@ -259,6 +259,18 @@ namespace Ñ
         void muestra();
     };
 
+    class DefineFunción : Nodo
+    {
+    public:
+        std::string función;
+
+        DefineFunción();
+        DefineFunción(const Ñ::DefineFunción& nodo);
+        ~DefineFunción();
+
+        void muestra();
+    };
+
     void borraNodos(Ñ::Nodo* nodos);
     void muestraNodos(Nodo* nodo);
     bool sonÁrbolesDuplicados(Nodo* nodo1, Nodo* nodo2);

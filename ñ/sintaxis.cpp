@@ -825,11 +825,84 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::defineFunción()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Nodo* t;
+		Ñ::Nodo* id;
+		Ñ::Nodo* args;
+		Ñ::Nodo* bq;
+		Ñ::DefineFunción* dfn;
+		std::string nombreFunción;
+
+		if(t = tipo())
+		{
+			
+		}
+		else
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		if(id = identificador())
+		{
+			nombreFunción = ((Ñ::Identificador*)id)->id;
+			delete id;
+		}
+		else
+		{
+			delete t;
+			cursor = c;
+			return nullptr;
+		}
+
+		if(!notación("("))
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		args = (Ñ::Nodo*)(new Ñ::Nodo);
+
+		if(!notación(")"))
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		if(bq = bloque())
+		{
+
+		}
+		else
+		{
+			delete t;
+			cursor = c;
+			return nullptr;
+		}
+
+		dfn = new Ñ::DefineFunción();
+		dfn->función = nombreFunción;
+		((Ñ::Nodo*)dfn)->ramas.push_back(t);
+		((Ñ::Nodo*)dfn)->ramas.push_back(args);
+		((Ñ::Nodo*)dfn)->ramas.push_back(bq);
+
+		return (Ñ::Nodo*)dfn;
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas)
 {
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)bloque();
+	return (Ñ::Nodo*)defineFunción();
 }
 
 Ñ::Nodo* Ñ::Sintaxis::analizaComando(std::vector<Ñ::Lexema*> _lexemas)

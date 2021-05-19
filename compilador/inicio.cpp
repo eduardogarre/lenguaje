@@ -327,7 +327,6 @@ int main(int argc, char** argv)
 		std::string archivo = args["<archivo>"].asString();
 		std::string contenido = "";
 
-		std::cout << "Abre archivo " << archivo << std::endl;
 		try{
 			contenido = leeArchivo(archivo);
 		}

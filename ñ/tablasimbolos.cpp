@@ -249,22 +249,34 @@ void Ñ::Símbolo::muestra()
     _superior = tablaSuperior;
 }
 
-bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
+bool Ñ::TablaSímbolos::nombreAsignadoEnEsteÁmbito(std::string id)
 {
     if(_tabla.count(id) == 0)
     {
-        if(_superior != nullptr)
-        {
-            return _superior->identificadorDisponible(id);
-        }
-        else
-        {
-            return true;
-        }
+        return false;
     }
     else
     {
-        return false;
+        return true;
+    }
+}
+
+bool Ñ::TablaSímbolos::nombreAsignadoEnCualquierÁmbito(std::string id)
+{
+    if(_tabla.count(id) == 1)
+    {
+        return true;
+    }
+    else
+    {
+        if(_superior != nullptr)
+        {
+            return _superior->nombreAsignadoEnCualquierÁmbito(id);
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 
@@ -278,7 +290,7 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
         return resultado;
     }
 
-    if(!identificadorDisponible(id))
+    if(nombreAsignadoEnEsteÁmbito(id))
     {
         resultado.error("El identificador \"" + id + "\" ya está en uso");
         return resultado;
@@ -302,7 +314,7 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
         return resultado;
     }
 
-    if(identificadorDisponible(id))
+    if(!nombreAsignadoEnEsteÁmbito(id))
     {
         resultado.error("El identificador no se ha declarado todavía");
         return resultado;
@@ -342,7 +354,7 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
         return _superior->ejecutaFunción(id, args);
     }
 
-    if(identificadorDisponible(id))
+    if(!nombreAsignadoEnCualquierÁmbito(id))
     {
         resultado.error("El identificador no se ha declarado todavía");
         return resultado;
@@ -371,7 +383,7 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 {
     Ñ::Resultado resultado;
 
-    if(!identificadorDisponible(id))
+    if(nombreAsignadoEnEsteÁmbito(id))
     {
         resultado.error("El identificador ya está en uso");
         return resultado;
@@ -389,7 +401,7 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 {
     Ñ::Resultado resultado;
 
-    if(identificadorDisponible(id))
+    if(!nombreAsignadoEnCualquierÁmbito(id))
     {
         resultado.error("El identificador no se ha declarado");
         return resultado;
@@ -413,7 +425,7 @@ bool Ñ::TablaSímbolos::identificadorDisponible(std::string id)
 {
     Ñ::Resultado resultado;
 
-    if(identificadorDisponible(id))
+    if(!nombreAsignadoEnEsteÁmbito(id))
     {
         if(_superior != nullptr)
         {

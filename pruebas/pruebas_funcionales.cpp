@@ -21,7 +21,7 @@ TEST(PruebasFuncionales, declaracionesVariables)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("a"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("a"));
     delete nodos, lexemas;
 
     expresión = "ent b;";
@@ -30,7 +30,7 @@ TEST(PruebasFuncionales, declaracionesVariables)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("b"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("b"));
     delete nodos, lexemas;
 
     expresión = "real c;";
@@ -39,7 +39,7 @@ TEST(PruebasFuncionales, declaracionesVariables)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("c"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("c"));
     delete nodos, lexemas;
 
     expresión = "bool d;";
@@ -48,13 +48,13 @@ TEST(PruebasFuncionales, declaracionesVariables)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("d"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("d"));
     delete nodos, lexemas;
 
-    ASSERT_TRUE(tablaSímbolos->identificadorDisponible("e"));
-    ASSERT_TRUE(tablaSímbolos->identificadorDisponible("h"));
-    ASSERT_TRUE(tablaSímbolos->identificadorDisponible("o"));
-    ASSERT_TRUE(tablaSímbolos->identificadorDisponible("z"));
+    ASSERT_TRUE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("e"));
+    ASSERT_TRUE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("h"));
+    ASSERT_TRUE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("o"));
+    ASSERT_TRUE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("z"));
 
     delete sintaxis, léxico, tablaSímbolos;
 }
@@ -79,7 +79,7 @@ TEST(PruebasFuncionales, definicionesVariables)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("a"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("a"));
     rValor = tablaSímbolos->leeValor("a");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -94,7 +94,7 @@ TEST(PruebasFuncionales, definicionesVariables)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("b"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("b"));
     rValor = tablaSímbolos->leeValor("b");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -109,7 +109,7 @@ TEST(PruebasFuncionales, definicionesVariables)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("c"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("c"));
     rValor = tablaSímbolos->leeValor("c");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -141,7 +141,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("a"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("a"));
     rValor = tablaSímbolos->leeValor("a");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -156,7 +156,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("b"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("b"));
     rValor = tablaSímbolos->leeValor("b");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -171,7 +171,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("c"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("c"));
     rValor = tablaSímbolos->leeValor("c");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -186,7 +186,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("d"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("d"));
     rValor = tablaSímbolos->leeValor("d");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -201,7 +201,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("e"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("e"));
     rValor = tablaSímbolos->leeValor("e");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -216,7 +216,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("f"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("f"));
     rValor = tablaSímbolos->leeValor("f");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -231,7 +231,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("g"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("g"));
     rValor = tablaSímbolos->leeValor("g");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -246,7 +246,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("h"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("h"));
     rValor = tablaSímbolos->leeValor("h");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -261,7 +261,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("i"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("i"));
     rValor = tablaSímbolos->leeValor("i");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();
@@ -276,7 +276,7 @@ TEST(PruebasFuncionales, operacionesAritmeticas)
     rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
     ASSERT_FALSE(rSemántico.error());
     rIntérprete = Ñ::interpretaNodos(nodos, tablaSímbolos);
-    ASSERT_FALSE(tablaSímbolos->identificadorDisponible("j"));
+    ASSERT_FALSE(tablaSímbolos->nombreAsignadoEnCualquierÁmbito("j"));
     rValor = tablaSímbolos->leeValor("j");
     ASSERT_FALSE(rValor.error());
     valor = rValor.nodo();

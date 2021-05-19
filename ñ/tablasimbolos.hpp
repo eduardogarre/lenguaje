@@ -21,7 +21,8 @@ namespace Ñ
         TablaSímbolos(TablaSímbolos* tablaSuperior);
         ~TablaSímbolos();
         
-        bool identificadorDisponible(std::string id);
+        bool nombreAsignadoEnEsteÁmbito(std::string id);
+        bool nombreAsignadoEnCualquierÁmbito(std::string id);
         Resultado declaraFunción(std::string id);
         Resultado defineFunciónEjecutable(std::string id, void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args = nullptr);
         Resultado ejecutaFunción(std::string id, Ñ::Nodo* args);

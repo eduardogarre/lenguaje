@@ -294,7 +294,7 @@ TEST(PruebasSintaxis, LlamadasFunciones)
 
     n = (Ñ::Nodo*)(new Ñ::Expresión());
     n1 = (Ñ::Nodo*)(new Ñ::LlamaFunción());
-    ((Ñ::LlamaFunción*)n1)->función = "apaga";
+    ((Ñ::LlamaFunción*)n1)->nombre = "apaga";
     n->ramas.push_back(n1);
 
     r = sintaxis.analiza(l);
@@ -356,7 +356,7 @@ TEST(PruebasSintaxis, LlamadasFuncionesConArgumento)
 
     n = (Ñ::Nodo*)(new Ñ::Expresión());
     n1 = (Ñ::Nodo*)(new Ñ::LlamaFunción());
-    ((Ñ::LlamaFunción*)n1)->función = "escribe";
+    ((Ñ::LlamaFunción*)n1)->nombre = "escribe";
     n2 = (Ñ::Nodo*)(new Ñ::Argumentos());
     n3 = (Ñ::Nodo*)(new Ñ::Igualdad());
     n4 = (Ñ::Nodo*)(new Ñ::Comparación());

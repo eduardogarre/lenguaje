@@ -603,7 +603,7 @@ namespace Ñ
             }
             Ñ::Nodo* argsResueltos = rArgs.nodo();
 
-            tablaSímbolos->ejecutaFunción(fn->función, argsResueltos);
+            tablaSímbolos->ejecutaFunción(fn->nombre, argsResueltos);
             
             resultado.éxito();
             return resultado;
@@ -759,7 +759,7 @@ namespace Ñ
         }
         Ñ::Nodo* argsResueltos = rArgs.nodo();
 
-        tablaSímbolos->ejecutaFunción(fn->función, argsResueltos);
+        tablaSímbolos->ejecutaFunción(fn->nombre, argsResueltos);
         
         resultado.éxito();
         return resultado;

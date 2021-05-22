@@ -257,9 +257,9 @@
     {
         Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos);
         
-        if(!tablaSímbolos->nombreAsignadoEnCualquierÁmbito(fn->función))
+        if(!tablaSímbolos->nombreAsignadoEnCualquierÁmbito(fn->nombre))
         {
-            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->función + "() no está en la tabla de símbolos");
+            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->nombre + "() no está en la tabla de símbolos");
             return resultado;
         }
 

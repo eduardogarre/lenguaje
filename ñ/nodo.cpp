@@ -429,7 +429,7 @@ void Ñ::Argumento::muestra()
 void Ñ::LlamaFunción::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_LLAMA_FUNCIÓN) [" + función + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_LLAMA_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
@@ -495,7 +495,51 @@ void Ñ::Bloque::muestra()
 void Ñ::DefineFunción::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_DEFINE_FUNCIÓN) [" + función + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_DEFINE_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::Función::Función() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN;
+}
+
+Ñ::Función::Función(const Ñ::Función& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN;
+}
+
+Ñ::Función::~Función() {}
+
+void Ñ::Función::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::FunciónEjecutable::FunciónEjecutable() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE;
+}
+
+Ñ::FunciónEjecutable::FunciónEjecutable(const Ñ::FunciónEjecutable& nodo) : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE;
+}
+
+Ñ::FunciónEjecutable::~FunciónEjecutable() {}
+
+void Ñ::FunciónEjecutable::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_FUNCIÓN_EJECUTABLE) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
@@ -627,6 +671,14 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::DefineFunción*)nodo)->muestra();
 	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN)
+	{
+		((Ñ::DefineFunción*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE)
+	{
+		((Ñ::DefineFunción*)nodo)->muestra();
+	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
 	{
 		((Ñ::Módulo*)nodo)->muestra();
@@ -690,6 +742,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::LlamaFunción* lfn2;
 		Ñ::DefineFunción* dfn1;
 		Ñ::DefineFunción* dfn2;
+		Ñ::Función* fn1;
+		Ñ::Función* fn2;
+		Ñ::FunciónEjecutable* fne1;
+		Ñ::FunciónEjecutable* fne2;
 		Ñ::Módulo* m1;
 		Ñ::Módulo* m2;
 
@@ -829,7 +885,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		case Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN:
 			lfn1 = (Ñ::LlamaFunción*)nodo1;
 			lfn2 = (Ñ::LlamaFunción*)nodo2;
-			if(lfn1->función == lfn2->función)
+			if(lfn1->nombre == lfn2->nombre)
 			{
 				return true;
 			}
@@ -850,7 +906,33 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		case Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN:
 			dfn1 = (Ñ::DefineFunción*)nodo1;
 			dfn2 = (Ñ::DefineFunción*)nodo2;
-			if(dfn1->función == dfn2->función)
+			if(dfn1->nombre == dfn2->nombre)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_FUNCIÓN:
+			fn1 = (Ñ::Función*)nodo1;
+			fn2 = (Ñ::Función*)nodo2;
+			if(fn1->nombre == fn2->nombre)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE:
+			fne1 = (Ñ::FunciónEjecutable*)nodo1;
+			fne2 = (Ñ::FunciónEjecutable*)nodo2;
+			if((fne1->nombre == fne2->nombre) && (fne1->función == fne2->función))
 			{
 				return true;
 			}
@@ -1016,7 +1098,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		Ñ::LlamaFunción* n = (Ñ::LlamaFunción*)nodo;
 		Ñ::LlamaFunción* f = new Ñ::LlamaFunción();
-		f->función = n->función;
+		f->nombre = n->nombre;
 
 		duplicado = (Ñ::Nodo*)f;
 	}
@@ -1034,6 +1116,23 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		Ñ::DefineFunción* n = (Ñ::DefineFunción*)nodo;
 		Ñ::DefineFunción* f = new Ñ::DefineFunción();
+		f->nombre = n->nombre;
+
+		duplicado = (Ñ::Nodo*)f;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN)
+	{
+		Ñ::Función* n = (Ñ::Función*)nodo;
+		Ñ::Función* f = new Ñ::Función();
+		f->nombre = n->nombre;
+
+		duplicado = (Ñ::Nodo*)f;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE)
+	{
+		Ñ::FunciónEjecutable* n = (Ñ::FunciónEjecutable*)nodo;
+		Ñ::FunciónEjecutable* f = new Ñ::FunciónEjecutable();
+		f->nombre = n->nombre;
 		f->función = n->función;
 
 		duplicado = (Ñ::Nodo*)f;

@@ -37,6 +37,8 @@ namespace Ñ
         NODO_EXPRESIÓN,
 
         NODO_BLOQUE,
+        NODO_FUNCIÓN,
+        NODO_FUNCIÓN_EJECUTABLE,
 
         NODO_MÓDULO
     };
@@ -232,7 +234,7 @@ namespace Ñ
     class LlamaFunción : Nodo
     {
     public:
-        std::string función;
+        std::string nombre;
 
         LlamaFunción();
         LlamaFunción(const Ñ::LlamaFunción& nodo);
@@ -264,11 +266,36 @@ namespace Ñ
     class DefineFunción : Nodo
     {
     public:
-        std::string función;
+        std::string nombre;
 
         DefineFunción();
         DefineFunción(const Ñ::DefineFunción& nodo);
         ~DefineFunción();
+
+        void muestra();
+    };
+
+    class Función : Nodo
+    {
+    public:
+        std::string nombre;
+
+        Función();
+        Función(const Ñ::Función& nodo);
+        ~Función();
+
+        void muestra();
+    };
+
+    class FunciónEjecutable : Nodo
+    {
+    public:
+        std::string nombre;
+        void (*función)(Ñ::Argumentos* args);
+
+        FunciónEjecutable();
+        FunciónEjecutable(const Ñ::FunciónEjecutable& nodo);
+        ~FunciónEjecutable();
 
         void muestra();
     };

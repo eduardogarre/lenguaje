@@ -682,12 +682,12 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 	if(cursor < lexemas.size())
 	{
-		std::string función;
+		std::string nombre;
 		Ñ::Nodo* args = nullptr;
 
 		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
-			función = lexemas[cursor]->contenido;
+			nombre = lexemas[cursor]->contenido;
 
 			cursor++;
 		}
@@ -725,7 +725,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		}
 
 		Ñ::LlamaFunción* fn = new Ñ::LlamaFunción();
-		fn->función = función;
+		fn->nombre = nombre;
 		if(args != nullptr)
 		{
 			((Ñ::Nodo*)fn)->ramas.push_back(args);
@@ -886,7 +886,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		}
 
 		dfn = new Ñ::DefineFunción();
-		dfn->función = nombreFunción;
+		dfn->nombre = nombreFunción;
 		((Ñ::Nodo*)dfn)->ramas.push_back(t);
 		((Ñ::Nodo*)dfn)->ramas.push_back(args);
 		((Ñ::Nodo*)dfn)->ramas.push_back(bq);

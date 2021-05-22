@@ -345,6 +345,39 @@ bool Ñ::TablaSímbolos::nombreAsignadoEnCualquierÁmbito(std::string id)
     return resultado;
 }
 
+Ñ::Resultado Ñ::TablaSímbolos::leeFunción(std::string id)
+{
+    Ñ::Resultado resultado;
+
+    if(_superior != nullptr)
+    {
+        return _superior->leeFunción(id);
+    }
+
+    if(!nombreAsignadoEnCualquierÁmbito(id))
+    {
+        resultado.error("El identificador no se ha declarado todavía");
+        return resultado;
+    }
+
+    Ñ::Símbolo* s = _tabla[id];
+    if(!s->esFunción())
+    {
+        resultado.error("El identificador no se había declarado como una función");
+        return resultado;
+    }
+
+    if(!s->esFunciónEjecutable() && !s->esFunciónImplementada())
+    {
+        resultado.error("No se ha definido una implementación para esta función");
+        return resultado;
+    }
+
+    resultado.nodo(s->obténImplementación());
+    resultado.éxito();
+    return resultado;
+}
+
 Ñ::Resultado Ñ::TablaSímbolos::ejecutaFunción(std::string id, Ñ::Nodo* args)
 {
     Ñ::Resultado resultado;

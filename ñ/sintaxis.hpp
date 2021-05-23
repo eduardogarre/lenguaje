@@ -32,8 +32,10 @@ namespace Ñ
         Ñ::Nodo* ladoDerechoAsignación();
         Ñ::Nodo* declaraVariable();
         Ñ::Nodo* asigna();
-        Ñ::Nodo* argumento();
-        Ñ::Nodo* argumentos();
+        Ñ::Nodo* declaraArgumento();
+        Ñ::Nodo* declaraArgumentos();
+        Ñ::Nodo* ponArgumento();
+        Ñ::Nodo* ponArgumentos();
         Ñ::Nodo* llamaFunción();
         Ñ::Nodo* expresión();
         Ñ::Nodo* bloque();

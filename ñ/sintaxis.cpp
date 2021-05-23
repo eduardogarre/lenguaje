@@ -633,7 +633,48 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::argumento()
+Ñ::Nodo* Ñ::Sintaxis::declaraArgumento()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		return Ñ::Sintaxis::declaraVariable();
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* Ñ::Sintaxis::declaraArgumentos()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Argumentos* args = new Ñ::Argumentos();
+
+		if(Ñ::Nodo* arg1 = declaraArgumento())
+		{
+			((Ñ::Nodo*)args)->ramas.push_back(arg1);
+
+			while(notación(","))
+			{
+				Ñ::Nodo* arg2 = declaraArgumento();
+				((Ñ::Nodo*)args)->ramas.push_back(arg2);
+			}
+
+			return (Ñ::Nodo*)args;
+		}
+
+		return (Ñ::Nodo*)args;
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* Ñ::Sintaxis::ponArgumento()
 {
 	uint32_t c = cursor;
 
@@ -646,30 +687,28 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::argumentos()
+Ñ::Nodo* Ñ::Sintaxis::ponArgumentos()
 {
 	uint32_t c = cursor;
 
 	if(cursor < lexemas.size())
 	{
-		Ñ::Argumentos* args = nullptr;
+		Ñ::Argumentos* args = new Ñ::Argumentos();
 
-		if(Ñ::Nodo* arg1 = argumento())
+		if(Ñ::Nodo* arg1 = ponArgumento())
 		{
-			args = new Ñ::Argumentos();
-
 			((Ñ::Nodo*)args)->ramas.push_back(arg1);
 
 			while(notación(","))
 			{
-				Ñ::Nodo* arg2 = argumento();
+				Ñ::Nodo* arg2 = ponArgumento();
 				((Ñ::Nodo*)args)->ramas.push_back(arg2);
 			}
 
 			return (Ñ::Nodo*)args;
 		}
 
-		return nullptr;
+		return (Ñ::Nodo*)args;
 	}
 
 	cursor = c;
@@ -703,33 +742,21 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 			return nullptr;
 		}
 
+		args = ponArgumentos();
+
 		if(!notación(")"))
 		{
-			args = argumentos();
-
-			//std::cout << "CURSOR INTERNO: " << cursor << std::endl;
-
-			if(args == nullptr)
+			if(args != nullptr)
 			{
-				cursor = c;
-				return nullptr;
+				delete args;
 			}
-			else
-			{
-				if(!notación(")"))
-				{
-					cursor = c;
-					return nullptr;
-				}
-			}
+			cursor = c;
+			return nullptr;
 		}
 
 		Ñ::LlamaFunción* fn = new Ñ::LlamaFunción();
 		fn->nombre = nombre;
-		if(args != nullptr)
-		{
-			((Ñ::Nodo*)fn)->ramas.push_back(args);
-		}
+		((Ñ::Nodo*)fn)->ramas.push_back(args);
 		return (Ñ::Nodo*)fn;
 	}
 
@@ -866,7 +893,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 			return nullptr;
 		}
 
-		args = (Ñ::Nodo*)(new Ñ::Nodo);
+		args = declaraArgumentos();
 
 		if(!notación(")"))
 		{

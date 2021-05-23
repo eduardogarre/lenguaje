@@ -16,7 +16,7 @@
             Ñ::Resultado rResuelveSímbolos;
             if(n == nullptr)
             {
-                rResuelveSímbolos.error("He recibido un nodo nulo");
+                rResuelveSímbolos.error("He recibido un nodo nulo entre los hijos de NODO_MÓDULO");
                 return rResuelveSímbolos;
             }
 
@@ -43,7 +43,7 @@
             Ñ::Resultado rResuelveSímbolos;
             if(n == nullptr)
             {
-                rResuelveSímbolos.error("He recibido un nodo nulo");
+                rResuelveSímbolos.error("He recibido un nodo nulo entre los hijos de NODO_DEFINE_FUNCIÓN [" + ((Ñ::DefineFunción*)nodos)->nombre + "]");
                 return rResuelveSímbolos;
             }
 
@@ -67,6 +67,21 @@
         resultado.éxito();
         return resultado;
     }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rResuelveSímbolos;
+            rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
+            if(rResuelveSímbolos.error())
+            {
+                return rResuelveSímbolos;
+            }
+        }
+
+        resultado.éxito();
+        return resultado;
+    }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
     {
         for(Ñ::Nodo* n : nodos->ramas)
@@ -74,7 +89,7 @@
             Ñ::Resultado rResuelveSímbolos;
             if(n == nullptr)
             {
-                rResuelveSímbolos.error("He recibido un nodo nulo");
+                rResuelveSímbolos.error("He recibido un nodo nulo entre los hijos de NODO_BLOQUE");
                 return rResuelveSímbolos;
             }
 

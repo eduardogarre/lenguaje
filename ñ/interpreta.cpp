@@ -31,7 +31,22 @@ namespace Ñ
         }
         else if(función->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN)
         {
+            Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)función;
             Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+            if(argumentos != nullptr)
+            {
+                for(int i = 0; i < argumentos->ramas.size(); i++)
+                {
+                    Ñ::Nodo* arg = argumentos->ramas[i];
+                    if(arg->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+                    {
+                        Ñ::Literal* valorArgumento = (Ñ::Literal*)arg;
+                        Ñ::DeclaraVariable* declaraciónArgumento = (Ñ::DeclaraVariable*)(((Ñ::Nodo*)fn)->ramas[1]->ramas[i]);
+                        subTabla->declara(declaraciónArgumento->variable, ((Ñ::Nodo*)declaraciónArgumento)->ramas[0]);
+                        subTabla->ponValor(declaraciónArgumento->variable, (Ñ::Nodo*)valorArgumento);
+                    }
+                }
+            }
             resultado = Ñ::interpretaNodos(función->ramas[2], subTabla);
             delete subTabla;
             resultado.éxito();
@@ -619,7 +634,7 @@ namespace Ñ
             Ñ::Nodo* args;
             if(nodos->ramas.size() == 0)
             {
-                args = nullptr;
+                args = (Ñ::Nodo*)(new Ñ::Argumentos);
             }
             else if(nodos->ramas.size() == 1)
             {
@@ -669,7 +684,7 @@ namespace Ñ
         Ñ::Nodo* args;
         if(nodos->ramas.size() == 0)
         {
-            args = nullptr;
+            args = (Ñ::Nodo*)(new Ñ::Argumentos);
         }
         else if(nodos->ramas.size() == 1)
         {

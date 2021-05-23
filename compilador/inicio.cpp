@@ -11,7 +11,7 @@
 #include "docopt.h"
 #include "ñ/ñ.hpp"
 
-bool EJECUTA_INTÉRPRETE = true;
+bool EJECUTA_INTÉRPRETE = false;
 
 void _muestraTexto(std::string txt)
 {
@@ -47,10 +47,25 @@ std::string _esperaComando()
 	return nullptr;
 }
 
+Ñ::Nodo* FunciónApaga(Ñ::Nodo* yo, Ñ::Nodo* args)
+{
+	if(EJECUTA_INTÉRPRETE)
+	{
+		EJECUTA_INTÉRPRETE = false;
+	}
+	else
+	{
+		exit(0);
+	}
+	
+	return nullptr;
+}
+
 Ñ::TablaSímbolos* creaTablaSímbolos()
 {
 	Ñ::TablaSímbolos* tabla = new Ñ::TablaSímbolos;
 	tabla->defineFunciónEjecutable("escribe", FunciónEscribe);
+	tabla->defineFunciónEjecutable("apaga", FunciónApaga);
 	return tabla;
 }
 
@@ -170,6 +185,8 @@ int interpretaArchivo(std::string txt)
 int interpretaEnLínea()
 {
 	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
+
+	EJECUTA_INTÉRPRETE = true;
 
 	while (EJECUTA_INTÉRPRETE)
 	{

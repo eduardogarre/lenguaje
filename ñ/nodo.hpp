@@ -291,7 +291,7 @@ namespace Ñ
     {
     public:
         std::string nombre;
-        void (*función)(Ñ::Argumentos* args);
+        Ñ::Nodo* (*función)(Ñ::Nodo* yo, Ñ::Nodo* argumentos);
 
         FunciónEjecutable();
         FunciónEjecutable(const Ñ::FunciónEjecutable& nodo);

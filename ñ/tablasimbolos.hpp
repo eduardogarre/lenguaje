@@ -8,7 +8,23 @@
 
 namespace Ñ
 {
-    class Símbolo;
+    class Símbolo
+    {
+    public:
+        Símbolo(std::string nombre, Ñ::Nodo* tipo);
+        ~Símbolo();
+
+        std::string nombre();
+        Ñ::Nodo* tipo();
+        void valor(Ñ::Nodo* valor);
+        Ñ::Nodo* valor();
+        //void muestra();
+        
+    private:
+        std::string _nombre;
+        Ñ::Nodo* _tipo;
+        Ñ::Nodo* _valor;
+    };
 
     class TablaSímbolos
     {
@@ -21,16 +37,14 @@ namespace Ñ
         TablaSímbolos(TablaSímbolos* tablaSuperior);
         ~TablaSímbolos();
         
-        bool nombreAsignadoEnEsteÁmbito(std::string id);
-        bool nombreAsignadoEnCualquierÁmbito(std::string id);
-        Resultado declaraFunción(std::string id);
-        Resultado defineFunciónEjecutable(std::string id, void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args = nullptr);
-        Resultado ejecutaFunción(std::string id, Ñ::Nodo* args);
-        Resultado leeFunción(std::string id);
+        bool nombreReservadoEnEsteÁmbito(std::string id);
+        bool nombreReservadoEnCualquierÁmbito(std::string id);
+        Ñ::Resultado declara(std::string nombre, Ñ::Nodo* tipo);
+        Ñ::Resultado ponValor(std::string nombre, Ñ::Nodo* valor);
+        Ñ::Resultado leeValor(std::string nombre);
+        Ñ::Resultado leeTipo(std::string nombre);
 
-        Resultado declaraVariable(std::string id, Ñ::Nodo* tipo);
-        Resultado ponValor(std::string id, Ñ::Nodo* valor);
-        Resultado leeValor(std::string id);
+        Ñ::Resultado defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*));
 
         void muestra();
     };

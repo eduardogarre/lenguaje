@@ -11,9 +11,6 @@
 #include "docopt.h"
 #include "ñ/ñ.hpp"
 
-// Extiendo nodos para pasar argumentos
-#include "nodos.hpp"
-
 bool EJECUTA_INTÉRPRETE = true;
 
 void _muestraTexto(std::string txt)
@@ -30,98 +27,31 @@ std::string _esperaComando()
 	return comando;
 }
 
-void apaga(Ñ::Argumentos* args)
+Ñ::Nodo* FunciónEscribe(Ñ::Nodo* yo, Ñ::Nodo* args)
 {
-	EJECUTA_INTÉRPRETE = false;
-	std::exit(0);
-}
-
-void escribe(Ñ::Argumentos* args)
-{
-	if(args == nullptr)
+	if(args != nullptr)
 	{
-		return;
-	}
-	else if(((Ñ::Nodo*)args)->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
-	{
-		if(((Ñ::Nodo*)args)->ramas.size() == 0)
+		if(args->ramas.size() > 0)
 		{
-			delete args;
-			return;
-		}
-		else if(((Ñ::Nodo*)args)->ramas.size() > 0)
-		{
-			for(auto arg : ((Ñ::Nodo*)args)->ramas)
+			for(Ñ::Nodo* n : args->ramas)
 			{
-				if(arg == nullptr)
+				if(n->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
 				{
-					continue;
-				}
-				else if(arg->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
-				{
-					std::string dato = ((Ñ::Literal*)arg)->dato;
-					std::cout << dato;
-				}
-				else
-				{
-					std::cout << "He recibido un Ñ::Nodo* que no es un Literal" << std::endl;
-					std::cout << "categoría :: " << arg->categoría << std::endl;
+					Ñ::Literal* lit = (Ñ::Literal*)n;
+					std::cout << lit->dato;
 				}
 			}
-			delete args;
 		}
 	}
-}
-
-void tabla(Ñ::Argumentos* args)
-{
-	if(args == nullptr)
-	{
-		return;
-	}
-	else if(((Ñ::Nodo*)args)->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
-	{
-		if(((Ñ::Nodo*)args)->ramas.size() == 0)
-		{
-			return;
-		}
-		else if(((Ñ::Nodo*)args)->ramas.size() == 1)
-		{
-			Ñ::Nodo* arg = ((Ñ::Nodo*)args)->ramas[0];
-			if(arg == nullptr)
-			{
-				return;
-			}
-			else if(arg->categoría == Ñ::CategoríaNodo::NODO_EXPANDIDO)
-			{
-				auto tablaSímbolos = ((NTablaSímbolos*)arg)->tablaSímbolos;
-				tablaSímbolos->muestra();
-			}
-		}
-	}
+	
+	return nullptr;
 }
 
 Ñ::TablaSímbolos* creaTablaSímbolos()
 {
-	return new Ñ::TablaSímbolos;
-}
-
-void llenaTablaSímbolos(Ñ::TablaSímbolos* tablaSímbolos)
-{
-	// Añado una función
-	tablaSímbolos->declaraFunción("escribe");
-	tablaSímbolos->defineFunciónEjecutable("escribe", escribe);
-
-	// Añado una función
-	tablaSímbolos->declaraFunción("apaga");
-	tablaSímbolos->defineFunciónEjecutable("apaga", apaga);
-
-	// Añado una función con un argumento prefijado, ntabla
-	tablaSímbolos->declaraFunción("tabla");
-	NTablaSímbolos* ntabla = new NTablaSímbolos(tablaSímbolos);
-	Ñ::Argumentos* args = new Ñ::Argumentos();
-	((Ñ::Nodo*)args)->ramas.push_back((Ñ::Nodo*)ntabla);
-	tablaSímbolos->defineFunciónEjecutable("tabla", tabla, (Ñ::Nodo*)args);
+	Ñ::TablaSímbolos* tabla = new Ñ::TablaSímbolos;
+	tabla->defineFunciónEjecutable("escribe", FunciónEscribe);
+	return tabla;
 }
 
 void _interpretaArchivo(std::string código, Ñ::TablaSímbolos* tablaSímbolos)
@@ -149,7 +79,9 @@ void _interpretaArchivo(std::string código, Ñ::TablaSímbolos* tablaSímbolos)
 		return;
 	}
 
-	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolos);
+	Ñ::TablaSímbolos* tablaSímbolosSemántica = creaTablaSímbolos();
+	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolosSemántica);
+	delete tablaSímbolosSemántica;
 
 	if(resultado.error())
 	{
@@ -227,7 +159,6 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 int interpretaArchivo(std::string txt)
 {
 	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
-	llenaTablaSímbolos(tablaSímbolos);
 
 	_interpretaArchivo(txt, tablaSímbolos);
 
@@ -239,7 +170,6 @@ int interpretaArchivo(std::string txt)
 int interpretaEnLínea()
 {
 	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
-	llenaTablaSímbolos(tablaSímbolos);
 
 	while (EJECUTA_INTÉRPRETE)
 	{

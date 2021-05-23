@@ -2,64 +2,12 @@
 
 #include "tablasimbolos.hpp"
 
-namespace Ñ
+
+Ñ::Símbolo::Símbolo(std::string nombre, Ñ::Nodo* tipo)
 {
-    enum CategoríaSímbolo {
-        VACÍO,
-        VARIABLE,
-        FUNCIÓN,
-        TIPO
-    };
-
-    class Símbolo
-    {
-    public:
-
-        Símbolo();
-        ~Símbolo();
-
-        bool esFunción();
-        bool esFunciónEjecutable();
-        bool esFunciónImplementada();
-        bool esVariable();
-
-        void declaraFunción() { _categoría = CategoríaSímbolo::FUNCIÓN; }
-
-        void declaraVariable(Ñ::Nodo* tipo);
-        void asignaValor(Ñ::Nodo* valor);
-        Ñ::Nodo* obténValor();
-
-        void ejecutaFunción(Ñ::Argumentos* args);
-        void añadeEjecución(void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args = nullptr);
-        void borraEjecución();
-
-        Ñ::Nodo* obténImplementación();
-        void añadeImplementación(Ñ::Nodo* impl);
-        void borraImplementación();
-
-        void muestra();
-        
-    private:
-        CategoríaSímbolo _categoría;
-        bool _ejecutable = false;
-        bool _definida = false;
-        
-        Ñ::Nodo* _tipo = nullptr;
-        Ñ::Nodo* _definición = nullptr;
-
-        void (*_ejecuta)(Ñ::Argumentos* args);
-        Ñ::Argumentos * _args = nullptr;
-    };
-}
-
-Ñ::Símbolo::Símbolo()
-{
-    _categoría = CategoríaSímbolo::VACÍO;
-    _ejecutable = false;
-    _definida = false;
-
-    _definición = nullptr;
-    _tipo = nullptr;
+    _nombre = nombre;
+    _tipo = Ñ::duplicaÁrbol(tipo);
+    _valor = nullptr;
 }
 
 Ñ::Símbolo::~Símbolo()
@@ -70,173 +18,31 @@ namespace Ñ
         _tipo = nullptr;
     }
     
-    if(_definición != nullptr)
+    if(_valor != nullptr)
     {
-        delete _definición;
-        _definición = nullptr;
-    }
-    
-    if(_args != nullptr)
-    {
-        delete _args;
-        _args = nullptr;
+        delete _valor;
+        _valor = nullptr;
     }
 }
 
-bool Ñ::Símbolo::esFunción()
+std::string Ñ::Símbolo::nombre()
 {
-    return _categoría == Ñ::CategoríaSímbolo::FUNCIÓN;
+    return _nombre;
 }
 
-bool Ñ::Símbolo::esFunciónEjecutable()
+Ñ::Nodo* Ñ::Símbolo::tipo()
 {
-    return _ejecutable;
+    return _tipo;
 }
 
-bool Ñ::Símbolo::esFunciónImplementada()
+void Ñ::Símbolo::valor(Ñ::Nodo* valor)
 {
-    return _definida;
+    _valor = Ñ::duplicaÁrbol(valor);
 }
 
-bool Ñ::Símbolo::esVariable()
+Ñ::Nodo* Ñ::Símbolo::valor()
 {
-    return _categoría == Ñ::CategoríaSímbolo::VARIABLE;
-}
-
-void Ñ::Símbolo::declaraVariable(Ñ::Nodo* tipo)
-{
-    if(_categoría != CategoríaSímbolo::VACÍO)
-    {
-        std::cout << "ERROR en la creación del símbolo, intentas sobreescribir un símbolo que no está vacío" << std::endl;
-        
-        return;
-    }
-
-    _categoría = CategoríaSímbolo::VARIABLE;
-    Ñ::Tipo* t = new Ñ::Tipo();
-    t->tipo = ((Ñ::Tipo*)tipo)->tipo;
-    t->vector = ((Ñ::Tipo*)tipo)->vector;
-    _tipo = (Ñ::Nodo*)(t);
-}
-
-void Ñ::Símbolo::asignaValor(Ñ::Nodo* valor)
-{
-    _categoría = CategoríaSímbolo::VARIABLE;
-
-    if(valor->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
-    {
-        _definición = duplicaÁrbol(valor);
-    }
-}
-
-Ñ::Nodo* Ñ::Símbolo::obténValor()
-{
-    return _definición;
-}
-
-void Ñ::Símbolo::ejecutaFunción(Ñ::Argumentos* args)
-{
-    if(_categoría == CategoríaSímbolo::FUNCIÓN && _ejecutable && _ejecuta)
-    {
-        if(_args == nullptr)
-        {
-            _ejecuta(args);
-        }
-        else
-        {
-            _ejecuta(_args);
-        }
-    }
-}
-
-void Ñ::Símbolo::añadeEjecución(void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args)
-{
-    _categoría = CategoríaSímbolo::FUNCIÓN;
-    _ejecutable = true;
-    _ejecuta = fn;
-    
-    if(args == nullptr)
-    {
-        _args = nullptr;
-    }
-    else if(args->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
-    {
-        _args = (Ñ::Argumentos*)args;
-    }
-}
-
-void Ñ::Símbolo::borraEjecución()
-{
-    _ejecutable = false;
-    _ejecuta = nullptr;
-}
-
-Ñ::Nodo* Ñ::Símbolo::obténImplementación()
-{
-    if(_definida)
-    {
-        return _definición;
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-void Ñ::Símbolo::añadeImplementación(Ñ::Nodo* impl)
-{
-    _definida = true;
-    _definición = impl;
-}
-
-void Ñ::Símbolo::borraImplementación()
-{
-    _definida = false;
-    _definición = nullptr;
-}
-
-void Ñ::Símbolo::muestra()
-{
-    if(_categoría == Ñ::CategoríaSímbolo::VACÍO)
-    {
-        std::cout << "[]";
-    }
-    else if(_categoría == Ñ::CategoríaSímbolo::VARIABLE)
-    {
-        if((Ñ::Literal*)_definición != nullptr)
-        {
-            std::cout << "[VARIABLE :: \"" + ((Ñ::Literal*)_definición)->dato + "\"] ";
-        }
-        else
-        {
-            std::cout << "[VARIABLE] ";
-        }
-
-        muestraNodos(_tipo);
-    }
-    else if(_categoría == Ñ::CategoríaSímbolo::FUNCIÓN)
-    {
-        std::cout << "[FUNCIÓN]";
-        if(_ejecutable)
-        {
-            std::cout << " [ejecutable]";
-        }
-        else
-        {
-            std::cout << " [----------]";
-        }
-
-        if(_definida)
-        {
-            std::cout << " [implementada]" << std::endl << " ";
-            muestraNodos(_definición);
-        }
-        else
-        {
-            std::cout << std::endl;
-        }
-    }
-
+    return _valor;
 }
 
 Ñ::TablaSímbolos::TablaSímbolos()
@@ -244,14 +50,27 @@ void Ñ::Símbolo::muestra()
     _superior = nullptr;
 }
 
+Ñ::TablaSímbolos::~TablaSímbolos()
+{
+    for (auto [clave, símbolo] : _tabla)
+    {
+        if(símbolo != nullptr)
+        {
+            delete símbolo;
+        }
+    }
+
+    _tabla.clear();
+}
+
 Ñ::TablaSímbolos::TablaSímbolos(Ñ::TablaSímbolos* tablaSuperior)
 {
     _superior = tablaSuperior;
 }
 
-bool Ñ::TablaSímbolos::nombreAsignadoEnEsteÁmbito(std::string id)
+bool Ñ::TablaSímbolos::nombreReservadoEnEsteÁmbito(std::string nombre)
 {
-    if(_tabla.count(id) == 0)
+    if(_tabla.count(nombre) == 0)
     {
         return false;
     }
@@ -261,9 +80,9 @@ bool Ñ::TablaSímbolos::nombreAsignadoEnEsteÁmbito(std::string id)
     }
 }
 
-bool Ñ::TablaSímbolos::nombreAsignadoEnCualquierÁmbito(std::string id)
+bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 {
-    if(_tabla.count(id) == 1)
+    if(_tabla.count(nombre) == 1)
     {
         return true;
     }
@@ -271,7 +90,7 @@ bool Ñ::TablaSímbolos::nombreAsignadoEnCualquierÁmbito(std::string id)
     {
         if(_superior != nullptr)
         {
-            return _superior->nombreAsignadoEnCualquierÁmbito(id);
+            return _superior->nombreReservadoEnCualquierÁmbito(nombre);
         }
         else
         {
@@ -280,224 +99,138 @@ bool Ñ::TablaSímbolos::nombreAsignadoEnCualquierÁmbito(std::string id)
     }
 }
 
-Ñ::Resultado Ñ::TablaSímbolos::declaraFunción(std::string id)
+Ñ::Resultado Ñ::TablaSímbolos::declara(std::string nombre, Ñ::Nodo* tipo)
 {
     Ñ::Resultado resultado;
 
-    if(_superior != nullptr)
+    if(nombreReservadoEnEsteÁmbito(nombre))
     {
-        resultado.error("Intentas declarar una función dentro de un bloque. Las funciones deben declararse en el espacio global.");
-        return resultado;
-    }
-
-    if(nombreAsignadoEnEsteÁmbito(id))
-    {
-        resultado.error("El identificador \"" + id + "\" ya está en uso");
-        return resultado;
-    }
-
-    Ñ::Símbolo* s = new Ñ::Símbolo();
-    s->declaraFunción();
-    _tabla[id] = s;
-
-    resultado.éxito();
-    return resultado;
-}
-
-Ñ::Resultado Ñ::TablaSímbolos::defineFunciónEjecutable(std::string id, void (*fn)(Ñ::Argumentos* args), Ñ::Nodo* args)
-{
-    Ñ::Resultado resultado;
-
-    if(_superior != nullptr)
-    {
-        resultado.error("Intentas definir una función dentro de un bloque. Las funciones deben definirse en el espacio global.");
-        return resultado;
-    }
-
-    if(!nombreAsignadoEnEsteÁmbito(id))
-    {
-        resultado.error("El identificador no se ha declarado todavía");
-        return resultado;
-    }
-
-    Ñ::Símbolo* s = _tabla[id];
-    if(!s->esFunción())
-    {
-        resultado.error("El identificador no se había declarado como una función");
-        return resultado;
-    }
-
-    if(s->esFunciónEjecutable())
-    {
-        resultado.error("Ya se ha asignado una ejecución a esta función");
-        return resultado;
-    }
-    else if(s->esFunciónImplementada())
-    {
-        resultado.error("Ya se ha definido una implementación para esta función");
-        return resultado;
-    }
-
-    s->añadeEjecución(fn, args);
-    _tabla[id] = s;
-
-    resultado.éxito();
-    return resultado;
-}
-
-Ñ::Resultado Ñ::TablaSímbolos::leeFunción(std::string id)
-{
-    Ñ::Resultado resultado;
-
-    if(_superior != nullptr)
-    {
-        return _superior->leeFunción(id);
-    }
-
-    if(!nombreAsignadoEnCualquierÁmbito(id))
-    {
-        resultado.error("El identificador no se ha declarado todavía");
-        return resultado;
-    }
-
-    Ñ::Símbolo* s = _tabla[id];
-    if(!s->esFunción())
-    {
-        resultado.error("El identificador no se había declarado como una función");
-        return resultado;
-    }
-
-    if(!s->esFunciónEjecutable() && !s->esFunciónImplementada())
-    {
-        resultado.error("No se ha definido una implementación para esta función");
-        return resultado;
-    }
-
-    resultado.nodo(s->obténImplementación());
-    resultado.éxito();
-    return resultado;
-}
-
-Ñ::Resultado Ñ::TablaSímbolos::ejecutaFunción(std::string id, Ñ::Nodo* args)
-{
-    Ñ::Resultado resultado;
-
-    if(_superior != nullptr)
-    {
-        return _superior->ejecutaFunción(id, args);
-    }
-
-    if(!nombreAsignadoEnCualquierÁmbito(id))
-    {
-        resultado.error("El identificador no se ha declarado todavía");
-        return resultado;
-    }
-
-    Ñ::Símbolo* s = _tabla[id];
-    if(!s->esFunción())
-    {
-        resultado.error("El identificador no se había declarado como una función");
-        return resultado;
-    }
-
-    if(!s->esFunciónEjecutable() && !s->esFunciónImplementada())
-    {
-        resultado.error("No se ha definido una implementación para esta función");
-        return resultado;
-    }
-
-    s->ejecutaFunción((Ñ::Argumentos*)args);
-
-    resultado.éxito();
-    return resultado;
-}
-
-Ñ::Resultado Ñ::TablaSímbolos::declaraVariable(std::string id, Ñ::Nodo* tipo)
-{
-    Ñ::Resultado resultado;
-
-    if(nombreAsignadoEnEsteÁmbito(id))
-    {
-        resultado.error("El identificador ya está en uso");
-        return resultado;
-    }
-
-    Ñ::Símbolo* s = new Ñ::Símbolo();
-    s->declaraVariable(tipo);
-    _tabla[id] = s;
-
-    resultado.éxito();
-    return resultado;
-}
-
-Ñ::Resultado Ñ::TablaSímbolos::ponValor(std::string id, Ñ::Nodo* valor)
-{
-    Ñ::Resultado resultado;
-
-    if(!nombreAsignadoEnCualquierÁmbito(id))
-    {
-        resultado.error("El identificador no se ha declarado");
-        return resultado;
-    }
-
-    Ñ::Símbolo* s = _tabla[id];
-    if(!s->esVariable())
-    {
-        resultado.error("El identificador no es una variable");
-        return resultado;
-    }
-
-    s->asignaValor(valor);
-    _tabla[id] = s;
-
-    resultado.éxito();
-    return resultado;
-}
-
-Ñ::Resultado Ñ::TablaSímbolos::leeValor(std::string id)
-{
-    Ñ::Resultado resultado;
-
-    if(!nombreAsignadoEnEsteÁmbito(id))
-    {
-        if(_superior != nullptr)
-        {
-            return _superior->leeValor(id);
-        }
-        else
-        {
-            resultado.error("El identificador no se ha declarado");
-            return resultado;
-        }
-    }
-
-    Ñ::Símbolo* s = _tabla[id];
-    if(!s->esVariable())
-    {
-        resultado.error("El identificador no es una variable");
+        resultado.error("Error, el identificador \"" + nombre + "\" ya existe en este ámbito.");
         return resultado;
     }
     
-    resultado.nodo(s->obténValor());
+    Ñ::Símbolo* s = new Ñ::Símbolo(nombre, tipo);
+    _tabla[nombre] = s;
+    
     resultado.éxito();
     return resultado;
+}
+
+Ñ::Resultado Ñ::TablaSímbolos::leeValor(std::string nombre)
+{
+    Ñ::Resultado resultado;
+
+    if(!nombreReservadoEnCualquierÁmbito(nombre))
+    {
+        resultado.error("Error, el identificador no se ha declarado previamente.");
+        return resultado;
+    }
+
+    if(!nombreReservadoEnEsteÁmbito(nombre))
+    {
+        return _superior->leeValor(nombre);
+    }
+    
+    Ñ::Nodo* valor = _tabla[nombre]->valor();
+    
+    if(valor == nullptr)
+    {
+        resultado.error("Error, el símbolo no ha sido definido todavía");
+        return resultado;
+    }
+
+    resultado.éxito();
+    resultado.nodo(Ñ::duplicaÁrbol(valor));
+    return resultado;
+}
+
+Ñ::Resultado Ñ::TablaSímbolos::leeTipo(std::string nombre)
+{
+    Ñ::Resultado resultado;
+
+    if(!nombreReservadoEnCualquierÁmbito(nombre))
+    {
+        resultado.error("Error, el identificador no se ha declarado previamente.");
+        return resultado;
+    }
+
+    if(!nombreReservadoEnEsteÁmbito(nombre))
+    {
+        return _superior->leeTipo(nombre);
+    }
+    
+    Ñ::Nodo* tipo = _tabla[nombre]->tipo();
+    
+    if(tipo == nullptr)
+    {
+        resultado.error("Error, el símbolo no ha sido definido todavía");
+        return resultado;
+    }
+
+    resultado.éxito();
+    resultado.nodo(Ñ::duplicaÁrbol(tipo));
+    return resultado;
+}
+
+Ñ::Resultado Ñ::TablaSímbolos::ponValor(std::string nombre, Ñ::Nodo* valor)
+{
+    Ñ::Resultado resultado;
+    
+    if(valor == nullptr)
+    {
+        resultado.error("Error, definición errónea");
+        return resultado;
+    }
+
+    if(!nombreReservadoEnCualquierÁmbito(nombre))
+    {
+        resultado.error("Error, el identificador no se ha declarado previamente.");
+        return resultado;
+    }
+
+    if(!nombreReservadoEnEsteÁmbito(nombre))
+    {
+        return _superior->ponValor(nombre, valor);
+    }
+    
+    Ñ::Símbolo* s = _tabla[nombre];
+    s->valor(valor);
+    _tabla[nombre] = s;
+
+    resultado.éxito();
+    return resultado;
+}
+
+Ñ::Resultado Ñ::TablaSímbolos::defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*))
+{
+    Ñ::Resultado r;
+
+    Ñ::FunciónEjecutable* función = new Ñ::FunciónEjecutable;
+    función->función = fne;
+    función->nombre = nombre;
+    r = declara(nombre, nullptr);
+    if(r.error())
+    {
+        return r;
+    }
+    r = ponValor(nombre, (Ñ::Nodo*)función);
+    if(r.error())
+    {
+        return r;
+    }
+
+    r.éxito();
+    return r;
 }
 
 void Ñ::TablaSímbolos::muestra()
 {
     for (auto [clave, valor] : _tabla)
     {
-        std::cout << clave << " ";
-        valor->muestra();
+        std::cout << "[" << valor->nombre() << "]" << std::endl;
+        std::cout << "\tTipo:\n";
+        muestraNodos(valor->tipo());
+        std::cout << "\tValor:\n";
+        muestraNodos(valor->valor());
     }
-}
-
-Ñ::TablaSímbolos::~TablaSímbolos()
-{
-    for (auto [clave, valor] : _tabla)
-    {
-        delete valor;
-    }
-
-    _tabla.clear();
 }

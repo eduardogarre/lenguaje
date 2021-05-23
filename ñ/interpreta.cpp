@@ -10,6 +10,38 @@ namespace Ñ
     Ñ::Resultado interpretaLIA(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos);
     Ñ::Resultado interpretaLDA(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos);
 
+    Ñ::Resultado ejecutaFunción(std::string identificador, Ñ::Nodo* argumentos, Ñ::TablaSímbolos* tablaSímbolos)
+    {
+        Ñ::Resultado resultado;
+        Ñ::Nodo* función;
+        
+        Ñ::Resultado rSímbolo = tablaSímbolos->leeValor(identificador);
+        if(rSímbolo.error())
+        {
+            return rSímbolo;
+        }
+        función = rSímbolo.nodo();
+
+        if(función->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE)
+        {
+            Ñ::FunciónEjecutable* efn = (Ñ::FunciónEjecutable*)función;
+            efn->función(nullptr, argumentos);
+            resultado.éxito();
+            return resultado;
+        }
+        else if(función->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN)
+        {
+            Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+            resultado = Ñ::interpretaNodos(función->ramas[2], subTabla);
+            delete subTabla;
+            resultado.éxito();
+            return resultado;
+        }
+
+        resultado.error("Pendiente de implementar");
+        return resultado;
+    }
+
     Ñ::Resultado sumaLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
     {
         std::string d1 = ((Ñ::Literal*)n1)->dato;
@@ -151,7 +183,7 @@ namespace Ñ
             if(a->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
             {
                 Ñ::Identificador* id = (Ñ::Identificador*)a;
-                if(!tablaSímbolos->nombreAsignadoEnCualquierÁmbito(id->id))
+                if(!tablaSímbolos->nombreReservadoEnCualquierÁmbito(id->id))
                 {
                     delete argumentos;
                     resultado.error("He recibido como argumento un identificador inexistente");
@@ -187,7 +219,7 @@ namespace Ñ
                 if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
                 {
                     Ñ::Identificador* id = (Ñ::Identificador*)(r.nodo());
-                    if(!tablaSímbolos->nombreAsignadoEnCualquierÁmbito(id->id))
+                    if(!tablaSímbolos->nombreReservadoEnCualquierÁmbito(id->id))
                     {
                         delete argumentos;
                         resultado.error("He recibido como argumento un identificador inexistente");
@@ -244,7 +276,7 @@ namespace Ñ
             std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
 
             // Añado la variable a la tabla de símbolos
-            tablaSímbolos->declaraVariable(nombre, tipo);
+            tablaSímbolos->declara(nombre, tipo);
 
             Ñ::Identificador* id = new Ñ::Identificador();
             id->id = nombre;
@@ -584,29 +616,21 @@ namespace Ñ
         }
         else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
         {
-            Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)nodos;
-            
-            Ñ::Argumentos* args;
-            if(nodos->ramas.size() < 1)
+            Ñ::Nodo* args;
+            if(nodos->ramas.size() == 0)
             {
                 args = nullptr;
             }
-            else
+            else if(nodos->ramas.size() == 1)
             {
-                args = (Ñ::Argumentos*)(nodos->ramas[0]);
+                Ñ::Resultado rArgs = resuelveArgumentos((Ñ::Argumentos*)(nodos->ramas[0]), tablaSímbolos);
+                if(rArgs.error())
+                {
+                    return rArgs;
+                }
+                args = rArgs.nodo();
             }
-
-            Ñ::Resultado rArgs = resuelveArgumentos(args, tablaSímbolos);
-            if(rArgs.error())
-            {
-                return rArgs;
-            }
-            Ñ::Nodo* argsResueltos = rArgs.nodo();
-
-            tablaSímbolos->ejecutaFunción(fn->nombre, argsResueltos);
-            
-            resultado.éxito();
-            return resultado;
+            return ejecutaFunción(((Ñ::LlamaFunción*)nodos)->nombre, args, tablaSímbolos);
         }
 
         resultado.error("INTÉRPRETE :: El árbol de nodos es incorrecto, esperaba Lado Derecho de Asignación. Categoría del nódulo actual: " + std::to_string(nodos->categoría));
@@ -640,11 +664,48 @@ namespace Ñ
         resultado.éxito();
         return resultado;
     }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+    {
+        Ñ::Nodo* args;
+        if(nodos->ramas.size() == 0)
+        {
+            args = nullptr;
+        }
+        else if(nodos->ramas.size() == 1)
+        {
+            Ñ::Resultado rArgs = resuelveArgumentos((Ñ::Argumentos*)(nodos->ramas[0]), tablaSímbolos);
+            if(rArgs.error())
+            {
+                return rArgs;
+            }
+            args = rArgs.nodo();
+        }
+        return ejecutaFunción(((Ñ::LlamaFunción*)nodos)->nombre, args, tablaSímbolos);
+    }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
     {
-        Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
-        resultado = Ñ::interpretaNodos(nodos->ramas[2], subTabla);
-        delete subTabla;
+        Ñ::Resultado rDeclara;
+        rDeclara = tablaSímbolos->declara(((Ñ::DefineFunción*)nodos)->nombre, nullptr);
+        if(rDeclara.error())
+        {
+            return rDeclara;
+        }
+
+        Ñ::Resultado rDefine;
+        Ñ::Función* fn = new Ñ::Función;
+        fn->nombre = ((Ñ::DefineFunción*)nodos)->nombre;
+        for(auto n : nodos->ramas)
+        {
+            ((Ñ::Nodo*)fn)->ramas.push_back(n);
+        }
+        
+        rDefine = tablaSímbolos->ponValor(((Ñ::DefineFunción*)nodos)->nombre, (Ñ::Nodo*)fn);
+        if(rDefine.error())
+        {
+            return rDefine;
+        }
+
+        resultado.éxito();
         return resultado;
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
@@ -736,32 +797,6 @@ namespace Ñ
 
         resultado.éxito();
         resultado.nodo(rLia.nodo());
-        return resultado;
-    }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
-    {
-        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)nodos;
-        
-        Ñ::Argumentos* args;
-        if(nodos->ramas.size() < 1)
-        {
-            args = nullptr;
-        }
-        else
-        {
-            args = (Ñ::Argumentos*)(nodos->ramas[0]);
-        }
-
-        Ñ::Resultado rArgs = resuelveArgumentos(args, tablaSímbolos);
-        if(rArgs.error())
-        {
-            return rArgs;
-        }
-        Ñ::Nodo* argsResueltos = rArgs.nodo();
-
-        tablaSímbolos->ejecutaFunción(fn->nombre, argsResueltos);
-        
-        resultado.éxito();
         return resultado;
     }
 

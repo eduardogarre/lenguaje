@@ -33,6 +33,11 @@
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
     {
+        //Ñ::Nodo* fn = Ñ::duplicaÁrbol(nodos);
+        //fn->categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN;
+        tablaSímbolos->declara(((Ñ::DefineFunción*)nodos)->nombre, nullptr);
+        //tablaSímbolos->ponValor(((Ñ::DefineFunción*)nodos)->nombre, fn);
+
         for(Ñ::Nodo* n : nodos->ramas)
         {
             Ñ::Resultado rResuelveSímbolos;
@@ -110,7 +115,7 @@
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
     {
         std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
-        if(tablaSímbolos->nombreAsignadoEnEsteÁmbito(nombre))
+        if(tablaSímbolos->nombreReservadoEnEsteÁmbito(nombre))
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" ya se había declarado previamente");
             return resultado;
@@ -122,7 +127,7 @@
             return resultado;
         }
 
-        Ñ::Resultado r = tablaSímbolos->declaraVariable(nombre, nodos->ramas[0]);
+        Ñ::Resultado r = tablaSímbolos->declara(nombre, nodos->ramas[0]);
         if(r.error())
         {
             return r;
@@ -204,7 +209,7 @@
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
     {
         std::string nombre = ((Ñ::Identificador*)nodos)->id;
-        if(tablaSímbolos->nombreAsignadoEnCualquierÁmbito(nombre))
+        if(tablaSímbolos->nombreReservadoEnCualquierÁmbito(nombre))
         {
             resultado.éxito();
             return resultado;
@@ -257,7 +262,7 @@
     {
         Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos);
         
-        if(!tablaSímbolos->nombreAsignadoEnCualquierÁmbito(fn->nombre))
+        if(!tablaSímbolos->nombreReservadoEnCualquierÁmbito(fn->nombre))
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: " + fn->nombre + "() no está en la tabla de símbolos");
             return resultado;

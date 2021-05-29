@@ -50,7 +50,6 @@ namespace Ñ
         std::vector<Ñ::Nodo*> ramas;
 
         Nodo();
-        Nodo(const Ñ::Nodo& nodo);
         ~Nodo();
 
         void muestra();
@@ -62,7 +61,6 @@ namespace Ñ
         std::string dato;
 
         Literal();
-        Literal(const Ñ::Literal& nodo);
         ~Literal();
 
         void muestra();
@@ -74,7 +72,6 @@ namespace Ñ
         std::string id;
 
         Identificador();
-        Identificador(const Ñ::Identificador& nodo);
         ~Identificador();
 
         void muestra();
@@ -87,7 +84,6 @@ namespace Ñ
         bool vector;
 
         Tipo();
-        Tipo(const Ñ::Tipo& nodo);
         ~Tipo();
 
         void muestra();
@@ -97,7 +93,6 @@ namespace Ñ
     {
     public:
         LadoIzquierdoAsignación();
-        LadoIzquierdoAsignación(const Ñ::LadoIzquierdoAsignación& nodo);
         ~LadoIzquierdoAsignación();
 
         void muestra();
@@ -107,7 +102,6 @@ namespace Ñ
     {
     public:
         LadoDerechoAsignación();
-        LadoDerechoAsignación(const Ñ::LadoDerechoAsignación& nodo);
         ~LadoDerechoAsignación();
 
         void muestra();
@@ -117,7 +111,6 @@ namespace Ñ
     {
     public:
         Igualdad();
-        Igualdad(const Ñ::Igualdad& nodo);
         ~Igualdad();
 
         void muestra();
@@ -127,7 +120,6 @@ namespace Ñ
     {
     public:
         Comparación();
-        Comparación(const Ñ::Comparación& nodo);
         ~Comparación();
 
         void muestra();
@@ -137,7 +129,6 @@ namespace Ñ
     {
     public:
         Término();
-        Término(const Ñ::Término& nodo);
         ~Término();
 
         void muestra();
@@ -147,7 +138,6 @@ namespace Ñ
     {
     public:
         Factor();
-        Factor(const Ñ::Factor& nodo);
         ~Factor();
 
         void muestra();
@@ -159,7 +149,6 @@ namespace Ñ
         std::string operación;
 
         OperaciónBinaria();
-        OperaciónBinaria(const Ñ::OperaciónBinaria& nodo);
         ~OperaciónBinaria();
 
         void muestra();
@@ -171,7 +160,6 @@ namespace Ñ
         std::string operación;
 
         OperaciónUnaria();
-        OperaciónUnaria(const Ñ::OperaciónUnaria& nodo);
         ~OperaciónUnaria();
 
         void muestra();
@@ -183,7 +171,6 @@ namespace Ñ
         std::string primario;
 
         Primario();
-        Primario(const Ñ::Primario& nodo);
         ~Primario();
 
         void muestra();
@@ -195,7 +182,6 @@ namespace Ñ
         std::string variable;
 
         DeclaraVariable();
-        DeclaraVariable(const Ñ::DeclaraVariable& nodo);
         ~DeclaraVariable();
 
         void muestra();
@@ -205,7 +191,6 @@ namespace Ñ
     {
     public:
         Asigna();
-        Asigna(const Ñ::Asigna& nodo);
         ~Asigna();
 
         void muestra();
@@ -215,7 +200,6 @@ namespace Ñ
     {
     public:
         Argumento();
-        Argumento(const Ñ::Argumento& nodo);
         ~Argumento();
 
         void muestra();
@@ -225,7 +209,6 @@ namespace Ñ
     {
     public:
         Argumentos();
-        Argumentos(const Ñ::Argumentos& nodo);
         ~Argumentos();
 
         void muestra();
@@ -237,7 +220,6 @@ namespace Ñ
         std::string nombre;
 
         LlamaFunción();
-        LlamaFunción(const Ñ::LlamaFunción& nodo);
         ~LlamaFunción();
 
         void muestra();
@@ -247,7 +229,6 @@ namespace Ñ
     {
     public:
         Expresión();
-        Expresión(const Ñ::Expresión& nodo);
         ~Expresión();
 
         void muestra();
@@ -257,7 +238,6 @@ namespace Ñ
     {
     public:
         Bloque();
-        Bloque(const Ñ::Bloque& nodo);
         ~Bloque();
 
         void muestra();
@@ -269,7 +249,6 @@ namespace Ñ
         std::string nombre;
 
         DefineFunción();
-        DefineFunción(const Ñ::DefineFunción& nodo);
         ~DefineFunción();
 
         void muestra();
@@ -281,7 +260,6 @@ namespace Ñ
         std::string nombre;
 
         Función();
-        Función(const Ñ::Función& nodo);
         ~Función();
 
         void muestra();
@@ -294,7 +272,6 @@ namespace Ñ
         Ñ::Nodo* (*función)(Ñ::Nodo* yo, Ñ::Nodo* argumentos);
 
         FunciónEjecutable();
-        FunciónEjecutable(const Ñ::FunciónEjecutable& nodo);
         ~FunciónEjecutable();
 
         void muestra();
@@ -306,7 +283,6 @@ namespace Ñ
         std::string módulo;
 
         Módulo();
-        Módulo(const Ñ::Módulo& nodo);
         ~Módulo();
 
         void muestra();

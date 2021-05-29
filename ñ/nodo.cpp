@@ -17,11 +17,6 @@ void imprimeAjuste()
 	categoría = Ñ::CategoríaNodo::NODO_VACÍO;
 }
 
-Ñ::Nodo::Nodo(const Ñ::Nodo& nodo)
-{
-	categoría = Ñ::CategoríaNodo::NODO_VACÍO;
-}
-
 Ñ::Nodo::~Nodo()
 {
 	for(uint32_t i = 0; i < ramas.size(); i++)
@@ -45,11 +40,6 @@ void Ñ::Nodo::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_LITERAL;
 }
 
-Ñ::Literal::Literal(const Ñ::Literal& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_LITERAL;
-}
-
 Ñ::Literal::~Literal() {}
 
 void Ñ::Literal::muestra()
@@ -63,11 +53,6 @@ void Ñ::Literal::muestra()
 }
 
 Ñ::Tipo::Tipo() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_TIPO;
-}
-
-Ñ::Tipo::Tipo(const Ñ::Tipo& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_TIPO;
 }
@@ -101,11 +86,6 @@ void Ñ::Tipo::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_IDENTIFICADOR;
 }
 
-Ñ::Identificador::Identificador(const Ñ::Identificador& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_IDENTIFICADOR;
-}
-
 Ñ::Identificador::~Identificador() {}
 
 void Ñ::Identificador::muestra()
@@ -119,11 +99,6 @@ void Ñ::Identificador::muestra()
 }
 
 Ñ::LadoIzquierdoAsignación::LadoIzquierdoAsignación() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN;
-}
-
-Ñ::LadoIzquierdoAsignación::LadoIzquierdoAsignación(const Ñ::LadoIzquierdoAsignación& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN;
 }
@@ -146,11 +121,6 @@ void Ñ::LadoIzquierdoAsignación::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
 }
 
-Ñ::LadoDerechoAsignación::LadoDerechoAsignación(const Ñ::LadoDerechoAsignación& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
-}
-
 Ñ::LadoDerechoAsignación::~LadoDerechoAsignación() {}
 
 void Ñ::LadoDerechoAsignación::muestra()
@@ -165,11 +135,6 @@ void Ñ::LadoDerechoAsignación::muestra()
 }
 
 Ñ::OperaciónBinaria::OperaciónBinaria() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_OP_BINARIA;
-}
-
-Ñ::OperaciónBinaria::OperaciónBinaria(const Ñ::OperaciónBinaria& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_OP_BINARIA;
 }
@@ -192,11 +157,6 @@ void Ñ::OperaciónBinaria::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_IGUALDAD;
 }
 
-Ñ::Igualdad::Igualdad(const Ñ::Igualdad& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_IGUALDAD;
-}
-
 Ñ::Igualdad::~Igualdad() {}
 
 void Ñ::Igualdad::muestra()
@@ -211,11 +171,6 @@ void Ñ::Igualdad::muestra()
 }
 
 Ñ::Comparación::Comparación() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_COMPARACIÓN;
-}
-
-Ñ::Comparación::Comparación(const Ñ::Comparación& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_COMPARACIÓN;
 }
@@ -238,11 +193,6 @@ void Ñ::Comparación::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
 }
 
-Ñ::Término::Término(const Ñ::Término& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
-}
-
 Ñ::Término::~Término() {}
 
 void Ñ::Término::muestra()
@@ -257,11 +207,6 @@ void Ñ::Término::muestra()
 }
 
 Ñ::Factor::Factor() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
-}
-
-Ñ::Factor::Factor(const Ñ::Factor& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
 }
@@ -284,11 +229,6 @@ void Ñ::Factor::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_OP_UNARIA;
 }
 
-Ñ::OperaciónUnaria::OperaciónUnaria(const Ñ::OperaciónUnaria& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_OP_UNARIA;
-}
-
 Ñ::OperaciónUnaria::~OperaciónUnaria() {}
 
 void Ñ::OperaciónUnaria::muestra()
@@ -303,11 +243,6 @@ void Ñ::OperaciónUnaria::muestra()
 }
 
 Ñ::Primario::Primario() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_PRIMARIO;
-}
-
-Ñ::Primario::Primario(const Ñ::Primario& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_PRIMARIO;
 }
@@ -330,11 +265,6 @@ void Ñ::Primario::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE;
 }
 
-Ñ::DeclaraVariable::DeclaraVariable(const Ñ::DeclaraVariable& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE;
-}
-
 Ñ::DeclaraVariable::~DeclaraVariable() {}
 
 void Ñ::DeclaraVariable::muestra()
@@ -349,11 +279,6 @@ void Ñ::DeclaraVariable::muestra()
 }
 
 Ñ::Asigna::Asigna() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_ASIGNA;
-}
-
-Ñ::Asigna::Asigna(const Ñ::Asigna& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_ASIGNA;
 }
@@ -375,11 +300,6 @@ void Ñ::Asigna::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTOS;
 }
 
-Ñ::Argumentos::Argumentos(const Ñ::Argumentos& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTOS;
-}
-
 Ñ::Argumentos::~Argumentos() {}
 
 void Ñ::Argumentos::muestra()
@@ -393,11 +313,6 @@ void Ñ::Argumentos::muestra()
 }
 
 Ñ::Argumento::Argumento() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTO;
-}
-
-Ñ::Argumento::Argumento(const Ñ::Argumento& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTO;
 }
@@ -419,11 +334,6 @@ void Ñ::Argumento::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN;
 }
 
-Ñ::LlamaFunción::LlamaFunción(const Ñ::LlamaFunción& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN;
-}
-
 Ñ::LlamaFunción::~LlamaFunción() {}
 
 void Ñ::LlamaFunción::muestra()
@@ -437,11 +347,6 @@ void Ñ::LlamaFunción::muestra()
 }
 
 Ñ::Expresión::Expresión() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
-}
-
-Ñ::Expresión::Expresión(const Ñ::Expresión& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
 }
@@ -463,11 +368,6 @@ void Ñ::Expresión::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_BLOQUE;
 }
 
-Ñ::Bloque::Bloque(const Ñ::Bloque& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_BLOQUE;
-}
-
 Ñ::Bloque::~Bloque() {}
 
 void Ñ::Bloque::muestra()
@@ -481,11 +381,6 @@ void Ñ::Bloque::muestra()
 }
 
 Ñ::DefineFunción::DefineFunción() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN;
-}
-
-Ñ::DefineFunción::DefineFunción(const Ñ::DefineFunción& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN;
 }
@@ -507,11 +402,6 @@ void Ñ::DefineFunción::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN;
 }
 
-Ñ::Función::Función(const Ñ::Función& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN;
-}
-
 Ñ::Función::~Función() {}
 
 void Ñ::Función::muestra()
@@ -529,11 +419,6 @@ void Ñ::Función::muestra()
 	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE;
 }
 
-Ñ::FunciónEjecutable::FunciónEjecutable(const Ñ::FunciónEjecutable& nodo) : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE;
-}
-
 Ñ::FunciónEjecutable::~FunciónEjecutable() {}
 
 void Ñ::FunciónEjecutable::muestra()
@@ -547,11 +432,6 @@ void Ñ::FunciónEjecutable::muestra()
 }
 
 Ñ::Módulo::Módulo() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_MÓDULO;
-}
-
-Ñ::Módulo::Módulo(const Ñ::Módulo& nodo) : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_MÓDULO;
 }

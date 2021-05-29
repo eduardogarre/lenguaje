@@ -35,6 +35,24 @@ void Ñ::Nodo::muestra()
 	}
 }
 
+Ñ::Entero::Entero() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_ENTERO;
+}
+
+Ñ::Entero::~Entero() {}
+
+void Ñ::Entero::muestra()
+{
+	imprimeAjuste();
+	std::cout << "(NODO_ENTERO) [" + std::to_string(entero) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+
 Ñ::Literal::Literal() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_LITERAL;
@@ -471,6 +489,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::Nodo*)nodo)->muestra();
 	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ENTERO)
+	{
+		((Ñ::Entero*)nodo)->muestra();
+	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
 	{
 		((Ñ::Literal*)nodo)->muestra();
@@ -592,6 +614,8 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			}
 		}
 	
+		Ñ::Entero* ent1;
+		Ñ::Entero* ent2;
 		Ñ::Literal* l1;
 		Ñ::Literal* l2;
 		Ñ::Identificador* id1;
@@ -633,6 +657,19 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		{
 		case Ñ::CategoríaNodo::NODO_VACÍO:
 			return true;
+			break;
+
+		case Ñ::CategoríaNodo::NODO_ENTERO:
+			ent1 = (Ñ::Entero*)nodo1;
+			ent2 = (Ñ::Entero*)nodo2;
+			if(ent1->entero == ent2->entero)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 			break;
 
 		case Ñ::CategoríaNodo::NODO_LITERAL:
@@ -859,6 +896,14 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	if(nodo->categoría == Ñ::CategoríaNodo::NODO_VACÍO)
 	{
 		duplicado = new Ñ::Nodo();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ENTERO)
+	{
+		Ñ::Entero* n = (Ñ::Entero*)nodo;
+		Ñ::Entero* e = new Ñ::Entero();
+		e->entero = n->entero;
+
+		duplicado = (Ñ::Nodo*)e;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
 	{

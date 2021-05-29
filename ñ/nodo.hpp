@@ -10,6 +10,8 @@ namespace Ñ
         NODO_VACÍO,
 
         NODO_EXPANDIDO,
+        
+        NODO_ENTERO,
 
         NODO_LITERAL,
         NODO_TIPO,
@@ -51,6 +53,17 @@ namespace Ñ
 
         Nodo();
         ~Nodo();
+
+        void muestra();
+    };
+
+    class Entero : Nodo
+    {
+    public:
+        int64_t entero;
+
+        Entero();
+        ~Entero();
 
         void muestra();
     };

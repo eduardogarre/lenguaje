@@ -1,6 +1,8 @@
 #include <iostream>
 
 #include "tablasimbolos.hpp"
+#include "tipo.hpp"
+#include "valor.hpp"
 
 
 Ñ::Símbolo::Símbolo(std::string nombre, Ñ::Nodo* tipo)

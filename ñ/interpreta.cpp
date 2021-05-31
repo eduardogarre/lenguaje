@@ -4,6 +4,8 @@
 
 #include "interpreta.hpp"
 #include "nodo.hpp"
+#include "tipo.hpp"
+#include "valor.hpp"
 
 namespace Ñ
 {

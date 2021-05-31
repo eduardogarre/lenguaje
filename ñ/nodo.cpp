@@ -1,10 +1,12 @@
 #include <iostream>
 
 #include "nodo.hpp"
+#include "tipo.hpp"
+#include "valor.hpp"
 
 uint32_t ajuste = -1;
 
-void imprimeAjuste()
+void Ñ::Nodo::imprimeAjuste()
 {
 	for(uint32_t i = 0; i < ajuste; i++)
 	{
@@ -35,23 +37,6 @@ void Ñ::Nodo::muestra()
 	}
 }
 
-Ñ::Entero::Entero() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_ENTERO;
-}
-
-Ñ::Entero::~Entero() {}
-
-void Ñ::Entero::muestra()
-{
-	imprimeAjuste();
-	std::cout << "(NODO_ENTERO) [" + std::to_string(entero) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
-	for(auto rama : ramas)
-	{
-		muestraNodos(rama);
-	}
-}
-
 
 Ñ::Literal::Literal() : Ñ::Nodo()
 {
@@ -67,35 +52,6 @@ void Ñ::Literal::muestra()
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
-	}
-}
-
-Ñ::Tipo::Tipo() : Ñ::Nodo()
-{
-	categoría = Ñ::CategoríaNodo::NODO_TIPO;
-}
-
-Ñ::Tipo::~Tipo() {}
-
-void Ñ::Tipo::muestra()
-{
-	if(vector)
-	{
-		imprimeAjuste();
-		std::cout << "(NODO_TIPO) [" + tipo + "[]] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
-		for(auto rama : ramas)
-		{
-			muestraNodos(rama);
-		}
-	}
-	else
-	{
-		imprimeAjuste();
-		std::cout << "(NODO_TIPO) [" + tipo + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
-		for(auto rama : ramas)
-		{
-			muestraNodos(rama);
-		}
 	}
 }
 
@@ -489,9 +445,9 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::Nodo*)nodo)->muestra();
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ENTERO)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_VALOR)
 	{
-		((Ñ::Entero*)nodo)->muestra();
+		((Ñ::Valor*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
 	{
@@ -614,8 +570,8 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			}
 		}
 	
-		Ñ::Entero* ent1;
-		Ñ::Entero* ent2;
+		Ñ::Valor* val1;
+		Ñ::Valor* val2;
 		Ñ::Literal* l1;
 		Ñ::Literal* l2;
 		Ñ::Identificador* id1;
@@ -659,17 +615,11 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			return true;
 			break;
 
-		case Ñ::CategoríaNodo::NODO_ENTERO:
-			ent1 = (Ñ::Entero*)nodo1;
-			ent2 = (Ñ::Entero*)nodo2;
-			if(ent1->entero == ent2->entero)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+		case Ñ::CategoríaNodo::NODO_VALOR:
+			val1 = (Ñ::Valor*)nodo1;
+			val2 = (Ñ::Valor*)nodo2;
+
+			return comparaValores(val1, val2);
 			break;
 
 		case Ñ::CategoríaNodo::NODO_LITERAL:
@@ -897,11 +847,14 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		duplicado = new Ñ::Nodo();
 	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ENTERO)
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_VALOR)
 	{
-		Ñ::Entero* n = (Ñ::Entero*)nodo;
-		Ñ::Entero* e = new Ñ::Entero();
-		e->entero = n->entero;
+		Ñ::Valor* n = (Ñ::Valor*)nodo;
+		Ñ::Valor* e = duplicaValor(n);
+		if(e == nullptr)
+		{
+			return nullptr;
+		}
 
 		duplicado = (Ñ::Nodo*)e;
 	}

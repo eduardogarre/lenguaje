@@ -4,6 +4,8 @@
 #include "resultado.hpp"
 #include "semantico.hpp"
 #include "tablasimbolos.hpp"
+#include "tipo.hpp"
+#include "valor.hpp"
 
 Ñ::Resultado resuelveSímbolos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
 {

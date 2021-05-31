@@ -7,6 +7,8 @@
 #include "nodo.hpp"
 #include "salida.hpp"
 #include "sintaxis.hpp"
+#include "tipo.hpp"
+#include "valor.hpp"
 
 bool Ñ::Sintaxis::notación(std::string carácter)
 {
@@ -486,11 +488,14 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
 		{
 			if( (lexemas[cursor]->contenido == "bool")
+			 || (lexemas[cursor]->contenido == "booleano")
+			 || (lexemas[cursor]->contenido == "ent")
 			 || (lexemas[cursor]->contenido == "entero")
 			 || (lexemas[cursor]->contenido == "ent8")
 			 || (lexemas[cursor]->contenido == "ent16")
 			 || (lexemas[cursor]->contenido == "ent32")
 			 || (lexemas[cursor]->contenido == "ent64")
+			 || (lexemas[cursor]->contenido == "nat")
 			 || (lexemas[cursor]->contenido == "natural")
 			 || (lexemas[cursor]->contenido == "nat8")
 			 || (lexemas[cursor]->contenido == "nat16")
@@ -501,6 +506,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 			 || (lexemas[cursor]->contenido == "rea32")
 			 || (lexemas[cursor]->contenido == "rea64")
 			 || (lexemas[cursor]->contenido == "txt")
+			 || (lexemas[cursor]->contenido == "nada")
 			)
 			{
 				tipo = lexemas[cursor]->contenido;

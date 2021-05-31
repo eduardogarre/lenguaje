@@ -11,10 +11,10 @@ namespace Ñ
 
         NODO_EXPANDIDO,
         
-        NODO_ENTERO,
+        NODO_TIPO,
+        NODO_VALOR,
 
         NODO_LITERAL,
-        NODO_TIPO,
         NODO_IDENTIFICADOR,
 
         NODO_LADO_IZQUIERDO_ASIGNACIÓN,
@@ -54,16 +54,7 @@ namespace Ñ
         Nodo();
         ~Nodo();
 
-        void muestra();
-    };
-
-    class Entero : Nodo
-    {
-    public:
-        int64_t entero;
-
-        Entero();
-        ~Entero();
+        void imprimeAjuste();
 
         void muestra();
     };
@@ -86,18 +77,6 @@ namespace Ñ
 
         Identificador();
         ~Identificador();
-
-        void muestra();
-    };
-
-    class Tipo : Nodo
-    {
-    public:
-        std::string tipo;
-        bool vector;
-
-        Tipo();
-        ~Tipo();
 
         void muestra();
     };

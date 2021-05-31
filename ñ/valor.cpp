@@ -972,6 +972,13 @@ void Ñ::Valor::muestra()
 		resultado.nodo((Ñ::Nodo*)v);
 		return resultado;
 	}
+	else if(valor->esReal32())
+	{
+		v->real32(valor->real32());
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
 	else
 	{
 		delete v;
@@ -1058,12 +1065,126 @@ void Ñ::Valor::muestra()
 		resultado.nodo((Ñ::Nodo*)v);
 		return resultado;
 	}
+	else if(valor->esReal32())
+	{
+		v->real64(valor->real32());
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esReal64())
+	{
+		v->real64(valor->real64());
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
 	else
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(valor->obténTipo())
 						+ " a real64");
+		return resultado;
+	}
+}
+
+Ñ::Resultado Ñ::aTexto(Ñ::Valor* valor)
+{
+	Ñ::Resultado resultado;
+	Ñ::Valor* v = new Ñ::Valor;
+
+	if(valor->esBooleano())
+	{
+		if(valor->booleano())
+		{
+			v->texto("cierto");
+		}
+		else
+		{
+			v->texto("falso");
+		}
+
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esNat8())
+	{
+		v->texto(std::to_string(valor->nat8()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esNat16())
+	{
+		v->texto(std::to_string(valor->nat16()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esNat32())
+	{
+		v->texto(std::to_string(valor->nat32()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esNat64())
+	{
+		v->texto(std::to_string(valor->nat64()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esEnt8())
+	{
+		v->texto(std::to_string(valor->ent8()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esEnt16())
+	{
+		v->texto(std::to_string(valor->ent16()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esEnt32())
+	{
+		v->texto(std::to_string(valor->ent32()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esEnt64())
+	{
+		v->texto(std::to_string(valor->ent64()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esReal32())
+	{
+		v->texto(std::to_string(valor->real32()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else if(valor->esReal64())
+	{
+		v->texto(std::to_string(valor->real64()));
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)v);
+		return resultado;
+	}
+	else
+	{
+		delete v;
+		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
+						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ " a texto");
 		return resultado;
 	}
 }
@@ -1247,6 +1368,14 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 		return (v1->puntero() == v2->puntero());
 		break;
 	
+	case TIPO_TEXTO:
+		r1 = Ñ::aTexto(valor1);
+		r2 = Ñ::aTexto(valor2);
+		v1 = (Ñ::Valor*)(r1).nodo();
+		v2 = (Ñ::Valor*)(r2).nodo();
+		return (v1->texto() == v2->texto());
+		break;
+	
 	case TIPO_BOOLEANO:
 		r1 = Ñ::aBooleano(valor1);
 		r2 = Ñ::aBooleano(valor2);
@@ -1367,6 +1496,12 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	case TIPO_PUNTERO:
 		v = new Ñ::Valor;
 		v->puntero(valor->puntero());
+		return v;
+		break;
+	
+	case TIPO_TEXTO:
+		v = new Ñ::Valor;
+		v->texto(valor->texto());
 		return v;
 		break;
 	

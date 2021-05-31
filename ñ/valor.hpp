@@ -104,4 +104,5 @@ namespace Ñ
     Ñ::Resultado aPuntero(Ñ::Valor* valor);
     Ñ::Resultado aReal32(Ñ::Valor* valor);
     Ñ::Resultado aReal64(Ñ::Valor* valor);
+    Ñ::Resultado aTexto(Ñ::Valor* valor);
 }

@@ -35,10 +35,45 @@ std::string _esperaComando()
 		{
 			for(Ñ::Nodo* n : args->ramas)
 			{
-				if(n->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+				if(n->categoría == Ñ::CategoríaNodo::NODO_VALOR)
 				{
-					Ñ::Literal* lit = (Ñ::Literal*)n;
-					std::cout << lit->dato;
+					Ñ::Valor* valor = (Ñ::Valor*)n;
+
+					switch (valor->obténTipo())
+					{
+					case Ñ::CategoríaTipo::TIPO_NADA:
+						break;
+					
+					case Ñ::CategoríaTipo::TIPO_BOOLEANO:
+						if(valor->booleano())
+						{
+							std::cout << "cierto";
+						}
+						else
+						{
+							std::cout << "falso";
+						}
+						break;
+					
+					case Ñ::CategoríaTipo::TIPO_NATURAL_64:
+						std::cout << valor->nat64();
+						break;
+					
+					case Ñ::CategoríaTipo::TIPO_ENTERO_64:
+						std::cout << valor->ent64();
+						break;
+					
+					case Ñ::CategoríaTipo::TIPO_REAL_64:
+						std::cout << valor->real64();
+						break;
+					
+					case Ñ::CategoríaTipo::TIPO_TEXTO:
+						std::cout << valor->texto();
+						break;
+					
+					default:
+						break;
+					}
 				}
 			}
 		}

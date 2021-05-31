@@ -24,7 +24,7 @@ namespace Ñ
         TIPO_REAL_64,
         TIPO_TEXTO
     };
-
+    
     class Tipo : Nodo
     {
     public:
@@ -38,4 +38,5 @@ namespace Ñ
     };
 
     std::string obténNombreDeTipo(Ñ::CategoríaTipo t);
+    Ñ::CategoríaTipo obténTipoDeNombre(std::string nombre);
 }

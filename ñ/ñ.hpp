@@ -8,4 +8,6 @@
 #include "salida.hpp"
 #include "semantico.hpp"
 #include "tablasimbolos.hpp"
+#include "tipo.hpp"
 #include "sintaxis.hpp"
+#include "valor.hpp"

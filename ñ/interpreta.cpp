@@ -43,9 +43,10 @@ namespace Ñ
                     if(arg->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
                     {
                         Ñ::Literal* valorArgumento = (Ñ::Literal*)arg;
+                        Ñ::Valor* valor = creaValor(valorArgumento);
                         Ñ::DeclaraVariable* declaraciónArgumento = (Ñ::DeclaraVariable*)(((Ñ::Nodo*)fn)->ramas[1]->ramas[i]);
                         subTabla->declara(declaraciónArgumento->variable, ((Ñ::Nodo*)declaraciónArgumento)->ramas[0]);
-                        subTabla->ponValor(declaraciónArgumento->variable, (Ñ::Nodo*)valorArgumento);
+                        subTabla->ponValor(declaraciónArgumento->variable, (Ñ::Nodo*)valor);
                     }
                 }
             }
@@ -59,71 +60,513 @@ namespace Ñ
         return resultado;
     }
 
-    Ñ::Resultado sumaLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
+    Ñ::Resultado sumaValores(Ñ::Nodo* n1, Ñ::Nodo* n2)
     {
-        std::string d1 = ((Ñ::Literal*)n1)->dato;
-        std::string d2 = ((Ñ::Literal*)n2)->dato;
+        Ñ::Resultado resultado;
+        if(n1 == nullptr || n2 == nullptr)
+        {
+            resultado.error("Uno de los valores es nulo");
+            return resultado;
+        }
+        else if(n1->categoría != Ñ::CategoríaNodo::NODO_VALOR || n2->categoría != Ñ::CategoríaNodo::NODO_VALOR)
+        {
+            resultado.error("Uno de los nodos no es un valor");
+            return resultado;
+        }
 
-        int32_t i1 = std::atoi(d1.c_str());
-        int32_t i2 = std::atoi(d2.c_str());
+        Ñ::Valor* v1 = (Ñ::Valor*)n1;
+        Ñ::Valor* v2 = (Ñ::Valor*)n2;
+        Ñ::Valor* r;
 
-        Ñ::Literal* l = new Ñ::Literal;
-        l->dato = std::to_string(i1 + i2);
-        Ñ::Resultado r;
-        r.éxito();
-        r.nodo((Ñ::Nodo*)l);
-        return r;
+        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1, v2);
+	
+        switch (tmc)
+        {
+        case TIPO_NADA:
+            resultado.error("Valor de tipo incorrecto");
+            return resultado;
+            break;
+        
+        case TIPO_PUNTERO:
+            r = new Ñ::Valor;
+            r->puntero(v1->puntero() + v2->puntero());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_BOOLEANO:
+            r = new Ñ::Valor;
+            r->booleano(v1->booleano() || v2->booleano());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_8:
+            r = new Ñ::Valor;
+            r->nat8(v1->nat8() + v2->nat8());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_16:
+            r = new Ñ::Valor;
+            r->nat16(v1->nat16() + v2->nat16());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_32:
+            r = new Ñ::Valor;
+            r->nat32(v1->nat32() + v2->nat32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_64:
+            r = new Ñ::Valor;
+            r->nat64(v1->nat64() + v2->nat64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_8:
+            r = new Ñ::Valor;
+            r->ent8(v1->ent8() + v2->ent8());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_16:
+            r = new Ñ::Valor;
+            r->ent16(v1->ent16() + v2->ent16());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_32:
+            r = new Ñ::Valor;
+            r->ent32(v1->ent32() + v2->ent32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_64:
+            r = new Ñ::Valor;
+            r->ent64(v1->ent64() + v2->ent64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_REAL_32:
+            r = new Ñ::Valor;
+            r->real32(v1->real32() + v2->real32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_REAL_64:
+            r = new Ñ::Valor;
+            r->real64(v1->real64() + v2->real64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        default:
+            resultado.error("Tipo mínimo común incorrecto");
+            return resultado;
+            break;
+        }
     }
     
-    Ñ::Resultado restaLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
+    Ñ::Resultado restaValores(Ñ::Nodo* n1, Ñ::Nodo* n2)
     {
-        std::string d1 = ((Ñ::Literal*)n1)->dato;
-        std::string d2 = ((Ñ::Literal*)n2)->dato;
+        Ñ::Resultado resultado;
+        if(n1 == nullptr || n2 == nullptr)
+        {
+            resultado.error("Uno de los valores es nulo");
+            return resultado;
+        }
+        else if(n1->categoría != Ñ::CategoríaNodo::NODO_VALOR || n2->categoría != Ñ::CategoríaNodo::NODO_VALOR)
+        {
+            resultado.error("Uno de los nodos no es un valor");
+            return resultado;
+        }
 
-        int32_t i1 = std::atoi(d1.c_str());
-        int32_t i2 = std::atoi(d2.c_str());
+        Ñ::Valor* v1 = (Ñ::Valor*)n1;
+        Ñ::Valor* v2 = (Ñ::Valor*)n2;
+        Ñ::Valor* r;
 
-        Ñ::Literal* l = new Ñ::Literal;
-        l->dato = std::to_string(i1 - i2);
-        Ñ::Resultado r;
-        r.éxito();
-        r.nodo((Ñ::Nodo*)l);
-        return r;
+        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1, v2);
+	
+        switch (tmc)
+        {
+        case TIPO_NADA:
+        case TIPO_BOOLEANO:
+            resultado.error("Valor de tipo incorrecto");
+            return resultado;
+            break;
+        
+        case TIPO_PUNTERO:
+            r = new Ñ::Valor;
+            r->puntero(v1->puntero() - v2->puntero());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_8:
+            r = new Ñ::Valor;
+            r->nat8(v1->nat8() - v2->nat8());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_16:
+            r = new Ñ::Valor;
+            r->nat16(v1->nat16() - v2->nat16());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_32:
+            r = new Ñ::Valor;
+            r->nat32(v1->nat32() - v2->nat32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_64:
+            r = new Ñ::Valor;
+            r->nat64(v1->nat64() - v2->nat64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_8:
+            r = new Ñ::Valor;
+            r->ent8(v1->ent8() - v2->ent8());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_16:
+            r = new Ñ::Valor;
+            r->ent16(v1->ent16() - v2->ent16());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_32:
+            r = new Ñ::Valor;
+            r->ent32(v1->ent32() - v2->ent32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_64:
+            r = new Ñ::Valor;
+            r->ent64(v1->ent64() - v2->ent64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_REAL_32:
+            r = new Ñ::Valor;
+            r->real32(v1->real32() - v2->real32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_REAL_64:
+            r = new Ñ::Valor;
+            r->real64(v1->real64() - v2->real64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        default:
+            resultado.error("Tipo mínimo común incorrecto");
+            return resultado;
+            break;
+        }
     }
     
-    Ñ::Resultado multiplicaLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
+    Ñ::Resultado multiplicaValores(Ñ::Nodo* n1, Ñ::Nodo* n2)
     {
-        std::string d1 = ((Ñ::Literal*)n1)->dato;
-        std::string d2 = ((Ñ::Literal*)n2)->dato;
+        Ñ::Resultado resultado;
+        if(n1 == nullptr || n2 == nullptr)
+        {
+            resultado.error("Uno de los valores es nulo");
+            return resultado;
+        }
+        else if(n1->categoría != Ñ::CategoríaNodo::NODO_VALOR || n2->categoría != Ñ::CategoríaNodo::NODO_VALOR)
+        {
+            resultado.error("Uno de los nodos no es un valor");
+            return resultado;
+        }
 
-        int32_t i1 = std::atoi(d1.c_str());
-        int32_t i2 = std::atoi(d2.c_str());
+        Ñ::Valor* v1 = (Ñ::Valor*)n1;
+        Ñ::Valor* v2 = (Ñ::Valor*)n2;
+        Ñ::Valor* r;
 
-        Ñ::Literal* l = new Ñ::Literal;
-        l->dato = std::to_string(i1 * i2);
-        Ñ::Resultado r;
-        r.éxito();
-        r.nodo((Ñ::Nodo*)l);
-        return r;
+        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1, v2);
+	
+        switch (tmc)
+        {
+        case TIPO_NADA:
+            resultado.error("Valor de tipo incorrecto");
+            return resultado;
+            break;
+        
+        case TIPO_PUNTERO:
+            r = new Ñ::Valor;
+            r->puntero(v1->puntero() * v2->puntero());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_BOOLEANO:
+            r = new Ñ::Valor;
+            r->booleano(v1->booleano() && v2->booleano());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_8:
+            r = new Ñ::Valor;
+            r->nat8(v1->nat8() * v2->nat8());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_16:
+            r = new Ñ::Valor;
+            r->nat16(v1->nat16() * v2->nat16());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_32:
+            r = new Ñ::Valor;
+            r->nat32(v1->nat32() * v2->nat32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_64:
+            r = new Ñ::Valor;
+            r->nat64(v1->nat64() * v2->nat64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_8:
+            r = new Ñ::Valor;
+            r->ent8(v1->ent8() * v2->ent8());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_16:
+            r = new Ñ::Valor;
+            r->ent16(v1->ent16() * v2->ent16());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_32:
+            r = new Ñ::Valor;
+            r->ent32(v1->ent32() * v2->ent32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_64:
+            r = new Ñ::Valor;
+            r->ent64(v1->ent64() * v2->ent64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_REAL_32:
+            r = new Ñ::Valor;
+            r->real32(v1->real32() * v2->real32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_REAL_64:
+            r = new Ñ::Valor;
+            r->real64(v1->real64() * v2->real64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        default:
+            resultado.error("Tipo mínimo común incorrecto");
+            return resultado;
+            break;
+        }
     }
     
-    Ñ::Resultado divideLiteralesEnteros(Ñ::Nodo* n1, Ñ::Nodo* n2)
+    Ñ::Resultado divideValores(Ñ::Nodo* n1, Ñ::Nodo* n2)
     {
-        std::string d1 = ((Ñ::Literal*)n1)->dato;
-        std::string d2 = ((Ñ::Literal*)n2)->dato;
+        Ñ::Resultado resultado;
+        if(n1 == nullptr || n2 == nullptr)
+        {
+            resultado.error("Uno de los valores es nulo");
+            return resultado;
+        }
+        else if(n1->categoría != Ñ::CategoríaNodo::NODO_VALOR || n2->categoría != Ñ::CategoríaNodo::NODO_VALOR)
+        {
+            resultado.error("Uno de los nodos no es un valor");
+            return resultado;
+        }
 
-        int32_t i1 = std::atoi(d1.c_str());
-        int32_t i2 = std::atoi(d2.c_str());
+        Ñ::Valor* v1 = (Ñ::Valor*)n1;
+        Ñ::Valor* v2 = (Ñ::Valor*)n2;
+        Ñ::Valor* r;
 
-        Ñ::Literal* l = new Ñ::Literal;
-        l->dato = std::to_string(i1 / i2);
-        Ñ::Resultado r;
-        r.éxito();
-        r.nodo((Ñ::Nodo*)l);
-        return r;
+        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1, v2);
+	
+        switch (tmc)
+        {
+        case TIPO_NADA:
+        case TIPO_BOOLEANO:
+            resultado.error("Valor de tipo incorrecto");
+            return resultado;
+            break;
+        
+        case TIPO_PUNTERO:
+            r = new Ñ::Valor;
+            r->puntero(v1->puntero() / v2->puntero());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_8:
+            r = new Ñ::Valor;
+            r->nat8(v1->nat8() / v2->nat8());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_16:
+            r = new Ñ::Valor;
+            r->nat16(v1->nat16() / v2->nat16());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_32:
+            r = new Ñ::Valor;
+            r->nat32(v1->nat32() / v2->nat32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_NATURAL_64:
+            r = new Ñ::Valor;
+            r->nat64(v1->nat64() / v2->nat64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_8:
+            r = new Ñ::Valor;
+            r->ent8(v1->ent8() / v2->ent8());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_16:
+            r = new Ñ::Valor;
+            r->ent16(v1->ent16() / v2->ent16());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_32:
+            r = new Ñ::Valor;
+            r->ent32(v1->ent32() / v2->ent32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_ENTERO_64:
+            r = new Ñ::Valor;
+            r->ent64(v1->ent64() / v2->ent64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_REAL_32:
+            r = new Ñ::Valor;
+            r->real32(v1->real32() / v2->real32());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        case TIPO_REAL_64:
+            r = new Ñ::Valor;
+            r->real64(v1->real64() / v2->real64());
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)r);
+            return resultado;
+            break;
+        
+        default:
+            resultado.error("Tipo mínimo común incorrecto");
+            return resultado;
+            break;
+        }
     }
 
-    Ñ::Resultado obténLiteral(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
+    Ñ::Resultado obténValor(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
     {
         Ñ::Resultado resultado;
         Ñ::Nodo* n;
@@ -138,12 +581,16 @@ namespace Ñ
             }
             else
             {
-                n = duplicaÁrbol(rid.nodo());
+                n = (Ñ::Nodo*)duplicaValor((Ñ::Valor*)rid.nodo());
             }
+        }
+        else if(nodo->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+        {
+            n = (Ñ::Nodo*)duplicaValor((Ñ::Valor*)nodo);
         }
         else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
         {
-            n = duplicaÁrbol(nodo);
+            n = (Ñ::Nodo*)creaValor((Ñ::Literal*)nodo);
         }
         else
         {
@@ -162,15 +609,20 @@ namespace Ñ
                 }
                 else
                 {
-                    n = duplicaÁrbol(rid.nodo());
+                    n = (Ñ::Nodo*)duplicaValor((Ñ::Valor*)rid.nodo());
                 }
+            }
+            else if(nodo->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+            {
+                n = (Ñ::Nodo*)nodo;
             }
             else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
             {
-                n = duplicaÁrbol(nodo);
+                n = (Ñ::Nodo*)creaValor((Ñ::Literal*)nodo);
             }
             else
             {
+                muestraNodos(nodo);
                 resultado.error("He recibido un nodo de categoría " + std::to_string(nodo->categoría));
                 return resultado;
             }
@@ -215,14 +667,18 @@ namespace Ñ
                         return r;
                     }
 
-                    n = Ñ::duplicaÁrbol(r.nodo());
+                    n = (Ñ::Nodo*)duplicaValor((Ñ::Valor*)r.nodo());
                     ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
                 }
             }
             else if(a->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
             {
-                n = duplicaÁrbol(a);
+                n = (Ñ::Nodo*)creaValor((Ñ::Literal*)a);
                 ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
+            }
+            else if(a->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+            {
+                ((Ñ::Nodo*)argumentos)->ramas.push_back(a);
             }
             else
             {
@@ -251,20 +707,27 @@ namespace Ñ
                             return r;
                         }
 
-                        n = Ñ::duplicaÁrbol(r.nodo());
+                        n = (Ñ::Nodo*)duplicaValor((Ñ::Valor*)r.nodo());
                         ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
                     }
                 }
                 else if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
                 {
-                    n = duplicaÁrbol(r.nodo());
+                    n = (Ñ::Nodo*)creaValor((Ñ::Literal*)r.nodo());
                     ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
+                }
+                else if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+                {
+                    ((Ñ::Nodo*)argumentos)->ramas.push_back(r.nodo());
                 }
                 else
                 {
+                    std::cout << "mostrando 'a'" << std::endl;
+                    muestraNodos(a);
+                    std::cout << "mostrando 'r'" << std::endl;
+                    muestraNodos(r.nodo());
                     delete argumentos;
                     resultado.error("He recibido como argumento un árbol que no consigo interpretar");
-                    muestraNodos(r.nodo());
                     return resultado;
                 }
             }
@@ -313,13 +776,19 @@ namespace Ñ
 
         if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
         {
-            resultado = obténLiteral(nodos, tablaSímbolos);
+            resultado = obténValor(nodos, tablaSímbolos);
             return resultado;
         }
         else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
         {
             resultado.éxito();
-            resultado.nodo(duplicaÁrbol(nodos));
+            resultado.nodo((Ñ::Nodo*)creaValor((Ñ::Literal*)nodos));
+            return resultado;
+        }
+        else if(nodos->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+        {
+            resultado.éxito();
+            resultado.nodo(nodos);
             return resultado;
         }
         else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
@@ -332,7 +801,7 @@ namespace Ñ
                 {
                     return r;
                 }
-                Ñ::Resultado rn = obténLiteral(r.nodo(), tablaSímbolos);
+                Ñ::Resultado rn = obténValor(r.nodo(), tablaSímbolos);
                 if(rn.error())
                 {
                     return rn;
@@ -344,15 +813,22 @@ namespace Ñ
                 delete r.nodo();
                 Ñ::Literal* lit = (Ñ::Literal*)n1;
                 Ñ::OperaciónUnaria* op = (Ñ::OperaciónUnaria*)nodos;
+                Ñ::Valor* valor;
+
                 if(op->operación == "!")
                 {
-                    if(lit->dato == "cierto")
+                    if(lit->tipo != Ñ::CategoríaTipo::TIPO_BOOLEANO)
                     {
-                        lit->dato = "falso";
+                        resultado.error("Has intentado aplicar la operación lógica NO a un valor que no es booleano");
+                        return resultado;
+                    }
+                    else if(lit->dato == "cierto")
+                    {
+                        valor->booleano(false);
                     }
                     else if(lit->dato == "falso")
                     {
-                        lit->dato = "cierto";
+                        valor->booleano(true);
                     }
                     else
                     {
@@ -361,22 +837,57 @@ namespace Ñ
                     }
 
                     resultado.éxito();
-                    resultado.nodo(n1);
+                    resultado.nodo((Ñ::Nodo*)valor);
                     return resultado;
                 }
                 else if(op->operación == "-")
                 {
-                    int32_t núm = std::strtol(lit->dato.c_str(), nullptr, 10);
-                    núm *= -1;
-                    lit->dato = std::to_string(núm);
+                    switch (lit->tipo)
+                    {
+                    case Ñ::CategoríaTipo::TIPO_NADA:
+                        resultado.error("Has intentado negativizar un valor vacío");
+                        return resultado;
+                        break;
+                    
+                    case Ñ::CategoríaTipo::TIPO_BOOLEANO:
+                        valor = new Ñ::Valor;
+                        if(lit->dato == "cierto")
+                        {
+                            valor->booleano(false);
+                        }
+                        else if(lit->dato == "falso")
+                        {
+                            valor->booleano(true);
+                        }
+                    
+                    case Ñ::CategoríaTipo::TIPO_ENTERO_64:
+                        valor = new Ñ::Valor;
+                        valor->ent64((-1) * std::stoll(lit->dato));
+                        break;
+                    
+                    case Ñ::CategoríaTipo::TIPO_REAL_64:
+                        valor = new Ñ::Valor;
+                        valor->real64((-1) * std::stod(lit->dato));
+                        break;
+                    
+                    case Ñ::CategoríaTipo::TIPO_TEXTO:
+                        valor = new Ñ::Valor;
+                        valor->texto(lit->dato);
+                        break;
+                    
+                    default:
+                        break;
+                    }
 
                     resultado.éxito();
-                    resultado.nodo(n1);
+                    resultado.nodo((Ñ::Nodo*)valor);
                     return resultado;
                 }
 
+                valor = creaValor(lit);
+
                 resultado.éxito();
-                resultado.nodo(n1);
+                resultado.nodo((Ñ::Nodo*)valor);
                 return resultado;
             }
             else
@@ -460,7 +971,7 @@ namespace Ñ
                 {
                     return r;
                 }
-                Ñ::Resultado rn = obténLiteral(r.nodo(), tablaSímbolos);
+                Ñ::Resultado rn = obténValor(r.nodo(), tablaSímbolos);
                 if(rn.error())
                 {
                     return rn;
@@ -494,7 +1005,7 @@ namespace Ñ
                     }
                     else
                     {
-                        rn2 = obténLiteral(rn2.nodo(), tablaSímbolos);
+                        rn2 = obténValor(rn2.nodo(), tablaSímbolos);
                         if(rn2.error())
                         {
                             return rn2;
@@ -504,7 +1015,7 @@ namespace Ñ
 
                     if(operación == "+")
                     {
-                        Ñ::Resultado rop = sumaLiteralesEnteros(n1, n2);
+                        Ñ::Resultado rop = sumaValores(n1, n2);
                         delete n2, n1;
                         if(rop.error())
                         {
@@ -514,7 +1025,7 @@ namespace Ñ
                     }
                     else if(operación == "-")
                     {
-                        Ñ::Resultado rop = restaLiteralesEnteros(n1, n2);
+                        Ñ::Resultado rop = restaValores(n1, n2);
                         delete n2, n1;
                         if(rop.error())
                         {
@@ -557,7 +1068,7 @@ namespace Ñ
                 {
                     return r;
                 }
-                Ñ::Resultado rn = obténLiteral(r.nodo(), tablaSímbolos);
+                Ñ::Resultado rn = obténValor(r.nodo(), tablaSímbolos);
                 if(rn.error())
                 {
                     return rn;
@@ -591,7 +1102,7 @@ namespace Ñ
                     }
                     else
                     {
-                        rn2 = obténLiteral(rn2.nodo(), tablaSímbolos);
+                        rn2 = obténValor(rn2.nodo(), tablaSímbolos);
                         if(rn2.error())
                         {
                             return rn2;
@@ -601,7 +1112,7 @@ namespace Ñ
 
                     if(operación == "*")
                     {
-                        Ñ::Resultado rop = multiplicaLiteralesEnteros(n1, n2);
+                        Ñ::Resultado rop = multiplicaValores(n1, n2);
                         delete n2, n1;
                         if(rop.error())
                         {
@@ -611,7 +1122,7 @@ namespace Ñ
                     }
                     else if(operación == "/")
                     {
-                        Ñ::Resultado rop = divideLiteralesEnteros(n1, n2);
+                        Ñ::Resultado rop = divideValores(n1, n2);
                         delete n2, n1;
                         if(rop.error())
                         {
@@ -772,6 +1283,13 @@ namespace Ñ
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
     {
+        Ñ::Nodo* v = (Ñ::Nodo*) creaValor((Ñ::Literal*)nodos);
+        resultado.éxito();
+        resultado.nodo(v);
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+    {
         resultado.éxito();
         resultado.nodo(duplicaÁrbol(nodos));
         return resultado;
@@ -790,7 +1308,7 @@ namespace Ñ
             return rLda;
         }
         
-        if(rLda.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+        if(rLda.nodo()->categoría == Ñ::CategoríaNodo::NODO_VALOR)
         {
             std::string id = ((Ñ::Identificador*)(rLia.nodo()))->id;
             tablaSímbolos->ponValor(id, rLda.nodo());
@@ -800,7 +1318,7 @@ namespace Ñ
             Ñ::Identificador* idLia = ((Ñ::Identificador*)rLia.nodo());
             Ñ::Identificador* idLda = ((Ñ::Identificador*)rLda.nodo());
 
-            Ñ::Resultado rId = obténLiteral(rLda.nodo(), tablaSímbolos);
+            Ñ::Resultado rId = obténValor(rLda.nodo(), tablaSímbolos);
             if(rId.error())
             {
                 return rId;

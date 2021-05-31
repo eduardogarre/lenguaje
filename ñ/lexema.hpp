@@ -11,6 +11,7 @@ namespace Ñ
         LEXEMA_NOTACIÓN,
         LEXEMA_TEXTO,
         LEXEMA_NÚMERO,
+        LEXEMA_NÚMERO_REAL,
 
         LEXEMA_FIN
     };

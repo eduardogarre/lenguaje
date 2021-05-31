@@ -5,6 +5,8 @@
 
 namespace Ñ
 {
+    extern enum CategoríaTipo;
+
     // Análisis sintáctico
     enum CategoríaNodo {
         NODO_VACÍO,
@@ -62,6 +64,7 @@ namespace Ñ
     class Literal : Nodo
     {
     public:
+        Ñ::CategoríaTipo tipo;
         std::string dato;
 
         Literal();

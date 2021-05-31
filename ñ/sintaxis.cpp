@@ -40,12 +40,22 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	{
 		l = new Ñ::Literal();
 		l->dato = lexemas[cursor]->contenido;
+		l->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_64;
+		cursor++;
+		return (Ñ::Nodo*)l;
+	}
+	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL)
+	{
+		l = new Ñ::Literal();
+		l->tipo = Ñ::CategoríaTipo::TIPO_REAL_64;
+		l->dato = lexemas[cursor]->contenido;
 		cursor++;
 		return (Ñ::Nodo*)l;
 	}
 	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_TEXTO)
 	{
 		l = new Ñ::Literal();
+		l->tipo = Ñ::CategoríaTipo::TIPO_TEXTO;
 		l->dato = lexemas[cursor]->contenido;
 		cursor++;
 		return (Ñ::Nodo*)l;
@@ -55,6 +65,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		if(lexemas[cursor]->contenido == "cierto")
 		{
 			l = new Ñ::Literal();
+			l->tipo = Ñ::CategoríaTipo::TIPO_BOOLEANO;
 			l->dato = lexemas[cursor]->contenido;
 			cursor++;
 			return (Ñ::Nodo*)l;
@@ -62,6 +73,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		else if(lexemas[cursor]->contenido == "falso")
 		{
 			l = new Ñ::Literal();
+			l->tipo = Ñ::CategoríaTipo::TIPO_BOOLEANO;
 			l->dato = lexemas[cursor]->contenido;
 			cursor++;
 			return (Ñ::Nodo*)l;
@@ -69,6 +81,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		else if(lexemas[cursor]->contenido == "nulo")
 		{
 			l = new Ñ::Literal();
+			l->tipo = Ñ::CategoríaTipo::TIPO_NADA;
 			l->dato = lexemas[cursor]->contenido;
 			cursor++;
 			return (Ñ::Nodo*)l;

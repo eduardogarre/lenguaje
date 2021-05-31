@@ -394,7 +394,7 @@ namespace Ñ
                 //double n = to!double(s);
 
                 Ñ::Lexema* l = new Ñ::Lexema();
-                l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO;
+                l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
 
                 //std::cout << "Creo nuevo lexema" << std::endl;
@@ -501,7 +501,7 @@ namespace Ñ
                 //double n = to!double(s);
 
                 Ñ::Lexema* l = new Ñ::Lexema();
-                l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO;
+                l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
                 
                 //std::cout << "Creo nuevo lexema" << std::endl;

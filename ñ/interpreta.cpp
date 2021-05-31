@@ -622,7 +622,6 @@ namespace Ñ
             }
             else
             {
-                muestraNodos(nodo);
                 resultado.error("He recibido un nodo de categoría " + std::to_string(nodo->categoría));
                 return resultado;
             }
@@ -648,10 +647,16 @@ namespace Ñ
         for(auto a : ((Ñ::Nodo*)args)->ramas)
         {
             Ñ::Nodo* n;
-
-            if(a->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+            Ñ::Resultado r = interpretaLDA(a, tablaSímbolos);
+            if(r.error())
             {
-                Ñ::Identificador* id = (Ñ::Identificador*)a;
+                delete argumentos;
+                return r;
+            }
+
+            if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+            {
+                Ñ::Identificador* id = (Ñ::Identificador*)(r.nodo());
                 if(!tablaSímbolos->nombreReservadoEnCualquierÁmbito(id->id))
                 {
                     delete argumentos;
@@ -671,65 +676,20 @@ namespace Ñ
                     ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
                 }
             }
-            else if(a->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+            else if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
             {
-                n = (Ñ::Nodo*)creaValor((Ñ::Literal*)a);
+                n = (Ñ::Nodo*)creaValor((Ñ::Literal*)r.nodo());
                 ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
             }
-            else if(a->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+            else if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_VALOR)
             {
-                ((Ñ::Nodo*)argumentos)->ramas.push_back(a);
+                ((Ñ::Nodo*)argumentos)->ramas.push_back(r.nodo());
             }
             else
             {
-                Ñ::Resultado r = interpretaLDA(a, tablaSímbolos);
-                if(r.error())
-                {
-                    delete argumentos;
-                    return r;
-                }
-
-                if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
-                {
-                    Ñ::Identificador* id = (Ñ::Identificador*)(r.nodo());
-                    if(!tablaSímbolos->nombreReservadoEnCualquierÁmbito(id->id))
-                    {
-                        delete argumentos;
-                        resultado.error("He recibido como argumento un identificador inexistente");
-                        return resultado;
-                    }
-                    else
-                    {
-                        Ñ::Resultado r = tablaSímbolos->leeValor(id->id);
-                        if(r.error())
-                        {
-                            delete argumentos;
-                            return r;
-                        }
-
-                        n = (Ñ::Nodo*)duplicaValor((Ñ::Valor*)r.nodo());
-                        ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
-                    }
-                }
-                else if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
-                {
-                    n = (Ñ::Nodo*)creaValor((Ñ::Literal*)r.nodo());
-                    ((Ñ::Nodo*)argumentos)->ramas.push_back(n);
-                }
-                else if(r.nodo()->categoría == Ñ::CategoríaNodo::NODO_VALOR)
-                {
-                    ((Ñ::Nodo*)argumentos)->ramas.push_back(r.nodo());
-                }
-                else
-                {
-                    std::cout << "mostrando 'a'" << std::endl;
-                    muestraNodos(a);
-                    std::cout << "mostrando 'r'" << std::endl;
-                    muestraNodos(r.nodo());
-                    delete argumentos;
-                    resultado.error("He recibido como argumento un árbol que no consigo interpretar");
-                    return resultado;
-                }
+                delete argumentos;
+                resultado.error("He recibido como argumento un árbol que no consigo interpretar");
+                return resultado;
             }
         }
 
@@ -781,8 +741,10 @@ namespace Ñ
         }
         else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
         {
+            Ñ::Valor* v = creaValor((Ñ::Literal*)nodos);
+
             resultado.éxito();
-            resultado.nodo((Ñ::Nodo*)creaValor((Ñ::Literal*)nodos));
+            resultado.nodo((Ñ::Nodo*)v);
             return resultado;
         }
         else if(nodos->categoría == Ñ::CategoríaNodo::NODO_VALOR)

@@ -48,7 +48,7 @@ void Ñ::Nodo::muestra()
 void Ñ::Literal::muestra()
 {
 	imprimeAjuste();
-	std::cout << "(NODO_LITERAL) [" + dato + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_LITERAL) [" + dato + "] - [" + obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
@@ -625,7 +625,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		case Ñ::CategoríaNodo::NODO_LITERAL:
 			l1 = (Ñ::Literal*)nodo1;
 			l2 = (Ñ::Literal*)nodo2;
-			if(l1->dato == l2->dato)
+			if(l1->dato == l2->dato && l1->tipo == l2->tipo)
 			{
 				return true;
 			}
@@ -863,6 +863,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::Literal* n = (Ñ::Literal*)nodo;
 		Ñ::Literal* l = new Ñ::Literal();
 		l->dato = n->dato;
+		l->tipo = n->tipo;
 
 		duplicado = (Ñ::Nodo*)l;
 	}

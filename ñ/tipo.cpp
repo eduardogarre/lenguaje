@@ -11,23 +11,11 @@
 
 void Ñ::Tipo::muestra()
 {
-	if(vector)
+	imprimeAjuste();
+	std::cout << "(NODO_TIPO) [" + obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
 	{
-		imprimeAjuste();
-		std::cout << "(NODO_TIPO) [" + tipo + "[]] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
-		for(auto rama : ramas)
-		{
-			muestraNodos(rama);
-		}
-	}
-	else
-	{
-		imprimeAjuste();
-		std::cout << "(NODO_TIPO) [" + tipo + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
-		for(auto rama : ramas)
-		{
-			muestraNodos(rama);
-		}
+		muestraNodos(rama);
 	}
 }
 
@@ -86,6 +74,14 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	else if(t == Ñ::CategoríaTipo::TIPO_REAL_64)
 	{
 		nombre = "real64";
+	}
+	else if(t == Ñ::CategoríaTipo::TIPO_TEXTO)
+	{
+		nombre = "txt";
+	}
+	else if(t == Ñ::CategoríaTipo::TIPO_VECTOR)
+	{
+		nombre = "[]";
 	}
 
 	return nombre;
@@ -164,5 +160,9 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	else if(nombre == "txt")
 	{
 		return Ñ::CategoríaTipo::TIPO_TEXTO;
+	}
+	else if(nombre == "[]")
+	{
+		return Ñ::CategoríaTipo::TIPO_VECTOR;
 	}
 }

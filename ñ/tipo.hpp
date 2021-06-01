@@ -22,14 +22,15 @@ namespace Ñ
         TIPO_ENTERO_64,
         TIPO_REAL_32,
         TIPO_REAL_64,
-        TIPO_TEXTO
+        TIPO_TEXTO,
+
+        TIPO_VECTOR
     };
     
     class Tipo : Nodo
     {
     public:
-        std::string tipo;
-        bool vector;
+        CategoríaTipo tipo;
 
         Tipo();
         ~Tipo();

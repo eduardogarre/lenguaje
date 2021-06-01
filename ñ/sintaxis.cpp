@@ -490,11 +490,11 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 	if(cursor < lexemas.size())
 	{
-		std::string tipo;
+		CategoríaTipo tipo;
 
 		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
-			tipo = lexemas[cursor]->contenido;
+			tipo = obténTipoDeNombre(lexemas[cursor]->contenido);
 
 			cursor++;
 		}
@@ -522,7 +522,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 			 || (lexemas[cursor]->contenido == "nada")
 			)
 			{
-				tipo = lexemas[cursor]->contenido;
+				tipo = obténTipoDeNombre(lexemas[cursor]->contenido);
 
 				cursor++;
 			}
@@ -545,8 +545,10 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 			if(notación("]"))
 			{
 				Ñ::Tipo* t = new Ñ::Tipo();
-				t->tipo = tipo;
-				t->vector = true;
+				Ñ::Tipo* subT = new Ñ::Tipo();
+				subT->tipo = tipo;
+				t->tipo = CategoríaTipo::TIPO_VECTOR;
+				((Ñ::Nodo*)t)->ramas.push_back((Ñ::Nodo*)subT);
 				return (Ñ::Nodo*)t;
 			}
 			else
@@ -561,7 +563,6 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		
 		Ñ::Tipo* t = new Ñ::Tipo();
 		t->tipo = tipo;
-		t->vector = false;
 		return (Ñ::Nodo*)t;
 	}
 

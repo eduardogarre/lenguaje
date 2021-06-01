@@ -1597,7 +1597,7 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	if(((Ñ::Nodo*)literal)->ramas.size() == 1)
 	{
 		Ñ::Nodo* t = ((Ñ::Nodo*)literal)->ramas[0];
-		Ñ::CategoríaTipo tipo = Ñ::obténTipoDeNombre(((Ñ::Tipo*)t)->tipo);
+		Ñ::CategoríaTipo tipo = ((Ñ::Tipo*)t)->tipo;
 		Ñ::Valor* valor;
 		
 		switch (tipo)

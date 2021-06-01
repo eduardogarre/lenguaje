@@ -713,7 +713,6 @@ namespace Ñ
             std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
 
             auto tipo = (nodos->ramas[0]);
-            std::string cadenaTipo = ((Ñ::Tipo*)tipo)->tipo;
 
             // Añado la variable a la tabla de símbolos
             tablaSímbolos->declara(nombre, tipo);

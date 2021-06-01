@@ -40,10 +40,10 @@ namespace Ñ
                 for(int i = 0; i < argumentos->ramas.size(); i++)
                 {
                     Ñ::Nodo* arg = argumentos->ramas[i];
-                    if(arg->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+                    if(arg->categoría == Ñ::CategoríaNodo::NODO_VALOR)
                     {
                         Ñ::Literal* valorArgumento = (Ñ::Literal*)arg;
-                        Ñ::Valor* valor = creaValor(valorArgumento);
+                        Ñ::Valor* valor = duplicaValor((Ñ::Valor*)arg);
                         Ñ::DeclaraVariable* declaraciónArgumento = (Ñ::DeclaraVariable*)(((Ñ::Nodo*)fn)->ramas[1]->ramas[i]);
                         subTabla->declara(declaraciónArgumento->variable, ((Ñ::Nodo*)declaraciónArgumento)->ramas[0]);
                         subTabla->ponValor(declaraciónArgumento->variable, (Ñ::Nodo*)valor);

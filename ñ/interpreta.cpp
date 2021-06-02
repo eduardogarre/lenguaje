@@ -1255,6 +1255,10 @@ namespace Ñ
         resultado.nodo(duplicaÁrbol(nodos));
         return resultado;
     }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+    {
+        return interpretaLIA(nodos, tablaSímbolos);
+    }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
     {
         Ñ::Resultado rLia = interpretaLIA(nodos->ramas[0], tablaSímbolos);

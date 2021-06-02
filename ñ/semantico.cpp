@@ -301,20 +301,97 @@
 Ñ::Resultado compruebaTipos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
-    
-    resultado.éxito();
-    return resultado;
+
+    if(nodos == nullptr)
+    {
+        resultado.error("ANÁLISIS DE TIPOS :: El nodo es nulo");
+        return resultado;
+    }
+
+    if(nodos->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rCompruebaTipos = compruebaTipos(n, tablaSímbolos);
+            
+            if(rCompruebaTipos.error())
+            {
+                return rCompruebaTipos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    {
+        for(Ñ::Nodo* n : nodos->ramas)
+        {
+            Ñ::Resultado rCompruebaTipos = compruebaTipos(n, tablaSímbolos);
+            
+            if(rCompruebaTipos.error())
+            {
+                return rCompruebaTipos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
+    {
+        // Analizo LIA, puede haber una declaración o una variable
+        Ñ::CategoríaNodo catLIA = nodos->ramas[0]->categoría;
+        Ñ::Resultado rTipoLIA = compruebaTipos(nodos->ramas[0], tablaSímbolos);
+        if(rTipoLIA.error())
+        {
+            return rTipoLIA;
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+    {
+        if( nodos->ramas.size() != 1)
+        {
+            resultado.error("ANÁLISIS DE TIPOS :: Árbol de la declaración de variable mal construido");
+            return resultado;
+        }
+
+        resultado.éxito();
+        resultado.nodo(nodos->ramas[0]);
+        return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+    {
+        std::string nombre = ((Ñ::Identificador*)nodos)->id;
+        if(tablaSímbolos->nombreReservadoEnCualquierÁmbito(nombre))
+        {
+            return tablaSímbolos->leeTipo(nombre);
+        }
+        else
+        {
+            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" no se había declarado previamente");
+            return resultado;
+        }
+    }
+    else
+    {
+        resultado.error("ANÁLISIS DE TIPOS :: El nodo tiene una categoría desconocida");
+        return resultado;
+    }
 }
 
 Ñ::Resultado Ñ::analizaSemántica(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
-    //if(nodos->categoría != Ñ::CategoríaNodo::NODO_EXPRESIÓN)
-    //{
-    //    resultado.error("SEMÁNTICO :: El nodo raíz no es una expresión");
-    //    return resultado;
-    //}
+    if(nodos == nullptr)
+    {
+        resultado.error("SEMÁNTICO :: El nodo raíz es nulo");
+        return resultado;
+    }
 
     if(nodos->ramas.size() < 1)
     {

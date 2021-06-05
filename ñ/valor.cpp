@@ -1593,151 +1593,140 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 		return new Ñ::Valor;
 	}
 
+	Ñ::CategoríaTipo tipo;
+	Ñ::Valor* valor;
+
 	// Si ya disponemos de un tipo asociado
 	if(((Ñ::Nodo*)literal)->ramas.size() == 1)
 	{
 		Ñ::Nodo* t = ((Ñ::Nodo*)literal)->ramas[0];
-		Ñ::CategoríaTipo tipo = ((Ñ::Tipo*)t)->tipo;
-		Ñ::Valor* valor;
-		
-		switch (tipo)
-		{
-		case TIPO_NADA:
-			return nullptr;
-			break;
-		
-		case TIPO_PUNTERO:
-			valor = new Ñ::Valor;
-			valor->puntero(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_BOOLEANO:
-			valor = new Ñ::Valor;
-			if(literal->dato == "cierto")
-			{
-				valor->booleano(true);
-			}
-			else if(literal->dato == "falso")
-			{
-				valor->booleano(false);
-			}
-			else
-			{
-				return nullptr;
-			}
-			break;
-		
-		case TIPO_NATURAL_8:
-			valor = new Ñ::Valor;
-			valor->nat8(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_NATURAL_16:
-			valor = new Ñ::Valor;
-			valor->nat16(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_NATURAL_32:
-			valor = new Ñ::Valor;
-			valor->nat32(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_NATURAL_64:
-			valor = new Ñ::Valor;
-			valor->nat64(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_ENTERO_8:
-			valor = new Ñ::Valor;
-			valor->ent8(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_ENTERO_16:
-			valor = new Ñ::Valor;
-			valor->ent16(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_ENTERO_32:
-			valor = new Ñ::Valor;
-			valor->ent32(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_ENTERO_64:
-			valor = new Ñ::Valor;
-			valor->ent64(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_REAL_32:
-			valor = new Ñ::Valor;
-			valor->real32(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		case TIPO_REAL_64:
-			valor = new Ñ::Valor;
-			valor->real64(std::stoi(literal->dato));
-			return valor;
-			break;
-		
-		default:
-			return nullptr;
-			break;
-		}
+		tipo = ((Ñ::Tipo*)t)->tipo;
 	}
 	// Si no tenemos suerte y no disponemos de un tipo asociado
 	else
 	{
-		Ñ::Valor* valor;
-		
 		switch (literal->tipo)
 		{
 		case Ñ::CategoríaTipo::TIPO_NADA:
-			valor = new Ñ::Valor;
-			return valor;
+			tipo = Ñ::CategoríaTipo::TIPO_NADA;
 			break;
 		
 		case Ñ::CategoríaTipo::TIPO_BOOLEANO:
-			valor = new Ñ::Valor;
-			if(literal->dato == "cierto")
-			{
-				valor->booleano(true);
-			}
-			else if(literal->dato == "falso")
-			{
-				valor->booleano(false);
-			}
-			return valor;
+			tipo = Ñ::CategoríaTipo::TIPO_BOOLEANO;
 			break;
 		
 		case Ñ::CategoríaTipo::TIPO_ENTERO_64:
-			valor = new Ñ::Valor;
-			valor->ent64(std::stoll(literal->dato));
-			return valor;
+			tipo = obténMínimoEnteroVálido(std::stoll(literal->dato));
+			break;
+		
+		case Ñ::CategoríaTipo::TIPO_NATURAL_64:
+			tipo = obténMínimoNaturalVálido(std::stoull(literal->dato));
 			break;
 		
 		case Ñ::CategoríaTipo::TIPO_REAL_64:
-			valor = new Ñ::Valor;
-			valor->real64(std::stod(literal->dato));
-			return valor;
+			tipo = Ñ::CategoríaTipo::TIPO_REAL_32;
 			break;
 		
 		case Ñ::CategoríaTipo::TIPO_TEXTO:
-			valor = new Ñ::Valor;
-			valor->texto(literal->dato);
-			return valor;
+			tipo = Ñ::CategoríaTipo::TIPO_TEXTO;
 			break;
 		
 		default:
+			tipo = Ñ::CategoríaTipo::TIPO_NADA;
 			break;
 		}
+	}
+		
+	switch (tipo)
+	{
+	case TIPO_NADA:
+		return nullptr;
+		break;
+	
+	case TIPO_PUNTERO:
+		valor = new Ñ::Valor;
+		valor->puntero(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_BOOLEANO:
+		valor = new Ñ::Valor;
+		if(literal->dato == "cierto")
+		{
+			valor->booleano(true);
+		}
+		else if(literal->dato == "falso")
+		{
+			valor->booleano(false);
+		}
+		else
+		{
+			return nullptr;
+		}
+		break;
+	
+	case TIPO_NATURAL_8:
+		valor = new Ñ::Valor;
+		valor->nat8(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_NATURAL_16:
+		valor = new Ñ::Valor;
+		valor->nat16(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_NATURAL_32:
+		valor = new Ñ::Valor;
+		valor->nat32(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_NATURAL_64:
+		valor = new Ñ::Valor;
+		valor->nat64(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_ENTERO_8:
+		valor = new Ñ::Valor;
+		valor->ent8(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_ENTERO_16:
+		valor = new Ñ::Valor;
+		valor->ent16(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_ENTERO_32:
+		valor = new Ñ::Valor;
+		valor->ent32(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_ENTERO_64:
+		valor = new Ñ::Valor;
+		valor->ent64(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_REAL_32:
+		valor = new Ñ::Valor;
+		valor->real32(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_REAL_64:
+		valor = new Ñ::Valor;
+		valor->real64(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	default:
+		return nullptr;
+		break;
 	}
 }

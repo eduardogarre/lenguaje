@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "apoyo.hpp"
+#include "nodo.hpp"
 #include "tipo.hpp"
 
 Ñ::Tipo::Tipo() : Ñ::Nodo()
@@ -165,4 +167,58 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	{
 		return Ñ::CategoríaTipo::TIPO_VECTOR;
 	}
+}
+
+Ñ::CategoríaTipo Ñ::obténMínimoNaturalVálido(uint64_t n)
+{
+	uint64_t probando;
+
+	probando = Ñ::potencia(2, 8);
+	if(probando >= n)
+	{
+		return Ñ::CategoríaTipo::TIPO_NATURAL_8;
+	}
+
+	probando = Ñ::potencia(2, 16);
+	if(probando >= n)
+	{
+		return Ñ::CategoríaTipo::TIPO_NATURAL_16;
+	}
+
+	probando = Ñ::potencia(2, 32);
+	if(probando >= n)
+	{
+		return Ñ::CategoríaTipo::TIPO_NATURAL_32;
+	}
+
+	return Ñ::CategoríaTipo::TIPO_NATURAL_64;
+}
+
+Ñ::CategoríaTipo Ñ::obténMínimoEnteroVálido(int64_t e)
+{
+	int64_t máx;
+	int64_t mín;
+
+	máx = Ñ::potencia(2, 7) - 1;
+	mín = - Ñ::potencia(2, 7);
+	if(máx >= e && mín <= e)
+	{
+		return Ñ::CategoríaTipo::TIPO_ENTERO_8;
+	}
+
+	máx = Ñ::potencia(2, 15) - 1;
+	mín = - Ñ::potencia(2, 15);
+	if(máx >= e && mín <= e)
+	{
+		return Ñ::CategoríaTipo::TIPO_ENTERO_16;
+	}
+
+	máx = Ñ::potencia(2, 31) - 1;
+	mín = - Ñ::potencia(2, 31);
+	if(máx >= e && mín <= e)
+	{
+		return Ñ::CategoríaTipo::TIPO_ENTERO_32;
+	}
+
+	return Ñ::CategoríaTipo::TIPO_ENTERO_64;
 }

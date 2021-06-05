@@ -7,13 +7,13 @@
 #include "tipo.hpp"
 #include "valor.hpp"
 
-Ñ::Resultado resuelveSímbolos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
+Ñ::Resultado resuelveSímbolos(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
-    if(nodos->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+    if(nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos;
             if(n == nullptr)
@@ -33,19 +33,16 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
     {
-        //Ñ::Nodo* fn = Ñ::duplicaÁrbol(nodos);
-        //fn->categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN;
-        tablaSímbolos->declara(((Ñ::DefineFunción*)nodos)->nombre, nullptr);
-        //tablaSímbolos->ponValor(((Ñ::DefineFunción*)nodos)->nombre, fn);
+        tablaSímbolos->declara(((Ñ::DefineFunción*)nodo)->nombre, nullptr);
 
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos;
             if(n == nullptr)
             {
-                rResuelveSímbolos.error("He recibido un nodo nulo entre los hijos de NODO_DEFINE_FUNCIÓN [" + ((Ñ::DefineFunción*)nodos)->nombre + "]");
+                rResuelveSímbolos.error("He recibido un nodo nulo entre los hijos de NODO_DEFINE_FUNCIÓN [" + ((Ñ::DefineFunción*)nodo)->nombre + "]");
                 return rResuelveSímbolos;
             }
 
@@ -69,9 +66,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos;
             rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
@@ -84,9 +81,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos;
             if(n == nullptr)
@@ -115,9 +112,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
             if(rResuelveSímbolos.error())
@@ -129,22 +126,22 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
     {
-        std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
+        std::string nombre = ((Ñ::DeclaraVariable*)nodo)->variable;
         if(tablaSímbolos->nombreReservadoEnEsteÁmbito(nombre))
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" ya se había declarado previamente");
             return resultado;
         }
 
-        if( nodos->ramas.size() != 1)
+        if( nodo->ramas.size() != 1)
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: Árbol de la declaración de variable mal construido");
             return resultado;
         }
 
-        Ñ::Resultado r = tablaSímbolos->declara(nombre, nodos->ramas[0]);
+        Ñ::Resultado r = tablaSímbolos->declara(nombre, nodo->ramas[0]);
         if(r.error())
         {
             return r;
@@ -153,9 +150,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
             if(rResuelveSímbolos.error())
@@ -167,9 +164,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
             if(rResuelveSímbolos.error())
@@ -181,9 +178,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_COMPARACIÓN)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_COMPARACIÓN)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
             if(rResuelveSímbolos.error())
@@ -195,9 +192,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_TÉRMINO)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TÉRMINO)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
             if(rResuelveSímbolos.error())
@@ -209,9 +206,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
             if(rResuelveSímbolos.error())
@@ -223,9 +220,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
     {
-        std::string nombre = ((Ñ::Identificador*)nodos)->id;
+        std::string nombre = ((Ñ::Identificador*)nodo)->id;
         if(tablaSímbolos->nombreReservadoEnCualquierÁmbito(nombre))
         {
             resultado.éxito();
@@ -237,9 +234,9 @@
             return resultado;
         }
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_BINARIA)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_BINARIA)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
             if(rResuelveSímbolos.error())
@@ -251,9 +248,9 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
+        for(Ñ::Nodo* n : nodo->ramas)
         {
             Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(n, tablaSímbolos);
             if(rResuelveSímbolos.error())
@@ -265,19 +262,19 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
     {
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_TIPO)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TIPO)
     {
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
-        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodos);
+        Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)(nodo);
         
         if(!tablaSímbolos->nombreReservadoEnCualquierÁmbito(fn->nombre))
         {
@@ -288,84 +285,41 @@
         resultado.éxito();
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_VACÍO)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_VACÍO)
     {
         resultado.éxito();
         return resultado;
     }
 
-    resultado.error("RESOLUCIÓN DE SÍMBOLOS :: No reconozco el árbol de nodos");
+    resultado.error("RESOLUCIÓN DE SÍMBOLOS :: No esperaba este nodo.");
     return resultado;
 }
 
-Ñ::Resultado compruebaTipos(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
+Ñ::Resultado compruebaTiposLIA(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
-    if(nodos == nullptr)
+    if(nodo == nullptr)
     {
         resultado.error("ANÁLISIS DE TIPOS :: El nodo es nulo");
         return resultado;
     }
-
-    if(nodos->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+    
+    if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
     {
-        for(Ñ::Nodo* n : nodos->ramas)
-        {
-            Ñ::Resultado rCompruebaTipos = compruebaTipos(n, tablaSímbolos);
-            
-            if(rCompruebaTipos.error())
-            {
-                return rCompruebaTipos;
-            }
-        }
-        
-        resultado.éxito();
-        return resultado;
-    }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
-    {
-        for(Ñ::Nodo* n : nodos->ramas)
-        {
-            Ñ::Resultado rCompruebaTipos = compruebaTipos(n, tablaSímbolos);
-            
-            if(rCompruebaTipos.error())
-            {
-                return rCompruebaTipos;
-            }
-        }
-        
-        resultado.éxito();
-        return resultado;
-    }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
-    {
-        // Analizo LIA, puede haber una declaración o una variable
-        Ñ::CategoríaNodo catLIA = nodos->ramas[0]->categoría;
-        Ñ::Resultado rTipoLIA = compruebaTipos(nodos->ramas[0], tablaSímbolos);
-        if(rTipoLIA.error())
-        {
-            return rTipoLIA;
-        }
-        
-        resultado.éxito();
-        return resultado;
-    }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
-    {
-        if( nodos->ramas.size() != 1)
+        if( nodo->ramas.size() != 1)
         {
             resultado.error("ANÁLISIS DE TIPOS :: Árbol de la declaración de variable mal construido");
             return resultado;
         }
 
         resultado.éxito();
-        resultado.nodo(nodos->ramas[0]);
+        resultado.nodo(nodo->ramas[0]);
         return resultado;
     }
-    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
     {
-        std::string nombre = ((Ñ::Identificador*)nodos)->id;
+        std::string nombre = ((Ñ::Identificador*)nodo)->id;
         if(tablaSímbolos->nombreReservadoEnCualquierÁmbito(nombre))
         {
             return tablaSímbolos->leeTipo(nombre);
@@ -383,29 +337,116 @@
     }
 }
 
-Ñ::Resultado Ñ::analizaSemántica(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
+Ñ::Resultado compruebaTiposLDA(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
 
-    if(nodos == nullptr)
+    if(nodo->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+    {
+        resultado = tablaSímbolos->leeTipo(((Ñ::Identificador*)nodo)->id);
+        return resultado;
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+    {
+
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
+    {
+        
+    }
+
+    resultado.error("El árbol de nodos es incorrecto, esperaba Lado Derecho de Asignación. Categoría del nódulo actual: " + std::to_string(nodo->categoría));
+    return resultado;
+}
+
+
+Ñ::Resultado compruebaTipos(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
+{
+    Ñ::Resultado resultado;
+
+    if(nodo == nullptr)
+    {
+        resultado.error("ANÁLISIS DE TIPOS :: El nodo es nulo");
+        return resultado;
+    }
+
+    if(nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+    {
+        for(Ñ::Nodo* n : nodo->ramas)
+        {
+            Ñ::Resultado rCompruebaTipos = compruebaTipos(n, tablaSímbolos);
+            
+            if(rCompruebaTipos.error())
+            {
+                return rCompruebaTipos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+    {
+        for(Ñ::Nodo* n : nodo->ramas)
+        {
+            Ñ::Resultado rCompruebaTipos = compruebaTipos(n, tablaSímbolos);
+            
+            if(rCompruebaTipos.error())
+            {
+                return rCompruebaTipos;
+            }
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
+    {
+        // Analizo LIA, puede haber una declaración o una variable
+        Ñ::CategoríaNodo catLIA = nodo->ramas[0]->categoría;
+        Ñ::Resultado rTipoLIA = compruebaTiposLIA(nodo->ramas[0], tablaSímbolos);
+        if(rTipoLIA.error())
+        {
+            return rTipoLIA;
+        }
+        
+        resultado.éxito();
+        return resultado;
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+    {
+        return compruebaTiposLIA(nodo, tablaSímbolos);
+    }
+    else
+    {
+        resultado.error("ANÁLISIS DE TIPOS :: El nodo tiene una categoría desconocida");
+        return resultado;
+    }
+}
+
+Ñ::Resultado Ñ::analizaSemántica(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
+{
+    Ñ::Resultado resultado;
+
+    if(nodo == nullptr)
     {
         resultado.error("SEMÁNTICO :: El nodo raíz es nulo");
         return resultado;
     }
 
-    if(nodos->ramas.size() < 1)
+    if(nodo->ramas.size() < 1)
     {
         resultado.error("SEMÁNTICO :: El nodo raíz está vacío");
         return resultado;
     }
 
-    Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(nodos, tablaSímbolos);
+    Ñ::Resultado rResuelveSímbolos = resuelveSímbolos(nodo, tablaSímbolos);
     if(rResuelveSímbolos.error())
     {
         resultado.error("SEMÁNTICO :: " + rResuelveSímbolos.mensaje());
         return resultado;
     }
-    Ñ::Resultado rCompruebaTipos = compruebaTipos(nodos, tablaSímbolos);
+    Ñ::Resultado rCompruebaTipos = compruebaTipos(nodo, tablaSímbolos);
     if(rCompruebaTipos.error())
     {
         resultado.error("SEMÁNTICO :: " + rCompruebaTipos.mensaje());

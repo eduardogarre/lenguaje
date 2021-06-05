@@ -40,4 +40,6 @@ namespace Ñ
 
     std::string obténNombreDeTipo(Ñ::CategoríaTipo t);
     Ñ::CategoríaTipo obténTipoDeNombre(std::string nombre);
+    Ñ::CategoríaTipo obténMínimoNaturalVálido(uint64_t n);
+    Ñ::CategoríaTipo obténMínimoEnteroVálido(int64_t e);
 }

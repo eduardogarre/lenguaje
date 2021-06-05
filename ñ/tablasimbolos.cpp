@@ -124,7 +124,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 
     if(!nombreReservadoEnCualquierÁmbito(nombre))
     {
-        resultado.error("Error, el identificador no se ha declarado previamente.");
+        resultado.error("Error, el identificador '" + nombre + "'no se ha declarado previamente.");
         return resultado;
     }
 
@@ -137,7 +137,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     
     if(valor == nullptr)
     {
-        resultado.error("Error, el símbolo no ha sido definido todavía");
+        resultado.error("Error, el identificador '" + nombre + "'no ha sido definido todavía");
         return resultado;
     }
 
@@ -152,7 +152,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 
     if(!nombreReservadoEnCualquierÁmbito(nombre))
     {
-        resultado.error("Error, el identificador no se ha declarado previamente.");
+        resultado.error("Error, el identificador '" + nombre + "' no se ha declarado previamente.");
         return resultado;
     }
 
@@ -165,7 +165,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     
     if(tipo == nullptr)
     {
-        resultado.error("Error, el símbolo no ha sido definido todavía");
+        resultado.error("Error, el identificador '" + nombre + "' no ha sido declarado correctamente, no dispongo de su tipo.");
         return resultado;
     }
 
@@ -186,7 +186,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 
     if(!nombreReservadoEnCualquierÁmbito(nombre))
     {
-        resultado.error("Error, el identificador no se ha declarado previamente.");
+        resultado.error("Error, el identificador '" + nombre + "'no se ha declarado previamente.");
         return resultado;
     }
 
@@ -203,14 +203,14 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     return resultado;
 }
 
-Ñ::Resultado Ñ::TablaSímbolos::defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*))
+Ñ::Resultado Ñ::TablaSímbolos::defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*), Ñ::Nodo* firma)
 {
     Ñ::Resultado r;
 
     Ñ::FunciónEjecutable* función = new Ñ::FunciónEjecutable;
     función->función = fne;
     función->nombre = nombre;
-    r = declara(nombre, nullptr);
+    r = declara(nombre, firma);
     if(r.error())
     {
         return r;

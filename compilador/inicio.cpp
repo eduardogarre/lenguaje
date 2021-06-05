@@ -27,6 +27,34 @@ std::string _esperaComando()
 	return comando;
 }
 
+Ñ::Nodo* creaFirmaEscribe()
+{
+	Ñ::Nodo* firma = (Ñ::Nodo*)(new Ñ::Tipo);
+	Ñ::Nodo* tipoNada = (Ñ::Nodo*)(new Ñ::Tipo);
+	Ñ::Nodo* argumentos = (Ñ::Nodo*)(new Ñ::Argumentos);
+	Ñ::DeclaraVariable* arg1 = new Ñ::DeclaraVariable;
+	arg1->variable = "texto";
+	Ñ::Tipo* tipoTxt = new Ñ::Tipo;
+	tipoTxt->tipo = Ñ::CategoríaTipo::TIPO_TEXTO;
+	((Ñ::Nodo*)arg1)->ramas.push_back((Ñ::Nodo*)tipoTxt);
+	argumentos->ramas.push_back((Ñ::Nodo*)arg1);
+	firma->ramas.push_back(tipoNada);
+	firma->ramas.push_back(argumentos);
+
+	return firma;
+}
+
+Ñ::Nodo* creaFirmaApaga()
+{
+	Ñ::Nodo* firma = (Ñ::Nodo*)(new Ñ::Tipo);
+	Ñ::Nodo* tipoNada = (Ñ::Nodo*)(new Ñ::Tipo);
+	Ñ::Nodo* argumentos = (Ñ::Nodo*)(new Ñ::Argumentos);
+	firma->ramas.push_back(tipoNada);
+	firma->ramas.push_back(argumentos);
+
+	return firma;
+}
+
 Ñ::Nodo* FunciónEscribe(Ñ::Nodo* yo, Ñ::Nodo* args)
 {
 	if(args != nullptr)
@@ -99,8 +127,15 @@ std::string _esperaComando()
 Ñ::TablaSímbolos* creaTablaSímbolos()
 {
 	Ñ::TablaSímbolos* tabla = new Ñ::TablaSímbolos;
-	tabla->defineFunciónEjecutable("escribe", FunciónEscribe);
-	tabla->defineFunciónEjecutable("apaga", FunciónApaga);
+
+	Ñ::Nodo* firmaEscribe = creaFirmaEscribe();
+	tabla->defineFunciónEjecutable("escribe", FunciónEscribe, firmaEscribe);
+	delete firmaEscribe;
+
+	Ñ::Nodo* firmaApaga = creaFirmaApaga();
+	tabla->defineFunciónEjecutable("apaga", FunciónApaga, firmaApaga);
+	delete firmaApaga;
+
 	return tabla;
 }
 

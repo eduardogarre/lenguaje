@@ -44,7 +44,7 @@ namespace Ñ
         Ñ::Resultado leeValor(std::string nombre);
         Ñ::Resultado leeTipo(std::string nombre);
 
-        Ñ::Resultado defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*));
+        Ñ::Resultado defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*), Ñ::Nodo* firma = nullptr);
 
         void muestra();
     };

@@ -7,6 +7,11 @@
 #include "tipo.hpp"
 #include "valor.hpp"
 
+
+Ñ::Resultado _analiza(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos);
+Ñ::Resultado _analizaLIA(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos);
+Ñ::Resultado _analizaLDA(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos);
+
 Ñ::Resultado _analizaLlamadaFunción(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
@@ -36,6 +41,48 @@
         resultado.error("La función " + fn->nombre + "() no ha sido declarada previamente.");
         return resultado;
     }
+
+    Ñ::Resultado rFirma = tablaSímbolos->leeTipo(fn->nombre);
+    if(rFirma.error())
+    {
+        return rFirma;
+    }
+
+    Ñ::Nodo* argsDeclarados = rFirma.nodo()->ramas[1];
+    Ñ::Nodo* argsDefinidos = nodo->ramas[0];
+
+    if(argsDeclarados->ramas.size() != argsDefinidos->ramas.size())
+    {
+        resultado.error("Has pasado " + std::to_string(argsDefinidos->ramas.size()) + " argumentos a " + fn->nombre + "(), que espera " + std::to_string(argsDeclarados->ramas.size()) + " argumentos");
+        return resultado;
+    }
+
+    Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+    for(uint8_t i = 0; i < argsDeclarados->ramas.size(); i++)
+    {
+        Ñ::Resultado rTipoLIA = _analizaLIA(argsDeclarados->ramas[i], subTabla);
+        Ñ::Resultado rTipoLDA = _analizaLDA(argsDefinidos->ramas[i], subTabla);
+
+        if(rTipoLIA.error())
+        {
+            return rTipoLIA;
+        }
+        else if(rTipoLDA.error())
+        {
+            return rTipoLDA;
+        }
+
+        Ñ::Tipo* tipoLIA = (Ñ::Tipo*)(rTipoLIA.nodo());
+        Ñ::Tipo* tipoLDA = (Ñ::Tipo*)(rTipoLDA.nodo());
+
+        if(!Ñ::tiposAsignables(tipoLIA->tipo, tipoLDA->tipo))
+        {
+            delete subTabla;
+            resultado.error("Esperaba un argumento de tipo '" + Ñ::obténNombreDeTipo(tipoLIA->tipo) + "', pero he recibido un '" + Ñ::obténNombreDeTipo(tipoLDA->tipo) + "'");
+            return resultado;
+        }
+    }
+    delete subTabla;
 
     resultado.éxito();
     return resultado;
@@ -80,8 +127,19 @@
 
         tablaSímbolos->declara(fn->nombre, rFirma.nodo());
     }
-    
-    resultado.éxito();
+
+    Ñ::TablaSímbolos* nuevaTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+
+    for(auto arg : nodo->ramas[1]->ramas)
+    {
+        Ñ::Resultado rArg = _analizaLIA(arg, nuevaTabla);
+        if(rArg.error())
+        {
+            return rArg;
+        }
+    }
+
+    resultado = _analiza(nodo->ramas[2], nuevaTabla);
     return resultado;
 }
 
@@ -459,6 +517,36 @@
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
     {
         return _analizaDefiniciónFunción(nodo, tablaSímbolos);
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+    {
+        for(Ñ::Nodo* n : nodo->ramas)
+        {
+            if(n == nullptr)
+            {
+                resultado.error("He recibido un nodo nulo");
+                return resultado;
+            }
+
+            if(n->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
+            {
+                Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+                resultado = _analiza(n, subTabla);
+                delete subTabla;
+            }
+            else
+            {
+                resultado = _analiza(n, tablaSímbolos);
+            }
+
+            if(resultado.error())
+            {
+                return resultado;
+            }
+        }
+
+        resultado.éxito();
+        return resultado;
     }
     else
     {

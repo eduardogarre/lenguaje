@@ -789,10 +789,12 @@ namespace Ñ
                     }
                     else if(val->booleano() == true)
                     {
+                        valor = new Ñ::Valor;
                         valor->booleano(false);
                     }
                     else if(val->booleano() == false)
                     {
+                        valor = new Ñ::Valor;
                         valor->booleano(true);
                     }
                     else

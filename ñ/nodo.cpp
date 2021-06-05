@@ -6,6 +6,128 @@
 
 uint32_t ajuste = -1;
 
+std::string Ñ::obténNombreDeNodo(Ñ::CategoríaNodo n)
+{
+	switch (n)
+	{
+	case NODO_VACÍO:
+		return "NODO_VACÍO";
+		break;
+	
+	case NODO_EXPANDIDO:
+		return "NODO_EXPANDIDO";
+		break;
+	
+	case NODO_TIPO:
+		return "NODO_TIPO";
+		break;
+	
+	case NODO_VALOR:
+		return "NODO_VALOR";
+		break;
+	
+	case NODO_LITERAL:
+		return "NODO_LITERAL";
+		break;
+	
+	case NODO_IDENTIFICADOR:
+		return "NODO_IDENTIFICADOR";
+		break;
+	
+	case NODO_LADO_IZQUIERDO_ASIGNACIÓN:
+		return "NODO_LADO_IZQUIERDO_ASIGNACIÓN";
+		break;
+	
+	case NODO_LADO_DERECHO_ASIGNACIÓN:
+		return "NODO_LADO_DERECHO_ASIGNACIÓN";
+		break;
+	
+	case NODO_IGUALDAD:
+		return "NODO_IGUALDAD";
+		break;
+	
+	case NODO_COMPARACIÓN:
+		return "NODO_COMPARACIÓN";
+		break;
+	
+	case NODO_TÉRMINO:
+		return "NODO_TÉRMINO";
+		break;
+	
+	case NODO_FACTOR:
+		return "NODO_FACTOR";
+		break;
+	
+	case NODO_OP_BINARIA:
+		return "NODO_OP_BINARIA";
+		break;
+	
+	case NODO_OP_UNARIA:
+		return "NODO_OP_UNARIA";
+		break;
+	
+	case NODO_PRIMARIO:
+		return "NODO_PRIMARIO";
+		break;
+	
+	case NODO_DECLARA_VARIABLE:
+		return "NODO_DECLARA_VARIABLE";
+		break;
+	
+	case NODO_ASIGNA:
+		return "NODO_ASIGNA";
+		break;
+	
+	case NODO_DECLARA_Y_ASIGNA_VARIABLE:
+		return "NODO_DECLARA_Y_ASIGNA_VARIABLE";
+		break;
+	
+	case NODO_ARGUMENTO:
+		return "NODO_ARGUMENTO";
+		break;
+	
+	case NODO_ARGUMENTOS:
+		return "NODO_ARGUMENTOS";
+		break;
+	
+	case NODO_DECLARA_FUNCIÓN:
+		return "NODO_DECLARA_FUNCIÓN";
+		break;
+	
+	case NODO_DEFINE_FUNCIÓN:
+		return "NODO_DEFINE_FUNCIÓN";
+		break;
+	
+	case NODO_LLAMA_FUNCIÓN:
+		return "NODO_LLAMA_FUNCIÓN";
+		break;
+	
+	case NODO_EXPRESIÓN:
+		return "NODO_EXPRESIÓN";
+		break;
+	
+	case NODO_BLOQUE:
+		return "NODO_BLOQUE";
+		break;
+	
+	case NODO_FUNCIÓN:
+		return "NODO_FUNCIÓN";
+		break;
+	
+	case NODO_FUNCIÓN_EJECUTABLE:
+		return "NODO_FUNCIÓN_EJECUTABLE";
+		break;
+	
+	case NODO_MÓDULO:
+		return "NODO_MÓDULO";
+		break;
+	
+	default:
+		return "ERROR";
+		break;
+	}
+}
+
 void Ñ::Nodo::imprimeAjuste()
 {
 	for(uint32_t i = 0; i < ajuste; i++)

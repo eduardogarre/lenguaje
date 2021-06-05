@@ -21,6 +21,63 @@ void Ñ::Tipo::muestra()
 	}
 }
 
+Ñ::Tipo* Ñ::creaTipoBásico(Ñ::CategoríaTipo tipo)
+{
+	Ñ::Tipo* t = new Ñ::Tipo;
+	t->tipo = tipo;
+	return t;
+}
+
+Ñ::Resultado Ñ::creaFirmaFunción(Ñ::Nodo* nodo)
+{
+	Ñ::Resultado resultado;
+	Ñ::Nodo* tipoRetorno;
+	Ñ::Nodo* argumentos;
+	Ñ::Nodo* firmaFunción;
+
+    if(nodo == nullptr)
+    {
+        resultado.error("El nodo es un puntero nulo, esperaba una declaración o una definición de función.");
+        return resultado;
+    }
+	
+    if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
+    {
+		if(nodo->ramas.size() != 3)
+		{
+			resultado.error("El árbol de nodos es incorrecto, la definición de una función debe tener 3 ramas: 'tipo', 'argumentos' y 'bloque'.");
+			return resultado;
+		}
+
+		tipoRetorno = duplicaÁrbol(nodo->ramas[0]);
+        argumentos = duplicaÁrbol(nodo->ramas[1]);
+    }
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+    {
+		if(nodo->ramas.size() != 2)
+		{
+			resultado.error("El árbol de nodos es incorrecto, la definición de una función debe tener 3 ramas: 'tipo', 'argumentos' y 'bloque'.");
+			return resultado;
+		}
+		
+		tipoRetorno = duplicaÁrbol(nodo->ramas[0]);
+        argumentos = duplicaÁrbol(nodo->ramas[1]);
+    }
+	else
+	{
+        resultado.error("El árbol de nodos es incorrecto, esperaba una declaración o una definición de función.");
+        return resultado;
+    }
+	
+	firmaFunción = (Ñ::Nodo*)(new Ñ::Tipo);
+	firmaFunción->ramas.push_back(tipoRetorno);
+	firmaFunción->ramas.push_back(argumentos);
+
+	resultado.éxito();
+	resultado.nodo(firmaFunción);
+	return resultado;
+}
+
 std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 {
 	std::string nombre = "";
@@ -91,11 +148,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 
 Ñ::CategoríaTipo Ñ::obténTipoDeNombre(std::string nombre)
 {
-	if(nombre == "nada")
-	{
-		return Ñ::CategoríaTipo::TIPO_NADA;
-	}
-	else if(nombre == "puntero")
+	if(nombre == "puntero")
 	{
 		return Ñ::CategoríaTipo::TIPO_PUNTERO;
 	}
@@ -123,7 +176,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	{
 		return Ñ::CategoríaTipo::TIPO_NATURAL_64;
 	}
-	else if(nombre == "natural")
+	else if(nombre == "natural" || nombre == "nat")
 	{
 		return Ñ::CategoríaTipo::TIPO_NATURAL_64;
 	}
@@ -143,7 +196,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	{
 		return Ñ::CategoríaTipo::TIPO_ENTERO_64;
 	}
-	else if(nombre == "entero")
+	else if(nombre == "entero" || nombre == "ent")
 	{
 		return Ñ::CategoríaTipo::TIPO_ENTERO_64;
 	}
@@ -166,6 +219,10 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	else if(nombre == "[]")
 	{
 		return Ñ::CategoríaTipo::TIPO_VECTOR;
+	}
+	else // nombre == "nada" y resto de combinaciones
+	{
+		return Ñ::CategoríaTipo::TIPO_NADA;
 	}
 }
 
@@ -221,4 +278,229 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	}
 
 	return Ñ::CategoríaTipo::TIPO_ENTERO_64;
+}
+
+bool Ñ::tiposAsignables(Ñ::CategoríaTipo lia, Ñ::CategoríaTipo lda)
+{
+	switch (lia)
+	{
+	case TIPO_PUNTERO:
+		switch (lda)
+		{
+		case TIPO_ENTERO_64:
+		case TIPO_PUNTERO:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_TEXTO:
+		switch (lda)
+		{
+		case TIPO_TEXTO:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_BOOLEANO:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_NATURAL_8:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_NATURAL_16:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_NATURAL_32:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_NATURAL_64:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_ENTERO_8:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_ENTERO_16:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_NATURAL_8:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_ENTERO_32:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_ENTERO_64:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_REAL_32:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+		case TIPO_REAL_32:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_REAL_64:
+		switch (lda)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+		case TIPO_REAL_32:
+		case TIPO_REAL_64:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	default:
+		return false;
+		break;
+	}
 }

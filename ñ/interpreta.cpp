@@ -704,12 +704,14 @@ namespace Ñ
 
         if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
         {
+
             resultado.éxito();
             resultado.nodo(duplicaÁrbol(nodos));
             return resultado;
         }
         else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
         {
+
             std::string nombre = ((Ñ::DeclaraVariable*)nodos)->variable;
 
             auto tipo = (nodos->ramas[0]);
@@ -732,7 +734,7 @@ namespace Ñ
     Ñ::Resultado interpretaLDA(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos)
     {
         Ñ::Resultado resultado;
-
+        
         if(nodos->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
         {
             resultado = obténValor(nodos, tablaSímbolos);
@@ -762,6 +764,7 @@ namespace Ñ
                 {
                     return r;
                 }
+                
                 Ñ::Resultado rn = obténValor(r.nodo(), tablaSímbolos);
                 if(rn.error())
                 {
@@ -772,22 +775,23 @@ namespace Ñ
                     n1 = rn.nodo();
                 }
                 delete r.nodo();
-                Ñ::Literal* lit = (Ñ::Literal*)n1;
+
+                Ñ::Valor* val = (Ñ::Valor*)n1;
                 Ñ::OperaciónUnaria* op = (Ñ::OperaciónUnaria*)nodos;
                 Ñ::Valor* valor;
 
                 if(op->operación == "!")
                 {
-                    if(lit->tipo != Ñ::CategoríaTipo::TIPO_BOOLEANO)
+                    if(val->obténTipo() != Ñ::CategoríaTipo::TIPO_BOOLEANO)
                     {
                         resultado.error("Has intentado aplicar la operación lógica NO a un valor que no es booleano");
                         return resultado;
                     }
-                    else if(lit->dato == "cierto")
+                    else if(val->booleano() == true)
                     {
                         valor->booleano(false);
                     }
-                    else if(lit->dato == "falso")
+                    else if(val->booleano() == false)
                     {
                         valor->booleano(true);
                     }
@@ -803,7 +807,7 @@ namespace Ñ
                 }
                 else if(op->operación == "-")
                 {
-                    switch (lit->tipo)
+                    switch (val->obténTipo())
                     {
                     case Ñ::CategoríaTipo::TIPO_NADA:
                         resultado.error("Has intentado negativizar un valor vacío");
@@ -812,28 +816,48 @@ namespace Ñ
                     
                     case Ñ::CategoríaTipo::TIPO_BOOLEANO:
                         valor = new Ñ::Valor;
-                        if(lit->dato == "cierto")
+                        if(val->booleano() == true)
                         {
                             valor->booleano(false);
                         }
-                        else if(lit->dato == "falso")
+                        else if(val->booleano() == false)
                         {
                             valor->booleano(true);
                         }
                     
+                    case Ñ::CategoríaTipo::TIPO_ENTERO_8:
+                        valor = new Ñ::Valor;
+                        valor->ent8((-1) * val->ent8());
+                        break;
+                    
+                    case Ñ::CategoríaTipo::TIPO_ENTERO_16:
+                        valor = new Ñ::Valor;
+                        valor->ent16((-1) * val->ent16());
+                        break;
+                    
+                    case Ñ::CategoríaTipo::TIPO_ENTERO_32:
+                        valor = new Ñ::Valor;
+                        valor->ent32((-1) * val->ent32());
+                        break;
+                    
                     case Ñ::CategoríaTipo::TIPO_ENTERO_64:
                         valor = new Ñ::Valor;
-                        valor->ent64((-1) * std::stoll(lit->dato));
+                        valor->ent64((-1) * val->ent64());
+                        break;
+                    
+                    case Ñ::CategoríaTipo::TIPO_REAL_32:
+                        valor = new Ñ::Valor;
+                        valor->real32((-1) * val->real32());
                         break;
                     
                     case Ñ::CategoríaTipo::TIPO_REAL_64:
                         valor = new Ñ::Valor;
-                        valor->real64((-1) * std::stod(lit->dato));
+                        valor->real64((-1) * val->real64());
                         break;
                     
                     case Ñ::CategoríaTipo::TIPO_TEXTO:
                         valor = new Ñ::Valor;
-                        valor->texto(lit->dato);
+                        valor->texto(val->texto());
                         break;
                     
                     default:
@@ -845,7 +869,7 @@ namespace Ñ
                     return resultado;
                 }
 
-                valor = creaValor(lit);
+                delete val;
 
                 resultado.éxito();
                 resultado.nodo((Ñ::Nodo*)valor);
@@ -853,7 +877,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("El nodo Ñ::Igualdad tenía " + std::to_string(nodos->ramas.size()) + " ramas");
+                resultado.error("El nodo Ñ::OpUnaria tenía " + std::to_string(nodos->ramas.size()) + " ramas");
                 return resultado;
             }
         }
@@ -879,7 +903,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("El nodo Ñ::Igualdad tenía " + std::to_string(nodos->ramas.size()) + " ramas");
+                resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodos->ramas.size()) + " ramas");
                 return resultado;
             }
         }
@@ -1263,6 +1287,7 @@ namespace Ñ
     {
         Ñ::Resultado rLia = interpretaLIA(nodos->ramas[0], tablaSímbolos);
         Ñ::Resultado rLda = interpretaLDA(nodos->ramas[1], tablaSímbolos);
+
 
         if(rLia.error())
         {

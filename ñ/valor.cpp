@@ -1650,19 +1650,21 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 		break;
 	
 	case TIPO_BOOLEANO:
-		valor = new Ñ::Valor;
 		if(literal->dato == "cierto")
 		{
+			valor = new Ñ::Valor;
 			valor->booleano(true);
 		}
 		else if(literal->dato == "falso")
 		{
+			valor = new Ñ::Valor;
 			valor->booleano(false);
 		}
 		else
 		{
 			return nullptr;
 		}
+		return valor;
 		break;
 	
 	case TIPO_NATURAL_8:
@@ -1722,6 +1724,12 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	case TIPO_REAL_64:
 		valor = new Ñ::Valor;
 		valor->real64(std::stoi(literal->dato));
+		return valor;
+		break;
+	
+	case TIPO_TEXTO:
+		valor = new Ñ::Valor;
+		valor->texto(literal->dato);
 		return valor;
 		break;
 	

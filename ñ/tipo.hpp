@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "nodo.hpp"
+#include "resultado.hpp"
 
 namespace Ñ
 {
@@ -24,6 +25,8 @@ namespace Ñ
         TIPO_REAL_64,
         TIPO_TEXTO,
 
+        TIPO_FUNCIÓN,
+
         TIPO_VECTOR
     };
     
@@ -38,8 +41,11 @@ namespace Ñ
         void muestra();
     };
 
+    Ñ::Tipo* creaTipoBásico(Ñ::CategoríaTipo tipo);
+    Ñ::Resultado creaFirmaFunción(Ñ::Nodo* fn);
     std::string obténNombreDeTipo(Ñ::CategoríaTipo t);
     Ñ::CategoríaTipo obténTipoDeNombre(std::string nombre);
     Ñ::CategoríaTipo obténMínimoNaturalVálido(uint64_t n);
     Ñ::CategoríaTipo obténMínimoEnteroVálido(int64_t e);
+    bool tiposAsignables(Ñ::CategoríaTipo lia, Ñ::CategoríaTipo lda);
 }

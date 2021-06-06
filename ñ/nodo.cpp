@@ -34,6 +34,10 @@ std::string Ñ::obténNombreDeNodo(Ñ::CategoríaNodo n)
 		return "NODO_IDENTIFICADOR";
 		break;
 	
+	case NODO_CONVIERTE_TIPOS:
+		return "NODO_CONVIERTE_TIPOS";
+		break;
+	
 	case NODO_LADO_IZQUIERDO_ASIGNACIÓN:
 		return "NODO_LADO_IZQUIERDO_ASIGNACIÓN";
 		break;
@@ -192,6 +196,23 @@ void Ñ::Identificador::muestra()
 {
 	imprimeAjuste();
 	std::cout << "(NODO_IDENTIFICADOR) [" + id + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
+Ñ::ConvierteTipos::ConvierteTipos() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS;
+}
+
+Ñ::ConvierteTipos::~ConvierteTipos() {}
+
+void Ñ::ConvierteTipos::muestra()
+{
+	imprimeAjuste();
+	std::cout << "(NODO_CONVIERTE_TIPOS) [ '" + Ñ::obténNombreDeTipo(origen) + "' -> '" + Ñ::obténNombreDeTipo(destino) + "' ] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
@@ -604,6 +625,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::Identificador*)nodo)->muestra();
 	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
+	{
+		((Ñ::ConvierteTipos*)nodo)->muestra();
+	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
 	{
 		((Ñ::OperaciónUnaria*)nodo)->muestra();
@@ -723,6 +748,8 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::Literal* l2;
 		Ñ::Identificador* id1;
 		Ñ::Identificador* id2;
+		Ñ::ConvierteTipos* conv1;
+		Ñ::ConvierteTipos* conv2;
 		Ñ::Tipo* t1;
 		Ñ::Tipo* t2;
 		Ñ::LadoIzquierdoAsignación* lia1;
@@ -786,6 +813,19 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			id1 = (Ñ::Identificador*)nodo1;
 			id2 = (Ñ::Identificador*)nodo2;
 			if(id1->id == id2->id)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
+			conv1 = (Ñ::ConvierteTipos*)nodo1;
+			conv2 = (Ñ::ConvierteTipos*)nodo2;
+			if((conv1->origen == conv2->origen) && (conv1->destino == conv2->destino))
 			{
 				return true;
 			}
@@ -1017,6 +1057,15 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		l->tipo = n->tipo;
 
 		duplicado = (Ñ::Nodo*)l;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
+	{
+		Ñ::ConvierteTipos* n = (Ñ::ConvierteTipos*)nodo;
+		Ñ::ConvierteTipos* t = new Ñ::ConvierteTipos();
+		t->origen = n->origen;
+		t->destino = n->destino;
+
+		duplicado = (Ñ::Nodo*)t;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TIPO)
 	{

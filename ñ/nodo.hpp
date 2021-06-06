@@ -19,6 +19,8 @@ namespace Ñ
         NODO_LITERAL,
         NODO_IDENTIFICADOR,
 
+        NODO_CONVIERTE_TIPOS,
+
         NODO_LADO_IZQUIERDO_ASIGNACIÓN,
         NODO_LADO_DERECHO_ASIGNACIÓN,
         NODO_IGUALDAD,
@@ -82,6 +84,18 @@ namespace Ñ
 
         Identificador();
         ~Identificador();
+
+        void muestra();
+    };
+
+    class ConvierteTipos : Nodo
+    {
+    public:
+        Ñ::CategoríaTipo origen;
+        Ñ::CategoríaTipo destino;
+
+        ConvierteTipos();
+        ~ConvierteTipos();
 
         void muestra();
     };

@@ -540,7 +540,7 @@
                 }
                 else
                 {
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta" << std::endl;
+                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la multiplicación/división" << std::endl;
                     resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
                     return resultado;
                 }
@@ -558,7 +558,7 @@
                 }
                 else
                 {
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta" << std::endl;
+                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la multiplicación/división" << std::endl;
                     resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
                     return resultado;
                 }

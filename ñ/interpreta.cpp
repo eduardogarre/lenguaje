@@ -1227,27 +1227,31 @@ namespace Ñ
     {
         for(Ñ::Nodo* n : nodos->ramas)
         {
-            Ñ::Resultado rResuelveSímbolos;
+            Ñ::Resultado rBloque;
             if(n == nullptr)
             {
-                rResuelveSímbolos.error("He recibido un nodo nulo");
-                return rResuelveSímbolos;
+                rBloque.error("He recibido un nodo nulo");
+                return rBloque;
             }
 
             if(n->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
             {
                 Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
-                rResuelveSímbolos = interpretaNodos(n, subTabla);
+                rBloque = interpretaNodos(n, subTabla);
                 delete subTabla;
             }
             else
             {
-                rResuelveSímbolos = interpretaNodos(n, tablaSímbolos);
+                rBloque = interpretaNodos(n, tablaSímbolos);
             }
 
-            if(rResuelveSímbolos.error())
+            if(rBloque.error())
             {
-                return rResuelveSímbolos;
+                return rBloque;
+            }
+            if(n->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DEVUELVE)
+            {
+                return rBloque;
             }
         }
         
@@ -1258,15 +1262,42 @@ namespace Ñ
     {
         for(Ñ::Nodo* n : nodos->ramas)
         {
-            Ñ::Resultado rResuelveSímbolos = interpretaNodos(n, tablaSímbolos);
-            if(rResuelveSímbolos.error())
+            Ñ::Resultado rExpresión = interpretaNodos(n, tablaSímbolos);
+            if(rExpresión.error())
             {
-                return rResuelveSímbolos;
+                return rExpresión;
+            }
+            if(n->categoría == Ñ::CategoríaNodo::NODO_DEVUELVE)
+            {
+                return rExpresión;
             }
         }
         
         resultado.éxito();
         return resultado;
+    }
+    else if(nodos->categoría == Ñ::CategoríaNodo::NODO_DEVUELVE)
+    {
+        if(nodos->ramas.size() == 0)
+        {
+            Ñ::Valor* retorno = new Ñ::Valor;
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)retorno);
+            return resultado;
+        }
+        else if(nodos->ramas.size() == 1)
+        {
+            Ñ::Resultado rLda = interpretaLDA(nodos->ramas[0], tablaSímbolos);
+            if(rLda.error())
+            {
+                return rLda;
+            }
+
+            // Obtengo el valor del 'devuelve X' y lo devuelvo
+            resultado.éxito();
+            resultado.nodo(rLda.nodo());
+            return resultado;
+        }
     }
     else if(nodos->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
     {

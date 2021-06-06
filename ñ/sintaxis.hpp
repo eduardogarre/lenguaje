@@ -37,6 +37,8 @@ namespace Ñ
         Ñ::Nodo* ponArgumento();
         Ñ::Nodo* ponArgumentos();
         Ñ::Nodo* llamaFunción();
+        Ñ::Nodo* vuelve();
+        Ñ::Nodo* devuelve();
         Ñ::Nodo* expresión();
         Ñ::Nodo* bloque();
         Ñ::Nodo* defineFunción();

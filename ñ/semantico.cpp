@@ -48,6 +48,7 @@
         return rFirma;
     }
 
+    Ñ::Nodo* tipoDevuelto = rFirma.nodo()->ramas[0];
     Ñ::Nodo* argsDeclarados = rFirma.nodo()->ramas[1];
     Ñ::Nodo* argsDefinidos = nodo->ramas[0];
 
@@ -58,6 +59,8 @@
     }
 
     Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+    subTabla->ponFunciónPropietaria(fn->nombre);
+
     for(uint8_t i = 0; i < argsDeclarados->ramas.size(); i++)
     {
         Ñ::Resultado rTipoLIA = _analizaLIA(argsDeclarados->ramas[i], subTabla);
@@ -85,6 +88,7 @@
     delete subTabla;
 
     resultado.éxito();
+    resultado.nodo(tipoDevuelto);
     return resultado;
 }
 
@@ -129,6 +133,7 @@
     }
 
     Ñ::TablaSímbolos* nuevaTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+    nuevaTabla->ponFunciónPropietaria(fn->nombre);
 
     for(auto arg : nodo->ramas[1]->ramas)
     {
@@ -140,6 +145,7 @@
     }
 
     resultado = _analiza(nodo->ramas[2], nuevaTabla);
+    delete nuevaTabla;
     return resultado;
 }
 
@@ -413,6 +419,10 @@
             return resultado;
         }
     }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+    {
+        return _analizaLlamadaFunción(nodo, tablaSímbolos);
+    }
 
     resultado.error("El árbol de nodos es incorrecto, esperaba Lado Derecho de Asignación. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodo->categoría));
     return resultado;
@@ -510,6 +520,55 @@
     {
         return _analizaLIA(nodo, tablaSímbolos);
     }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEVUELVE)
+    {
+        if(nodo->ramas.size() == 0)
+        {
+            resultado.éxito();
+            return resultado;
+        }
+        else if(nodo->ramas.size() == 1)
+        {
+            Ñ::Resultado rTipoLda = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+            if(rTipoLda.error())
+            {
+                return rTipoLda;
+            }
+
+            // Primero obtengo la firma de la función
+            std::string fn = tablaSímbolos->leeFunciónPropietaria();
+            Ñ::Resultado rTipoLia = tablaSímbolos->leeTipo(fn);
+            if(rTipoLia.error())
+            {
+                return rTipoLia;
+            }
+            Ñ::Nodo* firma = rTipoLia.nodo();
+            
+            // Obtengo el tipo de retorno de la función
+            Ñ::Tipo* tLia = (Ñ::Tipo*)(firma->ramas[0]);
+
+            // Obtengo el tipo del 'devuelve X'
+            Ñ::Tipo* tLda = (Ñ::Tipo*)(rTipoLda.nodo());
+
+            // Comparo si los tipos son compatibles
+            if(Ñ::tiposAsignables(tLia->tipo, tLda->tipo))
+            {
+                resultado.éxito();
+                return resultado;
+            }
+            else
+            {
+                std::string mensaje = "La función debe devolver un valor de tipo '" + Ñ::obténNombreDeTipo(tLia->tipo) + "', pero estás devolviendo un '" + Ñ::obténNombreDeTipo(tLda->tipo) + "'.";
+                resultado.error(mensaje);
+                return resultado;
+            }
+        }
+        else // más de 1 rama
+        {
+            resultado.error("El nodo 'NODO_DEVUELVE' tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            return resultado;
+        }
+    }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
         return _analizaLlamadaFunción(nodo, tablaSímbolos);
@@ -532,16 +591,19 @@
             {
                 Ñ::TablaSímbolos* subTabla = new Ñ::TablaSímbolos(tablaSímbolos);
                 resultado = _analiza(n, subTabla);
-                delete subTabla;
+                if(resultado.error())
+                {
+                    delete subTabla;
+                    return resultado;
+                }
             }
             else
             {
                 resultado = _analiza(n, tablaSímbolos);
-            }
-
-            if(resultado.error())
-            {
-                return resultado;
+                if(resultado.error())
+                {
+                    return resultado;
+                }
             }
         }
 

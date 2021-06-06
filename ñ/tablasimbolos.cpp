@@ -50,6 +50,13 @@ void Ñ::Símbolo::valor(Ñ::Nodo* valor)
 Ñ::TablaSímbolos::TablaSímbolos()
 {
     _superior = nullptr;
+    funciónPropietaria = "";
+}
+
+Ñ::TablaSímbolos::TablaSímbolos(Ñ::TablaSímbolos* tablaSuperior)
+{
+    _superior = tablaSuperior;
+    funciónPropietaria = "";
 }
 
 Ñ::TablaSímbolos::~TablaSímbolos()
@@ -63,11 +70,6 @@ void Ñ::Símbolo::valor(Ñ::Nodo* valor)
     }
 
     _tabla.clear();
-}
-
-Ñ::TablaSímbolos::TablaSímbolos(Ñ::TablaSímbolos* tablaSuperior)
-{
-    _superior = tablaSuperior;
 }
 
 bool Ñ::TablaSímbolos::nombreReservadoEnEsteÁmbito(std::string nombre)
@@ -203,6 +205,17 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     return resultado;
 }
 
+void Ñ::TablaSímbolos::ponFunciónPropietaria(std::string fn)
+{
+    funciónPropietaria = fn;
+}
+
+std::string Ñ::TablaSímbolos::leeFunciónPropietaria()
+{
+    return funciónPropietaria;
+}
+
+
 Ñ::Resultado Ñ::TablaSímbolos::defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*), Ñ::Nodo* firma)
 {
     Ñ::Resultado r;
@@ -227,6 +240,8 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 
 void Ñ::TablaSímbolos::muestra()
 {
+    std::cout << "Propietario: " << funciónPropietaria << "()" << std::endl;
+
     for (auto [clave, valor] : _tabla)
     {
         std::cout << "[" << valor->nombre() << "]" << std::endl;

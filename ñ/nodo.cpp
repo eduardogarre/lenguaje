@@ -102,6 +102,10 @@ std::string Ñ::obténNombreDeNodo(Ñ::CategoríaNodo n)
 		return "NODO_LLAMA_FUNCIÓN";
 		break;
 	
+	case NODO_DEVUELVE:
+		return "NODO_DEVUELVE";
+		break;
+	
 	case NODO_EXPRESIÓN:
 		return "NODO_EXPRESIÓN";
 		break;
@@ -442,6 +446,23 @@ void Ñ::LlamaFunción::muestra()
 	}
 }
 
+Ñ::Devuelve::Devuelve() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_DEVUELVE;
+}
+
+Ñ::Devuelve::~Devuelve() {}
+
+void Ñ::Devuelve::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_DEVUELVE) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 Ñ::Expresión::Expresión() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
@@ -638,6 +659,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
 	{
 		((Ñ::LlamaFunción*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEVUELVE)
+	{
+		((Ñ::Devuelve*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
 	{
@@ -884,6 +909,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			}
 			break;
 		
+		case Ñ::CategoríaNodo::NODO_DEVUELVE:
+			return true;
+			break;
+		
 		case Ñ::CategoríaNodo::NODO_EXPRESIÓN:
 			return true;
 			break;
@@ -1101,6 +1130,11 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		f->nombre = n->nombre;
 
 		duplicado = (Ñ::Nodo*)f;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEVUELVE)
+	{
+		Ñ::Devuelve* d = new Ñ::Devuelve();
+		duplicado = (Ñ::Nodo*)d;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
 	{

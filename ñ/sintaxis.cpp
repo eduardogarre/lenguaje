@@ -784,6 +784,53 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::vuelve()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		{
+			if(lexemas[cursor]->contenido == "vuelve")
+			{
+				cursor++;
+				Ñ::Nodo* dv = (Ñ::Nodo*)(new Ñ::Devuelve);
+				return dv;
+			}
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* Ñ::Sintaxis::devuelve()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		{
+			if(lexemas[cursor]->contenido == "devuelve")
+			{
+				cursor++;
+				
+				if(Ñ::Nodo* lda = ladoDerechoAsignación())
+				{
+					Ñ::Nodo* dv = (Ñ::Nodo*)(new Ñ::Devuelve);
+					dv->ramas.push_back(lda);
+					return dv;
+				}
+			}
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::expresión()
 {
 	uint32_t c = cursor;
@@ -819,6 +866,34 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		}
 		
 		if(Ñ::Nodo* dv = declaraVariable())
+		{
+			if(notación(";"))
+			{
+				Ñ::Expresión* af = new Ñ::Expresión();
+				((Ñ::Nodo*)af)->ramas.push_back(dv);
+				return ((Ñ::Nodo*)af);
+			}
+			else
+			{
+				delete dv;
+			}
+		}
+		
+		if(Ñ::Nodo* v = vuelve())
+		{
+			if(notación(";"))
+			{
+				Ñ::Expresión* af = new Ñ::Expresión();
+				((Ñ::Nodo*)af)->ramas.push_back(v);
+				return ((Ñ::Nodo*)af);
+			}
+			else
+			{
+				delete v;
+			}
+		}
+		
+		if(Ñ::Nodo* dv = devuelve())
 		{
 			if(notación(";"))
 			{

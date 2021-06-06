@@ -32,6 +32,8 @@ namespace Ñ
         std::map<std::string, Símbolo*> _tabla;
         TablaSímbolos* _superior;
 
+        std::string funciónPropietaria;
+
     public:
         TablaSímbolos();
         TablaSímbolos(TablaSímbolos* tablaSuperior);
@@ -43,6 +45,9 @@ namespace Ñ
         Ñ::Resultado ponValor(std::string nombre, Ñ::Nodo* valor);
         Ñ::Resultado leeValor(std::string nombre);
         Ñ::Resultado leeTipo(std::string nombre);
+        
+        void ponFunciónPropietaria(std::string fn);
+        std::string leeFunciónPropietaria();
 
         Ñ::Resultado defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*), Ñ::Nodo* firma = nullptr);
 

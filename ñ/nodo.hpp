@@ -37,6 +37,8 @@ namespace Ñ
         NODO_DECLARA_FUNCIÓN,
         NODO_DEFINE_FUNCIÓN,
         NODO_LLAMA_FUNCIÓN,
+        
+        NODO_DEVUELVE,
 
         NODO_EXPRESIÓN,
 
@@ -216,6 +218,15 @@ namespace Ñ
 
         LlamaFunción();
         ~LlamaFunción();
+
+        void muestra();
+    };
+
+    class Devuelve : Nodo
+    {
+    public:
+        Devuelve();
+        ~Devuelve();
 
         void muestra();
     };

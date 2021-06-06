@@ -78,7 +78,7 @@ namespace Ñ
         Ñ::Valor* v2 = (Ñ::Valor*)n2;
         Ñ::Valor* r;
 
-        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1, v2);
+        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1->obténTipo(), v2->obténTipo());
 	
         switch (tmc)
         {
@@ -208,7 +208,7 @@ namespace Ñ
         Ñ::Valor* v2 = (Ñ::Valor*)n2;
         Ñ::Valor* r;
 
-        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1, v2);
+        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1->obténTipo(), v2->obténTipo());
 	
         switch (tmc)
         {
@@ -331,7 +331,7 @@ namespace Ñ
         Ñ::Valor* v2 = (Ñ::Valor*)n2;
         Ñ::Valor* r;
 
-        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1, v2);
+        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1->obténTipo(), v2->obténTipo());
 	
         switch (tmc)
         {
@@ -461,7 +461,7 @@ namespace Ñ
         Ñ::Valor* v2 = (Ñ::Valor*)n2;
         Ñ::Valor* r;
 
-        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1, v2);
+        Ñ::CategoríaTipo tmc = obténTipoMínimoComún(v1->obténTipo(), v2->obténTipo());
 	
         switch (tmc)
         {

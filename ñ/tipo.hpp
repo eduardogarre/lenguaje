@@ -41,6 +41,7 @@ namespace Ñ
         void muestra();
     };
 
+    Ñ::CategoríaTipo obténTipoMínimoComún(Ñ::CategoríaTipo t1, Ñ::CategoríaTipo t2);
     Ñ::Tipo* creaTipoBásico(Ñ::CategoríaTipo tipo);
     Ñ::Resultado creaFirmaFunción(Ñ::Nodo* fn);
     std::string obténNombreDeTipo(Ñ::CategoríaTipo t);

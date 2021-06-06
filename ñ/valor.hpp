@@ -88,7 +88,6 @@ namespace Ñ
 
     Ñ::Valor* creaValor(Ñ::Literal* literal);
 
-    Ñ::CategoríaTipo obténTipoMínimoComún(Ñ::Valor* valor1, Ñ::Valor* valor2);
     bool comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2);
     Ñ::Valor* duplicaValor(Ñ::Valor* valor);
 

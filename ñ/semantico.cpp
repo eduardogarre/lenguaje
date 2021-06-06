@@ -384,7 +384,44 @@
         }
         else if(nodo->ramas.size() > 1)
         {
-            resultado.error("Pendiente de implementar operaciones de suma/resta.");
+            Ñ::CategoríaTipo tipoResultado;
+            Ñ::Nodo* t1;
+            Ñ::Resultado r = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            t1 = r.nodo();
+            tipoResultado = ((Ñ::Tipo*)t1)->tipo;
+            
+            for(int i = 1; i < nodo->ramas.size(); i++)
+            {
+                if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                {
+                    resultado.error("Término no ha recibido una operación válida");
+                    return resultado;
+                }
+                Ñ::Nodo* op = nodo->ramas[i];
+                if(op->ramas.size() != 1)
+                {
+                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    return resultado;
+                }
+
+                Ñ::Nodo* t2;
+                Ñ::Resultado r2 = _analizaLDA(op->ramas[0], tablaSímbolos);
+                if(r2.error())
+                {
+                    return r2;
+                }
+
+                t2 = r2.nodo();
+
+                tipoResultado = Ñ::obténTipoMínimoComún(tipoResultado, ((Ñ::Tipo*)t2)->tipo);
+            }
+
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)Ñ::creaTipoBásico(tipoResultado));
             return resultado;
         }
         else
@@ -410,7 +447,44 @@
         }
         else if(nodo->ramas.size() > 1)
         {
-            resultado.error("Pendiente de implementar operaciones de multiplicación/división.");
+            Ñ::CategoríaTipo tipoResultado;
+            Ñ::Nodo* t1;
+            Ñ::Resultado r = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            t1 = r.nodo();
+            tipoResultado = ((Ñ::Tipo*)t1)->tipo;
+            
+            for(int i = 1; i < nodo->ramas.size(); i++)
+            {
+                if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                {
+                    resultado.error("Término no ha recibido una operación válida");
+                    return resultado;
+                }
+                Ñ::Nodo* op = nodo->ramas[i];
+                if(op->ramas.size() != 1)
+                {
+                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    return resultado;
+                }
+
+                Ñ::Nodo* t2;
+                Ñ::Resultado r2 = _analizaLDA(op->ramas[0], tablaSímbolos);
+                if(r2.error())
+                {
+                    return r2;
+                }
+
+                t2 = r2.nodo();
+
+                tipoResultado = Ñ::obténTipoMínimoComún(tipoResultado, ((Ñ::Tipo*)t2)->tipo);
+            }
+
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)Ñ::creaTipoBásico(tipoResultado));
             return resultado;
         }
         else

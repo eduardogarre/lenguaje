@@ -44,6 +44,24 @@ std::string _esperaComando()
 	return firma;
 }
 
+Ñ::Nodo* creaFirmaEntATexto()
+{
+	Ñ::Nodo* firma = (Ñ::Nodo*)(new Ñ::Tipo);
+	Ñ::Tipo* tipoTxt = new Ñ::Tipo;
+	tipoTxt->tipo = Ñ::CategoríaTipo::TIPO_TEXTO;
+	Ñ::Nodo* argumentos = (Ñ::Nodo*)(new Ñ::Argumentos);
+	Ñ::DeclaraVariable* arg1 = new Ñ::DeclaraVariable;
+	arg1->variable = "e";
+	Ñ::Tipo* tipoEnt = new Ñ::Tipo;
+	tipoEnt->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_64;
+	((Ñ::Nodo*)arg1)->ramas.push_back((Ñ::Nodo*)tipoEnt);
+	argumentos->ramas.push_back((Ñ::Nodo*)arg1);
+	firma->ramas.push_back((Ñ::Nodo*)tipoTxt);
+	firma->ramas.push_back(argumentos);
+
+	return firma;
+}
+
 Ñ::Nodo* creaFirmaApaga()
 {
 	Ñ::Nodo* firma = (Ñ::Nodo*)(new Ñ::Tipo);
@@ -110,6 +128,42 @@ std::string _esperaComando()
 	return nullptr;
 }
 
+Ñ::Nodo* FunciónEntATexto(Ñ::Nodo* yo, Ñ::Nodo* args)
+{
+	if(args != nullptr)
+	{
+		if(args->ramas.size() == 1)
+		{
+			Ñ::Nodo* arg = args->ramas[0];
+
+			if(arg->categoría == Ñ::CategoríaNodo::NODO_VALOR)
+			{
+				Ñ::Valor* val = (Ñ::Valor*)arg;
+				Ñ::Resultado tmp = Ñ::aEnt64(val);
+				if(tmp.error())
+				{
+					return nullptr;
+				}
+				Ñ::Valor* valor = (Ñ::Valor*)(tmp.nodo());
+				delete val;
+				long long int entero = valor->ent64();
+				std::string texto = std::to_string(entero);
+				Ñ::Valor* resultado = new Ñ::Valor;
+				resultado->texto(texto);
+				return (Ñ::Nodo*)resultado;
+			}
+			
+			return nullptr;
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+	
+	return nullptr;
+}
+
 Ñ::Nodo* FunciónApaga(Ñ::Nodo* yo, Ñ::Nodo* args)
 {
 	if(EJECUTA_INTÉRPRETE)
@@ -131,6 +185,10 @@ std::string _esperaComando()
 	Ñ::Nodo* firmaEscribe = creaFirmaEscribe();
 	tabla->defineFunciónEjecutable("escribe", FunciónEscribe, firmaEscribe);
 	delete firmaEscribe;
+
+	Ñ::Nodo* firmaEntATexto = creaFirmaEntATexto();
+	tabla->defineFunciónEjecutable("entatxt", FunciónEntATexto, firmaEntATexto);
+	delete firmaEntATexto;
 
 	Ñ::Nodo* firmaApaga = creaFirmaApaga();
 	tabla->defineFunciónEjecutable("apaga", FunciónApaga, firmaApaga);

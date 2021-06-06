@@ -27,8 +27,9 @@ namespace Ñ
         if(función->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE)
         {
             Ñ::FunciónEjecutable* efn = (Ñ::FunciónEjecutable*)función;
-            efn->función(nullptr, argumentos);
+            Ñ::Nodo* devuelto = efn->función(nullptr, argumentos);
             resultado.éxito();
+            resultado.nodo(devuelto);
             return resultado;
         }
         else if(función->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN)

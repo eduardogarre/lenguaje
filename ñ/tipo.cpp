@@ -23,146 +23,386 @@ void Ñ::Tipo::muestra()
 
 Ñ::CategoríaTipo Ñ::obténTipoMínimoComún(Ñ::CategoríaTipo t1, Ñ::CategoríaTipo t2)
 {
-	Ñ::CategoríaTipo t;
+	switch (t1)
+	{
+	case TIPO_NADA:
+		return TIPO_NADA;
+		break;
+	
+	case TIPO_PUNTERO:
+		switch (t2)
+		{
+		case TIPO_PUNTERO:
+		case TIPO_ENTERO_64:
+			return TIPO_ENTERO_64;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_BOOLEANO:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+			return TIPO_BOOLEANO;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_NATURAL_8:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+			return TIPO_NATURAL_8;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_NATURAL_16:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+			return TIPO_NATURAL_16;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_NATURAL_32:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+			return TIPO_NATURAL_32;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_NATURAL_64:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+			return TIPO_NATURAL_64;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_ENTERO_8:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+			return TIPO_ENTERO_8;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_ENTERO_16:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_NATURAL_8:
+			return TIPO_ENTERO_16;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_ENTERO_32:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+			return TIPO_ENTERO_32;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_ENTERO_64:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_PUNTERO:
+			return TIPO_ENTERO_64;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_REAL_32:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+		case TIPO_REAL_32:
+			return TIPO_REAL_32;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_REAL_64:
+		switch (t2)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+		case TIPO_REAL_32:
+		case TIPO_REAL_64:
+			return TIPO_REAL_64;
+			break;
+		
+		default:
+			break;
+		}
+	
+	default:
+		break;
+	}
 
-	// Si alguno de los tipos es NADA, devuelvo nada
-	if(t1 == TIPO_NADA || t2 == TIPO_NADA)
+	
+	switch (t2)
 	{
-		t = TIPO_NADA;
-	}
-	// Si alguno de los tipos es un puntero, sólo puedo convertir a ENT64
-	else if((t1 == TIPO_PUNTERO || t2 == TIPO_PUNTERO) && (t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64))
-	{
-		t = TIPO_ENTERO_64;
-	}
-	// Si alguno de los tipos es un puntero, sólo puedo convertir a ENT64
-	else if(t1 == TIPO_PUNTERO && t2 == TIPO_PUNTERO)
-	{
-		t = TIPO_PUNTERO;
-	}
-	// Convertiremos booleano a cualquier otro tipo más grande (salvo NADA o PUNTERO)
-	else if((t1 == TIPO_BOOLEANO || t2 == TIPO_BOOLEANO) && (t1 > TIPO_BOOLEANO || t2 > TIPO_BOOLEANO))
-	{
-		t = (Ñ::CategoríaTipo) std::max((int)t1, (int)t2);
-	}
-	// Convertimos naturales a naturales tanto o más grandes
-	else if((t1 == TIPO_NATURAL_8 || t2 == TIPO_NATURAL_8) && (t1 == TIPO_NATURAL_8 || t2 == TIPO_NATURAL_8))
-	{
-		t = TIPO_NATURAL_8;
-	}
-	else if((t1 == TIPO_NATURAL_8 || t2 == TIPO_NATURAL_8) && (t1 == TIPO_NATURAL_16 || t2 == TIPO_NATURAL_16))
-	{
-		t = TIPO_NATURAL_16;
-	}
-	else if((t1 == TIPO_NATURAL_16 || t2 == TIPO_NATURAL_16) && (t1 == TIPO_NATURAL_16 || t2 == TIPO_NATURAL_16))
-	{
-		t = TIPO_NATURAL_16;
-	}
-	else if((t1 == TIPO_NATURAL_8 || t2 == TIPO_NATURAL_8) && (t1 == TIPO_NATURAL_32 || t2 == TIPO_NATURAL_32))
-	{
-		t = TIPO_NATURAL_32;
-	}
-	else if((t1 == TIPO_NATURAL_16 || t2 == TIPO_NATURAL_16) && (t1 == TIPO_NATURAL_32 || t2 == TIPO_NATURAL_32))
-	{
-		t = TIPO_NATURAL_32;
-	}
-	else if((t1 == TIPO_NATURAL_32 || t2 == TIPO_NATURAL_32) && (t1 == TIPO_NATURAL_32 || t2 == TIPO_NATURAL_32))
-	{
-		t = TIPO_NATURAL_32;
-	}
-	else if((t1 == TIPO_NATURAL_8 || t2 == TIPO_NATURAL_8) && (t1 == TIPO_NATURAL_64 || t2 == TIPO_NATURAL_64))
-	{
-		t = TIPO_NATURAL_64;
-	}
-	else if((t1 == TIPO_NATURAL_16 || t2 == TIPO_NATURAL_16) && (t1 == TIPO_NATURAL_64 || t2 == TIPO_NATURAL_64))
-	{
-		t = TIPO_NATURAL_64;
-	}
-	else if((t1 == TIPO_NATURAL_32 || t2 == TIPO_NATURAL_32) && (t1 == TIPO_NATURAL_64 || t2 == TIPO_NATURAL_64))
-	{
-		t = TIPO_NATURAL_64;
-	}
-	else if((t1 == TIPO_NATURAL_64 || t2 == TIPO_NATURAL_64) && (t1 == TIPO_NATURAL_64 || t2 == TIPO_NATURAL_64))
-	{
-		t = TIPO_NATURAL_64;
-	}
-	// Convertimos naturales a enteros más grandes
-	else if((t1 == TIPO_NATURAL_8 || t2 == TIPO_NATURAL_8) && (t1 == TIPO_ENTERO_16 || t2 == TIPO_ENTERO_16))
-	{
-		t = TIPO_ENTERO_16;
-	}
-	else if((t1 == TIPO_NATURAL_8 || t2 == TIPO_NATURAL_8) && (t1 == TIPO_ENTERO_32 || t2 == TIPO_ENTERO_32))
-	{
-		t = TIPO_ENTERO_32;
-	}
-	else if((t1 == TIPO_NATURAL_16 || t2 == TIPO_NATURAL_16) && (t1 == TIPO_ENTERO_32 || t2 == TIPO_ENTERO_32))
-	{
-		t = TIPO_ENTERO_32;
-	}
-	else if((t1 == TIPO_NATURAL_8 || t2 == TIPO_NATURAL_8) && (t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64))
-	{
-		t = TIPO_ENTERO_64;
-	}
-	else if((t1 == TIPO_NATURAL_16 || t2 == TIPO_NATURAL_16) && (t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64))
-	{
-		t = TIPO_ENTERO_64;
-	}
-	else if((t1 == TIPO_NATURAL_32 || t2 == TIPO_NATURAL_32) && (t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64))
-	{
-		t = TIPO_ENTERO_64;
-	}
-	// Convertimos enteros a enteros tanto o más grandes
-	else if((t1 == TIPO_ENTERO_8 || t2 == TIPO_ENTERO_8) && (t1 == TIPO_ENTERO_8 || t2 == TIPO_ENTERO_8))
-	{
-		t = TIPO_ENTERO_8;
-	}
-	else if((t1 == TIPO_ENTERO_8 || t2 == TIPO_ENTERO_8) && (t1 == TIPO_ENTERO_16 || t2 == TIPO_ENTERO_16))
-	{
-		t = TIPO_ENTERO_16;
-	}
-	else if((t1 == TIPO_ENTERO_16 || t2 == TIPO_ENTERO_16) && (t1 == TIPO_ENTERO_16 || t2 == TIPO_ENTERO_16))
-	{
-		t = TIPO_ENTERO_16;
-	}
-	else if((t1 == TIPO_ENTERO_8 || t2 == TIPO_ENTERO_8) && (t1 == TIPO_ENTERO_32 || t2 == TIPO_ENTERO_32))
-	{
-		t = TIPO_ENTERO_32;
-	}
-	else if((t1 == TIPO_ENTERO_16 || t2 == TIPO_ENTERO_16) && (t1 == TIPO_ENTERO_32 || t2 == TIPO_ENTERO_32))
-	{
-		t = TIPO_ENTERO_32;
-	}
-	else if((t1 == TIPO_ENTERO_32 || t2 == TIPO_ENTERO_32) && (t1 == TIPO_ENTERO_32 || t2 == TIPO_ENTERO_32))
-	{
-		t = TIPO_ENTERO_32;
-	}
-	else if((t1 == TIPO_ENTERO_8 || t2 == TIPO_ENTERO_8) && (t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64))
-	{
-		t = TIPO_ENTERO_64;
-	}
-	else if((t1 == TIPO_ENTERO_16 || t2 == TIPO_ENTERO_16) && (t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64))
-	{
-		t = TIPO_ENTERO_64;
-	}
-	else if((t1 == TIPO_ENTERO_32 || t2 == TIPO_ENTERO_32) && (t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64))
-	{
-		t = TIPO_ENTERO_64;
-	}
-	else if((t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64) && (t1 == TIPO_ENTERO_64 || t2 == TIPO_ENTERO_64))
-	{
-		t = TIPO_ENTERO_64;
-	}
-	// Si alguno de los tipos es un real y el otro no es ni NADA ni PUNTERO...
-	else if((t1 >= TIPO_REAL_32 || t2 >= TIPO_REAL_32) && (t1 != TIPO_NADA || t2 != TIPO_NADA) && (t1 != TIPO_PUNTERO || t2 != TIPO_PUNTERO))
-	{
-		t = (Ñ::CategoríaTipo) std::max((int)t1, (int)t2); 
-	}
-	else
-	{
-		t = TIPO_NADA;
+	case TIPO_NADA:
+		return TIPO_NADA;
+		break;
+	
+	case TIPO_PUNTERO:
+		switch (t1)
+		{
+		case TIPO_PUNTERO:
+		case TIPO_ENTERO_64:
+			return TIPO_ENTERO_64;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_BOOLEANO:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+			return TIPO_BOOLEANO;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_NATURAL_8:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+			return TIPO_NATURAL_8;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_NATURAL_16:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+			return TIPO_NATURAL_16;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_NATURAL_32:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+			return TIPO_NATURAL_32;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_NATURAL_64:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+			return TIPO_NATURAL_64;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_ENTERO_8:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+			return TIPO_ENTERO_8;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_ENTERO_16:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_NATURAL_8:
+			return TIPO_ENTERO_16;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_ENTERO_32:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+			return TIPO_ENTERO_32;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_ENTERO_64:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_PUNTERO:
+			return TIPO_ENTERO_64;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_REAL_32:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+		case TIPO_REAL_32:
+			return TIPO_REAL_32;
+			break;
+		
+		default:
+			break;
+		}
+	
+	case TIPO_REAL_64:
+		switch (t1)
+		{
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+		case TIPO_REAL_32:
+		case TIPO_REAL_64:
+			return TIPO_REAL_64;
+			break;
+		
+		default:
+			break;
+		}
+	
+	default:
+		break;
 	}
 
-	return t;
+	return TIPO_NADA;
 }
 
 Ñ::Tipo* Ñ::creaTipoBásico(Ñ::CategoríaTipo tipo)

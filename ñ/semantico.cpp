@@ -11,6 +11,28 @@
 Ñ::Resultado _analiza(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos);
 Ñ::Resultado _analizaLIA(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos);
 Ñ::Resultado _analizaLDA(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos);
+Ñ::Resultado _insertaConversión(Ñ::Nodo* nodo, Ñ::CategoríaTipo tipoOrigen, Ñ::CategoríaTipo tipoDestino);
+
+Ñ::Resultado _insertaConversión(Ñ::Nodo* padre, uint64_t índiceHijo, Ñ::CategoríaTipo tipoOrigen, Ñ::CategoríaTipo tipoDestino)
+{
+    Ñ::Resultado resultado;
+    
+    if(padre == nullptr)
+    {
+        resultado.error("Has pasados un nodo nulo");
+        return resultado;
+    }
+
+    Ñ::ConvierteTipos* conv = new Ñ::ConvierteTipos;
+    conv->origen = tipoOrigen;
+    conv->destino = tipoDestino;
+    ((Ñ::Nodo*)conv)->ramas.push_back(padre->ramas[índiceHijo]);
+
+    padre->ramas[índiceHijo] = (Ñ::Nodo*)conv;
+
+    resultado.éxito();
+    return resultado;
+}
 
 Ñ::Resultado _analizaLlamadaFunción(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
@@ -85,7 +107,9 @@
         else if(Ñ::tiposAsignables(tipoLIA->tipo, tipoLDA->tipo))
         {
             // Son tipos distintos pero compatibles, hay que convertir
-            std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(tipoLDA->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoLIA->tipo) << "' para la asignación" << std::endl;
+            //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(tipoLDA->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoLIA->tipo) << "' para la pase de argumentos" << std::endl;
+
+            _insertaConversión(nodo->ramas[0], i, tipoLDA->tipo, tipoLIA->tipo);            
         }
         else
         {
@@ -322,7 +346,13 @@
         // Convierto a Ñ::Valor*
         Ñ::Valor* v = Ñ::creaValor((Ñ::Literal*)nodo);
         // Compruebo el tipo del valor y devuelvo el resultado
-        return _analizaLDA((Ñ::Nodo*)v, tablaSímbolos);
+        Ñ::Resultado rTipoLiteral = _analizaLDA((Ñ::Nodo*)v, tablaSímbolos);
+        if(!rTipoLiteral.error())
+        {
+            // Si resultado correcto, asignaré al literal el tipo adecuado más 
+            ((Ñ::Literal*)nodo)->tipo = ((Ñ::Valor*)v)->obténTipo();
+        }
+        return rTipoLiteral;
     }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
     {
@@ -426,23 +456,23 @@
 
                 t2 = r2.nodo();
 
-                tipoResultado = Ñ::obténTipoMínimoComún(tipoResultado, ((Ñ::Tipo*)t2)->tipo);
+                Ñ::CategoríaTipo tmp = Ñ::obténTipoMínimoComún(tipoResultado, ((Ñ::Tipo*)t2)->tipo);
             
-                if(((Ñ::Tipo*)t1)->tipo == tipoResultado)
+                if(tmp == tipoResultado)
                 {
                     // Tipos idénticos, no hace falta comprobar compatibilidad
                 }
-                else if(tiposAsignables(tipoResultado, ((Ñ::Tipo*)t1)->tipo))
+                else if(tiposAsignables(tmp, tipoResultado))
                 {
                     // Son tipos distintos pero compatibles, hay que convertir
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta" << std::endl;
-                    resultado.éxito();
-                    return resultado;
+                    //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(tipoResultado) << "' a '" << Ñ::obténNombreDeTipo(tmp) << "' para la suma/resta 1" << std::endl;
+                    
+                    _insertaConversión(nodo, 0, tipoResultado, tmp);
+                    tipoResultado = tmp;
                 }
                 else
                 {
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta" << std::endl;
-                    resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.error("Suma/Resta 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmp) + "'.");
                     return resultado;
                 }
             
@@ -453,14 +483,12 @@
                 else if(tiposAsignables(tipoResultado, ((Ñ::Tipo*)t2)->tipo))
                 {
                     // Son tipos distintos pero compatibles, hay que convertir
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta" << std::endl;
-                    resultado.éxito();
-                    return resultado;
+                    //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta 2" << std::endl;
+                   _insertaConversión(nodo->ramas[i], 0, ((Ñ::Tipo*)t2)->tipo, tipoResultado);
                 }
                 else
                 {
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta" << std::endl;
-                    resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.error("Suma/Resta 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
                     return resultado;
                 }
             }
@@ -525,23 +553,23 @@
 
                 t2 = r2.nodo();
 
-                tipoResultado = Ñ::obténTipoMínimoComún(tipoResultado, ((Ñ::Tipo*)t2)->tipo);
-            
-                if(((Ñ::Tipo*)t1)->tipo == tipoResultado)
+                Ñ::CategoríaTipo tmp = Ñ::obténTipoMínimoComún(tipoResultado, ((Ñ::Tipo*)t2)->tipo);
+
+                if(tmp == tipoResultado)
                 {
                     // Tipos idénticos, no hace falta comprobar compatibilidad
                 }
-                else if(tiposAsignables(tipoResultado, ((Ñ::Tipo*)t1)->tipo))
+                else if(tiposAsignables(tmp, tipoResultado))
                 {
                     // Son tipos distintos pero compatibles, hay que convertir
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la multiplicación/división" << std::endl;
-                    resultado.éxito();
-                    return resultado;
+                    //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(tipoResultado) << "' a '" << Ñ::obténNombreDeTipo(tmp) << "' para la multiplicación/división 1" << std::endl;
+                    
+                    _insertaConversión(nodo, 0, tipoResultado, tmp);
+                    tipoResultado = tmp;
                 }
                 else
                 {
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la multiplicación/división" << std::endl;
-                    resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(((Ñ::Tipo*)t1)->tipo) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.error("Multiplicación/División 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmp) + "'.");
                     return resultado;
                 }
             
@@ -552,14 +580,13 @@
                 else if(tiposAsignables(tipoResultado, ((Ñ::Tipo*)t2)->tipo))
                 {
                     // Son tipos distintos pero compatibles, hay que convertir
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la multiplicación/división" << std::endl;
-                    resultado.éxito();
-                    return resultado;
+                    //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la multiplicación/división 2" << std::endl;
+                    
+                    _insertaConversión(op, 0, ((Ñ::Tipo*)t2)->tipo, tipoResultado);
                 }
                 else
                 {
-                    std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la multiplicación/división" << std::endl;
-                    resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.error("Multiplicación/División 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
                     return resultado;
                 }
             }
@@ -658,7 +685,8 @@
         else if(tiposAsignables(lia, lda))
         {
             // Son tipos distintos pero compatibles, hay que convertir
-            std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(lda) << "' a '" << Ñ::obténNombreDeTipo(lia) << "' para la asignación" << std::endl;
+            //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(lda) << "' a '" << Ñ::obténNombreDeTipo(lia) << "' para la asignación" << std::endl;
+            _insertaConversión(nodo, 1, lda, lia);
             resultado.éxito();
             return resultado;
         }
@@ -712,8 +740,9 @@
             else if(Ñ::tiposAsignables(tLia->tipo, tLda->tipo))
             {
                 // Son tipos distintos pero compatibles, hay que convertir
-                std::cout << "PENDIENTE: Añadir conversión de '" << Ñ::obténNombreDeTipo(tLda->tipo) << "' a '" << Ñ::obténNombreDeTipo(tLia->tipo) << "' para la asignación" << std::endl;
+                //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(tLda->tipo) << "' a '" << Ñ::obténNombreDeTipo(tLia->tipo) << "' para la devolución" << std::endl;
 
+                _insertaConversión(nodo, 0, tLda->tipo, tLia->tipo);
                 resultado.éxito();
                 return resultado;
             }

@@ -193,14 +193,11 @@ std::string _esperaComando()
 			if(arg->categoría == Ñ::CategoríaNodo::NODO_VALOR)
 			{
 				Ñ::Valor* val = (Ñ::Valor*)arg;
-				Ñ::Resultado tmp = Ñ::aReal64(val);
-				if(tmp.error())
+				if(!val->esReal64())
 				{
 					return nullptr;
 				}
-				Ñ::Valor* valor = (Ñ::Valor*)(tmp.nodo());
-				delete val;
-				double real = valor->real64();
+				double real = val->real64();
 				std::string texto = std::to_string(real);
 				Ñ::Valor* resultado = new Ñ::Valor;
 				resultado->texto(texto);
@@ -434,6 +431,13 @@ std::string leeArchivo(std::filesystem::path archivo)
 
 int main(int argc, char** argv)
 {
+
+	if(!(std::numeric_limits< double >::is_iec559))
+	{
+		std::cout << "Requiero el estándar IEEE 754 para los números reales" << std::endl;
+		return -1;
+	}
+
     std::map<std::string, docopt::value> args;
 	args = docopt::docopt(USO, { argv + 1, argv + argc }, false);
 

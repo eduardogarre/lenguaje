@@ -90,7 +90,9 @@ namespace Ñ
 
     bool comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2);
     Ñ::Valor* duplicaValor(Ñ::Valor* valor);
-
+    
+    Ñ::Resultado convierteValor(Ñ::Valor* valor, Ñ::CategoríaTipo tipoDestino);
+    
     Ñ::Resultado aBooleano(Ñ::Valor* valor);
     Ñ::Resultado aNat8(Ñ::Valor* valor);
     Ñ::Resultado aNat16(Ñ::Valor* valor);

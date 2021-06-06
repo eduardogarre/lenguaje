@@ -352,6 +352,8 @@ void Ñ::Valor::muestra()
 {
 	imprimeAjuste();
 	std::cout << "(NODO_VALOR) [";
+	std::cout << obténNombreDeTipo(tipo) << "] [";
+	
 
 	if(esNat8())
 	{
@@ -400,6 +402,10 @@ void Ñ::Valor::muestra()
 	else if(esPuntero())
 	{
 		std::cout << std::to_string(puntero());
+	}
+	else if(esTexto())
+	{
+		std::cout << texto();
 	}
 	else
 	{
@@ -1189,6 +1195,77 @@ void Ñ::Valor::muestra()
 	}
 }
 
+Ñ::Resultado Ñ::convierteValor(Ñ::Valor* valor, Ñ::CategoríaTipo tipoDestino)
+{
+	Ñ::Resultado resultado;
+
+	switch (tipoDestino)
+	{
+	case Ñ::CategoríaTipo::TIPO_NADA:
+		delete valor;
+		resultado.éxito();
+		resultado.nodo((Ñ::Nodo*)(new Ñ::Valor));
+		return resultado;
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_PUNTERO:
+		return Ñ::aPuntero(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_TEXTO:
+		return Ñ::aTexto(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_BOOLEANO:
+		return Ñ::aBooleano(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_NATURAL_8:
+		return Ñ::aNat8(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_NATURAL_16:
+		return Ñ::aNat16(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_NATURAL_32:
+		return Ñ::aNat32(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_NATURAL_64:
+		return Ñ::aNat64(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_ENTERO_8:
+		return Ñ::aEnt8(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_ENTERO_16:
+		return Ñ::aEnt16(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_ENTERO_32:
+		return Ñ::aEnt32(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_ENTERO_64:
+		return Ñ::aEnt64(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_REAL_32:
+		return Ñ::aReal32(valor);
+		break;
+	
+	case Ñ::CategoríaTipo::TIPO_REAL_64:
+		return Ñ::aReal64(valor);
+		break;
+	
+	default:
+		resultado.error("Tipo inválido: " + Ñ::obténNombreDeTipo(tipoDestino));
+		return resultado;
+		break;
+	}
+}
 
 bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 {
@@ -1460,16 +1537,26 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 			tipo = Ñ::CategoríaTipo::TIPO_BOOLEANO;
 			break;
 		
+		case Ñ::CategoríaTipo::TIPO_ENTERO_8:
+		case Ñ::CategoríaTipo::TIPO_ENTERO_16:
+		case Ñ::CategoríaTipo::TIPO_ENTERO_32:
 		case Ñ::CategoríaTipo::TIPO_ENTERO_64:
 			tipo = obténMínimoEnteroVálido(std::stoll(literal->dato));
 			break;
 		
+		case Ñ::CategoríaTipo::TIPO_NATURAL_8:
+		case Ñ::CategoríaTipo::TIPO_NATURAL_16:
+		case Ñ::CategoríaTipo::TIPO_NATURAL_32:
 		case Ñ::CategoríaTipo::TIPO_NATURAL_64:
 			tipo = obténMínimoNaturalVálido(std::stoull(literal->dato));
 			break;
 		
-		case Ñ::CategoríaTipo::TIPO_REAL_64:
+		case Ñ::CategoríaTipo::TIPO_REAL_32:
 			tipo = Ñ::CategoríaTipo::TIPO_REAL_32;
+			break;
+
+		case Ñ::CategoríaTipo::TIPO_REAL_64:
+			tipo = Ñ::CategoríaTipo::TIPO_REAL_64;
 			break;
 		
 		case Ñ::CategoríaTipo::TIPO_TEXTO:
@@ -1514,25 +1601,25 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	
 	case TIPO_NATURAL_8:
 		valor = new Ñ::Valor;
-		valor->nat8(std::stoi(literal->dato));
+		valor->nat8(std::stoul(literal->dato));
 		return valor;
 		break;
 	
 	case TIPO_NATURAL_16:
 		valor = new Ñ::Valor;
-		valor->nat16(std::stoi(literal->dato));
+		valor->nat16(std::stoul(literal->dato));
 		return valor;
 		break;
 	
 	case TIPO_NATURAL_32:
 		valor = new Ñ::Valor;
-		valor->nat32(std::stoi(literal->dato));
+		valor->nat32(std::stoul(literal->dato));
 		return valor;
 		break;
 	
 	case TIPO_NATURAL_64:
 		valor = new Ñ::Valor;
-		valor->nat64(std::stoi(literal->dato));
+		valor->nat64(std::stoul(literal->dato));
 		return valor;
 		break;
 	
@@ -1562,13 +1649,13 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	
 	case TIPO_REAL_32:
 		valor = new Ñ::Valor;
-		valor->real32(std::stoi(literal->dato));
+		valor->real32(std::stof(literal->dato));
 		return valor;
 		break;
 	
 	case TIPO_REAL_64:
 		valor = new Ñ::Valor;
-		valor->real64(std::stoi(literal->dato));
+		valor->real64(std::stod(literal->dato));
 		return valor;
 		break;
 	

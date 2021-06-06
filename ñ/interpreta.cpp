@@ -728,7 +728,7 @@ namespace Ñ
             return resultado;
         }
 
-        resultado.error("INTÉRPRETE :: El árbol de nodos es incorrecto, esperaba Lado Izquierdo de Asignación. Categoría del nódulo actual: " + std::to_string(nodos->categoría));
+        resultado.error("INTÉRPRETE :: El árbol de nodos es incorrecto, esperaba Lado Izquierdo de Asignación. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodos->categoría));
         return resultado;
     }
 
@@ -747,6 +747,20 @@ namespace Ñ
 
             resultado.éxito();
             resultado.nodo((Ñ::Nodo*)v);
+            return resultado;
+        }
+        else if(nodos->categoría == Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
+        {
+            Ñ::Resultado r = interpretaLDA(nodos->ramas[0], tablaSímbolos);
+            Ñ::ConvierteTipos* conv = (Ñ::ConvierteTipos*)nodos;
+            Ñ::Resultado rConv = Ñ::convierteValor((Ñ::Valor*)(r.nodo()), conv->destino);
+            if(rConv.error())
+            {
+                return rConv;
+            }
+
+            resultado.éxito();
+            resultado.nodo(rConv.nodo());
             return resultado;
         }
         else if(nodos->categoría == Ñ::CategoríaNodo::NODO_VALOR)
@@ -1149,7 +1163,7 @@ namespace Ñ
             return ejecutaFunción(((Ñ::LlamaFunción*)nodos)->nombre, args, tablaSímbolos);
         }
 
-        resultado.error("INTÉRPRETE :: El árbol de nodos es incorrecto, esperaba Lado Derecho de Asignación. Categoría del nódulo actual: " + std::to_string(nodos->categoría));
+        resultado.error("INTÉRPRETE :: El árbol de nodos es incorrecto, esperaba Lado Derecho de Asignación. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodos->categoría));
         return resultado;
     }
 }

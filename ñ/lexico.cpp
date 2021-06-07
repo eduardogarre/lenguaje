@@ -49,6 +49,56 @@ namespace Ñ
         return c;
     }
 
+    bool Léxico::comentario(std::string txt)
+    {
+        try {
+            bool resultado = false;
+            int c = cursor;
+
+            std::string carácter = siguienteCarácter(txt);
+
+            if(carácter == u8"/")
+            {
+                incrementaCursor(txt);
+                carácter = siguienteCarácter(txt);
+
+                if(carácter == u8"/")
+                {
+                    resultado = true;
+
+                    do {
+                        incrementaCursor(txt);
+                        carácter = siguienteCarácter(txt);
+                    } while(!esnuevalínea(carácter));
+                    
+                    return resultado;
+                }
+            }
+            
+            cursor = c;
+            return resultado;
+        }
+        catch(const std::runtime_error& re)
+        {
+            // speciffic handling for runtime_error
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
+            return false;
+        }
+        catch(const std::exception& ex)
+        {
+            // speciffic handling for all exceptions extending std::exception, except
+            // std::runtime_error which is handled explicitly
+            std::cerr << u8"Error: " << ex.what() << std::endl;
+            return false;
+        }
+        catch(...)
+        {
+            // catch any other errors (that we have no information about)
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
+            return false;
+        }
+    }
+
     bool Léxico::nuevaLínea(std::string txt)
     {
         try {
@@ -827,6 +877,12 @@ namespace Ñ
             {
                 //std::cout << "cursor: " << cursor << std::endl;
                 int c = cursor;
+                if(comentario(cmd))
+                {
+                    continue;
+                }
+                cursor = c;
+                
                 if(nuevaLínea(cmd))
                 {
                     continue;

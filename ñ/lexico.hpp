@@ -24,6 +24,8 @@ namespace Ñ
         void incrementaCursor(std::string txt);
         std::string siguienteCarácter(std::string txt);
         bool comentario(std::string txt);
+        bool _comentario1L(std::string txt);
+        bool _comentarioXL(std::string txt);
         bool nuevaLínea(std::string txt);
         bool espacio(std::string txt);
         bool notación(std::string txt);

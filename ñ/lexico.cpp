@@ -52,6 +52,45 @@ namespace Ñ
     bool Léxico::comentario(std::string txt)
     {
         try {
+            //std::cout << "número(" << txt << ")" << std::endl;
+            
+            if(_comentario1L(txt))
+            {
+                return true;
+            }
+            else if(_comentarioXL(txt))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch(const std::runtime_error& re)
+        {
+            // speciffic handling for runtime_error
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
+            return false;
+        }
+        catch(const std::exception& ex)
+        {
+            // speciffic handling for all exceptions extending std::exception, except
+            // std::runtime_error which is handled explicitly
+            std::cerr << u8"Error: " << ex.what() << std::endl;
+            return false;
+        }
+        catch(...)
+        {
+            // catch any other errors (that we have no information about)
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
+            return false;
+        }
+    }
+
+    bool Léxico::_comentario1L(std::string txt)
+    {
+        try {
             bool resultado = false;
             int c = cursor;
 
@@ -72,6 +111,67 @@ namespace Ñ
                     } while(!esnuevalínea(carácter));
                     
                     return resultado;
+                }
+            }
+            
+            cursor = c;
+            return resultado;
+        }
+        catch(const std::runtime_error& re)
+        {
+            // speciffic handling for runtime_error
+            std::cerr << u8"Error en tiempo de ejecución: " << re.what() << std::endl;
+            return false;
+        }
+        catch(const std::exception& ex)
+        {
+            // speciffic handling for all exceptions extending std::exception, except
+            // std::runtime_error which is handled explicitly
+            std::cerr << u8"Error: " << ex.what() << std::endl;
+            return false;
+        }
+        catch(...)
+        {
+            // catch any other errors (that we have no information about)
+            std::cerr << u8"Error desconocido. Posible corrupción de memoria." << std::endl;
+            return false;
+        }
+    }
+
+    bool Léxico::_comentarioXL(std::string txt)
+    {
+        try {
+            bool resultado = false;
+            int c = cursor;
+
+            std::string carácter = siguienteCarácter(txt);
+
+            if(carácter == u8"/")
+            {
+                incrementaCursor(txt);
+                carácter = siguienteCarácter(txt);
+
+                if(carácter == u8"*")
+                {
+                    resultado = true;
+
+                    while(cursor < txt.length()-1)
+                    {
+                        incrementaCursor(txt);
+                        carácter = siguienteCarácter(txt);
+
+                        if(carácter == u8"*")
+                        {
+                            incrementaCursor(txt);
+                            carácter = siguienteCarácter(txt);
+                            
+                            if(carácter == u8"/")
+                            {
+                                incrementaCursor(txt);
+                                return true;
+                            }
+                        }
+                    }
                 }
             }
             

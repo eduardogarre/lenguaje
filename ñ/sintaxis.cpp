@@ -1028,6 +1028,28 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	{
 		Ñ::Nodo* m = (Ñ::Nodo*)(new Ñ::Módulo);
 
+		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR && lexemas[cursor]->contenido == "módulo")
+		{
+			cursor++;
+
+			if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
+			{
+				((Ñ::Módulo*)m)->módulo = lexemas[cursor]->contenido;
+
+				cursor++;
+			}
+
+			if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN && lexemas[cursor]->contenido == ";")
+			{
+				cursor++;
+			}
+			else
+			{
+				cursor = c;
+				return nullptr;
+			}
+		}
+
 		while(true)
 		{
 			Ñ::Nodo* n;

@@ -296,6 +296,8 @@ void _interpretaArchivo(std::string código, Ñ::TablaSímbolos* tablaSímbolos)
 		}
 	}
 
+	Ñ::construye(nodos);
+
 	for(auto l : lexemas)
 	{
 		delete l;

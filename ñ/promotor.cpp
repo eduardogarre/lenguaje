@@ -23,7 +23,8 @@
 namespace Ñ
 {
     enum CategoríaLlvm {
-        FUNCIÓN_LLVM
+        FUNCIÓN_LLVM,
+        BLOQUE_LLVM
     };
 
     class ResultadoLlvm
@@ -35,7 +36,8 @@ namespace Ñ
         CategoríaLlvm categoría;
 
         union {
-            llvm::Function * _función;
+            llvm::Function *    _función;
+            llvm::BasicBlock *  _bloque;
         } entidad;
 
     public:
@@ -48,6 +50,9 @@ namespace Ñ
 
         void función(llvm::Function* fn) { categoría = Ñ::CategoríaLlvm::FUNCIÓN_LLVM; entidad._función = fn; }
         llvm::Function* función() { return (_error ? nullptr : entidad._función); }
+
+        void bloque(llvm::BasicBlock* blq) { categoría = Ñ::CategoríaLlvm::BLOQUE_LLVM; entidad._bloque = blq; }
+        llvm::BasicBlock* bloque() { return (_error ? nullptr : entidad._bloque); }
     };
 
     class Promotor
@@ -163,17 +168,12 @@ namespace Ñ
                 tablaSímbolosLlvm[argumento.getName().str()] = &argumento;
             }
 
-            llvm::BasicBlock* bloque = llvm::BasicBlock::Create(contextoLlvm, "entrada", funciónLlvm);
-
-            constructorLlvm.SetInsertPoint(bloque);
-
-            constructorLlvm.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt64Ty(contextoLlvm), 288));
+            resultado = construyeBloque("entrada", funciónLlvm);
 
             llvm::verifyFunction(*funciónLlvm);
 
             funciónLlvm->print(llvm::errs(), nullptr);
-            
-            resultado.éxito();
+
             return resultado;
         }
 
@@ -332,6 +332,31 @@ namespace Ñ
             
             resultado.éxito();
             resultado.función(función);
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeBloque(std::string nombre, llvm::Function* función)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(función == nullptr)
+            {
+                resultado.error("He recibido una función de valor nullptr, no puedo crear el bloque");
+                return resultado;
+            }
+
+            llvm::BasicBlock* bloque = llvm::BasicBlock::Create(contextoLlvm, nombre, función);
+            if(bloque == nullptr)
+            {
+                resultado.error("El proceso de creación del bloque '" + nombre + "' me ha devuelto un puntero nulo");
+                return resultado;
+            }
+
+            constructorLlvm.SetInsertPoint(bloque);
+
+            constructorLlvm.CreateRet(llvm::UndefValue::get(llvm::Type::getVoidTy(contextoLlvm)));
+            
+            resultado.éxito();
             return resultado;
         }
     };

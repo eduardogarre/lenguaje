@@ -24,6 +24,7 @@
 
 namespace Ñ
 {
+
     enum CategoríaLlvm {
         FUNCIÓN_LLVM,
         BLOQUE_LLVM,
@@ -74,6 +75,64 @@ namespace Ñ
         Promotor() : constructorLlvm(contextoLlvm)
         {
 
+        }
+
+        llvm::Type* creaTipoLlvm(Ñ::CategoríaTipo tipo)
+        {
+            switch (tipo)
+            {
+            case TIPO_NADA:
+                return llvm::Type::getVoidTy(contextoLlvm);
+                break;
+            
+            case TIPO_BOOLEANO:
+                return llvm::Type::getInt1Ty(contextoLlvm);
+                break;
+            
+            case TIPO_NATURAL_8:
+                return llvm::Type::getInt8Ty(contextoLlvm);
+                break;
+            
+            case TIPO_NATURAL_16:
+                return llvm::Type::getInt16Ty(contextoLlvm);
+                break;
+            
+            case TIPO_NATURAL_32:
+                return llvm::Type::getInt32Ty(contextoLlvm);
+                break;
+            
+            case TIPO_NATURAL_64:
+                return llvm::Type::getInt64Ty(contextoLlvm);
+                break;
+            
+            case TIPO_ENTERO_8:
+                return llvm::Type::getInt8Ty(contextoLlvm);
+                break;
+            
+            case TIPO_ENTERO_16:
+                return llvm::Type::getInt16Ty(contextoLlvm);
+                break;
+            
+            case TIPO_ENTERO_32:
+                return llvm::Type::getInt32Ty(contextoLlvm);
+                break;
+            
+            case TIPO_ENTERO_64:
+                return llvm::Type::getInt64Ty(contextoLlvm);
+                break;
+            
+            case TIPO_REAL_32:
+                return llvm::Type::getFloatTy(contextoLlvm);
+                break;
+            
+            case TIPO_REAL_64:
+                return llvm::Type::getDoubleTy(contextoLlvm);
+                break;
+            
+            default:
+                return nullptr;
+                break;
+            }
         }
 
         Ñ::ResultadoLlvm construyeMódulo(Ñ::Nodo* nodo)
@@ -203,51 +262,7 @@ namespace Ñ
             }
 
             Ñ::Tipo* tDevuelto = (Ñ::Tipo*)devuelto;
-            llvm::Type* tRetorno;
-
-            switch(tDevuelto->tipo)
-            {
-            case Ñ::CategoríaTipo::TIPO_NADA:
-                tRetorno = llvm::Type::getVoidTy(contextoLlvm);
-                break;
-
-            case Ñ::CategoríaTipo::TIPO_BOOLEANO:
-                tRetorno = llvm::Type::getInt1Ty(contextoLlvm);
-                break;
-
-            case Ñ::CategoríaTipo::TIPO_NATURAL_8:
-            case Ñ::CategoríaTipo::TIPO_ENTERO_8:
-                tRetorno = llvm::Type::getInt8Ty(contextoLlvm);
-                break;
-
-            case Ñ::CategoríaTipo::TIPO_NATURAL_16:
-            case Ñ::CategoríaTipo::TIPO_ENTERO_16:
-                tRetorno = llvm::Type::getInt16Ty(contextoLlvm);
-                break;
-
-            case Ñ::CategoríaTipo::TIPO_NATURAL_32:
-            case Ñ::CategoríaTipo::TIPO_ENTERO_32:
-                tRetorno = llvm::Type::getInt32Ty(contextoLlvm);
-                break;
-
-            case Ñ::CategoríaTipo::TIPO_NATURAL_64:
-            case Ñ::CategoríaTipo::TIPO_ENTERO_64:
-                tRetorno = llvm::Type::getInt64Ty(contextoLlvm);
-                break;
-                
-            case Ñ::CategoríaTipo::TIPO_REAL_32:
-                tRetorno = llvm::Type::getFloatTy(contextoLlvm);
-                break;
-                
-            case Ñ::CategoríaTipo::TIPO_REAL_64:
-                tRetorno = llvm::Type::getDoubleTy(contextoLlvm);
-                break;
-
-            default:
-                resultado.error("No reconozco el tipo de retorno");
-                return resultado;
-                break;
-            }
+            llvm::Type* tRetorno = creaTipoLlvm(tDevuelto->tipo);
 
             std::vector<llvm::Type*> vArgumentos;
 
@@ -262,46 +277,7 @@ namespace Ñ
                 if(a->categoría == Ñ::CategoríaNodo::NODO_TIPO)
                 {
                     Ñ::Tipo* arg = (Ñ::Tipo*)a;
-
-                    switch(arg->tipo)
-                    {
-                    case Ñ::CategoríaTipo::TIPO_BOOLEANO:
-                        vArgumentos.push_back(llvm::Type::getInt1Ty(contextoLlvm));
-                        break;
-
-                    case Ñ::CategoríaTipo::TIPO_NATURAL_8:
-                    case Ñ::CategoríaTipo::TIPO_ENTERO_8:
-                        vArgumentos.push_back(llvm::Type::getInt8Ty(contextoLlvm));
-                        break;
-
-                    case Ñ::CategoríaTipo::TIPO_NATURAL_16:
-                    case Ñ::CategoríaTipo::TIPO_ENTERO_16:
-                        vArgumentos.push_back(llvm::Type::getInt16Ty(contextoLlvm));
-                        break;
-
-                    case Ñ::CategoríaTipo::TIPO_NATURAL_32:
-                    case Ñ::CategoríaTipo::TIPO_ENTERO_32:
-                        vArgumentos.push_back(llvm::Type::getInt32Ty(contextoLlvm));
-                        break;
-
-                    case Ñ::CategoríaTipo::TIPO_NATURAL_64:
-                    case Ñ::CategoríaTipo::TIPO_ENTERO_64:
-                        vArgumentos.push_back(llvm::Type::getInt64Ty(contextoLlvm));
-                        break;
-                        
-                    case Ñ::CategoríaTipo::TIPO_REAL_32:
-                        vArgumentos.push_back(llvm::Type::getFloatTy(contextoLlvm));
-                        break;
-                        
-                    case Ñ::CategoríaTipo::TIPO_REAL_64:
-                        vArgumentos.push_back(llvm::Type::getDoubleTy(contextoLlvm));
-                        break;
-
-                    default:
-                        resultado.error("No reconozco el tipo de retorno");
-                        return resultado;
-                        break;
-                    }
+                    vArgumentos.push_back(creaTipoLlvm(arg->tipo));
                 }
             }
 
@@ -462,70 +438,70 @@ namespace Ñ
             switch (literal->tipo)
             {
             case Ñ::CategoríaTipo::TIPO_NATURAL_8:
-                tipo = llvm::Type::getInt8Ty(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número));
                 break;
                 
             case Ñ::CategoríaTipo::TIPO_NATURAL_16:
-                tipo = llvm::Type::getInt16Ty(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número));
                 break;
                 
             case Ñ::CategoríaTipo::TIPO_NATURAL_32:
-                tipo = llvm::Type::getInt32Ty(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número));
                 break;
 
             case Ñ::CategoríaTipo::TIPO_NATURAL_64:
-                tipo = llvm::Type::getInt64Ty(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_8:
-                tipo = llvm::Type::getInt8Ty(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número, true));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_16:
-                tipo = llvm::Type::getInt16Ty(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número, true));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_32:
-                tipo = llvm::Type::getInt32Ty(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número, true));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_64:
-                tipo = llvm::Type::getInt64Ty(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número, true));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_REAL_32:
-                tipo = llvm::Type::getFloatTy(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 real32 = std::stof(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipo, real32));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_REAL_64:
-                tipo = llvm::Type::getDoubleTy(contextoLlvm);
+                tipo = creaTipoLlvm(literal->tipo);
                 real64 = std::stod(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipo, real64));

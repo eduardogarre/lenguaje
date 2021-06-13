@@ -137,8 +137,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 		if(cmp1 = comparación())
 		{
-			Ñ::Nodo* ig = (Ñ::Nodo*)(new Ñ::Igualdad);
-			ig->ramas.push_back(cmp1);
+			Ñ::Nodo* ig = nullptr;
 
 			while(true)
 			{
@@ -180,6 +179,11 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria);
 					((Ñ::OperaciónBinaria*)op)->operación = operación;
 					op->ramas.push_back(cmpN);
+					if(ig == nullptr)
+					{
+						ig = (Ñ::Nodo*)(new Ñ::Igualdad);
+						ig->ramas.push_back(cmp1);
+					}
 					ig->ramas.push_back(op);
 				}
 				else
@@ -190,7 +194,14 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 				}
 			}
 
-			return ig;
+			if(ig == nullptr)
+			{
+				return cmp1;
+			}
+			else
+			{
+				return ig;
+			}
 		}
 	}
 
@@ -208,8 +219,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 		if(t1 = término())
 		{
-			Ñ::Nodo* cmp = (Ñ::Nodo*)(new Ñ::Comparación);
-			cmp->ramas.push_back(t1);
+			Ñ::Nodo* cmp = nullptr;
 
 			while(true)
 			{
@@ -249,6 +259,11 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria);
 					((Ñ::OperaciónBinaria*)op)->operación = operación;
 					op->ramas.push_back(tN);
+					if(cmp == nullptr)
+					{
+						cmp = (Ñ::Nodo*)(new Ñ::Igualdad);
+						cmp->ramas.push_back(t1);
+					}
 					cmp->ramas.push_back(op);
 				}
 				else
@@ -259,7 +274,14 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 				}
 			}
 
-			return cmp;
+			if(cmp == nullptr)
+			{
+				return t1;
+			}
+			else
+			{
+				return cmp;
+			}
 		}
 	}
 
@@ -277,8 +299,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 		if(f1 = factor())
 		{
-			Ñ::Nodo* t = (Ñ::Nodo*)(new Ñ::Término);
-			t->ramas.push_back(f1);
+			Ñ::Nodo* t = nullptr;
 
 			while(true)
 			{
@@ -304,6 +325,11 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria);
 					((Ñ::OperaciónBinaria*)op)->operación = operación;
 					op->ramas.push_back(fN);
+					if(t == nullptr)
+					{
+						t = (Ñ::Nodo*)(new Ñ::Igualdad);
+						t->ramas.push_back(f1);
+					}
 					t->ramas.push_back(op);
 				}
 				else
@@ -314,7 +340,14 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 				}
 			}
 
-			return t;
+			if(t == nullptr)
+			{
+				return f1;
+			}
+			else
+			{
+				return t;
+			}
 		}
 	}
 
@@ -332,8 +365,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 		if(u1 = operaciónUnaria())
 		{
-			Ñ::Nodo* f = (Ñ::Nodo*)(new Ñ::Factor);
-			f->ramas.push_back(u1);
+			Ñ::Nodo* f = nullptr;
 
 			while(true)
 			{
@@ -359,6 +391,11 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria);
 					((Ñ::OperaciónBinaria*)op)->operación = operación;
 					op->ramas.push_back(uN);
+					if(f == nullptr)
+					{
+						f = (Ñ::Nodo*)(new Ñ::Factor);
+						f->ramas.push_back(u1);
+					}
 					f->ramas.push_back(op);
 				}
 				else
@@ -369,7 +406,14 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 				}
 			}
 
-			return f;
+			if(f == nullptr)
+			{
+				return u1;
+			}
+			else
+			{
+				return f;
+			}
 		}
 	}
 

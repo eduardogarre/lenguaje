@@ -5,6 +5,8 @@
 #include <vector>
 
 #include "llvm/ADT/APFloat.h"
+#include "llvm/ADT/APint.h"
+#include "llvm/ADT/APSint.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
@@ -24,7 +26,8 @@ namespace Ñ
 {
     enum CategoríaLlvm {
         FUNCIÓN_LLVM,
-        BLOQUE_LLVM
+        BLOQUE_LLVM,
+        VALOR_LLVM
     };
 
     class ResultadoLlvm
@@ -38,6 +41,7 @@ namespace Ñ
         union {
             llvm::Function *    _función;
             llvm::BasicBlock *  _bloque;
+            llvm::Value *  _valor;
         } entidad;
 
     public:
@@ -53,6 +57,9 @@ namespace Ñ
 
         void bloque(llvm::BasicBlock* blq) { categoría = Ñ::CategoríaLlvm::BLOQUE_LLVM; entidad._bloque = blq; }
         llvm::BasicBlock* bloque() { return (_error ? nullptr : entidad._bloque); }
+
+        void valor(llvm::Value* val) { categoría = Ñ::CategoríaLlvm::VALOR_LLVM; entidad._valor = val; }
+        llvm::Value* valor() { return (_error ? nullptr : entidad._valor); }
     };
 
     class Promotor
@@ -92,7 +99,6 @@ namespace Ñ
             }
 
             // Creo el módulo LLVM y le asigno el nombre de mi módulo
-            std::cout << "Construyendo módulo '" << módulo->módulo << "'" << std::endl;
             móduloLlvm = new llvm::Module(módulo->módulo, contextoLlvm);
 
             for(auto n : nodo->ramas)
@@ -134,23 +140,14 @@ namespace Ñ
                 return resultado;
             }
 
-            std::cout << "Construyendo definición de función '" << función->nombre << "()'... ";
-
-            std::cout << "Declarando '" << función->nombre << "()'... " << std::endl;
-
             resultado = construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1]);
-            
-            std::cout << "Recuperando la función '" << función->nombre << "()' ya declarada" << std::endl;
             
             llvm::Function * funciónLlvm;
             
             funciónLlvm = móduloLlvm->getFunction(función->nombre);
-            
-            std::cout << "Función '" << función->nombre << "()' recuperada" << std::endl;
 
             if(!funciónLlvm)
             {
-                std::cout << "Error, no se ha registrado la función '" << función->nombre << "()'" << función->nombre << "()'" << std::endl;
                 resultado.error("Error, no se ha registrado la función '" + función->nombre + "()'");
                 return resultado;
             }
@@ -164,11 +161,12 @@ namespace Ñ
 
             for(auto &argumento : funciónLlvm->args())
             {
-                std::cout << "arg: " << argumento.getName().str() << std::endl;
                 tablaSímbolosLlvm[argumento.getName().str()] = &argumento;
             }
 
-            resultado = construyeBloque("entrada", funciónLlvm);
+            Ñ::Nodo* bloque = nodo->ramas[2];
+
+            resultado = construyeBloque("entrada", bloque, funciónLlvm);
 
             llvm::verifyFunction(*funciónLlvm);
 
@@ -204,12 +202,8 @@ namespace Ñ
                 return resultado;
             }
 
-            std::cout << "Construyendo declaración de '" << nombre << "()'" << std::endl;
-
             Ñ::Tipo* tDevuelto = (Ñ::Tipo*)devuelto;
             llvm::Type* tRetorno;
-
-            std::cout << "examinando tipo de retorno de '" << nombre << "()' ... ";
 
             switch(tDevuelto->tipo)
             {
@@ -250,15 +244,11 @@ namespace Ñ
                 break;
 
             default:
-                std::cout << "error" << std::endl;
                 resultado.error("No reconozco el tipo de retorno");
                 return resultado;
                 break;
             }
 
-            std::cout << "hecho." << std::endl;
-
-            std::cout << "Ahora examino argumentos de '" << nombre << "()' ... ";
             std::vector<llvm::Type*> vArgumentos;
 
             for(auto a : argumentos->ramas)
@@ -308,7 +298,6 @@ namespace Ñ
                         break;
 
                     default:
-                        std::cout << "error" << std::endl;
                         resultado.error("No reconozco el tipo de retorno");
                         return resultado;
                         break;
@@ -316,26 +305,16 @@ namespace Ñ
                 }
             }
 
-            std::cout << "hecho." << std::endl;
-            
-            std::cout << "Creo firma de '" << nombre << "()'... " << std::endl;
-            
             llvm::FunctionType* firmaFunción = llvm::FunctionType::get(tRetorno, vArgumentos, false);
 
-            std::cout << "hecho." << std::endl;
-            
-            std::cout << "Registro '" << nombre << "()'... " << std::endl;
-            
             llvm::Function* función = llvm::Function::Create(firmaFunción, llvm::Function::ExternalLinkage, nombre.c_str(), móduloLlvm);
 
-            std::cout << "hecho." << std::endl;
-            
             resultado.éxito();
             resultado.función(función);
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeBloque(std::string nombre, llvm::Function* función)
+        Ñ::ResultadoLlvm construyeBloque(std::string nombre, Ñ::Nodo* nodo, llvm::Function* función)
         {
             Ñ::ResultadoLlvm resultado;
 
@@ -354,9 +333,209 @@ namespace Ñ
 
             constructorLlvm.SetInsertPoint(bloque);
 
-            constructorLlvm.CreateRet(llvm::UndefValue::get(llvm::Type::getVoidTy(contextoLlvm)));
+            for(auto n : nodo->ramas)
+            {
+                resultado = construyeExpresión(n);
+                if(resultado.error())
+                {
+                    return resultado;
+                }
+            }
             
             resultado.éxito();
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeExpresión(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                return resultado;
+            }
+
+            if(nodo->ramas.size() != 1)
+            {
+                resultado.error("He recibido un nodo expresión que no contiene ningún hijo.");
+                return resultado;
+            }
+
+            auto n = nodo->ramas[0];
+
+            switch (n->categoría)
+            {
+            case Ñ::CategoríaNodo::NODO_DEVUELVE:
+                resultado = construyeRetorno(n);
+                break;
+            
+            default:
+                break;
+            }
+
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeRetorno(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                return resultado;
+            }
+
+            if(nodo->ramas.size() == 1)
+            {
+                resultado = construyeLDA(nodo->ramas[0]);
+                if(resultado.error())
+                {
+                    return resultado;
+                }
+
+                constructorLlvm.CreateRet(resultado.valor());
+
+                resultado.éxito();
+                return resultado;
+            }
+            else if(nodo->ramas.size() == 0)
+            {
+                constructorLlvm.CreateRetVoid();
+                resultado.éxito();
+                return resultado;
+            }
+            else
+            {
+                resultado.error("He recibido un nodo de devolución que tiene más de 1 hijo");
+                return resultado;
+            }
+        }
+
+        Ñ::ResultadoLlvm construyeLDA(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                return resultado;
+            }
+
+            switch (nodo->categoría)
+            {
+            case Ñ::CategoríaNodo::NODO_LITERAL:
+                resultado = construyeLiteral(nodo);
+                break;
+            
+            default:
+                resultado.error("No puedo construir este nodo como LDA");
+                break;
+            }
+
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeLiteral(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_LITERAL)
+            {
+                resultado.error("El nodo no es un literal, no puedo construirlo");
+                return resultado;
+            }
+
+            Ñ::Literal* literal = (Ñ::Literal*)nodo;
+            llvm::Type* tipo;
+            uint64_t número;
+            float real32;
+            double real64;
+
+            switch (literal->tipo)
+            {
+            case Ñ::CategoríaTipo::TIPO_NATURAL_8:
+                tipo = llvm::Type::getInt8Ty(contextoLlvm);
+                número = std::stoull(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipo, número));
+                break;
+                
+            case Ñ::CategoríaTipo::TIPO_NATURAL_16:
+                tipo = llvm::Type::getInt16Ty(contextoLlvm);
+                número = std::stoull(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipo, número));
+                break;
+                
+            case Ñ::CategoríaTipo::TIPO_NATURAL_32:
+                tipo = llvm::Type::getInt32Ty(contextoLlvm);
+                número = std::stoull(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipo, número));
+                break;
+
+            case Ñ::CategoríaTipo::TIPO_NATURAL_64:
+                tipo = llvm::Type::getInt64Ty(contextoLlvm);
+                número = std::stoull(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipo, número));
+                break;
+            
+            case Ñ::CategoríaTipo::TIPO_ENTERO_8:
+                tipo = llvm::Type::getInt8Ty(contextoLlvm);
+                número = std::stoll(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipo, número, true));
+                break;
+            
+            case Ñ::CategoríaTipo::TIPO_ENTERO_16:
+                tipo = llvm::Type::getInt16Ty(contextoLlvm);
+                número = std::stoll(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipo, número, true));
+                break;
+            
+            case Ñ::CategoríaTipo::TIPO_ENTERO_32:
+                tipo = llvm::Type::getInt32Ty(contextoLlvm);
+                número = std::stoll(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipo, número, true));
+                break;
+            
+            case Ñ::CategoríaTipo::TIPO_ENTERO_64:
+                tipo = llvm::Type::getInt64Ty(contextoLlvm);
+                número = std::stoll(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipo, número, true));
+                break;
+            
+            case Ñ::CategoríaTipo::TIPO_REAL_32:
+                tipo = llvm::Type::getFloatTy(contextoLlvm);
+                real32 = std::stof(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantFP::get(tipo, real32));
+                break;
+            
+            case Ñ::CategoríaTipo::TIPO_REAL_64:
+                tipo = llvm::Type::getDoubleTy(contextoLlvm);
+                real64 = std::stod(literal->dato);
+                resultado.éxito();
+                resultado.valor(llvm::ConstantFP::get(tipo, real64));
+                break;
+            
+            default:
+                resultado.error("Error, no reconozco el tipo del literal");
+                break;
+            }
+
             return resultado;
         }
     };
@@ -367,7 +546,11 @@ namespace Ñ
 
         Ñ::Promotor* promotor = new Ñ::Promotor;
 
+        std::cout << std::endl;
+
         muestraNodos(árbol);
+
+        std::cout << std::endl;
 
         if(árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {

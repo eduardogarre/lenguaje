@@ -584,11 +584,11 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	{
 		return Ñ::CategoríaTipo::TIPO_ENTERO_64;
 	}
-	else if(nombre == "rea32")
+	else if(nombre == "real32")
 	{
 		return Ñ::CategoríaTipo::TIPO_REAL_32;
 	}
-	else if(nombre == "rea64")
+	else if(nombre == "real64")
 	{
 		return Ñ::CategoríaTipo::TIPO_REAL_64;
 	}

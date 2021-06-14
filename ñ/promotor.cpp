@@ -487,6 +487,11 @@ namespace Ñ
                 resultado = construyeConversorTipos(nodo);
                 break;
             
+            case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
+                resultado.éxito();
+                resultado = construyeLecturaVariable(nodo);
+                break;
+            
             default:
                 resultado.error("No puedo construir este nodo como LDA");
                 break;
@@ -527,6 +532,44 @@ namespace Ñ
             tipo = creaTipoLlvm(t->tipo);
 
             llvm::Value* variable = constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
+
+            tablaSímbolosLlvm[nombre] = variable;
+
+            resultado.éxito();
+            resultado.valor(variable);
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeLecturaVariable(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+            {
+                resultado.error("El nodo no es una variable, no puedo construir su lectura");
+                return resultado;
+            }
+            
+            if(nodo->ramas.size() != 0)
+            {
+                resultado.error("El nodo 'identificador' no tiene las ramas esperadas, no puedo construir su lectura");
+                return resultado;
+            }
+
+            std::string nombre;
+            Ñ::Identificador* id;
+            llvm::Value* variable;
+
+            id = (Ñ::Identificador*)nodo;
+            nombre = id->id;
+
+            variable = tablaSímbolosLlvm[nombre];
 
             resultado.éxito();
             resultado.valor(variable);

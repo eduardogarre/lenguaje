@@ -12,6 +12,7 @@
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Function.h"
+#include "llvm/IR/Instructions.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
@@ -346,8 +347,58 @@ namespace Ñ
                 resultado = construyeRetorno(n);
                 break;
             
-            default:
+            case Ñ::CategoríaNodo::NODO_ASIGNA:
+                resultado = construyeAsignación(n);
                 break;
+            
+            default:
+                resultado.error("No reconozco la expresión");
+                break;
+            }
+
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeAsignación(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la asignación");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_ASIGNA)
+            {
+                resultado.error("He recibido un nodo que no es una asignación");
+                return resultado;
+            }
+            
+            if(nodo->ramas.size() == 2)
+            {
+                Ñ::ResultadoLlvm rLia = construyeLIA(nodo->ramas[0]);
+                if(rLia.error())
+                {
+                    return rLia;
+                }
+                llvm::Value* vLia = rLia.valor();
+
+                Ñ::ResultadoLlvm rLda = construyeLDA(nodo->ramas[1]);
+                if(rLda.error())
+                {
+                    return rLda;
+                }
+                llvm::Value* vLda = rLda.valor();
+
+                constructorLlvm.CreateStore(vLda, vLia, false);
+
+                resultado.éxito();
+            }
+            else
+            {
+                resultado.error("He recibido una asignación mal estructurada, tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+                return resultado;
             }
 
             return resultado;
@@ -389,6 +440,31 @@ namespace Ñ
             }
         }
 
+        Ñ::ResultadoLlvm construyeLIA(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                return resultado;
+            }
+
+            switch (nodo->categoría)
+            {
+            case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
+                resultado.éxito();
+                resultado = construyeDeclaraciónVariable(nodo);
+                break;
+            
+            default:
+                resultado.error("No puedo construir este nodo como LDA");
+                break;
+            }
+
+            return resultado;
+        }
+
         Ñ::ResultadoLlvm construyeLDA(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
@@ -402,10 +478,12 @@ namespace Ñ
             switch (nodo->categoría)
             {
             case Ñ::CategoríaNodo::NODO_LITERAL:
+                resultado.éxito();
                 resultado = construyeLiteral(nodo);
                 break;
             
             case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
+                resultado.éxito();
                 resultado = construyeConversorTipos(nodo);
                 break;
             
@@ -414,6 +492,44 @@ namespace Ñ
                 break;
             }
 
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeDeclaraciónVariable(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la declaración de variable");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+            {
+                resultado.error("El nodo no es una declaración de variable, no puedo construirlo");
+                return resultado;
+            }
+            
+            if(nodo->ramas.size() != 1)
+            {
+                resultado.error("El nodo 'declaración de variable' no tiene las ramas esperadas, no puedo construirlo");
+                return resultado;
+            }
+
+            std::string nombre;
+            llvm::Type* tipo;
+
+            Ñ::DeclaraVariable* dv = (Ñ::DeclaraVariable*)nodo;
+            Ñ::Tipo* t = (Ñ::Tipo*)(nodo->ramas[0]);
+
+            nombre = dv->variable;
+            tipo = creaTipoLlvm(t->tipo);
+
+            llvm::Value* variable = constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
+
+            resultado.éxito();
+            resultado.valor(variable);
             return resultado;
         }
 
@@ -439,8 +555,6 @@ namespace Ñ
                 return resultado;
             }
 
-            muestraNodos(nodo);
-
             Ñ::ConvierteTipos* conv = (Ñ::ConvierteTipos*)nodo;
 
             resultado = construyeLDA(nodo->ramas[0]);
@@ -455,9 +569,6 @@ namespace Ñ
                 resultado.error("Error al obtener el tipoLlvm");
                 return resultado;
             }
-
-            std::cout << "tipo origen: '" << obténNombreDeTipo(conv->origen) << "'" << std::endl;
-            std::cout << "tipo destino: '" << obténNombreDeTipo(conv->destino) << "'" << std::endl;
 
             llvm::Value* valor;
 
@@ -510,8 +621,6 @@ namespace Ñ
                 valor = nullptr;
                 break;
             }
-
-            std::cout << "hola2" << std::endl;
             
             resultado.éxito();
             resultado.valor(valor);

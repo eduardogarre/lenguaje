@@ -405,11 +405,116 @@ namespace Ñ
                 resultado = construyeLiteral(nodo);
                 break;
             
+            case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
+                resultado = construyeConversorTipos(nodo);
+                break;
+            
             default:
                 resultado.error("No puedo construir este nodo como LDA");
                 break;
             }
 
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeConversorTipos(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la conversión");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
+            {
+                resultado.error("El nodo no es un conversor de tipos, no puedo construirlo");
+                return resultado;
+            }
+
+            if(nodo->ramas.size() != 1)
+            {
+                resultado.error("El nodo conversor de tipos, está mal definido, tiene " + std::to_string(nodo->ramas.size()) + " hijos");
+                return resultado;
+            }
+
+            muestraNodos(nodo);
+
+            Ñ::ConvierteTipos* conv = (Ñ::ConvierteTipos*)nodo;
+
+            resultado = construyeLDA(nodo->ramas[0]);
+            if(resultado.error())
+            {
+                return resultado;
+            }
+
+            llvm::Type* tDestino = creaTipoLlvm(conv->destino);
+            if(tDestino == nullptr)
+            {
+                resultado.error("Error al obtener el tipoLlvm");
+                return resultado;
+            }
+
+            std::cout << "tipo origen: '" << obténNombreDeTipo(conv->origen) << "'" << std::endl;
+            std::cout << "tipo destino: '" << obténNombreDeTipo(conv->destino) << "'" << std::endl;
+
+            llvm::Value* valor;
+
+            switch (conv->destino)
+            {
+            case TIPO_NATURAL_8:
+            case TIPO_NATURAL_16:
+            case TIPO_NATURAL_32:
+            case TIPO_NATURAL_64:
+                valor = constructorLlvm.CreateIntCast(resultado.valor(), tDestino, false);
+                break;
+            
+            case TIPO_ENTERO_8:
+            case TIPO_ENTERO_16:
+            case TIPO_ENTERO_32:
+            case TIPO_ENTERO_64:
+                valor = constructorLlvm.CreateIntCast(resultado.valor(), tDestino, true);
+                break;
+            
+            case TIPO_REAL_32:
+            case TIPO_REAL_64:
+                switch (conv->origen)
+                {
+                case TIPO_NATURAL_8:
+                case TIPO_NATURAL_16:
+                case TIPO_NATURAL_32:
+                case TIPO_NATURAL_64:
+                    valor = constructorLlvm.CreateUIToFP(resultado.valor(), tDestino);
+                    break;
+                
+                case TIPO_ENTERO_8:
+                case TIPO_ENTERO_16:
+                case TIPO_ENTERO_32:
+                case TIPO_ENTERO_64:
+                    valor = constructorLlvm.CreateSIToFP(resultado.valor(), tDestino);
+                    break;
+            
+                case TIPO_REAL_32:
+                case TIPO_REAL_64:
+                    valor = constructorLlvm.CreateFPCast(resultado.valor(), tDestino);
+                    break;
+                
+                default:
+                    valor = nullptr;
+                    break;
+                }
+                break;
+
+            default:
+                valor = nullptr;
+                break;
+            }
+
+            std::cout << "hola2" << std::endl;
+            
+            resultado.éxito();
+            resultado.valor(valor);
             return resultado;
         }
 

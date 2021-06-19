@@ -261,7 +261,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 					op->ramas.push_back(tN);
 					if(cmp == nullptr)
 					{
-						cmp = (Ñ::Nodo*)(new Ñ::Igualdad);
+						cmp = (Ñ::Nodo*)(new Ñ::Comparación);
 						cmp->ramas.push_back(t1);
 					}
 					cmp->ramas.push_back(op);
@@ -327,7 +327,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 					op->ramas.push_back(fN);
 					if(t == nullptr)
 					{
-						t = (Ñ::Nodo*)(new Ñ::Igualdad);
+						t = (Ñ::Nodo*)(new Ñ::Término);
 						t->ramas.push_back(f1);
 					}
 					t->ramas.push_back(op);

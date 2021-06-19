@@ -78,6 +78,16 @@ namespace Ñ
 
         }
 
+        void ponId(std::string id, llvm::Value* valor)
+        {
+            tablaSímbolosLlvm[id] = valor;
+        }
+
+        llvm::Value* leeId(std::string id)
+        {
+            return tablaSímbolosLlvm[id];
+        }
+
         llvm::Type* creaTipoLlvm(Ñ::CategoríaTipo tipo)
         {
             switch (tipo)
@@ -217,11 +227,9 @@ namespace Ñ
                 return resultado;
             }
 
-            tablaSímbolosLlvm.clear();
-
             for(auto &argumento : funciónLlvm->args())
             {
-                tablaSímbolosLlvm[argumento.getName().str()] = &argumento;
+                ponId(argumento.getName().str(), &argumento);
             }
 
             Ñ::Nodo* bloque = nodo->ramas[2];
@@ -338,6 +346,8 @@ namespace Ñ
                 resultado.error("He recibido un nodo expresión que no contiene ningún hijo.");
                 return resultado;
             }
+
+            std::cout << "EXPRESIÓN" << std::endl;
 
             auto n = nodo->ramas[0];
 
@@ -491,6 +501,16 @@ namespace Ñ
                 resultado.éxito();
                 resultado = construyeLecturaVariable(nodo);
                 break;
+
+            case Ñ::CategoríaNodo::NODO_TÉRMINO:
+                resultado.éxito();
+                resultado = construyeOperaciónTérmino(nodo);
+                break;
+
+            case Ñ::CategoríaNodo::NODO_FACTOR:
+                resultado.éxito();
+                resultado = construyeOperaciónFactor(nodo);
+                break;
             
             default:
                 resultado.error("No puedo construir este nodo como LDA");
@@ -533,7 +553,8 @@ namespace Ñ
 
             llvm::Value* variable = constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
 
-            tablaSímbolosLlvm[nombre] = variable;
+            ponId(nombre, variable);
+            //tablaSímbolosLlvm[nombre] = variable;
 
             resultado.éxito();
             resultado.valor(variable);
@@ -570,7 +591,8 @@ namespace Ñ
             id = (Ñ::Identificador*)nodo;
             nombre = id->id;
 
-            variable = tablaSímbolosLlvm[nombre];
+            variable = leeId(nombre);
+            //variable = tablaSímbolosLlvm[nombre];
 
             valor = constructorLlvm.CreateLoad(variable, nombre);
 
@@ -772,6 +794,150 @@ namespace Ñ
                 break;
             }
 
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeOperaciónTérmino(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+            llvm::Value* v1;
+            llvm::Value* v2;
+
+            std::cout << "construyeOperaciónTérmino()" << std::endl;
+
+            Ñ::ResultadoLlvm rV1 = construyeLDA(nodo->ramas[0]);
+            if(rV1.error())
+            {
+                return rV1;
+            }
+            v1 = rV1.valor();
+            
+            std::cout << "Obtengo valor1" << std::endl;
+
+            for(int i = 1; i < nodo->ramas.size(); i++)
+            {
+                Ñ::Nodo* nOp = nodo->ramas[i];
+
+                if(nOp == nullptr)
+                {
+                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo nulo");
+                    return resultado;
+                }
+                else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                {
+                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    return resultado;
+                }
+
+                Ñ::ResultadoLlvm rV2 = construyeLDA(nOp->ramas[0]);
+                if(rV2.error())
+                {
+                    return rV2;
+                }
+                v2 = rV2.valor();
+
+                std::cout << "Obtengo valor2" << std::endl;
+
+                Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
+
+                if(op->operación == "+")
+                {
+                    std::cout << "Tengo que sumar... ";
+
+                    v1 = constructorLlvm.CreateAdd(v1, v2, "sumatmp");
+
+                    std::cout << "hecho." << std::endl;
+                }
+                else if(op->operación == "-")
+                {
+                    std::cout << "Tengo que restar... ";
+
+                    v1 = constructorLlvm.CreateSub(v1, v2, "restatmp");
+
+                    std::cout << "hecho." << std::endl;
+                }
+            }
+
+            std::cout << "Fin construyeOperaciónTérmino()" << std::endl;
+
+            resultado.éxito();
+            resultado.valor(v1);
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeOperaciónFactor(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+            llvm::Value* v1;
+            llvm::Value* v2;
+
+            std::cout << "construyeOperaciónFactor()" << std::endl;
+
+            Ñ::ResultadoLlvm rV1 = construyeLDA(nodo->ramas[0]);
+            if(rV1.error())
+            {
+                return rV1;
+            }
+            v1 = rV1.valor();
+            
+            std::cout << "Obtengo valor1" << std::endl;
+
+            for(int i = 1; i < nodo->ramas.size(); i++)
+            {
+                Ñ::Nodo* nOp = nodo->ramas[i];
+
+                if(nOp == nullptr)
+                {
+                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo nulo");
+                    return resultado;
+                }
+                else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                {
+                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    return resultado;
+                }
+
+                Ñ::ResultadoLlvm rV2 = construyeLDA(nOp->ramas[0]);
+                if(rV2.error())
+                {
+                    return rV2;
+                }
+                v2 = rV2.valor();
+
+                std::cout << "Obtengo valor2" << std::endl;
+
+                Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
+
+                if(op->operación == "*")
+                {
+                    std::cout << "Tengo que multiplicar... ";
+
+                    v1 = constructorLlvm.CreateMul(v1, v2, "multmp");
+
+                    std::cout << "hecho." << std::endl;
+                }
+                else if(op->operación == "/")
+                {
+                    std::cout << "Tengo que dividir... ";
+                    llvm::Type* tipoV1 = v1->getType();
+
+                    if(tipoV1->isFloatTy() || tipoV1->isDoubleTy())
+                    {
+                        v1 = constructorLlvm.CreateFDiv(v1, v2, "divtmp");
+                    }
+                    else if(tipoV1->isIntegerTy())
+                    {
+                        v1 = constructorLlvm.CreateSDiv(v1, v2, "divtmp");
+                    }
+                    
+                    std::cout << "hecho." << std::endl;
+                }
+            }
+
+            std::cout << "Fin construyeOperaciónFactor()" << std::endl;
+
+            resultado.éxito();
+            resultado.valor(v1);
             return resultado;
         }
     };

@@ -64,13 +64,65 @@ namespace Ñ
         llvm::Value* valor() { return (_error ? nullptr : entidad._valor); }
     };
 
+    class Símbolos
+    {
+    private:
+        std::vector<std::map<std::string, llvm::Value*>> tabla;
+
+    public:
+        Símbolos() {}
+
+        ~Símbolos() {}
+
+        void abreBloque()
+        {
+            std::map<std::string, llvm::Value*> ámbito;
+            tabla.push_back(ámbito);
+        }
+
+        void cierraBloque()
+        {
+            std::cout << "cierra bloque" << std::endl;
+            tabla.pop_back();
+        }
+
+        void ponId(std::string id, llvm::Value* valor)
+        {
+            std::cout << "ponId(" << id << "), tabla.size(): " << std::to_string(tabla.size()) << std::endl;
+            
+            if(tabla.size() < 1)
+            {
+                return;
+            }
+
+            tabla[tabla.size() - 1][id] = valor;
+        }
+
+        llvm::Value* leeId(std::string id)
+        {
+            std::cout << "leeId(" << id << ")" << std::endl;
+            
+            llvm::Value* valor = nullptr;
+
+            for(int i = tabla.size() - 1; i >= 0; i--)
+            {
+                valor = tabla.at(i).at(id);
+                if(valor != nullptr)
+                {
+                    return valor;
+                }
+            }
+            return nullptr;
+        }
+    };
+
     class Promotor
     {
     public:
         llvm::LLVMContext contextoLlvm;
         llvm::Module* móduloLlvm;
         llvm::IRBuilder<> constructorLlvm;
-        std::map<std::string, llvm::Value *> tablaSímbolosLlvm;
+        Ñ::Símbolos* tablaSímbolos = nullptr;
 
     public:
         Promotor() : constructorLlvm(contextoLlvm)
@@ -78,14 +130,45 @@ namespace Ñ
 
         }
 
+        ~Promotor()
+        {
+            if(tablaSímbolos != nullptr)
+            {
+                delete tablaSímbolos;
+            }
+        }
+
         void ponId(std::string id, llvm::Value* valor)
         {
-            tablaSímbolosLlvm[id] = valor;
+            if(tablaSímbolos != nullptr)
+            {
+                tablaSímbolos->ponId(id, valor);
+            }
+            else
+            {
+                std::cout << "Error, no puedo guardar el símbolo en la tabla" << std::endl;
+            }
         }
 
         llvm::Value* leeId(std::string id)
         {
-            return tablaSímbolosLlvm[id];
+            llvm::Value* valor = nullptr;
+
+            if(tablaSímbolos != nullptr)
+            {
+                valor = tablaSímbolos->leeId(id);
+                if(valor != nullptr)
+                {
+                    return valor;
+                }
+            }
+            else
+            {
+                std::cout << "Error, no se ha iniciado la tabla" << std::endl;
+            }
+            std::cout << "Error, no he encontrado el símbolo" << std::endl;
+            
+            return nullptr;
         }
 
         llvm::Type* creaTipoLlvm(Ñ::CategoríaTipo tipo)
@@ -227,6 +310,10 @@ namespace Ñ
                 return resultado;
             }
 
+            // Inicio construcción del bloque y definición de los argumentos
+            tablaSímbolos = new Símbolos;
+            tablaSímbolos->abreBloque();
+            std::cout << "hola1" << std::endl;
             for(auto &argumento : funciónLlvm->args())
             {
                 ponId(argumento.getName().str(), &argumento);
@@ -239,6 +326,8 @@ namespace Ñ
             llvm::verifyFunction(*funciónLlvm);
 
             funciónLlvm->print(llvm::errs(), nullptr);
+
+            tablaSímbolos->cierraBloque();
 
             return resultado;
         }
@@ -559,7 +648,6 @@ namespace Ñ
             llvm::Value* variable = constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
 
             ponId(nombre, variable);
-            //tablaSímbolosLlvm[nombre] = variable;
 
             resultado.éxito();
             resultado.valor(variable);
@@ -596,7 +684,6 @@ namespace Ñ
             nombre = id->id;
 
             variable = leeId(nombre);
-            //variable = tablaSímbolosLlvm[nombre];
 
             resultado.éxito();
             resultado.valor(variable);
@@ -634,7 +721,6 @@ namespace Ñ
             nombre = id->id;
 
             variable = leeId(nombre);
-            //variable = tablaSímbolosLlvm[nombre];
 
             valor = constructorLlvm.CreateLoad(variable, nombre);
 

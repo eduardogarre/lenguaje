@@ -323,6 +323,8 @@ namespace Ñ
             funciónLlvm->print(llvm::errs(), nullptr);
 
             tablaSímbolos->cierraBloque();
+            delete tablaSímbolos;
+            tablaSímbolos = nullptr;
 
             return resultado;
         }

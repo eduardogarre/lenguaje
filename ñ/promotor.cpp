@@ -82,14 +82,11 @@ namespace Ñ
 
         void cierraBloque()
         {
-            std::cout << "cierra bloque" << std::endl;
             tabla.pop_back();
         }
 
         void ponId(std::string id, llvm::Value* valor)
         {
-            std::cout << "ponId(" << id << "), tabla.size(): " << std::to_string(tabla.size()) << std::endl;
-            
             if(tabla.size() < 1)
             {
                 return;
@@ -100,8 +97,6 @@ namespace Ñ
 
         llvm::Value* leeId(std::string id)
         {
-            std::cout << "leeId(" << id << ")" << std::endl;
-            
             llvm::Value* valor = nullptr;
 
             for(int i = tabla.size() - 1; i >= 0; i--)
@@ -313,7 +308,7 @@ namespace Ñ
             // Inicio construcción del bloque y definición de los argumentos
             tablaSímbolos = new Símbolos;
             tablaSímbolos->abreBloque();
-            std::cout << "hola1" << std::endl;
+            
             for(auto &argumento : funciónLlvm->args())
             {
                 ponId(argumento.getName().str(), &argumento);
@@ -435,8 +430,6 @@ namespace Ñ
                 resultado.error("He recibido un nodo expresión que no contiene ningún hijo.");
                 return resultado;
             }
-
-            std::cout << "EXPRESIÓN" << std::endl;
 
             auto n = nodo->ramas[0];
 

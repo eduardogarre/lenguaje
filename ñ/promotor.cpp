@@ -565,14 +565,17 @@ namespace Ñ
             std::string nombre;
             Ñ::Identificador* id;
             llvm::Value* variable;
+            llvm::Value* valor;
 
             id = (Ñ::Identificador*)nodo;
             nombre = id->id;
 
             variable = tablaSímbolosLlvm[nombre];
 
+            valor = constructorLlvm.CreateLoad(variable, nombre);
+
             resultado.éxito();
-            resultado.valor(variable);
+            resultado.valor(valor);
             return resultado;
         }
 

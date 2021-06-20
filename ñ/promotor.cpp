@@ -326,6 +326,8 @@ namespace Ñ
             delete tablaSímbolos;
             tablaSímbolos = nullptr;
 
+            resultado.éxito();
+            resultado.valor((llvm::Value*)funciónLlvm);
             return resultado;
         }
 
@@ -599,6 +601,11 @@ namespace Ñ
             case Ñ::CategoríaNodo::NODO_FACTOR:
                 resultado.éxito();
                 resultado = construyeOperaciónFactor(nodo);
+                break;
+
+            case Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN:
+                resultado.éxito();
+                resultado = construyeLlamadaFunción(nodo);
                 break;
             
             default:
@@ -926,8 +933,6 @@ namespace Ñ
             llvm::Value* v1;
             llvm::Value* v2;
 
-            std::cout << "construyeOperaciónTérmino()" << std::endl;
-
             Ñ::ResultadoLlvm rV1 = construyeLDA(nodo->ramas[0]);
             if(rV1.error())
             {
@@ -935,8 +940,6 @@ namespace Ñ
             }
             v1 = rV1.valor();
             
-            std::cout << "Obtengo valor1" << std::endl;
-
             for(int i = 1; i < nodo->ramas.size(); i++)
             {
                 Ñ::Nodo* nOp = nodo->ramas[i];
@@ -959,29 +962,17 @@ namespace Ñ
                 }
                 v2 = rV2.valor();
 
-                std::cout << "Obtengo valor2" << std::endl;
-
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
                 if(op->operación == "+")
                 {
-                    std::cout << "Tengo que sumar... ";
-
                     v1 = constructorLlvm.CreateAdd(v1, v2, "sumatmp");
-
-                    std::cout << "hecho." << std::endl;
                 }
                 else if(op->operación == "-")
                 {
-                    std::cout << "Tengo que restar... ";
-
                     v1 = constructorLlvm.CreateSub(v1, v2, "restatmp");
-
-                    std::cout << "hecho." << std::endl;
                 }
             }
-
-            std::cout << "Fin construyeOperaciónTérmino()" << std::endl;
 
             resultado.éxito();
             resultado.valor(v1);
@@ -994,8 +985,6 @@ namespace Ñ
             llvm::Value* v1;
             llvm::Value* v2;
 
-            std::cout << "construyeOperaciónFactor()" << std::endl;
-
             Ñ::ResultadoLlvm rV1 = construyeLDA(nodo->ramas[0]);
             if(rV1.error())
             {
@@ -1003,8 +992,6 @@ namespace Ñ
             }
             v1 = rV1.valor();
             
-            std::cout << "Obtengo valor1" << std::endl;
-
             for(int i = 1; i < nodo->ramas.size(); i++)
             {
                 Ñ::Nodo* nOp = nodo->ramas[i];
@@ -1027,21 +1014,14 @@ namespace Ñ
                 }
                 v2 = rV2.valor();
 
-                std::cout << "Obtengo valor2" << std::endl;
-
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
                 if(op->operación == "*")
                 {
-                    std::cout << "Tengo que multiplicar... ";
-
                     v1 = constructorLlvm.CreateMul(v1, v2, "multmp");
-
-                    std::cout << "hecho." << std::endl;
                 }
                 else if(op->operación == "/")
                 {
-                    std::cout << "Tengo que dividir... ";
                     llvm::Type* tipoV1 = v1->getType();
 
                     if(tipoV1->isFloatTy() || tipoV1->isDoubleTy())
@@ -1052,15 +1032,45 @@ namespace Ñ
                     {
                         v1 = constructorLlvm.CreateSDiv(v1, v2, "divtmp");
                     }
-                    
-                    std::cout << "hecho." << std::endl;
                 }
             }
 
-            std::cout << "Fin construyeOperaciónFactor()" << std::endl;
-
             resultado.éxito();
             resultado.valor(v1);
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeLlamadaFunción(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+            
+            if(nodo == nullptr)
+            {
+                resultado.error("Esperaba una llamada a una función, pero el nodo es nulo");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+            {
+                resultado.error("Esperaba una llamada a una función, pero el nodo es de una categoría inesperada");
+                return resultado;
+            }
+
+            Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)nodo;
+            llvm::Function* funciónLlvm = móduloLlvm->getFunction(fn->nombre);
+            
+            if(!funciónLlvm)
+            {
+                resultado.error("Esperaba obtener una referencia a una función pero LLVM me ha devuelto un valor desconocido");
+                return resultado;
+            }
+
+            std::vector<llvm::Value*> argumentos;
+
+            llvm::Value* devuelto = constructorLlvm.CreateCall(funciónLlvm, argumentos, "llamda");
+
+            resultado.éxito();
+            resultado.valor(devuelto);
             return resultado;
         }
     };

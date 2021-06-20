@@ -182,6 +182,45 @@
     return resultado;
 }
 
+Ñ::Resultado _analizaDeclaraciónFunción(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
+{
+    Ñ::Resultado resultado;
+
+    if(nodo == nullptr)
+    {
+        resultado.error("El árbol de nodos es un puntero nulo, esperaba una declaración de función.");
+        return resultado;
+    }
+
+    if(nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+    {
+        resultado.error("El árbol de nodos es incorrecto, esperaba una declaración de función.");
+        return resultado;
+    }
+
+    if(nodo->ramas.size() != 2)
+    {
+        resultado.error("El árbol de nodos es incorrecto, la declaración de una función debe tener 2 ramas: 'tipo' y 'argumentos'.");
+        return resultado;
+    }
+
+    Ñ::DeclaraFunción* fn = (Ñ::DeclaraFunción*)nodo;
+    
+    if(!tablaSímbolos->nombreReservadoEnEsteÁmbito(fn->nombre))
+    {
+        Ñ::Resultado rFirma = creaFirmaFunción(nodo);
+        if(rFirma.error())
+        {
+            return rFirma;
+        }
+
+        tablaSímbolos->declara(fn->nombre, rFirma.nodo());
+    }
+    
+    resultado.éxito();
+    return resultado;
+}
+
 Ñ::Resultado _analizaLIA(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
@@ -766,6 +805,10 @@
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
     {
         return _analizaDefiniciónFunción(nodo, tablaSímbolos);
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+    {
+        return _analizaDeclaraciónFunción(nodo, tablaSímbolos);
     }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
     {

@@ -274,6 +274,17 @@ namespace Ñ
         void muestra();
     };
 
+    class DeclaraFunción : Nodo
+    {
+    public:
+        std::string nombre;
+
+        DeclaraFunción();
+        ~DeclaraFunción();
+
+        void muestra();
+    };
+
     class Función : Nodo
     {
     public:

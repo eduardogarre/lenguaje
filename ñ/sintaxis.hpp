@@ -42,6 +42,7 @@ namespace Ñ
         Ñ::Nodo* expresión();
         Ñ::Nodo* bloque();
         Ñ::Nodo* defineFunción();
+        Ñ::Nodo* declaraFunción();
         Ñ::Nodo* módulo();
 
     public:

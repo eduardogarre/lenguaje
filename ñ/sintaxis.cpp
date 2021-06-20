@@ -1064,6 +1064,75 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::declaraFunción()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Nodo* t;
+		Ñ::Nodo* id;
+		Ñ::Nodo* args;
+		Ñ::DeclaraFunción* dcfn;
+		std::string nombreFunción;
+
+		if(t = tipo())
+		{
+			
+		}
+		else
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		if(id = identificador())
+		{
+			nombreFunción = ((Ñ::Identificador*)id)->id;
+			delete id;
+		}
+		else
+		{
+			delete t;
+			cursor = c;
+			return nullptr;
+		}
+
+		if(!notación("("))
+		{
+			delete t;
+			cursor = c;
+			return nullptr;
+		}
+
+		args = declaraArgumentos();
+
+		if(!notación(")"))
+		{
+			delete t;
+			cursor = c;
+			return nullptr;
+		}
+
+		if(Ñ::Nodo* bq = bloque())
+		{
+			delete t, bq;
+			cursor = c;
+			return nullptr;
+		}
+
+		dcfn = new Ñ::DeclaraFunción();
+		dcfn->nombre = nombreFunción;
+		((Ñ::Nodo*)dcfn)->ramas.push_back(t);
+		((Ñ::Nodo*)dcfn)->ramas.push_back(args);
+
+		return (Ñ::Nodo*)dcfn;
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::módulo()
 {
 	uint32_t c = cursor;
@@ -1098,6 +1167,10 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		{
 			Ñ::Nodo* n;
 			if(n = defineFunción())
+			{
+				m->ramas.push_back(n);
+			}
+			else if(n = declaraFunción())
 			{
 				m->ramas.push_back(n);
 			}

@@ -260,6 +260,10 @@ namespace Ñ
                 {
                     resultado = construyeDefiniciónFunción(n);
                 }
+                else if(n->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+                {
+                    resultado = construyeDeclaraciónFunción(n);
+                }
             }
 
             resultado.éxito();
@@ -288,7 +292,7 @@ namespace Ñ
                 return resultado;
             }
 
-            resultado = construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1]);
+            resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1]);
             
             llvm::Function * funciónLlvm;
             
@@ -331,7 +335,41 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeDeclaraciónFunción(std::string nombre, Ñ::Nodo* devuelto, Ñ::Nodo* argumentos)
+        Ñ::ResultadoLlvm construyeDeclaraciónFunción(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+            
+            // Comprobaciones de error
+            Ñ::DeclaraFunción* función;
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo nulo, esperaba una declaración de función");
+                return resultado;
+            }
+            else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+            {
+                // Convierto Ñ::Nodo* a Ñ::DefineFunción*
+                función = (Ñ::DeclaraFunción*)nodo;
+            }
+            else
+            {
+                resultado.error("El nodo no es una declaración de función");
+                return resultado;
+            }
+
+            resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1]);
+            if(resultado.error())
+            {
+                return resultado;
+            }
+            llvm::Function* funciónLlvm = (llvm::Function*)resultado.valor();
+
+            funciónLlvm->print(llvm::errs(), nullptr);
+
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm _construyeDeclaraciónFunción(std::string nombre, Ñ::Nodo* devuelto, Ñ::Nodo* argumentos)
         {
             Ñ::ResultadoLlvm resultado;
             

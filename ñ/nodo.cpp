@@ -535,6 +535,23 @@ void Ñ::DefineFunción::muestra()
 	}
 }
 
+Ñ::DeclaraFunción::DeclaraFunción() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN;
+}
+
+Ñ::DeclaraFunción::~DeclaraFunción() {}
+
+void Ñ::DeclaraFunción::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_DECLARA_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 Ñ::Función::Función() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN;
@@ -701,6 +718,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	{
 		((Ñ::DefineFunción*)nodo)->muestra();
 	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+	{
+		((Ñ::DeclaraFunción*)nodo)->muestra();
+	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN)
 	{
 		((Ñ::DefineFunción*)nodo)->muestra();
@@ -776,6 +797,8 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::LlamaFunción* lfn2;
 		Ñ::DefineFunción* dfn1;
 		Ñ::DefineFunción* dfn2;
+		Ñ::DeclaraFunción* dcn1;
+		Ñ::DeclaraFunción* dcn2;
 		Ñ::Función* fn1;
 		Ñ::Función* fn2;
 		Ñ::FunciónEjecutable* fne1;
@@ -965,6 +988,19 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			dfn1 = (Ñ::DefineFunción*)nodo1;
 			dfn2 = (Ñ::DefineFunción*)nodo2;
 			if(dfn1->nombre == dfn2->nombre)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN:
+			dcn1 = (Ñ::DeclaraFunción*)nodo1;
+			dcn2 = (Ñ::DeclaraFunción*)nodo2;
+			if(dcn1->nombre == dcn2->nombre)
 			{
 				return true;
 			}
@@ -1199,6 +1235,14 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		Ñ::DefineFunción* n = (Ñ::DefineFunción*)nodo;
 		Ñ::DefineFunción* f = new Ñ::DefineFunción();
+		f->nombre = n->nombre;
+
+		duplicado = (Ñ::Nodo*)f;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+	{
+		Ñ::DeclaraFunción* n = (Ñ::DeclaraFunción*)nodo;
+		Ñ::DeclaraFunción* f = new Ñ::DeclaraFunción();
 		f->nombre = n->nombre;
 
 		duplicado = (Ñ::Nodo*)f;

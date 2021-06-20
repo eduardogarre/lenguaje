@@ -1114,6 +1114,13 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 			return nullptr;
 		}
 
+		if(!notación(";"))
+		{
+			delete t;
+			cursor = c;
+			return nullptr;
+		}
+
 		if(Ñ::Nodo* bq = bloque())
 		{
 			delete t, bq;

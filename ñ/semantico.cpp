@@ -151,7 +151,7 @@
     
     if(tablaSímbolos->nombreReservadoEnEsteÁmbito(fn->nombre))
     {
-        resultado.error("El identificador " + fn->nombre + " ya está en uso.");
+        resultado.error("El identificador '" + fn->nombre + "' ya está en uso, no puedo definir una nueva función '" + fn->nombre + "()'");
         return resultado;
     }
     else
@@ -215,6 +215,11 @@
         }
 
         tablaSímbolos->declara(fn->nombre, rFirma.nodo());
+    }
+    else
+    {
+        resultado.error("El identificador " + fn->nombre + " ya está en uso, no puedo declarar una nueva función '" + fn->nombre + "()'");
+        return resultado;
     }
     
     resultado.éxito();

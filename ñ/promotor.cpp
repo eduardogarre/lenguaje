@@ -264,6 +264,11 @@ namespace Ñ
                 {
                     resultado = construyeDeclaraciónFunción(n);
                 }
+
+                if(resultado.error())
+                {
+                    return resultado;
+                }
             }
 
             resultado.éxito();
@@ -293,6 +298,11 @@ namespace Ñ
             }
 
             resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1]);
+
+            if(resultado.error())
+            {
+                return resultado;
+            }
             
             llvm::Function * funciónLlvm;
             
@@ -321,6 +331,10 @@ namespace Ñ
             Ñ::Nodo* bloque = nodo->ramas[2];
 
             resultado = construyeBloque("entrada", bloque, funciónLlvm);
+            if(resultado.error())
+            {
+                return resultado;
+            }
 
             llvm::verifyFunction(*funciónLlvm);
 
@@ -481,12 +495,17 @@ namespace Ñ
                 resultado = construyeRetorno(n);
                 break;
             
+            case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
+                resultado = construyeDeclaraciónVariable(n);
+                break;
+            
             case Ñ::CategoríaNodo::NODO_ASIGNA:
                 resultado = construyeAsignación(n);
                 break;
             
             default:
                 resultado.error("No reconozco la expresión");
+                muestraNodos(nodo);
                 break;
             }
 

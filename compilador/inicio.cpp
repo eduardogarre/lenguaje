@@ -288,12 +288,12 @@ void _interpretaArchivo(std::string código, Ñ::TablaSímbolos* tablaSímbolos)
 	}
 	else
 	{
-		auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
-		if(resultado.error())
-		{
-			std::cout << resultado.mensaje() << std::endl;
-			muestraNodos(nodos);
-		}
+		//auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
+		//if(resultado.error())
+		//{
+		//	std::cout << resultado.mensaje() << std::endl;
+		//	muestraNodos(nodos);
+		//}
 	}
 
 	resultado = Ñ::construye(nodos);

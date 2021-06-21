@@ -70,7 +70,6 @@ namespace Ñ
     {
     private:
         std::vector<std::map<std::string, llvm::Value*>> tabla;
-        std::vector<std::string> listaArgumentos;
 
     public:
         Símbolos() {}
@@ -88,12 +87,7 @@ namespace Ñ
             tabla.pop_back();
         }
 
-        bool esArgumento(std::string id)
-        {
-            return (std::find(listaArgumentos.begin(), listaArgumentos.end(), id) != listaArgumentos.end());
-        }
-
-        void ponId(std::string id, llvm::Value* valor, bool esArgumento = false)
+        void ponId(std::string id, llvm::Value* valor)
         {
             if(tabla.size() < 1)
             {
@@ -101,10 +95,6 @@ namespace Ñ
                 return;
             }
 
-            if(esArgumento)
-            {
-                listaArgumentos.push_back(id);
-            }
             tabla[tabla.size() - 1][id] = valor;
         }
 
@@ -147,23 +137,11 @@ namespace Ñ
             }
         }
 
-        bool esArgumento(std::string id)
+        void ponId(std::string id, llvm::Value* valor)
         {
             if(tablaSímbolos != nullptr)
             {
-                return tablaSímbolos->esArgumento(id);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        void ponId(std::string id, llvm::Value* valor, bool esArgumento = false)
-        {
-            if(tablaSímbolos != nullptr)
-            {
-                tablaSímbolos->ponId(id, valor, esArgumento);
+                tablaSímbolos->ponId(id, valor);
             }
             else
             {
@@ -376,7 +354,9 @@ namespace Ñ
 
                 std::string nombre = ((Ñ::DeclaraVariable*)a)->variable;
                 argumento.setName(nombre);
-                ponId(nombre, &argumento, true);
+                llvm::Value* variable = constructorLlvm.CreateAlloca(argumento.getType(), nullptr, nombre);
+                constructorLlvm.CreateStore(&argumento, variable, false);
+                ponId(nombre, variable);
                 i++;
             }
 
@@ -828,20 +808,11 @@ namespace Ñ
             llvm::raw_string_ostream rso(type_str);
             tipoLia->print(rso);
 
-            if(esArgumento(nombre))
-            {
-                resultado.éxito();
-                resultado.valor(variable);
-                return resultado;
-            }
-            else
-            {
-                llvm::Value* valor = constructorLlvm.CreateLoad(variable, nombre);
+            llvm::Value* valor = constructorLlvm.CreateLoad(variable, nombre);
 
-                resultado.éxito();
-                resultado.valor(valor);
-                return resultado;
-            }
+            resultado.éxito();
+            resultado.valor(valor);
+            return resultado;
         }
 
         Ñ::ResultadoLlvm construyeConversorTipos(Ñ::Nodo* nodo)

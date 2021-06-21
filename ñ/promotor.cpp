@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <string>
@@ -18,6 +19,7 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Verifier.h"
+#include "llvm/Support/TypeName.h"
 
 #include "nodo.hpp"
 #include "promotor.hpp"
@@ -68,6 +70,7 @@ namespace Ñ
     {
     private:
         std::vector<std::map<std::string, llvm::Value*>> tabla;
+        std::vector<std::string> listaArgumentos;
 
     public:
         Símbolos() {}
@@ -85,13 +88,23 @@ namespace Ñ
             tabla.pop_back();
         }
 
-        void ponId(std::string id, llvm::Value* valor)
+        bool esArgumento(std::string id)
+        {
+            return (std::find(listaArgumentos.begin(), listaArgumentos.end(), id) != listaArgumentos.end());
+        }
+
+        void ponId(std::string id, llvm::Value* valor, bool esArgumento = false)
         {
             if(tabla.size() < 1)
             {
+                std::cout << "Error, no es posible guardar el identificador '" << id << "', la tabla de símbolos tiene " << std::to_string(tabla.size()) << " niveles" << std::endl;
                 return;
             }
 
+            if(esArgumento)
+            {
+                listaArgumentos.push_back(id);
+            }
             tabla[tabla.size() - 1][id] = valor;
         }
 
@@ -107,6 +120,7 @@ namespace Ñ
                     return valor;
                 }
             }
+            
             return nullptr;
         }
     };
@@ -133,15 +147,27 @@ namespace Ñ
             }
         }
 
-        void ponId(std::string id, llvm::Value* valor)
+        bool esArgumento(std::string id)
         {
             if(tablaSímbolos != nullptr)
             {
-                tablaSímbolos->ponId(id, valor);
+                return tablaSímbolos->esArgumento(id);
             }
             else
             {
-                std::cout << "Error, no puedo guardar el símbolo en la tabla" << std::endl;
+                return false;
+            }
+        }
+
+        void ponId(std::string id, llvm::Value* valor, bool esArgumento = false)
+        {
+            if(tablaSímbolos != nullptr)
+            {
+                tablaSímbolos->ponId(id, valor, esArgumento);
+            }
+            else
+            {
+                std::cout << "Error, no puedo guardar el símbolo '" << id << "' en la tabla" << std::endl;
             }
         }
 
@@ -159,9 +185,10 @@ namespace Ñ
             }
             else
             {
-                std::cout << "Error, no se ha iniciado la tabla" << std::endl;
+                std::cout << "Error, no se ha iniciado la tabla, no puedo guardar el símbolo '" << id << "'" << std::endl;
             }
-            std::cout << "Error, no he encontrado el símbolo" << std::endl;
+
+            std::cout << "Error, no he encontrado el símbolo '" << id << "'" << std::endl;
             
             return nullptr;
         }
@@ -259,10 +286,18 @@ namespace Ñ
                 else if(n->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
                 {
                     resultado = construyeDefiniciónFunción(n);
+                    if(resultado.error())
+                    {
+                        return resultado;
+                    }
                 }
                 else if(n->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
                 {
                     resultado = construyeDeclaraciónFunción(n);
+                    if(resultado.error())
+                    {
+                        return resultado;
+                    }
                 }
 
                 if(resultado.error())
@@ -298,7 +333,6 @@ namespace Ñ
             }
 
             resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1]);
-
             if(resultado.error())
             {
                 return resultado;
@@ -322,15 +356,33 @@ namespace Ñ
             // Inicio construcción del bloque y definición de los argumentos
             tablaSímbolos = new Símbolos;
             tablaSímbolos->abreBloque();
+
+            std::string nombreBloque = "entrada";
+            llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(contextoLlvm, nombreBloque, funciónLlvm);
+            if(bloqueLlvm == nullptr)
+            {
+                resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo");
+                return resultado;
+            }
+
+            constructorLlvm.SetInsertPoint(bloqueLlvm);
+
+            Ñ::Nodo* args = nodo->ramas[1];
             
+            int i = 0;
             for(auto &argumento : funciónLlvm->args())
             {
-                ponId(argumento.getName().str(), &argumento);
+                Ñ::Nodo* a = args->ramas[i];
+
+                std::string nombre = ((Ñ::DeclaraVariable*)a)->variable;
+                argumento.setName(nombre);
+                ponId(nombre, &argumento, true);
+                i++;
             }
 
             Ñ::Nodo* bloque = nodo->ramas[2];
 
-            resultado = construyeBloque("entrada", bloque, funciónLlvm);
+            resultado = construyeInteriorDeBloque(bloque);
             if(resultado.error())
             {
                 return resultado;
@@ -376,10 +428,11 @@ namespace Ñ
             {
                 return resultado;
             }
+            
             llvm::Function* funciónLlvm = (llvm::Function*)resultado.valor();
-
+            
             funciónLlvm->print(llvm::errs(), nullptr);
-
+            
             return resultado;
         }
 
@@ -428,6 +481,17 @@ namespace Ñ
                     Ñ::Tipo* arg = (Ñ::Tipo*)a;
                     vArgumentos.push_back(creaTipoLlvm(arg->tipo));
                 }
+                else if(a->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+                {
+                    Ñ::Tipo* arg = (Ñ::Tipo*)(a->ramas[0]);
+                    vArgumentos.push_back(creaTipoLlvm(arg->tipo));
+                }
+                else
+                {
+                    muestraNodos(a);
+                    resultado.error("He recibido un argumento de un tipo que no reconozco");
+                    return resultado;
+                }
             }
 
             llvm::FunctionType* firmaFunción = llvm::FunctionType::get(tRetorno, vArgumentos, false);
@@ -439,24 +503,9 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeBloque(std::string nombre, Ñ::Nodo* nodo, llvm::Function* función)
+        Ñ::ResultadoLlvm construyeInteriorDeBloque(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
-
-            if(función == nullptr)
-            {
-                resultado.error("He recibido una función de valor nullptr, no puedo crear el bloque");
-                return resultado;
-            }
-
-            llvm::BasicBlock* bloque = llvm::BasicBlock::Create(contextoLlvm, nombre, función);
-            if(bloque == nullptr)
-            {
-                resultado.error("El proceso de creación del bloque '" + nombre + "' me ha devuelto un puntero nulo");
-                return resultado;
-            }
-
-            constructorLlvm.SetInsertPoint(bloque);
 
             for(auto n : nodo->ramas)
             {
@@ -466,7 +515,7 @@ namespace Ñ
                     return resultado;
                 }
             }
-            
+
             resultado.éxito();
             return resultado;
         }
@@ -527,7 +576,7 @@ namespace Ñ
                 resultado.error("He recibido un nodo que no es una asignación");
                 return resultado;
             }
-            
+
             if(nodo->ramas.size() == 2)
             {
                 Ñ::ResultadoLlvm rLia = construyeLIA(nodo->ramas[0]);
@@ -535,6 +584,7 @@ namespace Ñ
                 {
                     return rLia;
                 }
+
                 llvm::Value* vLia = rLia.valor();
 
                 Ñ::ResultadoLlvm rLda = construyeLDA(nodo->ramas[1]);
@@ -542,19 +592,19 @@ namespace Ñ
                 {
                     return rLda;
                 }
+
                 llvm::Value* vLda = rLda.valor();
 
                 constructorLlvm.CreateStore(vLda, vLia, false);
 
                 resultado.éxito();
+                return resultado;
             }
             else
             {
                 resultado.error("He recibido una asignación mal estructurada, tiene " + std::to_string(nodo->ramas.size()) + " ramas");
                 return resultado;
             }
-
-            return resultado;
         }
 
         Ñ::ResultadoLlvm construyeRetorno(Ñ::Nodo* nodo)
@@ -570,6 +620,7 @@ namespace Ñ
             if(nodo->ramas.size() == 1)
             {
                 resultado = construyeLDA(nodo->ramas[0]);
+
                 if(resultado.error())
                 {
                     return resultado;
@@ -596,7 +647,7 @@ namespace Ñ
         Ñ::ResultadoLlvm construyeLIA(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
-
+            
             if(nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
@@ -606,12 +657,10 @@ namespace Ñ
             switch (nodo->categoría)
             {
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
-                resultado.éxito();
                 resultado = construyeDeclaraciónVariable(nodo);
                 break;
             
             case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
-                resultado.éxito();
                 resultado = construyeVariableLIA(nodo);
                 break;
             
@@ -636,32 +685,26 @@ namespace Ñ
             switch (nodo->categoría)
             {
             case Ñ::CategoríaNodo::NODO_LITERAL:
-                resultado.éxito();
                 resultado = construyeLiteral(nodo);
                 break;
             
             case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
-                resultado.éxito();
                 resultado = construyeConversorTipos(nodo);
                 break;
             
             case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
-                resultado.éxito();
                 resultado = construyeVariableLDA(nodo);
                 break;
 
             case Ñ::CategoríaNodo::NODO_TÉRMINO:
-                resultado.éxito();
                 resultado = construyeOperaciónTérmino(nodo);
                 break;
 
             case Ñ::CategoríaNodo::NODO_FACTOR:
-                resultado.éxito();
                 resultado = construyeOperaciónFactor(nodo);
                 break;
 
             case Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN:
-                resultado.éxito();
                 resultado = construyeLlamadaFunción(nodo);
                 break;
             
@@ -774,18 +817,31 @@ namespace Ñ
             std::string nombre;
             Ñ::Identificador* id;
             llvm::Value* variable;
-            llvm::Value* valor;
 
             id = (Ñ::Identificador*)nodo;
             nombre = id->id;
 
             variable = leeId(nombre);
 
-            valor = constructorLlvm.CreateLoad(variable, nombre);
+            llvm::Type* tipoLia = variable->getType();
+            std::string type_str;
+            llvm::raw_string_ostream rso(type_str);
+            tipoLia->print(rso);
 
-            resultado.éxito();
-            resultado.valor(valor);
-            return resultado;
+            if(esArgumento(nombre))
+            {
+                resultado.éxito();
+                resultado.valor(variable);
+                return resultado;
+            }
+            else
+            {
+                llvm::Value* valor = constructorLlvm.CreateLoad(variable, nombre);
+
+                resultado.éxito();
+                resultado.valor(valor);
+                return resultado;
+            }
         }
 
         Ñ::ResultadoLlvm construyeConversorTipos(Ñ::Nodo* nodo)
@@ -885,7 +941,7 @@ namespace Ñ
         Ñ::ResultadoLlvm construyeLiteral(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
-
+            
             if(nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
@@ -1121,10 +1177,27 @@ namespace Ñ
                 resultado.error("Esperaba obtener una referencia a una función pero LLVM me ha devuelto un valor desconocido");
                 return resultado;
             }
-
+            
             std::vector<llvm::Value*> argumentos;
 
-            llvm::Value* devuelto = constructorLlvm.CreateCall(funciónLlvm, argumentos, "llamda");
+            // Preparando argumentos
+            Ñ::Nodo* args = nodo->ramas[0];
+            
+            std::vector<llvm::Value*> vArgs;
+            
+            for(Ñ::Nodo* n : args->ramas)
+            {
+                resultado = construyeLDA(n);
+                if(resultado.error())
+                {
+                    return resultado;
+                }
+
+                vArgs.push_back(resultado.valor());
+
+            }
+
+            llvm::Value* devuelto = constructorLlvm.CreateCall(funciónLlvm, vArgs, "llamda");
 
             resultado.éxito();
             resultado.valor(devuelto);

@@ -296,7 +296,7 @@ void _interpretaArchivo(std::string código, Ñ::TablaSímbolos* tablaSímbolos)
 		//}
 	}
 
-	resultado = Ñ::construye(nodos);
+	resultado = Ñ::promueve(nodos);
 	if(resultado.error())
 	{
 		std::cout << resultado.mensaje() << std::endl;

@@ -33,7 +33,7 @@ add_library(lenguaje ${CODIGO_LENGUAJE})
 #message(STATUS "")
 execute_process(COMMAND llvm-config --libdir OUTPUT_VARIABLE ruta_bibliotecas_llvm OUTPUT_STRIP_TRAILING_WHITESPACE)
 file(GLOB bibliotecas_llvm CONFIGURE_DEPENDS "${ruta_bibliotecas_llvm}/*.lib")
-message(STATUS "${bibliotecas_llvm}")
+#message(STATUS "${bibliotecas_llvm}")
 
 # enlaza el ejecutable "prueballvm" con la biblioteca "lenguaje"
 target_link_libraries(lenguaje LINK_PUBLIC ${bibliotecas_llvm})

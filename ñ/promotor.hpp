@@ -5,5 +5,5 @@
 
 namespace Ñ
 {
-    Ñ::Resultado construye(Ñ::Nodo* árbol);
+    Ñ::Resultado promueve(Ñ::Nodo* árbol);
 }

@@ -7,20 +7,20 @@ mkdir proyecto
 
 cd obra
 cmake ..
-cmake --build . --parallel=4
+cmake --build . --parallel 4
 cd ..
 
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
 
 mv ./proyecto/compilador.exe ./proyecto/ñ.exe
 
-echo ""
-echo ""
-echo "Paso Pruebas"
-echo ""
-
-./proyecto/pruebas.exe
-
+#echo ""
+#echo ""
+#echo "Paso Pruebas"
+#echo ""
+#
+#./proyecto/pruebas.exe
+#
 #echo ""
 #echo ""
 #echo "Ejecuto ñ"

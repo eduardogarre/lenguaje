@@ -1169,6 +1169,8 @@ namespace Ñ
 
     Ñ::Resultado promueve(Ñ::Nodo* árbol)
     {
+        std::cout << "promueve(nodo)" << std::endl;
+
         Ñ::Resultado resultado;
 
         Ñ::Promotor* promotor = new Ñ::Promotor;
@@ -1178,6 +1180,18 @@ namespace Ñ
         muestraNodos(árbol);
 
         std::cout << std::endl;
+        std::cout << std::endl;
+
+        std::cout << "Preparando construcción 'justo a tiempo'" << std::endl;
+        
+        llvm::InitializeNativeTarget();
+        llvm::InitializeNativeTargetAsmPrinter();
+        llvm::InitializeNativeTargetAsmParser();
+
+        std::cout << std::endl;
+        std::cout << std::endl;
+
+        std::cout << "iniciando promoción a LLVM:" << std::endl << std::endl;
 
         if(árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {

@@ -1041,11 +1041,11 @@ namespace Ñ
 
                 if(op->operación == "+")
                 {
-                    v1 = constructorLlvm.CreateAdd(v1, v2, "sumatmp");
+                    v1 = constructorLlvm.CreateAdd(v1, v2, "suma_tmp");
                 }
                 else if(op->operación == "-")
                 {
-                    v1 = constructorLlvm.CreateSub(v1, v2, "restatmp");
+                    v1 = constructorLlvm.CreateSub(v1, v2, "resta_tmp");
                 }
             }
 
@@ -1093,7 +1093,7 @@ namespace Ñ
 
                 if(op->operación == "*")
                 {
-                    v1 = constructorLlvm.CreateMul(v1, v2, "multmp");
+                    v1 = constructorLlvm.CreateMul(v1, v2, "mul_tmp");
                 }
                 else if(op->operación == "/")
                 {
@@ -1101,11 +1101,11 @@ namespace Ñ
 
                     if(tipoV1->isFloatTy() || tipoV1->isDoubleTy())
                     {
-                        v1 = constructorLlvm.CreateFDiv(v1, v2, "divtmp");
+                        v1 = constructorLlvm.CreateFDiv(v1, v2, "div_tmp");
                     }
                     else if(tipoV1->isIntegerTy())
                     {
-                        v1 = constructorLlvm.CreateSDiv(v1, v2, "divtmp");
+                        v1 = constructorLlvm.CreateSDiv(v1, v2, "div_tmp");
                     }
                 }
             }

@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APint.h"
-#include "llvm/ADT/APSint.h"
+#include "llvm/ADT/APInt.h"
+#include "llvm/ADT/APSInt.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
@@ -15,13 +15,20 @@
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Value.h"
 #include "llvm/IR/Verifier.h"
+#include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/TypeName.h"
+#include "llvm/Target/TargetMachine.h"
+#include "llvm/Transforms/InstCombine/InstCombine.h"
+#include "llvm/Transforms/Scalar.h"
+#include "llvm/Transforms/Scalar/GVN.h"
 
+#include "constructor.hpp"
 #include "nodo.hpp"
 #include "promotor.hpp"
 #include "resultadollvm.hpp"
@@ -83,6 +90,7 @@ namespace Ñ
     public:
         llvm::LLVMContext contextoLlvm;
         llvm::Module* móduloLlvm;
+        llvm::legacy::FunctionPassManager* gestorPasesOptimización;
         llvm::IRBuilder<> constructorLlvm;
         Ñ::Símbolos* tablaSímbolos = nullptr;
 
@@ -98,6 +106,22 @@ namespace Ñ
             {
                 delete tablaSímbolos;
             }
+        }
+
+        void preparaPasesOptimización()
+        {
+            gestorPasesOptimización = new llvm::legacy::FunctionPassManager(móduloLlvm);
+
+            // Optimizaciones se secuencias cortas y pequeños reordenamientos.
+            gestorPasesOptimización->add(llvm::createInstructionCombiningPass());
+            // Reassociate expressions.
+            gestorPasesOptimización->add(llvm::createReassociatePass());
+            // Elimina subexpresiones comunes.
+            gestorPasesOptimización->add(llvm::createGVNPass());
+            // Simplifica el grafo de flujo de ejecución (elimina bloques inalcanzables, etc)
+            gestorPasesOptimización->add(llvm::createCFGSimplificationPass());
+
+            gestorPasesOptimización->doInitialization();
         }
 
         void ponId(std::string id, llvm::Value* valor)
@@ -217,6 +241,8 @@ namespace Ñ
             // Creo el módulo LLVM y le asigno el nombre de mi módulo
             móduloLlvm = new llvm::Module(módulo->módulo, contextoLlvm);
 
+            preparaPasesOptimización();
+
             for(auto n : nodo->ramas)
             {
                 if(n == nullptr)
@@ -332,6 +358,8 @@ namespace Ñ
             }
 
             llvm::verifyFunction(*funciónLlvm);
+
+            gestorPasesOptimización->run(*funciónLlvm);
 
             funciónLlvm->print(llvm::errs(), nullptr);
 

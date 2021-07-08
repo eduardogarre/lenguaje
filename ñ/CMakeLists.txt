@@ -24,15 +24,17 @@ add_definitions(${LLVM_DEFINITIONS_LIST})
 # add the executable
 add_library(lenguaje ${CODIGO_LENGUAJE})
 
+set(componentes_llvm core native orcjit)
 #set(componentes_llvm aggressiveinstcombine analysis asmparser asmprinter binaryformat bitreader bitstreamreader bitwriter cfguard codegen core coroutines coverage debuginfocodeview debuginfodwarf debuginfogsym debuginfomsf debuginfopdb demangle dlltooldriver dwarflinker engine executionengine extensions filecheck frontendopenacc frontendopenmp fuzzmutate globalisel instcombine instrumentation interfacestub interpreter ipo irreader libdriver lineeditor linker lto mc mca mcdisassembler mcparser mirparser native nativecodegen objcarcopts object objectyaml option orcshared orctargetprocess passes profiledata remarks runtimedyld scalaropts selectiondag support symbolize tablegen target textapi transformutils vectorize windowsmanifest x86asmparser x86codegen x86desc x86disassembler x86info xray)
 #message(STATUS "${componentes_llvm}")
 #string(REPLACE " " ";" lista_componentes_llvm ${componentes_llvm})
 #message(STATUS "${lista_componentes_llvm}")
 #llvm_map_components_to_libnames(bibliotecas_llvm ${componentes_llvm})
+llvm_map_components_to_libnames(bibliotecas_llvm ${componentes_llvm})
 #message(STATUS "${bibliotecas_llvm}")
 #message(STATUS "")
-execute_process(COMMAND llvm-config --libdir OUTPUT_VARIABLE ruta_bibliotecas_llvm OUTPUT_STRIP_TRAILING_WHITESPACE)
-file(GLOB bibliotecas_llvm CONFIGURE_DEPENDS "${ruta_bibliotecas_llvm}/*.lib")
+#execute_process(COMMAND llvm-config --libdir OUTPUT_VARIABLE ruta_bibliotecas_llvm OUTPUT_STRIP_TRAILING_WHITESPACE)
+#file(GLOB bibliotecas_llvm CONFIGURE_DEPENDS "${ruta_bibliotecas_llvm}/*.lib")
 #message(STATUS "${bibliotecas_llvm}")
 
 # enlaza el ejecutable "prueballvm" con la biblioteca "lenguaje"

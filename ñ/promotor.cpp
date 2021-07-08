@@ -29,6 +29,7 @@
 #include "llvm/Transforms/Scalar/GVN.h"
 
 #include "constructor.hpp"
+#include "justoatiempo.hpp"
 #include "nodo.hpp"
 #include "promotor.hpp"
 #include "resultadollvm.hpp"
@@ -93,6 +94,7 @@ namespace Ñ
         llvm::legacy::FunctionPassManager* gestorPasesOptimización;
         llvm::IRBuilder<> constructorLlvm;
         Ñ::Símbolos* tablaSímbolos = nullptr;
+        Ñ::ConstructorJAT* jat = nullptr;
 
     public:
         Promotor() : constructorLlvm(contextoLlvm)
@@ -1187,6 +1189,10 @@ namespace Ñ
         llvm::InitializeNativeTarget();
         llvm::InitializeNativeTargetAsmPrinter();
         llvm::InitializeNativeTargetAsmParser();
+        if(auto JatoError = Ñ::ConstructorJAT::Crea())
+        {
+            promotor->jat = *JatoError;
+        }
 
         std::cout << std::endl;
         std::cout << std::endl;

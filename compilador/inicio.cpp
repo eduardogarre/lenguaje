@@ -341,6 +341,7 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	{
 		std::cout << resultado.mensaje() << std::endl;
 		muestraNodos(nodos);
+		return;
 	}
 	//else
 	//{
@@ -356,6 +357,7 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	if(resultado.error())
 	{
 		std::cout << resultado.mensaje() << std::endl;
+		return;
 	}
 
 	for(auto l : lexemas)

@@ -110,8 +110,14 @@ namespace Ñ
             }
         }
 
-        void preparaPasesOptimización()
+        void preparaMóduloYPasesDeOptimización(std::string nombre)
         {
+
+            // Creo el módulo LLVM y le asigno el nombre de mi módulo
+            móduloLlvm = new llvm::Module(nombre, contextoLlvm);
+
+            móduloLlvm->setDataLayout(jat->leeMáquinaDestino().createDataLayout());
+
             gestorPasesOptimización = new llvm::legacy::FunctionPassManager(móduloLlvm);
 
             // Optimizaciones se secuencias cortas y pequeños reordenamientos.
@@ -240,10 +246,7 @@ namespace Ñ
                 return resultado;
             }
 
-            // Creo el módulo LLVM y le asigno el nombre de mi módulo
-            móduloLlvm = new llvm::Module(módulo->módulo, contextoLlvm);
-
-            preparaPasesOptimización();
+            preparaMóduloYPasesDeOptimización(módulo->módulo);
 
             for(auto n : nodo->ramas)
             {

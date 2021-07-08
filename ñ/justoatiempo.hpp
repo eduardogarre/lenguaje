@@ -1,6 +1,7 @@
 #pragma once
 
 #include "llvm/ADT/StringRef.h"
+#include "llvm/ExecutionEngine/ExecutionEngine.h"
 #include "llvm/ExecutionEngine/JITSymbol.h"
 #include "llvm/ExecutionEngine/Orc/CompileUtils.h"
 #include "llvm/ExecutionEngine/Orc/Core.h"
@@ -12,6 +13,7 @@
 #include "llvm/ExecutionEngine/SectionMemoryManager.h"
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/LLVMContext.h"
+#include "llvm/Target/TargetMachine.h"
 #include <memory>
 
 namespace Ñ
@@ -24,6 +26,7 @@ namespace Ñ
 
         llvm::DataLayout disposiciónDatos;
         llvm::orc::MangleAndInterner denomina;
+        llvm::TargetMachine* máquinaDestino;
 
         llvm::orc::RTDyldObjectLinkingLayer capaObjeto;
         llvm::orc::IRCompileLayer capaConstrucción;
@@ -37,6 +40,7 @@ namespace Ñ
                 llvm::DataLayout disposiciónDatos
             ) :
                 gestorEjecución(gestorEjecución),
+                máquinaDestino(llvm::EngineBuilder().selectTarget()),
                 sesiónEjecución(sesiónEjecución),
                 disposiciónDatos(disposiciónDatos),
                 denomina(*this->sesiónEjecución, this->disposiciónDatos),
@@ -86,6 +90,11 @@ namespace Ñ
         llvm::orc::JITDylib &leeTablaSímbolosBibliotecaDinámica()
         {
             return tablaSímbolosBibliotecaDinámica;
+        }
+
+        llvm::TargetMachine &leeMáquinaDestino()
+        {
+            return *máquinaDestino;
         }
 
         llvm::Error añadeMódulo(llvm::orc::ThreadSafeModule móduloMultihilo, llvm::orc::ResourceTrackerSP monitorRecursos = nullptr)

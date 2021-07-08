@@ -5,5 +5,5 @@
 
 namespace Ñ
 {
-    Ñ::Resultado promueve(Ñ::Nodo* árbol);
+    Ñ::Resultado promueve(Ñ::Nodo* árbol, Ñ::CategoríaNodo categoríaNodo = Ñ::CategoríaNodo::NODO_MÓDULO);
 }

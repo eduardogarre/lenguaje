@@ -342,14 +342,20 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 		std::cout << resultado.mensaje() << std::endl;
 		muestraNodos(nodos);
 	}
-	else
+	//else
+	//{
+	//	auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
+	//	if(resultado.error())
+	//	{
+	//		std::cout << resultado.mensaje() << std::endl;
+	//		muestraNodos(nodos);
+	//	}
+	//}
+
+	resultado = Ñ::promueve(nodos, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
+	if(resultado.error())
 	{
-		auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
-		if(resultado.error())
-		{
-			std::cout << resultado.mensaje() << std::endl;
-			muestraNodos(nodos);
-		}
+		std::cout << resultado.mensaje() << std::endl;
 	}
 
 	for(auto l : lexemas)

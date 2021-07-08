@@ -415,62 +415,71 @@ namespace Ñ
         Ñ::ResultadoLlvm _construyeDeclaraciónFunción(std::string nombre, Ñ::Nodo* devuelto, Ñ::Nodo* argumentos)
         {
             Ñ::ResultadoLlvm resultado;
+            llvm::Type* tRetorno = nullptr;
+            std::vector<llvm::Type*> vArgumentos = {};
             
             // Comprobaciones de error
             if(devuelto == nullptr)
             {
-                resultado.error("He recibido un nodo nulo, esperaba un tipo de devolución");
-                return resultado;
+                tRetorno = creaTipoLlvm(Ñ::CategoríaTipo::TIPO_NADA);
+                //resultado.error("He recibido un nodo nulo, esperaba un tipo de devolución");
+                //return resultado;
             }
             else if(devuelto->categoría != Ñ::CategoríaNodo::NODO_TIPO)
             {
                 resultado.error("El tipo de retorno no es un NODO_TIPO válido.");
                 return resultado;
             }
+            else
+            {
+                Ñ::Tipo* tDevuelto = (Ñ::Tipo*)devuelto;
+                tRetorno = creaTipoLlvm(tDevuelto->tipo);
+            }
 
             if(argumentos == nullptr)
             {
-                resultado.error("He recibido un nodo nulo, esperaba un nodo contenedor de argumentos");
-                return resultado;
+                //resultado.error("He recibido un nodo nulo, esperaba un nodo contenedor de argumentos");
+                //return resultado;
             }
             else if(argumentos->categoría != Ñ::CategoríaNodo::NODO_ARGUMENTOS)
             {
                 resultado.error("El tipo de retorno no es un NODO_ARGUMENTOS válido.");
                 return resultado;
             }
-
-            Ñ::Tipo* tDevuelto = (Ñ::Tipo*)devuelto;
-            llvm::Type* tRetorno = creaTipoLlvm(tDevuelto->tipo);
-
-            std::vector<llvm::Type*> vArgumentos;
-
-            for(auto a : argumentos->ramas)
+            else
             {
-                if(a == nullptr)
+                for(auto a : argumentos->ramas)
                 {
-                    resultado.error("He recibido un argumento nulo");
-                    return resultado;
-                }
+                    if(a == nullptr)
+                    {
+                        resultado.error("He recibido un argumento nulo");
+                        return resultado;
+                    }
 
-                if(a->categoría == Ñ::CategoríaNodo::NODO_TIPO)
-                {
-                    Ñ::Tipo* arg = (Ñ::Tipo*)a;
-                    vArgumentos.push_back(creaTipoLlvm(arg->tipo));
-                }
-                else if(a->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
-                {
-                    Ñ::Tipo* arg = (Ñ::Tipo*)(a->ramas[0]);
-                    vArgumentos.push_back(creaTipoLlvm(arg->tipo));
-                }
-                else
-                {
-                    muestraNodos(a);
-                    resultado.error("He recibido un argumento de un tipo que no reconozco");
-                    return resultado;
+                    if(a->categoría == Ñ::CategoríaNodo::NODO_TIPO)
+                    {
+                        Ñ::Tipo* arg = (Ñ::Tipo*)a;
+                        vArgumentos.push_back(creaTipoLlvm(arg->tipo));
+                    }
+                    else if(a->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+                    {
+                        Ñ::Tipo* arg = (Ñ::Tipo*)(a->ramas[0]);
+                        vArgumentos.push_back(creaTipoLlvm(arg->tipo));
+                    }
+                    else
+                    {
+                        muestraNodos(a);
+                        resultado.error("He recibido un argumento de un tipo que no reconozco");
+                        return resultado;
+                    }
                 }
             }
 
             llvm::FunctionType* firmaFunción = llvm::FunctionType::get(tRetorno, vArgumentos, false);
+
+            std::cout << "firmaFunción: " << firmaFunción << std::endl;
+            std::cout << "nombre: " << nombre.c_str() << std::endl;
+            std::cout << "móduloLlvm: " << móduloLlvm << std::endl;
 
             llvm::Function* función = llvm::Function::Create(firmaFunción, llvm::Function::ExternalLinkage, nombre.c_str(), móduloLlvm);
 
@@ -496,43 +505,149 @@ namespace Ñ
             return resultado;
         }
 
+        Ñ::ResultadoLlvm construyeExpresiónPrimerNivel(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+            Ñ::Expresión* expresión;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo nulo, esperaba una expresión de primer nivel");
+                return resultado;
+            }
+            else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+            {
+                // Convierto Ñ::Nodo* a Ñ::DefineFunción*
+                expresión = (Ñ::Expresión*)nodo;
+            }
+            else
+            {
+                resultado.error("El nodo no es una expresión de primer nivel");
+                return resultado;
+            }
+
+            preparaMóduloYPasesDeOptimización("");
+
+            resultado = _construyeDeclaraciónFunción("__función_anónima__", nullptr, nullptr);
+            if(resultado.error())
+            {
+                return resultado;
+            }
+            
+            llvm::Function * funciónLlvm;
+            
+            funciónLlvm = móduloLlvm->getFunction("__función_anónima__");
+
+            if(!funciónLlvm)
+            {
+                resultado.error("Error, no se ha registrado la función '__función_anónima__()'");
+                return resultado;
+            }
+            else if(!funciónLlvm->empty())
+            {
+                resultado.error("La función ya está definida, no puedo redefinirla.");
+                return resultado;
+            }
+
+            // Inicio construcción del bloque, no hay argumentos que definir
+            // PENDIENTE: No debo usar una tabla de símbolos local
+            tablaSímbolos = new Símbolos;
+            tablaSímbolos->abreBloque();
+
+            std::string nombreBloque = "entrada";
+            llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(contextoLlvm, nombreBloque, funciónLlvm);
+            if(bloqueLlvm == nullptr)
+            {
+                resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo");
+                return resultado;
+            }
+
+            constructorLlvm.SetInsertPoint(bloqueLlvm);
+
+            auto rExpresión = construyeExpresión(nodo);
+            if(rExpresión.error())
+            {
+                return rExpresión;
+            }
+            constructorLlvm.CreateRetVoid();
+
+            std::cout << "gestorPasesOptimización: " << gestorPasesOptimización << std::endl;
+            std::cout << "funciónLlvm: " << funciónLlvm << std::endl;
+
+            llvm::verifyFunction(*funciónLlvm);
+
+            //gestorPasesOptimización->run(*funciónLlvm);
+
+            funciónLlvm->print(llvm::errs(), nullptr);
+
+            tablaSímbolos->cierraBloque();
+            delete tablaSímbolos;
+            tablaSímbolos = nullptr;
+
+            resultado.éxito();
+            resultado.valor((llvm::Value*)funciónLlvm);
+            return resultado;
+        }
+
         Ñ::ResultadoLlvm construyeExpresión(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
+            std::cout << "1" << std::endl;
+
             if(nodo == nullptr)
             {
+                std::cout << "2" << std::endl;
+
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
                 return resultado;
             }
 
+            std::cout << "3" << std::endl;
+
             if(nodo->ramas.size() != 1)
             {
+                std::cout << "4" << std::endl;
+
                 resultado.error("He recibido un nodo expresión que no contiene ningún hijo.");
                 return resultado;
             }
 
+            std::cout << "5" << std::endl;
+
             auto n = nodo->ramas[0];
+
+            std::cout << "6" << std::endl;
 
             switch (n->categoría)
             {
             case Ñ::CategoríaNodo::NODO_DEVUELVE:
+                std::cout << "7" << std::endl;
+
                 resultado = construyeRetorno(n);
                 break;
             
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
+                std::cout << "8" << std::endl;
+
                 resultado = construyeDeclaraciónVariable(n);
                 break;
             
             case Ñ::CategoríaNodo::NODO_ASIGNA:
+                std::cout << "9" << std::endl;
+
                 resultado = construyeAsignación(n);
                 break;
             
             default:
+                std::cout << "10" << std::endl;
+
                 resultado.error("No reconozco la expresión");
                 muestraNodos(nodo);
                 break;
             }
+
+            std::cout << "11" << std::endl;
 
             return resultado;
         }
@@ -1172,7 +1287,7 @@ namespace Ñ
         }
     };
 
-    Ñ::Resultado promueve(Ñ::Nodo* árbol)
+    Ñ::Resultado promueve(Ñ::Nodo* árbol, Ñ::CategoríaNodo categoríaNodo)
     {
         std::cout << "promueve(nodo)" << std::endl;
 
@@ -1202,12 +1317,21 @@ namespace Ñ
 
         std::cout << "iniciando promoción a LLVM:" << std::endl << std::endl;
 
-        if(árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+        if(categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
             Ñ::ResultadoLlvm rMódulo = promotor->construyeMódulo(árbol);
             if(rMódulo.error())
             {
                 resultado.error(rMódulo.mensaje());
+                return resultado;
+            }
+        }
+        else if(categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+        {
+            Ñ::ResultadoLlvm rExpresión = promotor->construyeExpresiónPrimerNivel(árbol);
+            if(rExpresión.error())
+            {
+                resultado.error(rExpresión.mensaje());
                 return resultado;
             }
         }

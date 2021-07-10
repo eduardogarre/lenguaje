@@ -95,8 +95,8 @@ namespace Ñ
 
         llvm::Expected<llvm::JITEvaluatedSymbol> busca(llvm::StringRef nombre)
         {
-            //sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
-            //std::cout << std::endl;
+            sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
+            std::cout << std::endl;
             return sesiónEjecución.lookup({sesiónEjecución.getJITDylibByName("<main>")}, traduceSímbolos(nombre.str()), llvm::orc::SymbolState::Resolved);
         }
     };

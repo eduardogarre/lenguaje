@@ -9,6 +9,7 @@
 #include "llvm/ADT/APInt.h"
 #include "llvm/ADT/APSInt.h"
 #include "llvm/ADT/STLExtras.h"
+#include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
@@ -390,7 +391,7 @@ namespace Ñ
 
             gestorPasesOptimización->run(*funciónLlvm);
 
-            funciónLlvm->print(llvm::errs(), nullptr);
+            //funciónLlvm->print(llvm::errs(), nullptr);
 
             tablaSímbolos->cierraBloque();
             delete tablaSímbolos;
@@ -665,7 +666,16 @@ namespace Ñ
 
             if(nodo->ramas.size() == 2)
             {
-                Ñ::ResultadoLlvm rLia = construyeLIA(nodo->ramas[0]);
+                Ñ::ResultadoLlvm rLia;
+                if(jat)
+                {
+                    rLia = construyeLIAJAT(nodo->ramas[0]);
+                }
+                else
+                {
+                    rLia = construyeLIA(nodo->ramas[0]);
+                }
+
                 if(rLia.error())
                 {
                     return rLia;
@@ -744,6 +754,34 @@ namespace Ñ
             {
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
                 resultado = construyeDeclaraciónVariable(nodo);
+                break;
+            
+            case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
+                resultado = construyeVariableLIA(nodo);
+                break;
+            
+            default:
+                resultado.error("No puedo construir este nodo como LDA");
+                break;
+            }
+
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeLIAJAT(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+            
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                return resultado;
+            }
+
+            switch (nodo->categoría)
+            {
+            case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
+                resultado = construyeDeclaraciónVariableGlobal(nodo);
                 break;
             
             case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
@@ -842,6 +880,50 @@ namespace Ñ
             return resultado;
         }
 
+        Ñ::ResultadoLlvm construyeDeclaraciónVariableGlobal(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la declaración de variable");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+            {
+                resultado.error("El nodo no es una declaración de variable, no puedo construirlo");
+                return resultado;
+            }
+            
+            if(nodo->ramas.size() != 1)
+            {
+                resultado.error("El nodo 'declaración de variable' no tiene las ramas esperadas, no puedo construirlo");
+                return resultado;
+            }
+
+            std::string nombre;
+            llvm::Type* tipo;
+
+            Ñ::DeclaraVariable* dv = (Ñ::DeclaraVariable*)nodo;
+            Ñ::Tipo* t = (Ñ::Tipo*)(nodo->ramas[0]);
+
+            nombre = dv->variable;
+            tipo = creaTipoLlvm(t->tipo);
+
+            llvm::Constant* CERO = llvm::ConstantInt::get(tipo, 0);
+
+            //llvm::Value* variable = constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
+            llvm::GlobalVariable* varGlobal = new llvm::GlobalVariable(*móduloLlvm, tipo, false, llvm::GlobalValue::CommonLinkage, CERO, nombre);
+            //varGlobal->setAlignment(llvm::MaybeAlign(8));
+
+            ponId(nombre, varGlobal);
+
+            resultado.éxito();
+            resultado.valor(varGlobal);
+            return resultado;
+        }
+
         Ñ::ResultadoLlvm construyeVariableLIA(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
@@ -880,6 +962,8 @@ namespace Ñ
 
         Ñ::ResultadoLlvm construyeVariableLDA(Ñ::Nodo* nodo)
         {
+            std::cout << "AAAAAAAAAAAAA" << std::endl;
+            
             Ñ::ResultadoLlvm resultado;
 
             if(nodo == nullptr)
@@ -907,7 +991,14 @@ namespace Ñ
             id = (Ñ::Identificador*)nodo;
             nombre = id->id;
 
-            variable = leeId(nombre);
+            if(jat)
+            {
+                variable = móduloLlvm->getGlobalVariable(nombre, true);
+            }
+            else
+            {
+                variable = leeId(nombre);
+            }
 
             llvm::Type* tipoLia = variable->getType();
             std::string type_str;
@@ -1319,18 +1410,35 @@ namespace Ñ
             {
                 promotor->jat = *JatoError;
             }
+            
+            std::cout << "1" << std::endl;
 
             Ñ::ResultadoLlvm rExpresión = promotor->construyeExpresiónPrimerNivel(árbol);
+            
+            std::cout << "2" << std::endl;
+
             if(rExpresión.error())
             {
+                std::cout << "3" << std::endl;
+
                 resultado.error(rExpresión.mensaje());
                 return resultado;
             }
 
+            std::cout << "4" << std::endl;
+
+            promotor->móduloLlvm->print(llvm::outs(), nullptr);
+
+            std::cout << "5" << std::endl;
+
             std::unique_ptr<llvm::Module> módulo(promotor->móduloLlvm);
             promotor->jat->añadeMódulo(std::move(módulo));
 
+            std::cout << "6" << std::endl;
+
             llvm::Expected<llvm::JITEvaluatedSymbol> símboloEvaluadoJAT = promotor->jat->busca("__función_anónima__");
+
+            std::cout << "7" << std::endl;
 
             if(auto error = símboloEvaluadoJAT.takeError())
             {
@@ -1338,6 +1446,8 @@ namespace Ñ
                 return resultado;
             }
             
+            std::cout << "8" << std::endl;
+
             void (*funciónJAT)() = (void (*)())(*símboloEvaluadoJAT).getAddress();
 
             std::cout << "ejecutando '__función_anónima__()' ...";

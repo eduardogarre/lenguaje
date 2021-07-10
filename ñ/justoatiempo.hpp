@@ -9,11 +9,16 @@
 #include "llvm/ExecutionEngine/Orc/ExecutorProcessControl.h"
 #include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
 #include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
+#include "llvm/ExecutionEngine/Orc/LLJIT.h"
 #include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
+#include "llvm/ExecutionEngine/Orc/ThreadSafeModule.h"
 #include "llvm/ExecutionEngine/SectionMemoryManager.h"
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/LLVMContext.h"
+#include "llvm/Support/Error.h"
 #include "llvm/Target/TargetMachine.h"
+
+#include <iostream>
 #include <memory>
 
 namespace Ñ
@@ -21,65 +26,78 @@ namespace Ñ
     class ConstructorJAT // Justo A Tiempo
     {
     private:
-        llvm::orc::ExecutorProcessControl* gestorEjecución;
-        llvm::orc::ExecutionSession* sesiónEjecución;
-
-        llvm::DataLayout disposiciónDatos;
-        llvm::orc::MangleAndInterner denomina;
-        llvm::TargetMachine* máquinaDestino;
-
+        llvm::orc::ExecutionSession sesiónEjecución;
         llvm::orc::RTDyldObjectLinkingLayer capaObjeto;
         llvm::orc::IRCompileLayer capaConstrucción;
-
-        llvm::orc::JITDylib &tablaSímbolosBibliotecaDinámica;
+        llvm::DataLayout disposiciónDatos;
+        llvm::orc::MangleAndInterner traduceSímbolos;
+        llvm::orc::ThreadSafeContext contexto;
+        llvm::orc::ThreadSafeModule móduloMultihilo;
+        llvm::orc::JITDylib &tablaSímbolosPrincipal;
 
     public:
-        ConstructorJAT( llvm::orc::ExecutorProcessControl* gestorEjecución,
-                llvm::orc::ExecutionSession* sesiónEjecución,
-                llvm::orc::JITTargetMachineBuilder constructorJATMáquinaDestino,
+        ConstructorJAT( llvm::orc::JITTargetMachineBuilder constructorJATMáquinaDestino,
                 llvm::DataLayout disposiciónDatos
             ) :
-                gestorEjecución(gestorEjecución),
-                máquinaDestino(llvm::EngineBuilder().selectTarget()),
-                sesiónEjecución(sesiónEjecución),
-                disposiciónDatos(disposiciónDatos),
-                denomina(*this->sesiónEjecución, this->disposiciónDatos),
-                capaObjeto(*this->sesiónEjecución, []() { return std::make_unique<llvm::SectionMemoryManager>(); }),
-                capaConstrucción(*this->sesiónEjecución, capaObjeto, std::make_unique<llvm::orc::ConcurrentIRCompiler>(std::move(constructorJATMáquinaDestino)) ),
-                tablaSímbolosBibliotecaDinámica(this->sesiónEjecución->createBareJITDylib("<main>"))
+                capaObjeto(sesiónEjecución, []() { return std::make_unique<llvm::SectionMemoryManager>(); }),
+                capaConstrucción(sesiónEjecución, capaObjeto, std::make_unique<llvm::orc::ConcurrentIRCompiler>(std::move(constructorJATMáquinaDestino))),
+                disposiciónDatos(std::move(disposiciónDatos)),
+                traduceSímbolos(sesiónEjecución, this->disposiciónDatos),
+                contexto(std::make_unique<llvm::LLVMContext>()),
+                tablaSímbolosPrincipal(this->sesiónEjecución.createBareJITDylib("<main>"))
         {
-            tablaSímbolosBibliotecaDinámica.addGenerator( cantFail( llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess( disposiciónDatos.getGlobalPrefix())));
-        }
+            std::cout << "001" << std::endl;
+        
+            //sesiónEjecución.getJITDylibByName("<main>")->addGenerator(llvm::cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(disposiciónDatos.getGlobalPrefix())));
 
-        ~ConstructorJAT()
-        {
-            if (auto error = sesiónEjecución->endSession())
+            llvm::orc::JITDylib* jitdylib = sesiónEjecución.getJITDylibByName("<main>");
+
+            std::cout << "002" << std::endl;
+            if(!jitdylib)
             {
-                sesiónEjecución->reportError(std::move(error));
+                std::cout << "jitdylib nulo" << std::endl;
             }
+        
+            jitdylib->addGenerator(llvm::cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(disposiciónDatos.getGlobalPrefix())));
+        
+            std::cout << "003" << std::endl;
         }
 
         static llvm::Expected<Ñ::ConstructorJAT*> Crea()
         {
-            auto conjuntoNombres = std::make_shared<llvm::orc::SymbolStringPool>();
-            auto gestorEjecución = llvm::orc::SelfExecutorProcessControl::Create(conjuntoNombres);
+            std::cout << "01" << std::endl;
+        
+            auto destinoConstrucciónJAT = llvm::orc::JITTargetMachineBuilder::detectHost();
 
-            if (!gestorEjecución)
+            std::cout << "02" << std::endl;
+        
+            if(!destinoConstrucciónJAT)
             {
-                return gestorEjecución.takeError();
+                std::cout << "03" << std::endl;
+        
+                return destinoConstrucciónJAT.takeError();
             }
 
-            auto sesiónEjecución = new llvm::orc::ExecutionSession(std::move(conjuntoNombres));
+            std::cout << "04" << std::endl;
+        
+            auto disposiciónDatos = destinoConstrucciónJAT->getDefaultDataLayoutForTarget();
 
-            llvm::orc::JITTargetMachineBuilder constructorJATMáquinaDestino((*gestorEjecución)->getTargetTriple());
-
-            auto disposiciónDatos = constructorJATMáquinaDestino.getDefaultDataLayoutForTarget();
-            if (!disposiciónDatos)
+            std::cout << "05" << std::endl;
+        
+            if(!disposiciónDatos)
             {
+                std::cout << "06" << std::endl;
+        
                 return disposiciónDatos.takeError();
             }
 
-            return new Ñ::ConstructorJAT((*gestorEjecución).get(), sesiónEjecución, std::move(constructorJATMáquinaDestino), std::move(*disposiciónDatos));
+            std::cout << "07" << std::endl;
+
+            Ñ::ConstructorJAT* jat = new Ñ::ConstructorJAT(std::move(*destinoConstrucciónJAT), std::move(*disposiciónDatos));
+        
+            std::cout << "08" << std::endl;
+
+            return jat;
         }
 
         const llvm::DataLayout &leeDisposiciónDatos() const
@@ -87,29 +105,20 @@ namespace Ñ
             return disposiciónDatos;
         }
 
-        llvm::orc::JITDylib &leeTablaSímbolosBibliotecaDinámica()
+        llvm::LLVMContext &leeContexto()
         {
-            return tablaSímbolosBibliotecaDinámica;
+            return *contexto.getContext();
         }
 
-        llvm::TargetMachine &leeMáquinaDestino()
+        void añadeMódulo(std::unique_ptr<llvm::Module> módulo)
         {
-            return *máquinaDestino;
+            llvm::orc::JITDylib* jitdylib = sesiónEjecución.getJITDylibByName("<main>");
+            llvm::cantFail(capaConstrucción.add(*jitdylib, llvm::orc::ThreadSafeModule(std::move(módulo), contexto)));
         }
 
-        llvm::Error añadeMódulo(llvm::orc::ThreadSafeModule móduloMultihilo, llvm::orc::ResourceTrackerSP monitorRecursos = nullptr)
+        llvm::Expected<llvm::JITEvaluatedSymbol> busca(std::string nombre)
         {
-            if (!monitorRecursos)
-            {
-                monitorRecursos = tablaSímbolosBibliotecaDinámica.getDefaultResourceTracker();
-            }
-
-            return capaConstrucción.add(monitorRecursos, std::move(móduloMultihilo));
-        }
-
-        llvm::Expected<llvm::JITEvaluatedSymbol> busca(llvm::StringRef nombre)
-        {
-            return sesiónEjecución->lookup({&tablaSímbolosBibliotecaDinámica}, denomina(nombre.str()));
+            return sesiónEjecución.lookup({sesiónEjecución.getJITDylibByName("<main>")}, traduceSímbolos(nombre));
         }
     };
 }

@@ -1,0 +1,8 @@
+ent inicia(ent x)
+{
+    ent a = 288;
+    ent b = (1 + a) * x + (1 + a) * x;
+    devuelve b; 
+}
+
+ent x = inicia(42);

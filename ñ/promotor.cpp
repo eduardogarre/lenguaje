@@ -110,14 +110,37 @@ namespace Ñ
             }
         }
 
-        void preparaMóduloYPasesDeOptimización(std::string nombre)
+        void preparaMódulo(std::string nombre)
         {
 
             // Creo el módulo LLVM y le asigno el nombre de mi módulo
             móduloLlvm = new llvm::Module(nombre, contextoLlvm);
 
-            móduloLlvm->setDataLayout(jat->leeMáquinaDestino().createDataLayout());
+            gestorPasesOptimización = new llvm::legacy::FunctionPassManager(móduloLlvm);
 
+            // Optimizaciones se secuencias cortas y pequeños reordenamientos.
+            gestorPasesOptimización->add(llvm::createInstructionCombiningPass());
+            // Reassociate expressions.
+            gestorPasesOptimización->add(llvm::createReassociatePass());
+            // Elimina subexpresiones comunes.
+            gestorPasesOptimización->add(llvm::createGVNPass());
+            // Simplifica el grafo de flujo de ejecución (elimina bloques inalcanzables, etc)
+            gestorPasesOptimización->add(llvm::createCFGSimplificationPass());
+
+            gestorPasesOptimización->doInitialization();
+        }
+
+        void preparaMóduloJAT(std::string nombre)
+        {
+
+            // Creo el módulo LLVM y le asigno el nombre de mi módulo
+            móduloLlvm = new llvm::Module(nombre, contextoLlvm);
+
+            móduloLlvm->setDataLayout(jat->leeDisposiciónDatos());
+        }
+
+        void preparaPasesDeOptimización()
+        {
             gestorPasesOptimización = new llvm::legacy::FunctionPassManager(móduloLlvm);
 
             // Optimizaciones se secuencias cortas y pequeños reordenamientos.
@@ -246,7 +269,8 @@ namespace Ñ
                 return resultado;
             }
 
-            preparaMóduloYPasesDeOptimización(módulo->módulo);
+            preparaMódulo(módulo->módulo);
+            preparaPasesDeOptimización();
 
             for(auto n : nodo->ramas)
             {
@@ -526,7 +550,7 @@ namespace Ñ
                 return resultado;
             }
 
-            preparaMóduloYPasesDeOptimización("");
+            preparaMóduloJAT("");
 
             resultado = _construyeDeclaraciónFunción("__función_anónima__", nullptr, nullptr);
             if(resultado.error())
@@ -1302,23 +1326,10 @@ namespace Ñ
         std::cout << std::endl;
         std::cout << std::endl;
 
-        std::cout << "Preparando construcción 'justo a tiempo'" << std::endl;
-        
-        llvm::InitializeNativeTarget();
-        llvm::InitializeNativeTargetAsmPrinter();
-        llvm::InitializeNativeTargetAsmParser();
-        if(auto JatoError = Ñ::ConstructorJAT::Crea())
-        {
-            promotor->jat = *JatoError;
-        }
-
-        std::cout << std::endl;
-        std::cout << std::endl;
-
-        std::cout << "iniciando promoción a LLVM:" << std::endl << std::endl;
-
         if(categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
+            std::cout << "iniciando promoción a LLVM:" << std::endl << std::endl;
+
             Ñ::ResultadoLlvm rMódulo = promotor->construyeMódulo(árbol);
             if(rMódulo.error())
             {
@@ -1328,6 +1339,16 @@ namespace Ñ
         }
         else if(categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {
+            std::cout << "Preparando construcción 'justo a tiempo'" << std::endl;
+            
+            llvm::InitializeNativeTarget();
+            llvm::InitializeNativeTargetAsmPrinter();
+            llvm::InitializeNativeTargetAsmParser();
+            if(auto JatoError = Ñ::ConstructorJAT::Crea())
+            {
+                promotor->jat = *JatoError;
+            }
+
             Ñ::ResultadoLlvm rExpresión = promotor->construyeExpresiónPrimerNivel(árbol);
             if(rExpresión.error())
             {

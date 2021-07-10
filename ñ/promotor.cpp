@@ -90,8 +90,8 @@ namespace Ñ
     {
     public:
         llvm::LLVMContext contextoLlvm;
-        llvm::Module* móduloLlvm;
-        llvm::legacy::FunctionPassManager* gestorPasesOptimización;
+        llvm::Module* móduloLlvm = nullptr;
+        llvm::legacy::FunctionPassManager* gestorPasesOptimización = nullptr;
         llvm::IRBuilder<> constructorLlvm;
         Ñ::Símbolos* tablaSímbolos = nullptr;
         Ñ::ConstructorJAT* jat = nullptr;
@@ -501,10 +501,6 @@ namespace Ñ
 
             llvm::FunctionType* firmaFunción = llvm::FunctionType::get(tRetorno, vArgumentos, false);
 
-            std::cout << "firmaFunción: " << firmaFunción << std::endl;
-            std::cout << "nombre: " << nombre.c_str() << std::endl;
-            std::cout << "móduloLlvm: " << móduloLlvm << std::endl;
-
             llvm::Function* función = llvm::Function::Create(firmaFunción, llvm::Function::ExternalLinkage, nombre.c_str(), móduloLlvm);
 
             resultado.éxito();
@@ -595,9 +591,6 @@ namespace Ñ
             }
             constructorLlvm.CreateRetVoid();
 
-            std::cout << "gestorPasesOptimización: " << gestorPasesOptimización << std::endl;
-            std::cout << "funciónLlvm: " << funciónLlvm << std::endl;
-
             llvm::verifyFunction(*funciónLlvm);
 
             //gestorPasesOptimización->run(*funciónLlvm);
@@ -617,61 +610,39 @@ namespace Ñ
         {
             Ñ::ResultadoLlvm resultado;
 
-            std::cout << "1" << std::endl;
-
             if(nodo == nullptr)
             {
-                std::cout << "2" << std::endl;
-
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
                 return resultado;
             }
 
-            std::cout << "3" << std::endl;
-
             if(nodo->ramas.size() != 1)
             {
-                std::cout << "4" << std::endl;
-
                 resultado.error("He recibido un nodo expresión que no contiene ningún hijo.");
                 return resultado;
             }
 
-            std::cout << "5" << std::endl;
-
             auto n = nodo->ramas[0];
-
-            std::cout << "6" << std::endl;
 
             switch (n->categoría)
             {
             case Ñ::CategoríaNodo::NODO_DEVUELVE:
-                std::cout << "7" << std::endl;
-
                 resultado = construyeRetorno(n);
                 break;
             
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
-                std::cout << "8" << std::endl;
-
                 resultado = construyeDeclaraciónVariable(n);
                 break;
             
             case Ñ::CategoríaNodo::NODO_ASIGNA:
-                std::cout << "9" << std::endl;
-
                 resultado = construyeAsignación(n);
                 break;
             
             default:
-                std::cout << "10" << std::endl;
-
                 resultado.error("No reconozco la expresión");
                 muestraNodos(nodo);
                 break;
             }
-
-            std::cout << "11" << std::endl;
 
             return resultado;
         }
@@ -1328,7 +1299,7 @@ namespace Ñ
 
         if(categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
-            std::cout << "iniciando promoción a LLVM:" << std::endl << std::endl;
+            std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
 
             Ñ::ResultadoLlvm rMódulo = promotor->construyeMódulo(árbol);
             if(rMódulo.error())
@@ -1339,7 +1310,7 @@ namespace Ñ
         }
         else if(categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {
-            std::cout << "Preparando construcción 'justo a tiempo'" << std::endl;
+            std::cout << "Preparando construcción 'justo a tiempo'" << std::endl << std::endl;
             
             llvm::InitializeNativeTarget();
             llvm::InitializeNativeTargetAsmPrinter();
@@ -1355,6 +1326,9 @@ namespace Ñ
                 resultado.error(rExpresión.mensaje());
                 return resultado;
             }
+
+            std::unique_ptr<llvm::Module> módulo(promotor->móduloLlvm);
+            promotor->jat->añadeMódulo(std::move(módulo));
         }
 
         return resultado;

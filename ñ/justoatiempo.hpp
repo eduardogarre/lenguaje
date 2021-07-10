@@ -46,57 +46,32 @@ namespace Ñ
                 contexto(std::make_unique<llvm::LLVMContext>()),
                 tablaSímbolosPrincipal(this->sesiónEjecución.createBareJITDylib("<main>"))
         {
-            std::cout << "001" << std::endl;
-        
-            //sesiónEjecución.getJITDylibByName("<main>")->addGenerator(llvm::cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(disposiciónDatos.getGlobalPrefix())));
-
             llvm::orc::JITDylib* jitdylib = sesiónEjecución.getJITDylibByName("<main>");
 
-            std::cout << "002" << std::endl;
-            if(!jitdylib)
+            if(jitdylib)
             {
-                std::cout << "jitdylib nulo" << std::endl;
+                jitdylib->addGenerator(llvm::cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(disposiciónDatos.getGlobalPrefix())));
             }
-        
-            jitdylib->addGenerator(llvm::cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(disposiciónDatos.getGlobalPrefix())));
-        
-            std::cout << "003" << std::endl;
         }
 
         static llvm::Expected<Ñ::ConstructorJAT*> Crea()
         {
-            std::cout << "01" << std::endl;
-        
             auto destinoConstrucciónJAT = llvm::orc::JITTargetMachineBuilder::detectHost();
 
-            std::cout << "02" << std::endl;
-        
             if(!destinoConstrucciónJAT)
             {
-                std::cout << "03" << std::endl;
-        
                 return destinoConstrucciónJAT.takeError();
             }
 
-            std::cout << "04" << std::endl;
-        
             auto disposiciónDatos = destinoConstrucciónJAT->getDefaultDataLayoutForTarget();
 
-            std::cout << "05" << std::endl;
-        
             if(!disposiciónDatos)
             {
-                std::cout << "06" << std::endl;
-        
                 return disposiciónDatos.takeError();
             }
 
-            std::cout << "07" << std::endl;
-
             Ñ::ConstructorJAT* jat = new Ñ::ConstructorJAT(std::move(*destinoConstrucciónJAT), std::move(*disposiciónDatos));
         
-            std::cout << "08" << std::endl;
-
             return jat;
         }
 

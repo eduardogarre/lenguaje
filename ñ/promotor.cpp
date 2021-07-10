@@ -1329,8 +1329,25 @@ namespace Ñ
 
             std::unique_ptr<llvm::Module> módulo(promotor->móduloLlvm);
             promotor->jat->añadeMódulo(std::move(módulo));
+
+            llvm::Expected<llvm::JITEvaluatedSymbol> símboloEvaluadoJAT = promotor->jat->busca("__función_anónima__");
+
+            if(auto error = símboloEvaluadoJAT.takeError())
+            {
+                resultado.error("El constructor JAT no encuentra el símbolo '__función_anónima__()'");
+                return resultado;
+            }
+            
+            void (*funciónJAT)() = (void (*)())(*símboloEvaluadoJAT).getAddress();
+
+            std::cout << "ejecutando '__función_anónima__()' ...";
+
+            funciónJAT();
+
+            std::cout << " hecho." << std::endl;
         }
 
+        resultado.éxito();
         return resultado;
     }
 }

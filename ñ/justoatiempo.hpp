@@ -46,6 +46,8 @@ namespace Ñ
                 contexto(std::make_unique<llvm::LLVMContext>()),
                 tablaSímbolosPrincipal(this->sesiónEjecución.createBareJITDylib("<main>"))
         {
+            // Por el momento, en Windows el gestor de COFF, RuntimeDyldCOFF, no informa correctamente del estado de los símbolos
+            capaObjeto.setOverrideObjectFlagsWithResponsibilityFlags(true);
             llvm::orc::JITDylib* jitdylib = sesiónEjecución.getJITDylibByName("<main>");
 
             if(jitdylib)
@@ -91,9 +93,11 @@ namespace Ñ
             llvm::cantFail(capaConstrucción.add(*jitdylib, llvm::orc::ThreadSafeModule(std::move(módulo), contexto)));
         }
 
-        llvm::Expected<llvm::JITEvaluatedSymbol> busca(std::string nombre)
+        llvm::Expected<llvm::JITEvaluatedSymbol> busca(llvm::StringRef nombre)
         {
-            return sesiónEjecución.lookup({sesiónEjecución.getJITDylibByName("<main>")}, traduceSímbolos(nombre));
+            //sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
+            //std::cout << std::endl;
+            return sesiónEjecución.lookup({sesiónEjecución.getJITDylibByName("<main>")}, traduceSímbolos(nombre.str()), llvm::orc::SymbolState::Resolved);
         }
     };
 }

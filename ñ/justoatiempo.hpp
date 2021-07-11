@@ -56,20 +56,22 @@ namespace Ñ
             }
         }
 
-        static llvm::Expected<Ñ::ConstructorJAT*> Crea()
+        static Ñ::ConstructorJAT* Crea()
         {
             auto destinoConstrucciónJAT = llvm::orc::JITTargetMachineBuilder::detectHost();
 
             if(!destinoConstrucciónJAT)
             {
-                return destinoConstrucciónJAT.takeError();
+                destinoConstrucciónJAT.takeError();
+                return nullptr;
             }
 
             auto disposiciónDatos = destinoConstrucciónJAT->getDefaultDataLayoutForTarget();
 
             if(!disposiciónDatos)
             {
-                return disposiciónDatos.takeError();
+                disposiciónDatos.takeError();
+                return nullptr;
             }
 
             Ñ::ConstructorJAT* jat = new Ñ::ConstructorJAT(std::move(*destinoConstrucciónJAT), std::move(*disposiciónDatos));
@@ -98,6 +100,23 @@ namespace Ñ
             sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
             std::cout << std::endl;
             return sesiónEjecución.lookup({sesiónEjecución.getJITDylibByName("<main>")}, traduceSímbolos(nombre.str()), llvm::orc::SymbolState::Resolved);
+        }
+
+        llvm::Error eliminaSímbolo(std::string nombre)
+        {
+            auto conjuntoSímbolos = new llvm::orc::SymbolStringPool();
+            auto símbolo = sesiónEjecución.intern(nombre);
+
+            std::cout << std::endl;
+            std::cout << "Contenido del JITDylib antes de borrar '" << nombre << "'" << std::endl << std::endl;
+            sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
+
+            auto res = tablaSímbolosPrincipal.remove({símbolo});
+
+            std::cout << "Contenido del JITDylib después de borrar '" << nombre << "'" << std::endl << std::endl;
+            sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
+
+            return res;
         }
     };
 }

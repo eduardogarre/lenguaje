@@ -38,6 +38,8 @@
 
 namespace Ñ
 {
+    static Ñ::ConstructorJAT* jat = nullptr;
+
     class Símbolos
     {
     private:
@@ -95,7 +97,6 @@ namespace Ñ
         llvm::legacy::FunctionPassManager* gestorPasesOptimización = nullptr;
         llvm::IRBuilder<> constructorLlvm;
         Ñ::Símbolos* tablaSímbolos = nullptr;
-        Ñ::ConstructorJAT* jat = nullptr;
 
     public:
         Promotor() : constructorLlvm(contextoLlvm)
@@ -1406,9 +1407,10 @@ namespace Ñ
             llvm::InitializeNativeTarget();
             llvm::InitializeNativeTargetAsmPrinter();
             llvm::InitializeNativeTargetAsmParser();
-            if(auto JatoError = Ñ::ConstructorJAT::Crea())
+
+            if(!jat)
             {
-                promotor->jat = *JatoError;
+                jat = Ñ::ConstructorJAT::Crea();
             }
             
             std::cout << "1" << std::endl;
@@ -1432,11 +1434,11 @@ namespace Ñ
             std::cout << "5" << std::endl;
 
             std::unique_ptr<llvm::Module> módulo(promotor->móduloLlvm);
-            promotor->jat->añadeMódulo(std::move(módulo));
+            jat->añadeMódulo(std::move(módulo));
 
             std::cout << "6" << std::endl;
 
-            llvm::Expected<llvm::JITEvaluatedSymbol> funciónEvaluadaJAT = promotor->jat->busca("__función_anónima__");
+            llvm::Expected<llvm::JITEvaluatedSymbol> funciónEvaluadaJAT = jat->busca("__función_anónima__");
 
             std::cout << "7" << std::endl;
 
@@ -1456,7 +1458,13 @@ namespace Ñ
 
             std::cout << " hecho." << std::endl;
 
-            llvm::Expected<llvm::JITEvaluatedSymbol> variableEvaluadaJAT = promotor->jat->busca("a");
+            std::cout << "Elimino '__función_anónima__()' ..." << std::endl;
+            
+            jat->eliminaSímbolo("__función_anónima__");
+
+            std::cout << " hecho." << std::endl;
+
+            llvm::Expected<llvm::JITEvaluatedSymbol> variableEvaluadaJAT = jat->busca("a");
 
             std::cout << "9" << std::endl;
 

@@ -432,7 +432,7 @@ namespace Ñ
             
             llvm::Function* funciónLlvm = (llvm::Function*)resultado.valor();
             
-            funciónLlvm->print(llvm::errs(), nullptr);
+            //funciónLlvm->print(llvm::errs(), nullptr);
             
             return resultado;
         }
@@ -596,7 +596,7 @@ namespace Ñ
 
             //gestorPasesOptimización->run(*funciónLlvm);
 
-            funciónLlvm->print(llvm::errs(), nullptr);
+            //funciónLlvm->print(llvm::errs(), nullptr);
 
             tablaSímbolos->cierraBloque();
             delete tablaSímbolos;
@@ -1000,10 +1000,10 @@ namespace Ñ
                 variable = leeId(nombre);
             }
 
-            llvm::Type* tipoLia = variable->getType();
-            std::string type_str;
-            llvm::raw_string_ostream rso(type_str);
-            tipoLia->print(rso);
+            //llvm::Type* tipoLia = variable->getType();
+            //std::string type_str;
+            //llvm::raw_string_ostream rso(type_str);
+            //tipoLia->print(rso);
 
             llvm::Value* valor = constructorLlvm.CreateLoad(variable, nombre);
 
@@ -1436,11 +1436,11 @@ namespace Ñ
 
             std::cout << "6" << std::endl;
 
-            llvm::Expected<llvm::JITEvaluatedSymbol> símboloEvaluadoJAT = promotor->jat->busca("__función_anónima__");
+            llvm::Expected<llvm::JITEvaluatedSymbol> funciónEvaluadaJAT = promotor->jat->busca("__función_anónima__");
 
             std::cout << "7" << std::endl;
 
-            if(auto error = símboloEvaluadoJAT.takeError())
+            if(auto error = funciónEvaluadaJAT.takeError())
             {
                 resultado.error("El constructor JAT no encuentra el símbolo '__función_anónima__()'");
                 return resultado;
@@ -1448,13 +1448,29 @@ namespace Ñ
             
             std::cout << "8" << std::endl;
 
-            void (*funciónJAT)() = (void (*)())(*símboloEvaluadoJAT).getAddress();
+            void (*funciónJAT)() = (void (*)())(*funciónEvaluadaJAT).getAddress();
 
             std::cout << "ejecutando '__función_anónima__()' ...";
 
             funciónJAT();
 
             std::cout << " hecho." << std::endl;
+
+            llvm::Expected<llvm::JITEvaluatedSymbol> variableEvaluadaJAT = promotor->jat->busca("a");
+
+            std::cout << "9" << std::endl;
+
+            if(auto error = variableEvaluadaJAT.takeError())
+            {
+                resultado.error("El constructor JAT no encuentra el símbolo 'a()'");
+                return resultado;
+            }
+            
+            std::cout << "10" << std::endl;
+
+            int64_t* entero = (int64_t*)(*variableEvaluadaJAT).getAddress();
+
+            std::cout << "La variable global 'a' vale " << std::to_string(*entero) << std::endl;
         }
 
         resultado.éxito();

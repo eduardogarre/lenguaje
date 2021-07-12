@@ -97,9 +97,12 @@ namespace Ñ
 
         llvm::Expected<llvm::JITEvaluatedSymbol> busca(llvm::StringRef nombre)
         {
-            sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
-            std::cout << std::endl;
             return sesiónEjecución.lookup({sesiónEjecución.getJITDylibByName("<main>")}, traduceSímbolos(nombre.str()), llvm::orc::SymbolState::Resolved);
+        }
+
+        void muestraSímbolos()
+        {
+            sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
         }
 
         llvm::Error eliminaSímbolo(std::string nombre)
@@ -107,14 +110,7 @@ namespace Ñ
             auto conjuntoSímbolos = new llvm::orc::SymbolStringPool();
             auto símbolo = sesiónEjecución.intern(nombre);
 
-            std::cout << std::endl;
-            std::cout << "Contenido del JITDylib antes de borrar '" << nombre << "'" << std::endl << std::endl;
-            sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
-
             auto res = tablaSímbolosPrincipal.remove({símbolo});
-
-            std::cout << "Contenido del JITDylib después de borrar '" << nombre << "'" << std::endl << std::endl;
-            sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
 
             return res;
         }

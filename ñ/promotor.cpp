@@ -963,21 +963,27 @@ namespace Ñ
 
         Ñ::ResultadoLlvm construyeVariableLDA(Ñ::Nodo* nodo)
         {
-            std::cout << "AAAAAAAAAAAAA" << std::endl;
+            std::cout << "A" << std::endl;
             
             Ñ::ResultadoLlvm resultado;
 
+            std::cout << "B" << std::endl;
+            
             if(nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable");
                 return resultado;
             }
 
+            std::cout << "C" << std::endl;
+            
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
             {
                 resultado.error("El nodo no es una variable, no puedo construir su lectura");
                 return resultado;
             }
+            
+            std::cout << "D" << std::endl;
             
             if(nodo->ramas.size() != 0)
             {
@@ -985,19 +991,29 @@ namespace Ñ
                 return resultado;
             }
 
+            std::cout << "E" << std::endl;
+            
             std::string nombre;
             Ñ::Identificador* id;
             llvm::Value* variable;
 
+            std::cout << "F" << std::endl;
+            
             id = (Ñ::Identificador*)nodo;
             nombre = id->id;
 
+            std::cout << "G" << std::endl;
+            
             if(jat)
             {
+            std::cout << "H" << std::endl;
+            
                 variable = móduloLlvm->getGlobalVariable(nombre, true);
             }
             else
             {
+            std::cout << "I" << std::endl;
+            
                 variable = leeId(nombre);
             }
 
@@ -1006,8 +1022,12 @@ namespace Ñ
             //llvm::raw_string_ostream rso(type_str);
             //tipoLia->print(rso);
 
+            std::cout << "J" << std::endl;
+            
             llvm::Value* valor = constructorLlvm.CreateLoad(variable, nombre);
 
+            std::cout << "K" << std::endl;
+            
             resultado.éxito();
             resultado.valor(valor);
             return resultado;
@@ -1458,7 +1478,7 @@ namespace Ñ
 
             std::cout << " hecho." << std::endl;
 
-            std::cout << "Elimino '__función_anónima__()' ..." << std::endl;
+            std::cout << "Elimino '__función_anónima__()' ...";
             
             jat->eliminaSímbolo("__función_anónima__");
 

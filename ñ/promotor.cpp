@@ -22,6 +22,7 @@
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Value.h"
 #include "llvm/IR/Verifier.h"
+#include "llvm/Support/Host.h"
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/TypeName.h"
 #include "llvm/Target/TargetMachine.h"
@@ -39,6 +40,7 @@
 namespace Ñ
 {
     static Ñ::ConstructorJAT* jat = nullptr;
+    std::map<std::string, llvm::Type*> globales;
 
     class Símbolos
     {
@@ -263,6 +265,7 @@ namespace Ñ
             else if(nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
             {
                 // Convierto Ñ::Nodo* a Ñ::Módulo*
+                std::cout << "Convierto Ñ::Nodo* a Ñ::Módulo*" << std::endl;
                 módulo = (Ñ::Módulo*)nodo;
             }
             else
@@ -271,8 +274,13 @@ namespace Ñ
                 return resultado;
             }
 
+            std::cout << "preparaMódulo(módulo->módulo);" << std::endl;
             preparaMódulo(módulo->módulo);
+
+            std::cout << "preparaPasesDeOptimización();" << std::endl;
             preparaPasesDeOptimización();
+
+            std::cout << "HECHO" << std::endl;
 
             for(auto n : nodo->ramas)
             {
@@ -550,6 +558,11 @@ namespace Ñ
 
             preparaMóduloJAT("");
 
+            for(auto const&[nombre, tipo] : globales)
+            {
+                llvm::GlobalVariable* varGlobal = new llvm::GlobalVariable(*móduloLlvm, tipo, false, llvm::GlobalValue::ExternalLinkage, 0, nombre);
+            }
+
             resultado = _construyeDeclaraciónFunción("__función_anónima__", nullptr, nullptr);
             if(resultado.error())
             {
@@ -633,6 +646,14 @@ namespace Ñ
                 break;
             
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
+                if(jat)
+                {
+                    resultado = construyeDeclaraciónVariableGlobal(n);
+                }
+                else
+                {
+                    resultado = construyeDeclaraciónVariable(n);
+                }
                 resultado = construyeDeclaraciónVariable(n);
                 break;
             
@@ -683,7 +704,7 @@ namespace Ñ
                 }
 
                 llvm::Value* vLia = rLia.valor();
-
+            
                 Ñ::ResultadoLlvm rLda = construyeLDA(nodo->ramas[1]);
                 if(rLda.error())
                 {
@@ -692,7 +713,7 @@ namespace Ñ
 
                 llvm::Value* vLda = rLda.valor();
 
-                constructorLlvm.CreateStore(vLda, vLia, false);
+                constructorLlvm.CreateStore(vLda, vLia);
 
                 resultado.éxito();
                 return resultado;
@@ -912,6 +933,8 @@ namespace Ñ
             nombre = dv->variable;
             tipo = creaTipoLlvm(t->tipo);
 
+            globales[nombre] = tipo;
+
             llvm::Constant* CERO = llvm::ConstantInt::get(tipo, 0);
 
             //llvm::Value* variable = constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
@@ -963,27 +986,19 @@ namespace Ñ
 
         Ñ::ResultadoLlvm construyeVariableLDA(Ñ::Nodo* nodo)
         {
-            std::cout << "A" << std::endl;
-            
             Ñ::ResultadoLlvm resultado;
 
-            std::cout << "B" << std::endl;
-            
             if(nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable");
                 return resultado;
             }
 
-            std::cout << "C" << std::endl;
-            
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
             {
                 resultado.error("El nodo no es una variable, no puedo construir su lectura");
                 return resultado;
             }
-            
-            std::cout << "D" << std::endl;
             
             if(nodo->ramas.size() != 0)
             {
@@ -991,43 +1006,24 @@ namespace Ñ
                 return resultado;
             }
 
-            std::cout << "E" << std::endl;
-            
             std::string nombre;
             Ñ::Identificador* id;
             llvm::Value* variable;
 
-            std::cout << "F" << std::endl;
-            
             id = (Ñ::Identificador*)nodo;
             nombre = id->id;
 
-            std::cout << "G" << std::endl;
-            
             if(jat)
             {
-            std::cout << "H" << std::endl;
-            
                 variable = móduloLlvm->getGlobalVariable(nombre, true);
             }
             else
             {
-            std::cout << "I" << std::endl;
-            
                 variable = leeId(nombre);
             }
 
-            //llvm::Type* tipoLia = variable->getType();
-            //std::string type_str;
-            //llvm::raw_string_ostream rso(type_str);
-            //tipoLia->print(rso);
-
-            std::cout << "J" << std::endl;
-            
             llvm::Value* valor = constructorLlvm.CreateLoad(variable, nombre);
 
-            std::cout << "K" << std::endl;
-            
             resultado.éxito();
             resultado.valor(valor);
             return resultado;
@@ -1363,7 +1359,7 @@ namespace Ñ
             
             if(!funciónLlvm)
             {
-                resultado.error("Esperaba obtener una referencia a una función pero LLVM me ha devuelto un valor desconocido");
+                resultado.error("Esperaba una llamada a una función, pero parece que la función \"" + fn->nombre + "()\" no existe.");
                 return resultado;
             }
             
@@ -1371,8 +1367,8 @@ namespace Ñ
 
             // Preparando argumentos
             Ñ::Nodo* args = nodo->ramas[0];
-            
-            std::vector<llvm::Value*> vArgs;
+
+            std::vector<llvm::Value*> valoresArgumentos;
             
             for(Ñ::Nodo* n : args->ramas)
             {
@@ -1382,11 +1378,11 @@ namespace Ñ
                     return resultado;
                 }
 
-                vArgs.push_back(resultado.valor());
+                valoresArgumentos.push_back(resultado.valor());
 
             }
 
-            llvm::Value* devuelto = constructorLlvm.CreateCall(funciónLlvm, vArgs, "llamda");
+            llvm::Value* devuelto = constructorLlvm.CreateCall(funciónLlvm, valoresArgumentos, "llamadatmp");
 
             resultado.éxito();
             resultado.valor(devuelto);
@@ -1411,6 +1407,18 @@ namespace Ñ
 
         if(categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
+            llvm::InitializeNativeTarget();
+            llvm::InitializeNativeTargetAsmParser();
+            llvm::InitializeNativeTargetAsmPrinter();
+
+            //llvm::InitializeAllTargetInfos();
+            //llvm::InitializeAllTargets();
+            //llvm::InitializeAllTargetMCs();
+            //llvm::InitializeAllAsmParsers();
+            //llvm::InitializeAllAsmPrinters();
+
+            auto TargetTriple = llvm::sys::getDefaultTargetTriple();
+
             std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
 
             Ñ::ResultadoLlvm rMódulo = promotor->construyeMódulo(árbol);
@@ -1419,6 +1427,8 @@ namespace Ñ
                 resultado.error(rMódulo.mensaje());
                 return resultado;
             }
+
+            promotor->móduloLlvm->print(llvm::outs(), nullptr);
         }
         else if(categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {

@@ -1,6 +1,7 @@
 ﻿rm build -Force -Recurse -ErrorAction SilentlyContinue
 rm proyecto -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
+rm -ErrorAction SilentlyContinue *.o
 
 mkdir obra
 mkdir proyecto

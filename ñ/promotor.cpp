@@ -23,6 +23,8 @@
 #include "llvm/IR/Value.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/Support/Host.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/TargetRegistry.h"
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/TypeName.h"
 #include "llvm/Target/TargetMachine.h"
@@ -1411,13 +1413,23 @@ namespace Ñ
             llvm::InitializeNativeTargetAsmParser();
             llvm::InitializeNativeTargetAsmPrinter();
 
-            //llvm::InitializeAllTargetInfos();
-            //llvm::InitializeAllTargets();
-            //llvm::InitializeAllTargetMCs();
-            //llvm::InitializeAllAsmParsers();
-            //llvm::InitializeAllAsmPrinters();
+            std::string tripleteDestino = llvm::sys::getDefaultTargetTriple();
+            std::cout << "Tripleta de Destino: " << tripleteDestino << std::endl;
 
-            auto TargetTriple = llvm::sys::getDefaultTargetTriple();
+            std::string error;
+            auto destino = llvm::TargetRegistry::lookupTarget(tripleteDestino, error);
+
+            if (!destino) {
+                resultado.error(error);
+                return resultado;
+            }
+
+            std::string procesador = "x86-64";
+            std::string características = "";
+
+            llvm::TargetOptions opciones;
+            auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
+            auto máquinaDestino = destino->createTargetMachine(tripleteDestino, procesador, características, opciones, modeloReordenamiento);
 
             std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
 
@@ -1428,7 +1440,34 @@ namespace Ñ
                 return resultado;
             }
 
+            promotor->móduloLlvm->setDataLayout(máquinaDestino->createDataLayout());
+            promotor->móduloLlvm->setTargetTriple(tripleteDestino);
+
+            std::cout << std::endl << "Archivo de representación intermedia:" << std::endl << std::endl;
             promotor->móduloLlvm->print(llvm::outs(), nullptr);
+
+            std::string nombreArchivoDestino = "resultado.o";
+            std::error_code códigoError;
+            llvm::raw_fd_ostream archivoDestino(nombreArchivoDestino, códigoError, llvm::sys::fs::OF_None);
+
+            if (códigoError) {
+                resultado.error("No he podido abrir el archivo: " + códigoError.message());
+                return resultado;
+            }
+
+            llvm::legacy::PassManager paseDeCódigoObjeto;
+            auto tipoArchivo = llvm::CGFT_ObjectFile;
+
+            if(máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
+            {
+                resultado.error("No he podido emitir un archivo de este tipo");
+                return resultado;
+            }
+
+            paseDeCódigoObjeto.run(*(promotor->móduloLlvm));
+            archivoDestino.flush();
+
+            std::cout << "He construido el archivo \"" + nombreArchivoDestino + "\"." << std::endl;
         }
         else if(categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {

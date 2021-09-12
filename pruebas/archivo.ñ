@@ -1,8 +1,4 @@
-ent inicia(ent x)
+ent doble(ent x)
 {
-    ent a = 288;
-    ent b = (1 + a) * x + (1 + a) * x;
-    devuelve b; 
+    devuelve x * 2; 
 }
-
-ent x = inicia(42);

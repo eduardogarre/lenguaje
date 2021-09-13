@@ -518,6 +518,23 @@ void Ñ::Bloque::muestra()
 	}
 }
 
+Ñ::SiCondicional::SiCondicional() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_SI_CONDICIONAL;
+}
+
+Ñ::SiCondicional::~SiCondicional() {}
+
+void Ñ::SiCondicional::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_SI_CONDICIONAL) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 Ñ::DefineFunción::DefineFunción() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN;
@@ -717,6 +734,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
 	{
 		((Ñ::Bloque*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
+	{
+		((Ñ::SiCondicional*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
 	{
@@ -988,6 +1009,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			return true;
 			break;
 		
+		case Ñ::CategoríaNodo::NODO_SI_CONDICIONAL:
+			return true;
+			break;
+		
 		case Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN:
 			dfn1 = (Ñ::DefineFunción*)nodo1;
 			dfn2 = (Ñ::DefineFunción*)nodo2;
@@ -1234,6 +1259,11 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		Ñ::Bloque* b = new Ñ::Bloque();
 		duplicado = (Ñ::Nodo*)b;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
+	{
+		Ñ::SiCondicional* sc = new Ñ::SiCondicional();
+		duplicado = (Ñ::Nodo*)sc;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
 	{

@@ -43,8 +43,10 @@ namespace Ñ
         NODO_DEVUELVE,
 
         NODO_EXPRESIÓN,
-
+        
         NODO_BLOQUE,
+        NODO_SI_CONDICIONAL,
+        
         NODO_FUNCIÓN,
         NODO_FUNCIÓN_EJECUTABLE,
 
@@ -259,6 +261,15 @@ namespace Ñ
     public:
         Bloque();
         ~Bloque();
+
+        void muestra();
+    };
+
+    class SiCondicional : Nodo
+    {
+    public:
+        SiCondicional();
+        ~SiCondicional();
 
         void muestra();
     };

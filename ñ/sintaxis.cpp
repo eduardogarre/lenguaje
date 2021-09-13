@@ -30,6 +30,26 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 	return false;
 }
 
+bool Ñ::Sintaxis::reservada(std::string palabra)
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		{
+			if(lexemas[cursor]->contenido == palabra)
+			{
+				cursor++;
+				return true;
+			}
+		}
+	}
+
+	cursor = c;
+	return false;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::literal()
 {
 	uint32_t c = cursor;
@@ -1003,6 +1023,16 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		Ñ::Nodo* bq;
 		Ñ::DefineFunción* dfn;
 		std::string nombreFunción;
+		bool público = false;
+
+		if(reservada("público"))
+		{
+			público = true;
+		}
+		else if(reservada("privado"))
+		{
+			público = false;
+		}
 
 		if(t = tipo())
 		{
@@ -1053,6 +1083,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 		dfn = new Ñ::DefineFunción();
 		dfn->nombre = nombreFunción;
+		dfn->público = público;
 		((Ñ::Nodo*)dfn)->ramas.push_back(t);
 		((Ñ::Nodo*)dfn)->ramas.push_back(args);
 		((Ñ::Nodo*)dfn)->ramas.push_back(bq);
@@ -1075,6 +1106,9 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 		Ñ::Nodo* args;
 		Ñ::DeclaraFunción* dcfn;
 		std::string nombreFunción;
+		bool externo = false;
+
+		externo = reservada("externo");
 
 		if(t = tipo())
 		{
@@ -1130,6 +1164,7 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 
 		dcfn = new Ñ::DeclaraFunción();
 		dcfn->nombre = nombreFunción;
+		dcfn->externo = externo;
 		((Ñ::Nodo*)dcfn)->ramas.push_back(t);
 		((Ñ::Nodo*)dcfn)->ramas.push_back(args);
 

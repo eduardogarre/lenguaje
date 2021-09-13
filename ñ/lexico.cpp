@@ -409,6 +409,8 @@ namespace Ñ
                  || (s == "devuelve")
                  || (s == "var")
                  || (s == "externo")
+                 || (s == "público")
+                 || (s == "privado")
                  || (s == "si")
                  || (s == "sino")
                  || (s == "no")

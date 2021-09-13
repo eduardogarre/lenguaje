@@ -1,4 +1,6 @@
-ent doble(ent x)
+externo real sin(real n);
+
+público ent doble(ent x)
 {
     devuelve x * 2; 
 }

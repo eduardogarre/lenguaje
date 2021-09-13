@@ -19,6 +19,7 @@ namespace Ñ
         std::vector<Ñ::Lexema*> lexemas;
 
         bool notación(std::string carácter);
+        bool reservada(std::string palabra);
         Ñ::Nodo* literal();
         Ñ::Nodo* tipo();
         Ñ::Nodo* identificador();

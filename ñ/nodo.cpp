@@ -528,7 +528,9 @@ void Ñ::Bloque::muestra()
 void Ñ::DefineFunción::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_DEFINE_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::string txtpúblico = "público ";
+	std::string txtvacío = "";
+	std::cout << u8"(NODO_DEFINE_FUNCIÓN) [" + (público ? txtpúblico : txtvacío) + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
@@ -545,7 +547,9 @@ void Ñ::DefineFunción::muestra()
 void Ñ::DeclaraFunción::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_DECLARA_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::string txtexterno = "externo ";
+	std::string txtvacío = "";
+	std::cout << u8"(NODO_DECLARA_FUNCIÓN) [" + (externo ? txtexterno : txtvacío) + nombre + "()] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);
@@ -987,7 +991,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		case Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN:
 			dfn1 = (Ñ::DefineFunción*)nodo1;
 			dfn2 = (Ñ::DefineFunción*)nodo2;
-			if(dfn1->nombre == dfn2->nombre)
+			if(dfn1->nombre == dfn2->nombre && dfn1->público == dfn2->público)
 			{
 				return true;
 			}
@@ -1000,7 +1004,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		case Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN:
 			dcn1 = (Ñ::DeclaraFunción*)nodo1;
 			dcn2 = (Ñ::DeclaraFunción*)nodo2;
-			if(dcn1->nombre == dcn2->nombre)
+			if(dcn1->nombre == dcn2->nombre && dcn1->externo == dcn2->externo)
 			{
 				return true;
 			}
@@ -1236,6 +1240,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::DefineFunción* n = (Ñ::DefineFunción*)nodo;
 		Ñ::DefineFunción* f = new Ñ::DefineFunción();
 		f->nombre = n->nombre;
+		f->público = n->público;
 
 		duplicado = (Ñ::Nodo*)f;
 	}
@@ -1244,6 +1249,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::DeclaraFunción* n = (Ñ::DeclaraFunción*)nodo;
 		Ñ::DeclaraFunción* f = new Ñ::DeclaraFunción();
 		f->nombre = n->nombre;
+		f->externo = n->externo;
 
 		duplicado = (Ñ::Nodo*)f;
 	}

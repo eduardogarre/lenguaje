@@ -267,6 +267,7 @@ namespace Ñ
     {
     public:
         std::string nombre;
+        bool público;
 
         DefineFunción();
         ~DefineFunción();
@@ -278,6 +279,7 @@ namespace Ñ
     {
     public:
         std::string nombre;
+        bool externo;
 
         DeclaraFunción();
         ~DeclaraFunción();

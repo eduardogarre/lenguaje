@@ -340,7 +340,15 @@ namespace Ñ
                 return resultado;
             }
 
-            resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1]);
+            if(función->público)
+            {
+                resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1], true);
+            }
+            else
+            {
+                resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1], false);
+            }
+
             if(resultado.error())
             {
                 return resultado;
@@ -435,7 +443,7 @@ namespace Ñ
                 return resultado;
             }
 
-            resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1]);
+            resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1], función->externo);
             if(resultado.error())
             {
                 return resultado;
@@ -448,7 +456,7 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm _construyeDeclaraciónFunción(std::string nombre, Ñ::Nodo* devuelto, Ñ::Nodo* argumentos)
+        Ñ::ResultadoLlvm _construyeDeclaraciónFunción(std::string nombre, Ñ::Nodo* devuelto, Ñ::Nodo* argumentos, bool externo)
         {
             Ñ::ResultadoLlvm resultado;
             llvm::Type* tRetorno = nullptr;
@@ -513,7 +521,16 @@ namespace Ñ
 
             llvm::FunctionType* firmaFunción = llvm::FunctionType::get(tRetorno, vArgumentos, false);
 
-            llvm::Function* función = llvm::Function::Create(firmaFunción, llvm::Function::ExternalLinkage, nombre.c_str(), móduloLlvm);
+            llvm::Function* función;
+
+            if(externo)
+            {
+                función = llvm::Function::Create(firmaFunción, llvm::Function::ExternalLinkage, nombre.c_str(), móduloLlvm);
+            }
+            else
+            {
+                función = llvm::Function::Create(firmaFunción, llvm::Function::PrivateLinkage, nombre.c_str(), móduloLlvm);
+            }
 
             resultado.éxito();
             resultado.función(función);
@@ -565,7 +582,7 @@ namespace Ñ
                 llvm::GlobalVariable* varGlobal = new llvm::GlobalVariable(*móduloLlvm, tipo, false, llvm::GlobalValue::ExternalLinkage, 0, nombre);
             }
 
-            resultado = _construyeDeclaraciónFunción("__función_anónima__", nullptr, nullptr);
+            resultado = _construyeDeclaraciónFunción("__función_anónima__", nullptr, nullptr, true);
             if(resultado.error())
             {
                 return resultado;

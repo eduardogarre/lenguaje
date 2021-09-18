@@ -123,20 +123,7 @@ namespace Ñ
             // Creo el módulo LLVM y le asigno el nombre de mi módulo
             móduloLlvm = new llvm::Module(nombre, contextoLlvm);
 
-            gestorPasesOptimización = new llvm::legacy::FunctionPassManager(móduloLlvm);
-
-            // Optimizaciones se secuencias cortas y pequeños reordenamientos.
-            gestorPasesOptimización->add(llvm::createInstructionCombiningPass());
-            // Reassociate expressions.
-            gestorPasesOptimización->add(llvm::createReassociatePass());
-            // Elimina subexpresiones comunes.
-            gestorPasesOptimización->add(llvm::createGVNPass());
-            // Simplifica el grafo de flujo de ejecución (elimina bloques inalcanzables, etc)
-            gestorPasesOptimización->add(llvm::createCFGSimplificationPass());
-            // Intenta convertir variables en RAM a registros
-            gestorPasesOptimización->add(llvm::createPromoteMemoryToRegisterPass());
-
-            gestorPasesOptimización->doInitialization();
+            preparaPasesDeOptimización();
         }
 
         void preparaMóduloJAT(std::string nombre)
@@ -162,6 +149,9 @@ namespace Ñ
             gestorPasesOptimización->add(llvm::createCFGSimplificationPass());
             // Intenta convertir variables en RAM a registros
             gestorPasesOptimización->add(llvm::createPromoteMemoryToRegisterPass());
+            // Intenta simplificar el control de flujo cuando los saltos condicionales están
+            // predeterminados por valores ya establecidos
+            gestorPasesOptimización->add(llvm::createJumpThreadingPass());
 
             gestorPasesOptimización->doInitialization();
         }
@@ -631,6 +621,7 @@ namespace Ñ
                 return rExpresión;
             }
             constructorLlvm.CreateRetVoid();
+            constructorLlvm.CreateUnreachable();
 
             llvm::verifyFunction(*funciónLlvm);
 
@@ -868,6 +859,7 @@ namespace Ñ
                 }
 
                 constructorLlvm.CreateRet(resultado.valor());
+                constructorLlvm.CreateUnreachable();
 
                 resultado.éxito();
                 return resultado;
@@ -875,6 +867,7 @@ namespace Ñ
             else if(nodo->ramas.size() == 0)
             {
                 constructorLlvm.CreateRetVoid();
+                constructorLlvm.CreateUnreachable();
                 resultado.éxito();
                 return resultado;
             }

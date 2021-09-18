@@ -406,8 +406,8 @@ namespace Ñ
             std::cout << "Ejecuto optimizaciones" << std::endl;
             
             gestorPasesOptimización->run(*funciónLlvm);
-
-            //funciónLlvm->print(llvm::errs(), nullptr);
+            
+            funciónLlvm->print(llvm::errs(), nullptr);
 
             tablaSímbolos->cierraBloque();
             delete tablaSímbolos;
@@ -540,10 +540,10 @@ namespace Ñ
 
             for(auto n : nodo->ramas)
             {
-                resultado = construyeExpresión(n);
-                if(resultado.error())
+                Ñ::ResultadoLlvm resultadoIntermedio = construyeExpresión(n);
+                if(resultadoIntermedio.error())
                 {
-                    return resultado;
+                    return resultadoIntermedio;
                 }
             }
 
@@ -676,6 +676,16 @@ namespace Ñ
             
             case Ñ::CategoríaNodo::NODO_ASIGNA:
                 resultado = construyeAsignación(n);
+                break;
+            
+            case Ñ::CategoríaNodo::NODO_LITERAL:
+            case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
+            case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
+            case Ñ::CategoríaNodo::NODO_COMPARACIÓN:
+            case Ñ::CategoríaNodo::NODO_TÉRMINO:
+            case Ñ::CategoríaNodo::NODO_FACTOR:
+            case Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN:
+                resultado = construyeLDA(n);
                 break;
             
             case Ñ::CategoríaNodo::NODO_SI_CONDICIONAL:
@@ -1566,10 +1576,19 @@ namespace Ñ
 
             }
 
-            llvm::Value* devuelto = constructorLlvm.CreateCall(funciónLlvm, valoresArgumentos, "llamadatmp");
+            if(funciónLlvm->getReturnType()->isVoidTy())
+            {
+                constructorLlvm.CreateCall(funciónLlvm, valoresArgumentos);
+                resultado.éxito();
+                resultado.valor(nullptr);
+            }
+            else
+            {
+                llvm::Value* devuelto = constructorLlvm.CreateCall(funciónLlvm, valoresArgumentos, "llamadatmp");
+                resultado.éxito();
+                resultado.valor(devuelto);
+            }
 
-            resultado.éxito();
-            resultado.valor(devuelto);
             return resultado;
         }
     };

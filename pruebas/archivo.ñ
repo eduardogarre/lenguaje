@@ -1,13 +1,17 @@
-público ent dobleTriple(ent x)
+externo nada escribe(ent número);
+
+público ent inicia()
 {
-    si (x > 10)
+    ent número = 42;
+
+    si (42 > 2)
     {
-        devuelve x * 2;
+        escribe(42);
     }
     sino
     {
-        devuelve x * 3;
+        escribe(288);
     }
 
-    devuelve 0; 
+    devuelve 0;
 }

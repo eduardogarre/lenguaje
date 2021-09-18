@@ -1,12 +1,14 @@
 #include <iostream>
 
 extern "C" {
-    int dobleTriple(int);
+    int inicia();
+    
+    void escribe(int numero)
+    {
+        std::cout << numero << std::endl;
+    }
 }
 
 int main() {
-    int númeroDoble = 20;
-    std::cout << "El doble de " << númeroDoble << " es: " << dobleTriple(númeroDoble) << std::endl;
-    int númeroTriple = 3;
-    std::cout << "El triple de " << númeroTriple << " es: " << dobleTriple(númeroTriple) << std::endl;
+    inicia();
 }

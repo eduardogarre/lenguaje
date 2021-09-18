@@ -1,6 +1,13 @@
-externo real sin(real n);
-
-público ent doble(ent x)
+público ent dobleTriple(ent x)
 {
-    devuelve x * 2; 
+    si (x > 10)
+    {
+        devuelve x * 2;
+    }
+    sino
+    {
+        devuelve x * 3;
+    }
+
+    devuelve 0; 
 }

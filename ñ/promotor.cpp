@@ -29,6 +29,7 @@
 #include "llvm/Support/TypeName.h"
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Transforms/InstCombine/InstCombine.h"
+#include "llvm/Transforms/Utils.h"
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/Transforms/Scalar/GVN.h"
 
@@ -132,6 +133,8 @@ namespace Ñ
             gestorPasesOptimización->add(llvm::createGVNPass());
             // Simplifica el grafo de flujo de ejecución (elimina bloques inalcanzables, etc)
             gestorPasesOptimización->add(llvm::createCFGSimplificationPass());
+            // Intenta convertir variables en RAM a registros
+            gestorPasesOptimización->add(llvm::createPromoteMemoryToRegisterPass());
 
             gestorPasesOptimización->doInitialization();
         }
@@ -157,6 +160,8 @@ namespace Ñ
             gestorPasesOptimización->add(llvm::createGVNPass());
             // Simplifica el grafo de flujo de ejecución (elimina bloques inalcanzables, etc)
             gestorPasesOptimización->add(llvm::createCFGSimplificationPass());
+            // Intenta convertir variables en RAM a registros
+            gestorPasesOptimización->add(llvm::createPromoteMemoryToRegisterPass());
 
             gestorPasesOptimización->doInitialization();
         }
@@ -408,6 +413,8 @@ namespace Ñ
 
             llvm::verifyFunction(*funciónLlvm);
 
+            std::cout << "Ejecuto optimizaciones" << std::endl;
+            
             gestorPasesOptimización->run(*funciónLlvm);
 
             //funciónLlvm->print(llvm::errs(), nullptr);
@@ -646,7 +653,7 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                resultado.error("He recibido un nullptr, esperaba una expresión");
                 return resultado;
             }
 
@@ -680,12 +687,109 @@ namespace Ñ
                 resultado = construyeAsignación(n);
                 break;
             
+            case Ñ::CategoríaNodo::NODO_SI_CONDICIONAL:
+                resultado = construyeSiCondicional(n);
+                break;
+            
             default:
                 resultado.error("No reconozco la expresión");
                 muestraNodos(nodo);
                 break;
             }
 
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeSiCondicional(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("El nodo vale nullptr, esperaba un si-condicional");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
+            {
+                resultado.error("El nodo no es un si-condicional");
+                return resultado;
+            }
+
+            int64_t índice = 0;
+
+            //Condición
+            std::cout << "Condición" << std::endl;
+
+            Ñ::Nodo* condición = nodo->ramas[índice];
+            Ñ::ResultadoLlvm resultadoCondición = construyeLDA(condición);
+            if(resultadoCondición.error())
+            {
+                return resultadoCondición;
+            }
+
+            llvm::Value* valorCondición = resultadoCondición.valor();
+
+            //Bloque
+            std::cout << "Bloque entonces" << std::endl;
+            
+            ++índice;
+            Ñ::Nodo* nodoBloque = nodo->ramas[índice];
+            //PENDIENTE: Construir bloque entonces
+            //Obtengo la función actual
+            llvm::Function *funciónActual = constructorLlvm.GetInsertBlock()->getParent();
+            
+            llvm::BasicBlock *bloqueEntonces = llvm::BasicBlock::Create(contextoLlvm, "entonces", funciónActual);
+            llvm::BasicBlock *bloqueSino = llvm::BasicBlock::Create(contextoLlvm, "sino");
+            llvm::BasicBlock *bloqueContinúa = llvm::BasicBlock::Create(contextoLlvm, "sigue");
+
+            // Inserto salto condicional en el bloque de donde venimos
+            constructorLlvm.CreateCondBr(valorCondición, bloqueEntonces, bloqueSino);
+            // Desde ahora inserto nuevas instrucciones en el bloque Entonces
+            constructorLlvm.SetInsertPoint(bloqueEntonces);
+
+            construyeInteriorDeBloque(nodoBloque);
+            
+            //Después de construir el interior del bloque, puedo haber creado
+            //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
+            //puede haber cambiado. Por eso, releemos el bloque actual.
+            bloqueEntonces = constructorLlvm.GetInsertBlock();
+
+            //Introduzco, al final del bloque actual, un salto hasta el bloque tras el condicional
+            constructorLlvm.CreateBr(bloqueContinúa);
+
+            //Bloque Sino
+            ++índice;
+
+            if( nodo->ramas.size() == (índice + 1)
+                && nodo->ramas[índice] != nullptr
+                && nodo->ramas[índice]->categoría == Ñ::NODO_BLOQUE)
+            {
+                std::cout << "Bloque si no" << std::endl;
+
+                //Inserto el bloque Sino al final de la función
+                funciónActual->getBasicBlockList().push_back(bloqueSino);
+                constructorLlvm.SetInsertPoint(bloqueSino);
+
+                //Relleno el bloque Sino
+                nodoBloque = nodo->ramas[índice];
+                construyeInteriorDeBloque(nodoBloque);
+
+                bloqueSino = constructorLlvm.GetInsertBlock();
+
+                constructorLlvm.CreateBr(bloqueContinúa);
+                
+                ++índice;
+            }
+
+            std::cout << "Bloque continuación" << std::endl;
+
+            //Inserto el bloque Continuación al final de la función
+            funciónActual->getBasicBlockList().push_back(bloqueContinúa);
+            constructorLlvm.SetInsertPoint(bloqueContinúa);
+
+            resultado.éxito();
+            //resultado.error("Pendiente de implementar si-condicional");
             return resultado;
         }
 
@@ -859,6 +963,10 @@ namespace Ñ
             
             case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
                 resultado = construyeVariableLDA(nodo);
+                break;
+
+            case Ñ::CategoríaNodo::NODO_COMPARACIÓN:
+                resultado = construyeOperaciónComparación(nodo);
                 break;
 
             case Ñ::CategoríaNodo::NODO_TÉRMINO:
@@ -1241,6 +1349,70 @@ namespace Ñ
                 break;
             }
 
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeOperaciónComparación(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+            llvm::Value* v1;
+            llvm::Value* v2;
+
+            Ñ::ResultadoLlvm rV1 = construyeLDA(nodo->ramas[0]);
+            if(rV1.error())
+            {
+                return rV1;
+            }
+            v1 = rV1.valor();
+            
+            for(int i = 1; i < nodo->ramas.size(); i++)
+            {
+                Ñ::Nodo* nOp = nodo->ramas[i];
+
+                if(nOp == nullptr)
+                {
+                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo nulo");
+                    return resultado;
+                }
+                else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                {
+                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    return resultado;
+                }
+
+                Ñ::ResultadoLlvm rV2 = construyeLDA(nOp->ramas[0]);
+                if(rV2.error())
+                {
+                    return rV2;
+                }
+                v2 = rV2.valor();
+
+                Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
+
+                if(op->operación == "<")
+                {
+                    v1 = constructorLlvm.CreateICmpSLT(v1, v2, "cmp_menorque_tmp");
+                }
+                else if(op->operación == ">")
+                {
+                    v1 = constructorLlvm.CreateICmpSGT(v1, v2, "cmp_mayorque_tmp");
+                }
+                else if(op->operación == "==")
+                {
+                    v1 = constructorLlvm.CreateICmpEQ(v1, v2, "cmp_igualque_tmp");
+                }
+                else if(op->operación == "<=")
+                {
+                    v1 = constructorLlvm.CreateICmpSLE(v1, v2, "cmp_menorigual_tmp");
+                }
+                else if(op->operación == ">=")
+                {
+                    v1 = constructorLlvm.CreateICmpSGE(v1, v2, "cmp_mayorigual_tmp");
+                }
+            }
+
+            resultado.éxito();
+            resultado.valor(v1);
             return resultado;
         }
 

@@ -34,6 +34,32 @@
     return resultado;
 }
 
+Ñ::Resultado _analizaSiCondicional(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
+{
+    Ñ::Resultado resultado;
+
+    if(nodo == nullptr)
+    {
+        resultado.error("El árbol de nodos es un puntero nulo, esperaba un si-condicional.");
+        return resultado;
+    }
+
+    if(nodo->categoría != Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
+    {
+        resultado.error("El árbol de nodos es incorrecto, esperaba un si-condicional.");
+        return resultado;
+    }
+
+    if(nodo->ramas.size() < 2)
+    {
+        resultado.error("El árbol de nodos es incorrecto, esperaba al menos una condición y un bloque.");
+        return resultado;
+    }
+
+    resultado.éxito();
+    return resultado;
+}
+
 Ñ::Resultado _analizaLlamadaFunción(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
@@ -802,6 +828,10 @@
             resultado.error("El nodo 'NODO_DEVUELVE' tiene " + std::to_string(nodo->ramas.size()) + " ramas");
             return resultado;
         }
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
+    {
+        return _analizaSiCondicional(nodo, tablaSímbolos);
     }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {

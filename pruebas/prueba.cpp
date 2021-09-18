@@ -1,9 +1,10 @@
 #include <iostream>
 
 extern "C" {
-    int doble(int);
+    int dobleTriple(int);
 }
 
 int main() {
-    std::cout << "El doble de 2 es: " << doble(2) << std::endl;
+    int número = 20;
+    std::cout << "El doble o triple de " << número << " es: " << dobleTriple(número) << std::endl;
 }

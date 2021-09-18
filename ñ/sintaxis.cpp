@@ -895,6 +895,116 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::siCondicional()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::SiCondicional* sc = nullptr;
+
+		if(!reservada("si"))
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		if(!notación("("))
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		if(Ñ::Nodo* lda = ladoDerechoAsignación())
+		{
+			if(!notación(")"))
+			{
+				delete lda;
+				cursor = c;
+				return nullptr;
+			}
+
+			if(Ñ::Nodo* blq = bloque())
+			{
+				sc = new Ñ::SiCondicional();
+				((Ñ::Nodo*)sc)->ramas.push_back(lda);
+				((Ñ::Nodo*)sc)->ramas.push_back(blq);
+			}
+			else
+			{
+				delete lda;
+				cursor = c;
+				return nullptr;
+			}
+		}
+		else
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		while(reservada("sino"))
+		{
+			if(!reservada("si"))
+			{
+				if(Ñ::Nodo* blq = bloque())
+				{
+					((Ñ::Nodo*)sc)->ramas.push_back(blq);
+					break;
+				}
+				else
+				{
+					delete sc;
+					cursor = c;
+					return nullptr;
+				}
+			}
+
+			if(!notación("("))
+			{
+				delete sc;
+				cursor = c;
+				return nullptr;
+			}
+
+			if(Ñ::Nodo* lda = ladoDerechoAsignación())
+			{
+				if(!notación(")"))
+				{
+					delete lda;
+					delete sc;
+					cursor = c;
+					return nullptr;
+				}
+
+				if(Ñ::Nodo* blq = bloque())
+				{
+					((Ñ::Nodo*)sc)->ramas.push_back(lda);
+					((Ñ::Nodo*)sc)->ramas.push_back(blq);
+				}
+				else
+				{
+					delete lda;
+					delete sc;
+					cursor = c;
+					return nullptr;
+				}
+			}
+			else
+			{
+				delete sc;
+				cursor = c;
+				return nullptr;
+			}
+		}
+
+		return (Ñ::Nodo*)sc;
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::expresión()
 {
 	uint32_t c = cursor;
@@ -905,9 +1015,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		{
 			if(notación(";"))
 			{
-				Ñ::Expresión* af = new Ñ::Expresión();
-				((Ñ::Nodo*)af)->ramas.push_back(as);
-				return ((Ñ::Nodo*)af);
+				Ñ::Expresión* ex = new Ñ::Expresión();
+				((Ñ::Nodo*)ex)->ramas.push_back(as);
+				return ((Ñ::Nodo*)ex);
 			}
 			else
 			{
@@ -919,9 +1029,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		{
 			if(notación(";"))
 			{
-				Ñ::Expresión* af = new Ñ::Expresión();
-				((Ñ::Nodo*)af)->ramas.push_back(fn);
-				return ((Ñ::Nodo*)af);
+				Ñ::Expresión* ex = new Ñ::Expresión();
+				((Ñ::Nodo*)ex)->ramas.push_back(fn);
+				return ((Ñ::Nodo*)ex);
 			}
 			else
 			{
@@ -933,9 +1043,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		{
 			if(notación(";"))
 			{
-				Ñ::Expresión* af = new Ñ::Expresión();
-				((Ñ::Nodo*)af)->ramas.push_back(dv);
-				return ((Ñ::Nodo*)af);
+				Ñ::Expresión* ex = new Ñ::Expresión();
+				((Ñ::Nodo*)ex)->ramas.push_back(dv);
+				return ((Ñ::Nodo*)ex);
 			}
 			else
 			{
@@ -947,9 +1057,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		{
 			if(notación(";"))
 			{
-				Ñ::Expresión* af = new Ñ::Expresión();
-				((Ñ::Nodo*)af)->ramas.push_back(v);
-				return ((Ñ::Nodo*)af);
+				Ñ::Expresión* ex = new Ñ::Expresión();
+				((Ñ::Nodo*)ex)->ramas.push_back(v);
+				return ((Ñ::Nodo*)ex);
 			}
 			else
 			{
@@ -961,14 +1071,21 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		{
 			if(notación(";"))
 			{
-				Ñ::Expresión* af = new Ñ::Expresión();
-				((Ñ::Nodo*)af)->ramas.push_back(dv);
-				return ((Ñ::Nodo*)af);
+				Ñ::Expresión* ex = new Ñ::Expresión();
+				((Ñ::Nodo*)ex)->ramas.push_back(dv);
+				return ((Ñ::Nodo*)ex);
 			}
 			else
 			{
 				delete dv;
 			}
+		}
+		
+		if(Ñ::Nodo* sc = siCondicional())
+		{
+			Ñ::Expresión* ex = new Ñ::Expresión();
+			((Ñ::Nodo*)ex)->ramas.push_back(sc);
+			return ((Ñ::Nodo*)ex);
 		}
 	}
 

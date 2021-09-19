@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "llvm/Support/Host.h"
+#include "llvm/Support/FileSystem.h"
 #include "llvm/Support/TargetRegistry.h"
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Target/TargetMachine.h"
@@ -165,6 +166,38 @@ int Compilador::construyeArchivos(std::vector<std::string> archivos)
 			std::cout << "ERROR FATAL: " << resultado.mensaje() << std::endl;
             return -1;
         }
+
+		llvm::Module* móduloLlvm = resultado.módulo();
+
+		móduloLlvm->setDataLayout(máquinaDestino->createDataLayout());
+		móduloLlvm->setTargetTriple(tripleteDestino);
+
+		std::cout << std::endl << "Archivo de representación intermedia:" << std::endl << std::endl;
+		móduloLlvm->print(llvm::outs(), nullptr);
+
+		std::string nombreArchivoDestino = "resultado.o";
+		std::error_code códigoError;
+		llvm::raw_fd_ostream archivoDestino(nombreArchivoDestino, códigoError, llvm::sys::fs::OF_None);
+
+		if (códigoError) {
+			std::cout << ("No he podido abrir el archivo: " + códigoError.message()) << std::endl;
+			return -1;
+		}
+
+		llvm::legacy::PassManager paseDeCódigoObjeto;
+		auto tipoArchivo = llvm::CGFT_ObjectFile;
+
+		if(máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
+		{
+			std::cout << ("No he podido emitir un archivo de este tipo") << std::endl;
+			return -1;
+		}
+
+		paseDeCódigoObjeto.run(*(móduloLlvm));
+		archivoDestino.flush();
+
+		std::cout << "He construido el archivo \"" + nombreArchivoDestino + "\"." << std::endl;
     }
+	
     return 0;
 }

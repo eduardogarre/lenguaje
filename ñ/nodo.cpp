@@ -265,7 +265,7 @@ void Ñ::LadoDerechoAsignación::muestra()
 void Ñ::OperaciónBinaria::muestra()
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_OP_BINARIA) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_OP_BINARIA) [" + operación + "] - [" + Ñ::obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -923,7 +923,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		case Ñ::CategoríaNodo::NODO_OP_BINARIA:
 			b1 = (Ñ::OperaciónBinaria*)nodo1;
 			b2 = (Ñ::OperaciónBinaria*)nodo2;
-			if(b1->operación == b2->operación)
+			if(b1->operación == b2->operación && b1->tipo == b2->tipo)
 			{
 				return true;
 			}
@@ -1153,6 +1153,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::OperaciónBinaria* n = (Ñ::OperaciónBinaria*)nodo;
 		Ñ::OperaciónBinaria* o = new Ñ::OperaciónBinaria();
 		o->operación = n->operación;
+		o->tipo = n->tipo;
 
 		duplicado = (Ñ::Nodo*)o;
 	}

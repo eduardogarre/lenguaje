@@ -160,6 +160,7 @@ namespace Ñ
     {
     public:
         std::string operación;
+        Ñ::CategoríaTipo tipo;        
 
         OperaciónBinaria();
         ~OperaciónBinaria();

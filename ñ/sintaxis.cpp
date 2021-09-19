@@ -60,7 +60,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	{
 		l = new Ñ::Literal();
 		l->dato = lexemas[cursor]->contenido;
-		l->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_64;
+		l->tipo = Ñ::CategoríaTipo::TIPO_NATURAL_64;
 		cursor++;
 		return (Ñ::Nodo*)l;
 	}

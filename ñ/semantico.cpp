@@ -549,12 +549,14 @@
                 if(((Ñ::Tipo*)t2)->tipo == tipoResultado)
                 {
                     // Tipos idénticos, no hace falta comprobar compatibilidad
+                    ((Ñ::OperaciónBinaria*)op)->tipo = tipoResultado;
                 }
                 else if(tiposAsignables(tipoResultado, ((Ñ::Tipo*)t2)->tipo))
                 {
                     // Son tipos distintos pero compatibles, hay que convertir
                     //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta 2" << std::endl;
                    _insertaConversión(nodo->ramas[i], 0, ((Ñ::Tipo*)t2)->tipo, tipoResultado);
+                    ((Ñ::OperaciónBinaria*)op)->tipo = tipoResultado;
                 }
                 else
                 {
@@ -646,6 +648,7 @@
                 if(((Ñ::Tipo*)t2)->tipo == tipoResultado)
                 {
                     // Tipos idénticos, no hace falta comprobar compatibilidad
+                    ((Ñ::OperaciónBinaria*)op)->tipo = tipoResultado;
                 }
                 else if(tiposAsignables(tipoResultado, ((Ñ::Tipo*)t2)->tipo))
                 {
@@ -653,6 +656,7 @@
                     //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la multiplicación/división 2" << std::endl;
                     
                     _insertaConversión(op, 0, ((Ñ::Tipo*)t2)->tipo, tipoResultado);
+                    ((Ñ::OperaciónBinaria*)op)->tipo = tipoResultado;
                 }
                 else
                 {

@@ -4,6 +4,61 @@
 #include "nodo.hpp"
 #include "tipo.hpp"
 
+bool Ñ::esNatural(Ñ::CategoríaTipo tipo)
+{
+	if(	   tipo == Ñ::CategoríaTipo::TIPO_NATURAL_8
+		|| tipo == Ñ::CategoríaTipo::TIPO_NATURAL_16
+		|| tipo == Ñ::CategoríaTipo::TIPO_NATURAL_32
+		|| tipo == Ñ::CategoríaTipo::TIPO_NATURAL_64)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Ñ::esEntero(Ñ::CategoríaTipo tipo)
+{
+	if(	   tipo == Ñ::CategoríaTipo::TIPO_ENTERO_8
+		|| tipo == Ñ::CategoríaTipo::TIPO_ENTERO_16
+		|| tipo == Ñ::CategoríaTipo::TIPO_ENTERO_32
+		|| tipo == Ñ::CategoríaTipo::TIPO_ENTERO_64)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Ñ::esReal(Ñ::CategoríaTipo tipo)
+{
+	if(	   tipo == Ñ::CategoríaTipo::TIPO_REAL_32
+		|| tipo == Ñ::CategoríaTipo::TIPO_REAL_64)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Ñ::esBooleano(Ñ::CategoríaTipo tipo)
+{
+	if( tipo == Ñ::CategoríaTipo::TIPO_BOOLEANO )
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 Ñ::Tipo::Tipo() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_TIPO;
@@ -60,6 +115,31 @@ void Ñ::Tipo::muestra()
 			return TIPO_NATURAL_8;
 			break;
 		
+		case TIPO_NATURAL_16:
+			return TIPO_NATURAL_16;
+			break;
+		
+		case TIPO_NATURAL_32:
+			return TIPO_NATURAL_32;
+			break;
+		
+		case TIPO_NATURAL_64:
+			return TIPO_NATURAL_64;
+			break;
+		
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+			return TIPO_ENTERO_16;
+			break;
+		
+		case TIPO_ENTERO_32:
+			return TIPO_ENTERO_32;
+			break;
+		
+		case TIPO_ENTERO_64:
+			return TIPO_ENTERO_64;
+			break;
+		
 		default:
 			break;
 		}
@@ -71,6 +151,24 @@ void Ñ::Tipo::muestra()
 		case TIPO_NATURAL_8:
 		case TIPO_NATURAL_16:
 			return TIPO_NATURAL_16;
+			break;
+		
+		case TIPO_NATURAL_32:
+			return TIPO_NATURAL_32;
+			break;
+		
+		case TIPO_NATURAL_64:
+			return TIPO_NATURAL_64;
+			break;
+		
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+			return TIPO_ENTERO_32;
+			break;
+		
+		case TIPO_ENTERO_64:
+			return TIPO_ENTERO_64;
 			break;
 		
 		default:
@@ -85,6 +183,17 @@ void Ñ::Tipo::muestra()
 		case TIPO_NATURAL_16:
 		case TIPO_NATURAL_32:
 			return TIPO_NATURAL_32;
+			break;
+		
+		case TIPO_NATURAL_64:
+			return TIPO_NATURAL_64;
+			break;
+		
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+			return TIPO_ENTERO_64;
 			break;
 		
 		default:
@@ -114,6 +223,21 @@ void Ñ::Tipo::muestra()
 			return TIPO_ENTERO_8;
 			break;
 		
+		case TIPO_NATURAL_8:
+		case TIPO_ENTERO_16:
+			return TIPO_ENTERO_16;
+			break;
+		
+		case TIPO_NATURAL_16:
+		case TIPO_ENTERO_32:
+			return TIPO_ENTERO_32;
+			break;
+		
+		case TIPO_NATURAL_32:
+		case TIPO_ENTERO_64:
+			return TIPO_ENTERO_64;
+			break;
+		
 		default:
 			break;
 		}
@@ -122,10 +246,20 @@ void Ñ::Tipo::muestra()
 		switch (t2)
 		{
 		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
 		case TIPO_ENTERO_8:
 		case TIPO_ENTERO_16:
-		case TIPO_NATURAL_8:
 			return TIPO_ENTERO_16;
+			break;
+		
+		case TIPO_NATURAL_16:
+		case TIPO_ENTERO_32:
+			return TIPO_ENTERO_32;
+			break;
+		
+		case TIPO_NATURAL_32:
+		case TIPO_ENTERO_64:
+			return TIPO_ENTERO_64;
 			break;
 		
 		default:
@@ -136,12 +270,17 @@ void Ñ::Tipo::muestra()
 		switch (t2)
 		{
 		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
 		case TIPO_ENTERO_8:
 		case TIPO_ENTERO_16:
 		case TIPO_ENTERO_32:
-		case TIPO_NATURAL_8:
-		case TIPO_NATURAL_16:
 			return TIPO_ENTERO_32;
+			break;
+		
+		case TIPO_NATURAL_32:
+		case TIPO_ENTERO_64:
+			return TIPO_ENTERO_64;
 			break;
 		
 		default:
@@ -152,13 +291,13 @@ void Ñ::Tipo::muestra()
 		switch (t2)
 		{
 		case TIPO_BOOLEANO:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
 		case TIPO_ENTERO_8:
 		case TIPO_ENTERO_16:
 		case TIPO_ENTERO_32:
 		case TIPO_ENTERO_64:
-		case TIPO_NATURAL_8:
-		case TIPO_NATURAL_16:
-		case TIPO_NATURAL_32:
 		case TIPO_PUNTERO:
 			return TIPO_ENTERO_64;
 			break;

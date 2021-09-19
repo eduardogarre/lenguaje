@@ -1,12 +1,18 @@
 externo nada escribe(ent número);
 
+público ent duplica(ent x)
+{
+    devuelve x * 2;
+}
+
 público ent inicia()
 {
     ent número = 42;
 
     si (42 > 2)
     {
-        escribe(42);
+        ent y = duplica(42);
+        escribe(y);
     }
     sino
     {

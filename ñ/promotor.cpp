@@ -1443,13 +1443,39 @@ namespace Ñ
 
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
+                Ñ::CategoríaTipo tipo = op->tipo;
+
                 if(op->operación == "+")
                 {
-                    v1 = constructorLlvm.CreateAdd(v1, v2, "suma_tmp");
+                    if(esReal(tipo))
+                    {
+                        v1 = constructorLlvm.CreateFAdd(v1, v2, "suma");
+                    }
+                    else if(esEntero(tipo) || esNatural(tipo))
+                    {
+                        v1 = constructorLlvm.CreateAdd(v1, v2, "suma");
+                    }
+                    else
+                    {
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        return resultado;
+                    }
                 }
                 else if(op->operación == "-")
                 {
-                    v1 = constructorLlvm.CreateSub(v1, v2, "resta_tmp");
+                    if(esReal(tipo))
+                    {
+                        v1 = constructorLlvm.CreateFSub(v1, v2, "resta");
+                    }
+                    else if(esEntero(tipo) || esNatural(tipo))
+                    {
+                        v1 = constructorLlvm.CreateSub(v1, v2, "resta");
+                    }
+                    else
+                    {
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        return resultado;
+                    }
                 }
             }
 
@@ -1495,21 +1521,42 @@ namespace Ñ
 
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
+                Ñ::CategoríaTipo tipo = op->tipo;
+
                 if(op->operación == "*")
                 {
-                    v1 = constructorLlvm.CreateMul(v1, v2, "mul_tmp");
+                    if(esReal(tipo))
+                    {
+                        v1 = constructorLlvm.CreateFMul(v1, v2, "mul_tmp");
+                    }
+                    else if(esEntero(tipo) || esNatural(tipo))
+                    {
+                        v1 = constructorLlvm.CreateMul(v1, v2, "mul_tmp");
+                    }
+                    else
+                    {
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        return resultado;
+                    }
                 }
                 else if(op->operación == "/")
                 {
-                    llvm::Type* tipoV1 = v1->getType();
-
-                    if(tipoV1->isFloatTy() || tipoV1->isDoubleTy())
+                    if(esReal(tipo))
                     {
                         v1 = constructorLlvm.CreateFDiv(v1, v2, "div_tmp");
                     }
-                    else if(tipoV1->isIntegerTy())
+                    else if(esEntero(tipo))
                     {
                         v1 = constructorLlvm.CreateSDiv(v1, v2, "div_tmp");
+                    }
+                    else if(esNatural(tipo))
+                    {
+                        v1 = constructorLlvm.CreateUDiv(v1, v2, "div_tmp");
+                    }
+                    else
+                    {
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        return resultado;
                     }
                 }
             }

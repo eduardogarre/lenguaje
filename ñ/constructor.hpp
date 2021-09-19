@@ -1,8 +1,10 @@
 #pragma once
 
-#include "resultadollvm.hpp"
+#include "entorno.hpp"
+#include "nodo.hpp"
+#include "resultado.hpp"
 
 namespace Ñ
 {
-    Ñ::ResultadoLlvm construye();
+    Ñ::Resultado construye(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo = Ñ::CategoríaNodo::NODO_MÓDULO);
 }

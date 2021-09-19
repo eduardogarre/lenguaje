@@ -1292,7 +1292,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::módulo()
+Ñ::Nodo* Ñ::Sintaxis::módulo(std::string nombreMódulo)
 {
 	uint32_t c = cursor;
 
@@ -1310,6 +1310,10 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 				cursor++;
 			}
+			else
+			{
+				((Ñ::Módulo*)m)->módulo = nombreMódulo;
+			}
 
 			if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN && lexemas[cursor]->contenido == ";")
 			{
@@ -1320,6 +1324,10 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				cursor = c;
 				return nullptr;
 			}
+		}
+		else
+		{
+			((Ñ::Módulo*)m)->módulo = nombreMódulo;
 		}
 
 		while(true)
@@ -1350,11 +1358,11 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas)
+Ñ::Nodo* Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas, std::string nombreArchivo)
 {
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)módulo();
+	return (Ñ::Nodo*)módulo(nombreArchivo);
 }
 
 Ñ::Nodo* Ñ::Sintaxis::analizaComando(std::vector<Ñ::Lexema*> _lexemas)

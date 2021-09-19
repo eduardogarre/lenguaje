@@ -45,10 +45,10 @@ namespace Ñ
         Ñ::Nodo* bloque();
         Ñ::Nodo* defineFunción();
         Ñ::Nodo* declaraFunción();
-        Ñ::Nodo* módulo();
+        Ñ::Nodo* módulo(std::string nombre);
 
     public:
-        Ñ::Nodo* analiza(std::vector<Ñ::Lexema*> _lexemas);
+        Ñ::Nodo* analiza(std::vector<Ñ::Lexema*> _lexemas, std::string nombreArchivo);
         Ñ::Nodo* analizaComando(std::vector<Ñ::Lexema*> _lexemas);
     };
 }

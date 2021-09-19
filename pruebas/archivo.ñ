@@ -1,3 +1,5 @@
+módulo archivo;
+
 externo nada escribe(ent número);
 
 público ent duplica(ent x)

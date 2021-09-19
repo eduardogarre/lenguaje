@@ -10,6 +10,7 @@
 
 #include "docopt.h"
 #include "ñ/ñ.hpp"
+#include "promotor.hpp"
 
 bool EJECUTA_INTÉRPRETE = false;
 
@@ -25,71 +26,6 @@ std::string _esperaComando()
 	std::getline(std::cin, comando);
 
 	return comando;
-}
-
-Ñ::TablaSímbolos* creaTablaSímbolos()
-{
-	Ñ::TablaSímbolos* tabla = new Ñ::TablaSímbolos;
-
-	return tabla;
-}
-
-void _interpretaArchivo(std::string código, Ñ::TablaSímbolos* tablaSímbolos)
-{
-	std::vector<Ñ::Lexema*> lexemas;
-	Ñ::Nodo* nodos;
-
-	Ñ::Léxico léxico;
-	Ñ::Sintaxis sintaxis;
-	
-	lexemas = léxico.analiza(código);
-
-	if(lexemas.empty())
-	{
-		Ñ::errorConsola(u8"Error durante el análisis léxico, código incorrecto.");
-		return;
-	}
-
-	nodos = sintaxis.analiza(lexemas);
-
-	if(nodos == nullptr)
-	{
-		Ñ::errorConsola(u8"Error durante el análisis sintáctico, código incorrecto.");
-		muestraLexemas(lexemas);
-		return;
-	}
-
-	Ñ::TablaSímbolos* tablaSímbolosSemántica = creaTablaSímbolos();
-	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolosSemántica);
-	delete tablaSímbolosSemántica;
-
-	if(resultado.error())
-	{
-		std::cout << resultado.mensaje() << std::endl;
-		muestraNodos(nodos);
-	}
-	else
-	{
-		//auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
-		//if(resultado.error())
-		//{
-		//	std::cout << resultado.mensaje() << std::endl;
-		//	muestraNodos(nodos);
-		//}
-	}
-
-	resultado = Ñ::promueve(nodos);
-	if(resultado.error())
-	{
-		std::cout << resultado.mensaje() << std::endl;
-	}
-
-	for(auto l : lexemas)
-	{
-		delete l;
-	}
-	lexemas.clear();
-	delete nodos;
 }
 
 void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
@@ -135,7 +71,9 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	//	}
 	//}
 
-	resultado = Ñ::promueve(nodos, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
+	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
+
+	resultado = Ñ::construye(nodos, entorno, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
 	if(resultado.error())
 	{
 		std::cout << resultado.mensaje() << std::endl;
@@ -150,20 +88,9 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	delete nodos;
 }
 
-int interpretaArchivo(std::string txt)
-{
-	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
-
-	_interpretaArchivo(txt, tablaSímbolos);
-
-	delete tablaSímbolos;
-
-	return 0;
-}
-
 int interpretaEnLínea()
 {
-	Ñ::TablaSímbolos* tablaSímbolos = creaTablaSímbolos();
+	Ñ::TablaSímbolos* tablaSímbolos = new Ñ::TablaSímbolos;
 
 	EJECUTA_INTÉRPRETE = true;
 
@@ -189,7 +116,7 @@ u8R"(Compilador Ñ.
 
     Usage:
 	  ñ
-	  ñ <archivo>
+	  ñ <archivo>...
       ñ (-a | --ayuda)
       ñ (-v | --version)
 
@@ -206,23 +133,6 @@ void muestraAyuda()
 void muestraVersión()
 {
 	std::cout << VERSIÓN << std::endl;
-}
-
-std::string leeArchivo(std::filesystem::path archivo)
-{
-    // Open the stream to 'lock' the file.
-    std::ifstream arc(archivo, std::ios::in | std::ios::binary);
-
-    // Obtain the size of the file.
-    const auto tamaño = std::filesystem::file_size(archivo);
-
-    // Create a buffer.
-    std::string resultado(tamaño, '\0');
-
-    // Read the whole file into the buffer.
-    arc.read(resultado.data(), tamaño);
-
-    return resultado;
 }
 
 int main(int argc, char** argv)
@@ -255,20 +165,11 @@ int main(int argc, char** argv)
 		}
 	}
 
-	if(args["<archivo>"].isString())
+	if(args["<archivo>"].isStringList())
 	{
-		std::string archivo = args["<archivo>"].asString();
-		std::string contenido = "";
+		std::vector<std::string> archivos = args["<archivo>"].asStringList();
 
-		try{
-			contenido = leeArchivo(archivo);
-		}
-		catch (std::exception& e)
-		{
-			std::cout << "Error al leer el archivo" << '\n';
-		}
-
-		return interpretaArchivo(contenido);
+		return Compilador::construyeArchivos(archivos);
 	}
 
 	return interpretaEnLínea();

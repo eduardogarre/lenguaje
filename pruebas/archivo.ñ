@@ -1,11 +1,5 @@
-módulo archivo;
-
 externo nada escribe(ent número);
-
-público ent duplica(ent x)
-{
-    devuelve x * 2;
-}
+externo ent duplica(ent x);
 
 público ent inicia()
 {

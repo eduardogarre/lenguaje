@@ -30,11 +30,24 @@ std::string leeArchivo(std::filesystem::path archivo)
     return resultado;
 }
 
+std::string creaNombreMódulo(std::string archivo)
+{
+	std::filesystem::path p = archivo;
+	std::string antes = p.string();
+	std::string después = p.stem().string();
+    std::cout << "Antes: " << antes << std::endl;
+    std::cout << "Después: " << después << std::endl;
+
+	return después;
+}
+
 Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
 {
 	Ñ::ResultadoLlvm resultado;
 
 	std::string código = "";
+
+	std::string nombreMódulo = creaNombreMódulo(archivo);
 
 	try{
 		código = leeArchivo(archivo);
@@ -66,7 +79,7 @@ std::string leeArchivo(std::filesystem::path archivo)
 		return resultado;
 	}
 
-	nodos = sintaxis.analiza(lexemas, archivo);
+	nodos = sintaxis.analiza(lexemas, nombreMódulo);
 
 	if(nodos == nullptr)
 	{
@@ -175,7 +188,9 @@ int Compilador::construyeArchivos(std::vector<std::string> archivos)
 		std::cout << std::endl << "Archivo de representación intermedia:" << std::endl << std::endl;
 		móduloLlvm->print(llvm::outs(), nullptr);
 
-		std::string nombreArchivoDestino = "resultado.o";
+		std::string nombreMódulo = creaNombreMódulo(archivo);
+
+		std::string nombreArchivoDestino = nombreMódulo + ".o";
 		std::error_code códigoError;
 		llvm::raw_fd_ostream archivoDestino(nombreArchivoDestino, códigoError, llvm::sys::fs::OF_None);
 
@@ -198,6 +213,6 @@ int Compilador::construyeArchivos(std::vector<std::string> archivos)
 
 		std::cout << "He construido el archivo \"" + nombreArchivoDestino + "\"." << std::endl;
     }
-	
+
     return 0;
 }

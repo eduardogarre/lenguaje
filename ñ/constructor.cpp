@@ -1597,64 +1597,11 @@ namespace Ñ
 
         if(categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
-            llvm::InitializeNativeTarget();
-            llvm::InitializeNativeTargetAsmParser();
-            llvm::InitializeNativeTargetAsmPrinter();
-
-            std::string tripleteDestino = llvm::sys::getDefaultTargetTriple();
-            std::cout << "Tripleta de Destino: " << tripleteDestino << std::endl;
-
-            std::string error;
-            auto destino = llvm::TargetRegistry::lookupTarget(tripleteDestino, error);
-
-            if (!destino) {
-                resultado.error(error);
-                return resultado;
-            }
-
-            std::string procesador = "x86-64";
-            std::string características = "";
-
-            llvm::TargetOptions opciones;
-            auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
-            auto máquinaDestino = destino->createTargetMachine(tripleteDestino, procesador, características, opciones, modeloReordenamiento);
-
-            std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
-
             Ñ::ResultadoLlvm rMódulo = constructor->construyeMódulo(árbol);
             if(rMódulo.error())
             {
                 return rMódulo;
             }
-
-            constructor->móduloLlvm->setDataLayout(máquinaDestino->createDataLayout());
-            constructor->móduloLlvm->setTargetTriple(tripleteDestino);
-
-            std::cout << std::endl << "Archivo de representación intermedia:" << std::endl << std::endl;
-            constructor->móduloLlvm->print(llvm::outs(), nullptr);
-
-            std::string nombreArchivoDestino = "resultado.o";
-            std::error_code códigoError;
-            llvm::raw_fd_ostream archivoDestino(nombreArchivoDestino, códigoError, llvm::sys::fs::OF_None);
-
-            if (códigoError) {
-                resultado.error("No he podido abrir el archivo: " + códigoError.message());
-                return resultado;
-            }
-
-            llvm::legacy::PassManager paseDeCódigoObjeto;
-            auto tipoArchivo = llvm::CGFT_ObjectFile;
-
-            if(máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
-            {
-                resultado.error("No he podido emitir un archivo de este tipo");
-                return resultado;
-            }
-
-            paseDeCódigoObjeto.run(*(constructor->móduloLlvm));
-            archivoDestino.flush();
-
-            std::cout << "He construido el archivo \"" + nombreArchivoDestino + "\"." << std::endl;
 
             resultado.módulo(constructor->móduloLlvm);
         }
@@ -1689,7 +1636,7 @@ namespace Ñ
 
             constructor->móduloLlvm->print(llvm::outs(), nullptr);
             resultado.módulo(constructor->móduloLlvm);
-            
+
             std::cout << "5" << std::endl;
 
             std::unique_ptr<llvm::Module> módulo(constructor->móduloLlvm);

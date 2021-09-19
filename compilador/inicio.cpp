@@ -53,11 +53,11 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 		return;
 	}
 
-	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolos);
+	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 
-	if(resultado.error())
+	if(rSemántico.error())
 	{
-		std::cout << resultado.mensaje() << std::endl;
+		std::cout << rSemántico.mensaje() << std::endl;
 		muestraNodos(nodos);
 		return;
 	}
@@ -73,10 +73,10 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 
 	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
 
-	resultado = Ñ::construye(nodos, entorno, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
-	if(resultado.error())
+	Ñ::ResultadoLlvm rConstrucción = Ñ::construye(nodos, entorno, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
+	if(rConstrucción.error())
 	{
-		std::cout << resultado.mensaje() << std::endl;
+		std::cout << rConstrucción.mensaje() << std::endl;
 		return;
 	}
 

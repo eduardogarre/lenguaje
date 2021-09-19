@@ -4,7 +4,10 @@
 #include <string>
 #include <vector>
 
+#include "llvm/Support/Host.h"
+#include "llvm/Support/TargetRegistry.h"
 #include "llvm/Support/TargetSelect.h"
+#include "llvm/Target/TargetMachine.h"
 
 #include "promotor.hpp"
 #include "ñ/ñ.hpp"
@@ -26,8 +29,10 @@ std::string leeArchivo(std::filesystem::path archivo)
     return resultado;
 }
 
-int construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
+Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
 {
+	Ñ::ResultadoLlvm resultado;
+
 	std::string código = "";
 
 	try{
@@ -56,7 +61,8 @@ int construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
 		}
 		lexemas.clear();
 
-		return -1;
+		resultado.error("Error durante el análisis léxico, código incorrecto.");
+		return resultado;
 	}
 
 	nodos = sintaxis.analiza(lexemas, archivo);
@@ -72,16 +78,17 @@ int construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
 		}
 		lexemas.clear();
 
-		return -1;
+		resultado.error("Error durante el análisis sintáctico, código incorrecto.");
+		return resultado;
 	}
 
 	Ñ::TablaSímbolos* tablaSímbolos = new Ñ::TablaSímbolos;
-	Ñ::Resultado resultado = Ñ::analizaSemántica(nodos, tablaSímbolos);
+	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 	delete tablaSímbolos;
 
-	if(resultado.error())
+	if(rSemántico.error())
 	{
-		std::cout << resultado.mensaje() << std::endl;
+		std::cout << rSemántico.mensaje() << std::endl;
 		muestraNodos(nodos);
 	
 		for(auto l : lexemas)
@@ -90,7 +97,9 @@ int construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
 		}
 		lexemas.clear();
 		delete nodos;
-		return -1;
+		
+		resultado.error(rSemántico.mensaje());
+		return resultado;
 	}
 	else
 	{
@@ -114,10 +123,11 @@ int construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
 	if(resultado.error())
 	{
 		std::cout << resultado.mensaje() << std::endl;
-		return -1;
+		return resultado;
 	}
 
-	return 0;
+	resultado.éxito();
+	return resultado;
 }
 
 int Compilador::construyeArchivos(std::vector<std::string> archivos)
@@ -128,12 +138,32 @@ int Compilador::construyeArchivos(std::vector<std::string> archivos)
 	llvm::InitializeNativeTargetAsmParser();
 	llvm::InitializeNativeTargetAsmPrinter();
 
+	std::string tripleteDestino = llvm::sys::getDefaultTargetTriple();
+	std::cout << "Tripleta de Destino: " << tripleteDestino << std::endl;
+
+	std::string error;
+	auto destino = llvm::TargetRegistry::lookupTarget(tripleteDestino, error);
+
+	if (!destino) {
+		return -1;
+	}
+
+	std::string procesador = "x86-64";
+	std::string características = "";
+
+	llvm::TargetOptions opciones;
+	auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
+	auto máquinaDestino = destino->createTargetMachine(tripleteDestino, procesador, características, opciones, modeloReordenamiento);
+
+	std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
+
     for(std::string archivo : archivos)
     {
-        int resultado = construyeArchivo(archivo, entorno);
-        if(resultado != 0)
+        Ñ::ResultadoLlvm resultado = construyeArchivo(archivo, entorno);
+        if(resultado.error())
         {
-            return resultado;
+			std::cout << "ERROR FATAL: " << resultado.mensaje() << std::endl;
+            return -1;
         }
     }
     return 0;

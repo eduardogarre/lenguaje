@@ -1578,13 +1578,13 @@ namespace Ñ
         }
     };
 
-    Ñ::Resultado construye(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo)
+    Ñ::ResultadoLlvm construye(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo)
     {
         std::cout << "construye(nodo)" << std::endl;
 
         Ñ::entorno = entorno;
 
-        Ñ::Resultado resultado;
+        Ñ::ResultadoLlvm resultado;
 
         Ñ::Constructor* constructor = new Ñ::Constructor;
 
@@ -1624,8 +1624,7 @@ namespace Ñ
             Ñ::ResultadoLlvm rMódulo = constructor->construyeMódulo(árbol);
             if(rMódulo.error())
             {
-                resultado.error(rMódulo.mensaje());
-                return resultado;
+                return rMódulo;
             }
 
             constructor->móduloLlvm->setDataLayout(máquinaDestino->createDataLayout());
@@ -1656,6 +1655,8 @@ namespace Ñ
             archivoDestino.flush();
 
             std::cout << "He construido el archivo \"" + nombreArchivoDestino + "\"." << std::endl;
+
+            resultado.módulo(constructor->móduloLlvm);
         }
         else if(categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {
@@ -1687,7 +1688,8 @@ namespace Ñ
             std::cout << "4" << std::endl;
 
             constructor->móduloLlvm->print(llvm::outs(), nullptr);
-
+            resultado.módulo(constructor->móduloLlvm);
+            
             std::cout << "5" << std::endl;
 
             std::unique_ptr<llvm::Module> módulo(constructor->móduloLlvm);

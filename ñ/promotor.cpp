@@ -262,7 +262,6 @@ namespace Ñ
             else if(nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
             {
                 // Convierto Ñ::Nodo* a Ñ::Módulo*
-                std::cout << "Convierto Ñ::Nodo* a Ñ::Módulo*" << std::endl;
                 módulo = (Ñ::Módulo*)nodo;
             }
             else
@@ -271,13 +270,9 @@ namespace Ñ
                 return resultado;
             }
 
-            std::cout << "preparaMódulo(módulo->módulo);" << std::endl;
             preparaMódulo(módulo->módulo);
 
-            std::cout << "preparaPasesDeOptimización();" << std::endl;
             preparaPasesDeOptimización();
-
-            std::cout << "HECHO" << std::endl;
 
             for(auto n : nodo->ramas)
             {
@@ -720,8 +715,6 @@ namespace Ñ
             int64_t índice = 0;
 
             //Condición
-            std::cout << "Condición" << std::endl;
-
             Ñ::Nodo* condición = nodo->ramas[índice];
             Ñ::ResultadoLlvm resultadoCondición = construyeLDA(condición);
             if(resultadoCondición.error())
@@ -732,8 +725,6 @@ namespace Ñ
             llvm::Value* valorCondición = resultadoCondición.valor();
 
             //Bloque
-            std::cout << "Bloque entonces" << std::endl;
-            
             ++índice;
             Ñ::Nodo* nodoBloque = nodo->ramas[índice];
             //PENDIENTE: Construir bloque entonces
@@ -766,8 +757,6 @@ namespace Ñ
                 && nodo->ramas[índice] != nullptr
                 && nodo->ramas[índice]->categoría == Ñ::NODO_BLOQUE)
             {
-                std::cout << "Bloque si no" << std::endl;
-
                 //Inserto el bloque Sino al final de la función
                 funciónActual->getBasicBlockList().push_back(bloqueSino);
                 constructorLlvm.SetInsertPoint(bloqueSino);
@@ -782,8 +771,6 @@ namespace Ñ
                 
                 ++índice;
             }
-
-            std::cout << "Bloque continuación" << std::endl;
 
             //Inserto el bloque Continuación al final de la función
             funciónActual->getBasicBlockList().push_back(bloqueContinúa);

@@ -7,7 +7,7 @@ set(BUILD_SHARED_LIBS OFF)
 project(biblioteca VERSION 0.1)
 
 #file(GLOB CODIGO_BIBLIOTECA CONFIGURE_DEPENDS "./*.hpp" "./*.cpp")
-file(GLOB_RECURSE CODIGO_BIBLIOTECA CONFIGURE_DEPENDS "./*.hpp" "./*.cpp")
+file(GLOB_RECURSE CODIGO_BIBLIOTECA CONFIGURE_DEPENDS "./*.h" "./*.c")
 
 # añade la biblioteca
 add_library(biblioteca STATIC ${CODIGO_BIBLIOTECA})
@@ -15,9 +15,9 @@ add_library(biblioteca STATIC ${CODIGO_BIBLIOTECA})
 #target_link_libraries(biblioteca PUBLIC "-static")
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /utf-8")
+    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} /std:c17 /utf-8")
 elseif(CMAKE_COMPILER_IS_GNUC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c17")
 endif()
 
 set_target_properties(biblioteca PROPERTIES

@@ -5,5 +5,5 @@
 
 namespace Compilador
 {
-    int construyeArchivos(std::vector<std::string> archivos);
+    int compila(Compilador::Configuración cfg);
 }

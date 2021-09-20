@@ -1,22 +1,20 @@
 ﻿rm build -Force -Recurse -ErrorAction SilentlyContinue
-rm proyecto -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
 rm -ErrorAction SilentlyContinue *.o
 
 mkdir obra
-mkdir proyecto
 
 cd obra
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Release ../biblioteca
 cmake --build . --parallel 4
 cd ..
 
-mv ./proyecto/compilador.exe ./proyecto/ñ.exe
+mv ./proyecto/Debug/biblioteca.lib ./proyecto/biblioteca.lib
+cp ./biblioteca/lld-link.exe ./proyecto/lld-link.exe
 
 rm build -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
-
-./construyeBiblioteca.ps1
+rm ./proyecto/Debug -Force -Recurse -ErrorAction SilentlyContinue
 
 #echo ""
 #echo ""

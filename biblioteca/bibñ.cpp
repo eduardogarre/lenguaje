@@ -10,5 +10,5 @@ extern "C" {
 }
 
 int main() {
-    inicia();
+    return inicia();
 }

@@ -1,10 +1,13 @@
 ﻿cmake_minimum_required(VERSION 3.14)
 
+set(CMAKE_BUILD_TYPE Release)
+
 # set the project name
 project(lenguaje VERSION 0.1)
 
 add_subdirectory(ñ)
 add_subdirectory(compilador)
+#add_subdirectory(biblioteca)
 #add_subdirectory(pruebas)
 
 message("MENSAJE :: Configuro algunas flags del compilador")

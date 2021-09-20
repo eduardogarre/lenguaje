@@ -8,6 +8,7 @@
 #include <thread>
 #include <vector>
 
+#include "configuracion.hpp"
 #include "docopt.h"
 #include "ñ/ñ.hpp"
 #include "promotor.hpp"
@@ -116,13 +117,14 @@ u8R"(Compilador Ñ.
 
     Usage:
 	  ñ
-	  ñ <archivo>...
+	  ñ <archivo>... [--salida <nombre>]
       ñ (-a | --ayuda)
       ñ (-v | --version)
 
     Options:
-      -a --ayuda    Muestra este mensaje
-      -v --version  Muestra versión.
+      -a --ayuda      Muestra este mensaje
+	  -s <nombre>, --salida <nombre>   Pon nombre al archivo producido
+      -v --version    Muestra versión.
 )";
 
 void muestraAyuda()
@@ -137,7 +139,6 @@ void muestraVersión()
 
 int main(int argc, char** argv)
 {
-
 	if(!(std::numeric_limits< double >::is_iec559))
 	{
 		std::cout << "Requiero el estándar IEEE 754 para los números reales" << std::endl;
@@ -165,11 +166,28 @@ int main(int argc, char** argv)
 		}
 	}
 
+	Compilador::Configuración cfg;
+
+	std::string nombreArchivoDestino = "programa";
+	if(args["--salida"].isString())
+	{
+		cfg.nombreArchivoDestino = args["--salida"].asString();
+	}
+
+	std::cout << "Crearé el programa '" << cfg.nombreArchivoDestino << cfg.extensión << "'" << std::endl << std::endl;
+
 	if(args["<archivo>"].isStringList())
 	{
-		std::vector<std::string> archivos = args["<archivo>"].asStringList();
+		cfg.archivos = args["<archivo>"].asStringList();
 
-		return Compilador::construyeArchivos(archivos);
+		std::cout << "Construyendo";
+		for(std::string archivo : cfg.archivos)
+		{
+			std::cout << " " << archivo;
+		}
+		std::cout << std::endl << std::endl;
+
+		return Compilador::compila(cfg);
 	}
 
 	return interpretaEnLínea();

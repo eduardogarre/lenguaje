@@ -10,8 +10,10 @@
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Target/TargetMachine.h"
 
-#include "promotor.hpp"
+#include "configuracion.hpp"
+#include "herramientas.hpp"
 #include "ñ/ñ.hpp"
+#include "promotor.hpp"
 
 std::string leeArchivo(std::filesystem::path archivo)
 {
@@ -144,7 +146,7 @@ std::string creaNombreMódulo(std::string archivo)
 	return resultado;
 }
 
-int Compilador::construyeArchivos(std::vector<std::string> archivos)
+int Compilador::compila(Compilador::Configuración cfg)
 {
 	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
 	
@@ -171,7 +173,7 @@ int Compilador::construyeArchivos(std::vector<std::string> archivos)
 
 	std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
 
-    for(std::string archivo : archivos)
+    for(std::string archivo : cfg.archivos)
     {
         Ñ::ResultadoLlvm resultado = construyeArchivo(archivo, entorno);
         if(resultado.error())
@@ -213,6 +215,11 @@ int Compilador::construyeArchivos(std::vector<std::string> archivos)
 
 		std::cout << "He construido el archivo \"" + nombreArchivoDestino + "\"." << std::endl;
     }
+
+	std::string archivoDestino = cfg.nombreArchivoDestino + cfg.extensión;
+	
+	ejecutaPrograma("proyecto/lld-link.exe",
+					"ñ *.o proyecto/biblioteca.lib /out:" + archivoDestino);
 
     return 0;
 }

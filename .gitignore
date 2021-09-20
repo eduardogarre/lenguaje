@@ -17,6 +17,14 @@
 *.o
 *.obj
 
+# Static library files
+*.lib
+*.a
+
+# Dynamic library files
+*.dll
+*.so
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

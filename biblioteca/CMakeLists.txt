@@ -15,9 +15,16 @@ add_library(biblioteca STATIC ${CODIGO_BIBLIOTECA})
 #target_link_libraries(biblioteca PUBLIC "-static")
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} /std:c17 /utf-8")
+    foreach(flag_var
+            CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+            CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO)
+        if(${flag_var} MATCHES "/RTC")
+            string(REGEX REPLACE "[/|-]RTC(su|[1su])" "" ${flag_var} "${${flag_var}}")
+        endif()
+    endforeach(flag_var)
+    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} /X /std:c17 /utf-8")
 elseif(CMAKE_COMPILER_IS_GNUC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c17")
+    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -nostdinc -nostdinc++ -std=c17")
 endif()
 
 set_target_properties(biblioteca PROPERTIES

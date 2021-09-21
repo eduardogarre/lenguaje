@@ -219,7 +219,7 @@ int Compilador::compila(Compilador::Configuración cfg)
 	std::string archivoDestino = cfg.nombreArchivoDestino + cfg.extensión;
 	
 	ejecutaPrograma("proyecto/lld-link.exe",
-					"ñ *.o proyecto/biblioteca.lib /out:" + archivoDestino);
+					"lld *.o proyecto/biblioteca.lib /entry:__punto_de_entrada /subsystem:console /nodefaultlib /out:" + archivoDestino);
 
     return 0;
 }

@@ -199,6 +199,11 @@ namespace Ñ
             }
         }
 
+        llvm::Type* creaVectorLlvm(Ñ::CategoríaTipo tipo, uint32_t tamaño)
+        {
+            return llvm::VectorType::get(creaTipoLlvm(tipo), tamaño, true);
+        }
+
         Ñ::ResultadoLlvm construyeMódulo(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
@@ -420,7 +425,14 @@ namespace Ñ
             else
             {
                 Ñ::Tipo* tDevuelto = (Ñ::Tipo*)devuelto;
-                tRetorno = creaTipoLlvm(tDevuelto->tipo);
+                if(tDevuelto->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tRetorno = creaVectorLlvm(tDevuelto->tipo, ((Ñ::Nodo*)tDevuelto)->ramas.size());
+                }
+                else
+                {
+                    tRetorno = creaTipoLlvm(tDevuelto->tipo);
+                }
             }
 
             if(argumentos == nullptr)
@@ -446,12 +458,26 @@ namespace Ñ
                     if(a->categoría == Ñ::CategoríaNodo::NODO_TIPO)
                     {
                         Ñ::Tipo* arg = (Ñ::Tipo*)a;
-                        vArgumentos.push_back(creaTipoLlvm(arg->tipo));
+                        if(arg->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                        {
+                            vArgumentos.push_back(creaVectorLlvm(arg->tipo, ((Ñ::Nodo*)arg)->ramas.size()));
+                        }
+                        else
+                        {
+                            vArgumentos.push_back(creaTipoLlvm(arg->tipo));
+                        }
                     }
                     else if(a->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
                     {
                         Ñ::Tipo* arg = (Ñ::Tipo*)(a->ramas[0]);
-                        vArgumentos.push_back(creaTipoLlvm(arg->tipo));
+                        if(arg->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                        {
+                            vArgumentos.push_back(creaVectorLlvm(arg->tipo, ((Ñ::Nodo*)arg)->ramas.size()));
+                        }
+                        else
+                        {
+                            vArgumentos.push_back(creaTipoLlvm(arg->tipo));
+                        }
                     }
                     else
                     {
@@ -961,7 +987,14 @@ namespace Ñ
             Ñ::Tipo* t = (Ñ::Tipo*)(nodo->ramas[0]);
 
             nombre = dv->variable;
-            tipo = creaTipoLlvm(t->tipo);
+            if(t->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+            {
+                tipo = creaVectorLlvm(t->tipo, ((Ñ::Nodo*)t)->ramas.size());
+            }
+            else
+            {
+                tipo = creaTipoLlvm(t->tipo);
+            }
 
             llvm::Value* variable = entorno->constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
 
@@ -1001,7 +1034,14 @@ namespace Ñ
             Ñ::Tipo* t = (Ñ::Tipo*)(nodo->ramas[0]);
 
             nombre = dv->variable;
-            tipo = creaTipoLlvm(t->tipo);
+            if(t->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+            {
+                tipo = creaVectorLlvm(t->tipo, ((Ñ::Nodo*)t)->ramas.size());
+            }
+            else
+            {
+                tipo = creaTipoLlvm(t->tipo);
+            }
 
             entorno->globales[nombre] = tipo;
 
@@ -1129,7 +1169,16 @@ namespace Ñ
                 return resultado;
             }
 
-            llvm::Type* tDestino = creaTipoLlvm(conv->destino);
+            llvm::Type* tDestino;
+            if(conv->destino == Ñ::CategoríaTipo::TIPO_VECTOR)
+            {
+                tDestino = creaVectorLlvm(conv->destino, 0);
+            }
+            else
+            {
+                tDestino = creaTipoLlvm(conv->destino);
+            }
+            
             if(tDestino == nullptr)
             {
                 resultado.error("Error al obtener el tipoLlvm");
@@ -1218,70 +1267,140 @@ namespace Ñ
             switch (literal->tipo)
             {
             case Ñ::CategoríaTipo::TIPO_NATURAL_8:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número));
                 break;
                 
             case Ñ::CategoríaTipo::TIPO_NATURAL_16:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número));
                 break;
                 
             case Ñ::CategoríaTipo::TIPO_NATURAL_32:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número));
                 break;
 
             case Ñ::CategoríaTipo::TIPO_NATURAL_64:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_8:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número, true));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_16:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número, true));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_32:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número, true));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_64:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipo, número, true));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_REAL_32:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 real32 = std::stof(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipo, real32));
                 break;
             
             case Ñ::CategoríaTipo::TIPO_REAL_64:
-                tipo = creaTipoLlvm(literal->tipo);
+                if(literal->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    tipo = creaVectorLlvm(literal->tipo, 0);
+                }
+                else
+                {
+                    tipo = creaTipoLlvm(literal->tipo);
+                }
                 real64 = std::stod(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipo, real64));

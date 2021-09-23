@@ -51,6 +51,8 @@ std::string creaNombreMódulo(std::string archivo)
 
 	std::string nombreMódulo = creaNombreMódulo(archivo);
 
+	std::cout << "LEYENDO EL CODIGO DEL ARCHIVO" << std::endl;
+
 	try{
 		código = leeArchivo(archivo);
 	}
@@ -65,6 +67,8 @@ std::string creaNombreMódulo(std::string archivo)
 	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
 	
+	std::cout << "ANALIZANDO LEXICO" << std::endl;
+
 	lexemas = léxico.analiza(código);
 
 	if(lexemas.empty())
@@ -80,6 +84,8 @@ std::string creaNombreMódulo(std::string archivo)
 		resultado.error("Error durante el análisis léxico, código incorrecto.");
 		return resultado;
 	}
+	
+	std::cout << "ANALIZANDO SINTAXIS" << std::endl;
 
 	nodos = sintaxis.analiza(lexemas, nombreMódulo);
 
@@ -97,6 +103,8 @@ std::string creaNombreMódulo(std::string archivo)
 		resultado.error("Error durante el análisis sintáctico, código incorrecto.");
 		return resultado;
 	}
+	
+	std::cout << "ANALIZANDO SEMANTICA" << std::endl;
 
 	Ñ::TablaSímbolos* tablaSímbolos = new Ñ::TablaSímbolos;
 	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
@@ -126,6 +134,8 @@ std::string creaNombreMódulo(std::string archivo)
 		//	muestraNodos(nodos);
 		//}
 	}
+	
+	std::cout << "CONSTRUYENDO MODULO" << std::endl;
 
 	resultado = Ñ::construye(nodos, entorno);
 

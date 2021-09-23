@@ -27,6 +27,21 @@ txt borraTxt(txt texto)
     return texto;
 }
 
+txt sumaTxt(txt texto1, txt texto2)
+{
+    int i;
+    int espacio1 = texto1.posición[15];
+    for(i = 0; i < espacio1 && texto2.posición[i] != 0; i++)
+    {
+        texto1.posición[15 - espacio1 + i] = texto2.posición[i];
+    }
+
+    texto1.posición[15 - espacio1 + i] = 0;
+    texto1.posición[15] = espacio1 - i;
+
+    return texto1;
+}
+
 int longTxt(txt texto)
 {
     return 15 - texto.posición[15];

@@ -21,6 +21,8 @@ txt creaTxt (const char* caracteres);
 
 txt borraTxt(txt texto);
 
+txt sumaTxt(txt texto1, txt texto2);
+
 int longTxt(txt texto);
 
 const char* cadenaCdeTxt(txt texto);

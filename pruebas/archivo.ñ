@@ -1,8 +1,12 @@
 externo ent hola();
+externo ent mundo();
+externo ent holamundo();
 externo ent duplica(ent x);
 
 público ent inicia()
 {
+    //ent[] grupo;
+
     ent número = 288;
 
     si (42 < 2)
@@ -16,5 +20,5 @@ público ent inicia()
         número = número;
     }
 
-    devuelve hola();
+    devuelve holamundo();
 }

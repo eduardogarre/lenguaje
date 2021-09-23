@@ -5,7 +5,19 @@ extern void __security_init_cookie(void);
 
 extern int hola()
 {
-    txt texto = creaTxt("hola, mundo\n");
+    txt texto = creaTxt("hola, ");
+    return escribe(texto);
+}
+
+extern int mundo()
+{
+    txt texto = creaTxt("mundo\n");
+    return escribe(texto);
+}
+
+extern int holamundo()
+{
+    txt texto = sumaTxt(creaTxt("hola, "), creaTxt("mundo!\n"));
     return escribe(texto);
 }
 

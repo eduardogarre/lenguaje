@@ -11,6 +11,7 @@ file(GLOB_RECURSE CODIGO_BIBLIOTECA CONFIGURE_DEPENDS "./*.h" "./*.c")
 
 # añade la biblioteca
 add_library(biblioteca STATIC ${CODIGO_BIBLIOTECA})
+#add_executable(biblioteca ${CODIGO_BIBLIOTECA})
 
 #target_link_libraries(biblioteca PUBLIC "-static")
 
@@ -22,9 +23,12 @@ if(MSVC)
             string(REGEX REPLACE "[/|-]RTC(su|[1su])" "" ${flag_var} "${${flag_var}}")
         endif()
     endforeach(flag_var)
-    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} /X /std:c17 /utf-8")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /GS- /X /std:c17 /utf-8")
+    set_target_properties(biblioteca PROPERTIES
+        LINK_FLAGS "../proyecto/kernel32.lib ../proyecto/libcmt.lib ../proyecto/ntdll.lib /entry:__lugar_de_inicio /subsystem:console /nodefaultlib"
+    )
 elseif(CMAKE_COMPILER_IS_GNUC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -nostdinc -nostdinc++ -std=c17")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdinc -nostdinc++ -std=c17")
 endif()
 
 set_target_properties(biblioteca PROPERTIES

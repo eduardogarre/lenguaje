@@ -5,7 +5,7 @@ extern void __security_init_cookie(void);
 
 extern int hola()
 {
-    txt texto = creaTxt("hola españoles\n");
+    txt texto = creaTxt("hola, mundo\n");
     return escribe(texto);
 }
 

@@ -33,7 +33,7 @@ extern void* __stdcall GetStdHandle( unsigned long asaComún );
 extern int escribe(txt texto)
 {
     int escrito;
-    WriteConsoleA(GetStdHandle(ASA_COMUN_SALIDA), cadenaCdeTxt(texto), longTxt(texto), &escrito, 0);
+    WriteConsoleA(GetStdHandle(ASA_COMUN_SALIDA), (const void*) cadenaCdeTxt(texto), longTxt(texto), &escrito, 0);
 
     return escrito;
 }

@@ -5,7 +5,8 @@ extern void __security_init_cookie(void);
 
 extern int hola()
 {
-    return escribe(creaTxt("hola"));
+    txt texto = creaTxt("hola españoles\n");
+    return escribe(texto);
 }
 
 int __lugar_de_inicio()

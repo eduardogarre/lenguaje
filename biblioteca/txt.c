@@ -2,13 +2,14 @@
 
 txt creaTxt (const char* caracteres) {
     txt texto;
+    texto = borraTxt(texto);
     int i;
-    for(i = 0; i < 15 || caracteres[i] != '\0'; i++)
+    for(i = 0; i < 15 && caracteres[i] != 0; i++)
     {
         texto.posición[i] = caracteres[i];
     }
 
-    texto.posición[i] = '\0';
+    texto.posición[i] = 0;
     texto.posición[15] = 15 - i;
 
     return texto;

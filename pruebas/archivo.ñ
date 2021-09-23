@@ -3,7 +3,7 @@ externo ent duplica(ent x);
 
 público ent inicia()
 {
-    ent número = 42;
+    ent número = 288;
 
     si (42 < 2)
     {
@@ -16,7 +16,5 @@ público ent inicia()
         número = número;
     }
 
-    hola();
-
-    devuelve número;
+    devuelve hola();
 }

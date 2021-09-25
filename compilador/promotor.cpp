@@ -88,6 +88,8 @@ std::string creaNombreMódulo(std::string archivo)
 	std::cout << "ANALIZANDO SINTAXIS" << std::endl;
 
 	nodos = sintaxis.analiza(lexemas, nombreMódulo);
+	
+	muestraNodos(nodos);
 
 	if(nodos == nullptr)
 	{

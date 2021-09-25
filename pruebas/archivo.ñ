@@ -5,7 +5,7 @@ externo ent duplica(ent x);
 
 público ent inicia()
 {
-    //ent[] grupo;
+    //ent[] vector = [0, 1, 2, 3];
 
     ent número = 288;
 
@@ -21,4 +21,6 @@ público ent inicia()
     }
 
     devuelve holamundo();
+
+    //devuelve 0;
 }

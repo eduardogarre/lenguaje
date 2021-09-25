@@ -107,6 +107,44 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return (Ñ::Nodo*)l;
 		}
 	}
+	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN)
+	{
+		if(lexemas[cursor]->contenido == "[")
+		{
+			cursor++;
+
+			l = new Ñ::Literal();
+			l->tipo = Ñ::CategoríaTipo::TIPO_VECTOR;
+
+			while(lexemas[cursor]->contenido != "]")
+			{
+				if(Ñ::Nodo* n = literal())
+				{
+					((Ñ::Nodo*)l)->ramas.push_back(n);
+				}
+				else
+				{
+					delete l;
+					cursor = c;
+					return nullptr;
+				}
+
+				if(!notación(","))
+				{
+					break;
+				}
+			}
+
+			if(!notación("]"))
+			{
+				delete l;
+				cursor = c;
+				return nullptr;
+			}
+
+			return (Ñ::Nodo*)l;
+		}
+	}
 
 	cursor = c;
 	return nullptr;

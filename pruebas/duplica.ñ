@@ -1,6 +1,6 @@
 
 
-público ent duplica(ent x)
-{
-    devuelve x * 2;
-}
+//público ent duplica(ent x)
+//{
+//    devuelve x * 2;
+//}

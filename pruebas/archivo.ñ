@@ -1,7 +1,7 @@
-externo ent hola();
-externo ent mundo();
-externo ent holamundo();
-externo ent duplica(ent x);
+//externo ent hola();
+//externo ent mundo();
+//externo ent holamundo();
+//externo ent duplica(ent x);
 
 público ent inicia()
 {
@@ -9,18 +9,18 @@ público ent inicia()
 
     ent número = 288;
 
-    si (42 < 2)
-    {
-        //ent y = duplica(42);
-        ent y = duplica(número);
-        número = y;
-    }
-    sino
-    {
-        número = número;
-    }
+    //si (42 < 2)
+    //{
+    //    //ent y = duplica(42);
+    //    ent y = duplica(número);
+    //    número = y;
+    //}
+    //sino
+    //{
+    //    número = número;
+    //}
 
-    devuelve holamundo();
+    //devuelve holamundo();
 
-    //devuelve 0;
+    devuelve número;
 }

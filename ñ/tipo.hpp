@@ -42,16 +42,16 @@ namespace Ñ
         void muestra();
     };
 
-    Ñ::CategoríaTipo obténTipoMínimoComún(Ñ::CategoríaTipo t1, Ñ::CategoríaTipo t2);
+    Ñ::Tipo* obténTipoMínimoComún(Ñ::Tipo* t1, Ñ::Tipo* t2);
     Ñ::Tipo* creaTipoBásico(Ñ::CategoríaTipo tipo);
     Ñ::Resultado creaFirmaFunción(Ñ::Nodo* fn);
-    std::string obténNombreDeTipo(Ñ::CategoríaTipo t);
+    std::string obténNombreDeTipo(Ñ::Tipo* t);
     Ñ::Tipo* obténTipoDeLiteral(Ñ::Literal* literal);
     Ñ::Tipo* obténTipoDeValor(Ñ::Valor* valor);
     Ñ::CategoríaTipo obténTipoDeNombre(std::string nombre);
     Ñ::CategoríaTipo obténMínimoNaturalVálido(uint64_t n);
     Ñ::CategoríaTipo obténMínimoEnteroVálido(int64_t e);
-    bool tiposAsignables(Ñ::CategoríaTipo lia, Ñ::CategoríaTipo lda);
+    bool tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda);
     bool esBooleano(Ñ::CategoríaTipo tipo);
     bool esNatural(Ñ::CategoríaTipo tipo);
     bool esEntero(Ñ::CategoríaTipo tipo);

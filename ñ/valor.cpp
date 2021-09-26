@@ -352,7 +352,7 @@ void Ñ::Valor::muestra()
 {
 	imprimeAjuste();
 	std::cout << "(NODO_VALOR) [";
-	std::cout << obténNombreDeTipo(tipo) << "] [";
+	std::cout << obténNombreDeTipo(obténTipoDeValor(this)) << "] [";
 	
 
 	if(esNat8())
@@ -445,7 +445,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a bool");
 		return resultado;
 	}
@@ -483,7 +483,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a nat8");
 		return resultado;
 	}
@@ -527,7 +527,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a nat16");
 		return resultado;
 	}
@@ -578,7 +578,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a nat32");
 		return resultado;
 	}
@@ -636,7 +636,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a nat64");
 		return resultado;
 	}
@@ -674,7 +674,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a ent8");
 		return resultado;
 	}
@@ -725,7 +725,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a ent16");
 		return resultado;
 	}
@@ -790,7 +790,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a ent32");
 		return resultado;
 	}
@@ -869,7 +869,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a ent64");
 		return resultado;
 	}
@@ -882,7 +882,7 @@ void Ñ::Valor::muestra()
 	if(valor->esPuntero())
 	{
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a puntero");
 		return resultado;
 	}
@@ -892,7 +892,7 @@ void Ñ::Valor::muestra()
 	if(resultado.error())
 	{
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a puntero");
 		return resultado;
 	}
@@ -989,7 +989,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a real32");
 		return resultado;
 	}
@@ -1089,7 +1089,7 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a real64");
 		return resultado;
 	}
@@ -1189,31 +1189,23 @@ void Ñ::Valor::muestra()
 	{
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
-						+ Ñ::obténNombreDeTipo(valor->obténTipo())
+						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
 						+ " a texto");
 		return resultado;
 	}
 }
 
-Ñ::Resultado Ñ::convierteValor(Ñ::Valor* valor, Ñ::CategoríaTipo tipoDestino)
+Ñ::Resultado Ñ::convierteValor(Ñ::Valor* valor, Ñ::Tipo* tipoDestino)
 {
 	Ñ::Resultado resultado;
 
-	switch (tipoDestino)
+	switch (tipoDestino->tipo)
 	{
 	case Ñ::CategoríaTipo::TIPO_NADA:
 		delete valor;
 		resultado.éxito();
 		resultado.nodo((Ñ::Nodo*)(new Ñ::Valor));
 		return resultado;
-		break;
-	
-	case Ñ::CategoríaTipo::TIPO_PUNTERO:
-		return Ñ::aPuntero(valor);
-		break;
-	
-	case Ñ::CategoríaTipo::TIPO_TEXTO:
-		return Ñ::aTexto(valor);
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_BOOLEANO:
@@ -1274,9 +1266,9 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	Ñ::Resultado r1;
 	Ñ::Resultado r2;
 
-	Ñ::CategoríaTipo tmc = obténTipoMínimoComún(valor1->obténTipo(), valor2->obténTipo());
+	Ñ::Tipo* tmc = obténTipoMínimoComún(obténTipoDeValor(valor1), obténTipoDeValor(valor2));
 	
-	switch (tmc)
+	switch (tmc->tipo)
 	{
 	case TIPO_NADA:
 		return false;

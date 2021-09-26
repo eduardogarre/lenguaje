@@ -2,7 +2,6 @@
 
 #include "constructor.hpp"
 #include "entorno.hpp"
-#include "interpreta.hpp"
 #include "lexema.hpp"
 #include "lexico.hpp"
 #include "nodo.hpp"

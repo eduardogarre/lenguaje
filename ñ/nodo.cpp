@@ -178,7 +178,7 @@ void Ñ::Nodo::muestra()
 void Ñ::Literal::muestra()
 {
 	imprimeAjuste();
-	std::cout << "(NODO_LITERAL) [" + dato + "] - [" + obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_LITERAL) [" + dato + "] - [" + obténNombreDeTipo(obténTipoDeLiteral(this)) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama);

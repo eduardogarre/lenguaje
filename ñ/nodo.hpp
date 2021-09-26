@@ -6,6 +6,7 @@
 namespace Ñ
 {
     extern enum CategoríaTipo;
+    extern class Tipo;
 
     // Análisis sintáctico
     enum CategoríaNodo {
@@ -93,8 +94,8 @@ namespace Ñ
     class ConvierteTipos : Nodo
     {
     public:
-        Ñ::CategoríaTipo origen;
-        Ñ::CategoríaTipo destino;
+        Ñ::Tipo* origen;
+        Ñ::Tipo* destino;
 
         ConvierteTipos();
         ~ConvierteTipos();
@@ -160,7 +161,7 @@ namespace Ñ
     {
     public:
         std::string operación;
-        Ñ::CategoríaTipo tipo;        
+        Ñ::Tipo* tipo;        
 
         OperaciónBinaria();
         ~OperaciónBinaria();

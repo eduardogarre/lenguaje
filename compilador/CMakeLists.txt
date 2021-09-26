@@ -38,6 +38,7 @@ llvm_map_components_to_libnames(bibliotecas_llvm ${componentes_llvm})
 target_link_libraries(compilador LINK_PUBLIC lenguaje docopt_s ${bibliotecas_llvm})
 
 set_target_properties(compilador PROPERTIES
+                      OUTPUT_NAME "ñ"
                       RUNTIME_OUTPUT_DIRECTORY_DEBUG  "../../proyecto/"
                       RUNTIME_OUTPUT_DIRECTORY_RELEASE  "../../proyecto/"
                       RUNTIME_OUTPUT_DIRECTORY  "../../proyecto/"

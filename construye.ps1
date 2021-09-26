@@ -11,8 +11,6 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --parallel 4
 cd ..
 
-mv ./proyecto/compilador.exe ./proyecto/ñ.exe
-
 rm build -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
 

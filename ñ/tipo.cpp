@@ -687,7 +687,16 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 	}
 	else if(t->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
 	{
-		nombre = "*";
+		Ñ::Nodo* n = (Ñ::Nodo*)t;
+		uint64_t tamaño = n->ramas.size();
+		if(tamaño < 1)
+		{
+			return "";
+		}
+		Ñ::Nodo* subnodo = n->ramas[0];
+		Ñ::Tipo* subtipo = (Ñ::Tipo*)subnodo;
+		nombre = obténNombreDeTipo(subtipo);
+		nombre += "*";
 	}
 	else if(t->tipo == Ñ::CategoríaTipo::TIPO_TEXTO)
 	{
@@ -695,7 +704,16 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 	}
 	else if(t->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
 	{
-		nombre = "[]";
+		Ñ::Nodo* n = (Ñ::Nodo*)t;
+		uint64_t tamaño = n->ramas.size();
+		if(tamaño < 1)
+		{
+			return "";
+		}
+		Ñ::Nodo* subnodo = n->ramas[0];
+		Ñ::Tipo* subtipo = (Ñ::Tipo*)subnodo;
+		nombre = obténNombreDeTipo(subtipo);
+		nombre += "[]";
 	}
 
 	return nombre;

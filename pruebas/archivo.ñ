@@ -1,6 +1,6 @@
 //externo ent hola();
 //externo ent mundo();
-//externo ent holamundo();
+externo ent holamundo();
 //externo ent duplica(ent x);
 
 público ent inicia()
@@ -9,6 +9,8 @@ público ent inicia()
 
     ent número = 288;
 
+    holamundo();
+    
     //si (42 < 2)
     //{
     //    //ent y = duplica(42);

@@ -1417,7 +1417,7 @@ namespace Ñ
 
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
-                Ñ::CategoríaTipo tipo = op->tipo->tipo;
+                Ñ::Tipo* tipo = op->tipo;
 
                 if(op->operación == "+")
                 {
@@ -1495,7 +1495,7 @@ namespace Ñ
 
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
-                Ñ::CategoríaTipo tipo = op->tipo->tipo;
+                Ñ::Tipo* tipo = op->tipo;
 
                 if(op->operación == "*")
                 {

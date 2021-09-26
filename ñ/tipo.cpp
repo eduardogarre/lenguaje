@@ -4,12 +4,12 @@
 #include "nodo.hpp"
 #include "tipo.hpp"
 
-bool Ñ::esNatural(Ñ::CategoríaTipo tipo)
+bool Ñ::esNatural(Ñ::Tipo* tipo)
 {
-	if(	   tipo == Ñ::CategoríaTipo::TIPO_NATURAL_8
-		|| tipo == Ñ::CategoríaTipo::TIPO_NATURAL_16
-		|| tipo == Ñ::CategoríaTipo::TIPO_NATURAL_32
-		|| tipo == Ñ::CategoríaTipo::TIPO_NATURAL_64)
+	if(	   tipo->tipo == Ñ::CategoríaTipo::TIPO_NATURAL_8
+		|| tipo->tipo == Ñ::CategoríaTipo::TIPO_NATURAL_16
+		|| tipo->tipo == Ñ::CategoríaTipo::TIPO_NATURAL_32
+		|| tipo->tipo == Ñ::CategoríaTipo::TIPO_NATURAL_64)
 	{
 		return true;
 	}
@@ -19,12 +19,12 @@ bool Ñ::esNatural(Ñ::CategoríaTipo tipo)
 	}
 }
 
-bool Ñ::esEntero(Ñ::CategoríaTipo tipo)
+bool Ñ::esEntero(Ñ::Tipo* tipo)
 {
-	if(	   tipo == Ñ::CategoríaTipo::TIPO_ENTERO_8
-		|| tipo == Ñ::CategoríaTipo::TIPO_ENTERO_16
-		|| tipo == Ñ::CategoríaTipo::TIPO_ENTERO_32
-		|| tipo == Ñ::CategoríaTipo::TIPO_ENTERO_64)
+	if(	   tipo->tipo == Ñ::CategoríaTipo::TIPO_ENTERO_8
+		|| tipo->tipo == Ñ::CategoríaTipo::TIPO_ENTERO_16
+		|| tipo->tipo == Ñ::CategoríaTipo::TIPO_ENTERO_32
+		|| tipo->tipo == Ñ::CategoríaTipo::TIPO_ENTERO_64)
 	{
 		return true;
 	}
@@ -34,10 +34,10 @@ bool Ñ::esEntero(Ñ::CategoríaTipo tipo)
 	}
 }
 
-bool Ñ::esReal(Ñ::CategoríaTipo tipo)
+bool Ñ::esReal(Ñ::Tipo* tipo)
 {
-	if(	   tipo == Ñ::CategoríaTipo::TIPO_REAL_32
-		|| tipo == Ñ::CategoríaTipo::TIPO_REAL_64)
+	if(	   tipo->tipo == Ñ::CategoríaTipo::TIPO_REAL_32
+		|| tipo->tipo == Ñ::CategoríaTipo::TIPO_REAL_64)
 	{
 		return true;
 	}
@@ -47,9 +47,9 @@ bool Ñ::esReal(Ñ::CategoríaTipo tipo)
 	}
 }
 
-bool Ñ::esBooleano(Ñ::CategoríaTipo tipo)
+bool Ñ::esBooleano(Ñ::Tipo* tipo)
 {
-	if( tipo == Ñ::CategoríaTipo::TIPO_BOOLEANO )
+	if( tipo->tipo == Ñ::CategoríaTipo::TIPO_BOOLEANO )
 	{
 		return true;
 	}

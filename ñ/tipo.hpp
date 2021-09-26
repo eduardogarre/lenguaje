@@ -5,6 +5,7 @@
 
 #include "nodo.hpp"
 #include "resultado.hpp"
+#include "valor.hpp"
 
 namespace Ñ
 {
@@ -45,6 +46,8 @@ namespace Ñ
     Ñ::Tipo* creaTipoBásico(Ñ::CategoríaTipo tipo);
     Ñ::Resultado creaFirmaFunción(Ñ::Nodo* fn);
     std::string obténNombreDeTipo(Ñ::CategoríaTipo t);
+    Ñ::Tipo* obténTipoDeLiteral(Ñ::Literal* literal);
+    Ñ::Tipo* obténTipoDeValor(Ñ::Valor* valor);
     Ñ::CategoríaTipo obténTipoDeNombre(std::string nombre);
     Ñ::CategoríaTipo obténMínimoNaturalVálido(uint64_t n);
     Ñ::CategoríaTipo obténMínimoEnteroVálido(int64_t e);

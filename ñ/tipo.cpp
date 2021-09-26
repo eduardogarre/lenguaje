@@ -669,6 +669,79 @@ std::string Ñ::obténNombreDeTipo(Ñ::CategoríaTipo t)
 	return nombre;
 }
 
+Ñ::Tipo* Ñ::obténTipoDeLiteral(Ñ::Literal* literal)
+{
+	if(literal == nullptr)
+	{
+		return nullptr;
+	}
+	
+	if(((Ñ::Nodo*)literal)->categoría != Ñ::CategoríaNodo::NODO_LITERAL)
+	{
+		return nullptr;
+	}
+
+	Ñ::Tipo* tipo = new Ñ::Tipo;
+	tipo->tipo = literal->tipo;
+
+	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+	{
+		uint64_t tamaño = ((Ñ::Nodo*)literal)->ramas.size();
+		Ñ::Tipo* subtipo;
+		if(tamaño < 1)
+		{
+			delete tipo;
+			return nullptr;
+		}
+		else
+		{
+			for(Ñ::Nodo* subtipo : ((Ñ::Nodo*)literal)->ramas)
+			{
+				((Ñ::Nodo*)tipo)->ramas.push_back(subtipo);
+			}
+
+			return tipo;
+		}
+	}
+}
+
+Ñ::Tipo* Ñ::obténTipoDeValor(Ñ::Valor* valor)
+{
+	if(valor == nullptr)
+	{
+		return nullptr;
+	}
+	
+	if(((Ñ::Nodo*)valor)->categoría != Ñ::CategoríaNodo::NODO_VALOR)
+	{
+		return nullptr;
+	}
+
+	Ñ::Tipo* tipo = new Ñ::Tipo;
+	tipo->tipo = valor->tipo;
+
+	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+	{
+		uint64_t tamaño = ((Ñ::Nodo*)valor)->ramas.size();
+		Ñ::Tipo* subtipo;
+		if(tamaño < 1)
+		{
+			delete tipo;
+			return nullptr;
+		}
+		else
+		{
+			for(Ñ::Nodo* subtipo : ((Ñ::Nodo*)valor)->ramas)
+			{
+				((Ñ::Nodo*)tipo)->ramas.push_back(subtipo);
+			}
+
+			return tipo;
+		}
+	}
+}
+
+
 Ñ::CategoríaTipo Ñ::obténTipoDeNombre(std::string nombre)
 {
 	if(nombre == "puntero")

@@ -12,8 +12,6 @@ namespace Ñ
     class Valor : Nodo
     {
     private:
-        CategoríaTipo tipo;
-        
         union {
             bool        booleano;
             uint8_t     nat8;
@@ -32,6 +30,8 @@ namespace Ñ
         std::string _texto;
 
     public:
+        CategoríaTipo tipo;
+        
         Valor();
         ~Valor();
 

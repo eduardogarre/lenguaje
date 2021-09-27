@@ -637,7 +637,11 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 {
 	std::string nombre = "";
 
-	if(t->tipo == Ñ::CategoríaTipo::TIPO_NADA)
+	if(t == nullptr)
+	{
+		nombre = "";
+	}
+	else if(t->tipo == Ñ::CategoríaTipo::TIPO_NADA)
 	{
 		nombre = "nada";
 	}

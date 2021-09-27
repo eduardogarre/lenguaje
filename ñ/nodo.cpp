@@ -923,7 +923,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		case Ñ::CategoríaNodo::NODO_OP_BINARIA:
 			b1 = (Ñ::OperaciónBinaria*)nodo1;
 			b2 = (Ñ::OperaciónBinaria*)nodo2;
-			if(b1->operación == b2->operación && b1->tipo == b2->tipo)
+			if(b1->operación == b2->operación && sonÁrbolesDuplicados((Ñ::Nodo*)b1->tipo, (Ñ::Nodo*)b2->tipo))
 			{
 				return true;
 			}

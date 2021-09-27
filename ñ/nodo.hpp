@@ -161,7 +161,7 @@ namespace Ñ
     {
     public:
         std::string operación;
-        Ñ::Tipo* tipo;        
+        Ñ::Tipo* tipo = nullptr;        
 
         OperaciónBinaria();
         ~OperaciónBinaria();

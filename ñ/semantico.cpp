@@ -343,9 +343,8 @@
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_VALOR)
     {
         resultado.éxito();
-        Ñ::CategoríaTipo tipo = ((Ñ::Valor*)nodo)->obténTipo();
-        Ñ::Tipo* t = Ñ::creaTipoBásico(tipo);
-        resultado.nodo((Ñ::Nodo*)t);
+        Ñ::Tipo* tipo = obténTipoDeValor((Ñ::Valor*)nodo);
+        resultado.nodo((Ñ::Nodo*)tipo);
         return resultado;
     }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
@@ -766,6 +765,10 @@
         }
         else
         {
+            std::cout << "LDA" << std::endl;
+            muestraNodos((Ñ::Nodo*)lda);
+            std::cout << "LIA" << std::endl;
+            muestraNodos((Ñ::Nodo*)lia);
             resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(lda) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(lia) + "'.");
             return resultado;
         }

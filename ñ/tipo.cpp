@@ -538,7 +538,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
 	{
 		uint64_t tamaño = ((Ñ::Nodo*)literal)->ramas.size();
-		Ñ::Tipo* subtipo;
+
 		if(tamaño < 1)
 		{
 			delete tipo;
@@ -546,9 +546,11 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 		}
 		else
 		{
-			for(Ñ::Nodo* subtipo : ((Ñ::Nodo*)literal)->ramas)
+			for(Ñ::Nodo* subliteral : ((Ñ::Nodo*)literal)->ramas)
 			{
-				((Ñ::Nodo*)tipo)->ramas.push_back(subtipo);
+				Ñ::Tipo* subtipo = new Ñ::Tipo;
+				subtipo->tipo = ((Ñ::Literal*)subliteral)->tipo;
+				((Ñ::Nodo*)tipo)->ramas.push_back((Ñ::Nodo*)subtipo);
 			}
 
 			return tipo;
@@ -574,7 +576,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
 	{
 		uint64_t tamaño = ((Ñ::Nodo*)valor)->ramas.size();
-		Ñ::Tipo* subtipo;
+		
 		if(tamaño < 1)
 		{
 			delete tipo;
@@ -582,9 +584,11 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 		}
 		else
 		{
-			for(Ñ::Nodo* subtipo : ((Ñ::Nodo*)valor)->ramas)
+			for(Ñ::Nodo* subvalor : ((Ñ::Nodo*)valor)->ramas)
 			{
-				((Ñ::Nodo*)tipo)->ramas.push_back(subtipo);
+				Ñ::Tipo* subtipo = new Ñ::Tipo;
+				subtipo->tipo = ((Ñ::Valor*)subvalor)->tipo;
+				((Ñ::Nodo*)tipo)->ramas.push_back((Ñ::Nodo*)subtipo);
 			}
 
 			return tipo;
@@ -918,6 +922,36 @@ bool Ñ::tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda)
 			break;
 		}
 		break;
+
+	case TIPO_VECTOR:
+		switch (lda->tipo)
+		{
+		case TIPO_VECTOR:
+			if(((Ñ::Nodo*)lia)->ramas.size() == ((Ñ::Nodo*)lda)->ramas.size())
+			{
+				for(int i = 0; i < ((Ñ::Nodo*)lia)->ramas.size(); i++)
+				{
+					Ñ::Tipo* sublia = (Ñ::Tipo*)((Ñ::Nodo*)lia)->ramas[i];
+					Ñ::Tipo* sublda = (Ñ::Tipo*)((Ñ::Nodo*)lda)->ramas[i];
+					if(!tiposAsignables(sublia, sublda))
+					{
+						return false;
+					}
+				}
+			}
+			else
+			{
+				return false;
+			}
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
 	
 	default:
 		return false;

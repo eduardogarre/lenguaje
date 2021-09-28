@@ -5,7 +5,7 @@ externo ent duplica(ent x);
 
 público ent inicia()
 {
-    //ent[] vector = [288, 42, 144, 44];
+    //nat8[] vector = [42];
 
     ent número = 288 / 2;
 

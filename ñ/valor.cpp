@@ -346,6 +346,17 @@ bool Ñ::Valor::esPuntero()
 	return tipo == Ñ::CategoríaTipo::TIPO_PUNTERO;
 }
 
+void Ñ::Valor::vector(uint64_t tamaño)
+{
+	tipo = Ñ::CategoríaTipo::TIPO_VECTOR;
+	dato.vector = tamaño;
+}
+
+bool Ñ::Valor::esVector()
+{
+	return tipo == Ñ::CategoríaTipo::TIPO_VECTOR;
+}
+
 
 
 void Ñ::Valor::muestra()
@@ -1507,95 +1518,89 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 		return new Ñ::Valor;
 	}
 	
-	Ñ::Valor* valor;
+	Ñ::Valor* valor = new Ñ::Valor;
+
+	for(auto subliteral : ((Ñ::Nodo*)literal)->ramas)
+	{
+		Ñ::Valor* subvalor = creaValor((Ñ::Literal*)subliteral);
+		((Ñ::Nodo*)valor)->ramas.push_back((Ñ::Nodo*)subvalor);
+	}
 	
 	switch (literal->tipo)
 	{
 	case Ñ::CategoríaTipo::TIPO_NADA:
-		valor = new Ñ::Valor;
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_BOOLEANO:
 		if(literal->dato == "cierto")
 		{
-			valor = new Ñ::Valor;
 			valor->booleano(true);
 		}
 		else if(literal->dato == "falso")
 		{
-			valor = new Ñ::Valor;
 			valor->booleano(false);
-		}
-		else
-		{
-			return nullptr;
 		}
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_ENTERO_8:
-		valor = new Ñ::Valor;
 		valor->ent8(std::stoi(literal->dato));
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_ENTERO_16:
-		valor = new Ñ::Valor;
 		valor->ent16(std::stoi(literal->dato));
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_ENTERO_32:
-		valor = new Ñ::Valor;
 		valor->ent32(std::stoi(literal->dato));
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_ENTERO_64:
-		valor = new Ñ::Valor;
 		valor->ent64(std::stoi(literal->dato));
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_NATURAL_8:
-		valor = new Ñ::Valor;
 		valor->nat8(std::stoul(literal->dato));
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_NATURAL_16:
-		valor = new Ñ::Valor;
 		valor->nat16(std::stoul(literal->dato));
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_NATURAL_32:
-		valor = new Ñ::Valor;
 		valor->nat32(std::stoul(literal->dato));
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_NATURAL_64:
-		valor = new Ñ::Valor;
 		valor->nat64(std::stoul(literal->dato));
 		return valor;
 		break;
 	
 	case Ñ::CategoríaTipo::TIPO_REAL_32:
-		valor = new Ñ::Valor;
 		valor->real32(std::stof(literal->dato));
 		return valor;
 		break;
 
 	case Ñ::CategoríaTipo::TIPO_REAL_64:
-		valor = new Ñ::Valor;
 		valor->real64(std::stod(literal->dato));
+		return valor;
+		break;
+
+	case Ñ::CategoríaTipo::TIPO_VECTOR:
+		valor->vector(((Ñ::Nodo*)valor)->ramas.size());
 		return valor;
 		break;
 	
 	default:
-		return nullptr;
+		return valor;
 		break;
 	}
 }

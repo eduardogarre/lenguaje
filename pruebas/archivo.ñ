@@ -5,9 +5,9 @@ externo ent duplica(ent x);
 
 público ent inicia()
 {
-    //ent[] vector = [0, 1, 2, 3];
+    //ent[] vector = [288, 42, 144, 44];
 
-    ent número = 288 * 2;
+    ent número = 288 / 2;
 
     //holamundo();
     

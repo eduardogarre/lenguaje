@@ -60,7 +60,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	{
 		l = new Ñ::Literal();
 		l->dato = lexemas[cursor]->contenido;
-		l->tipo = Ñ::CategoríaTipo::TIPO_NATURAL_64;
+		l->tipo = obténMínimoNaturalVálido(std::stoull(l->dato));
 		cursor++;
 		return (Ñ::Nodo*)l;
 	}
@@ -68,14 +68,6 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	{
 		l = new Ñ::Literal();
 		l->tipo = Ñ::CategoríaTipo::TIPO_REAL_64;
-		l->dato = lexemas[cursor]->contenido;
-		cursor++;
-		return (Ñ::Nodo*)l;
-	}
-	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_TEXTO)
-	{
-		l = new Ñ::Literal();
-		l->tipo = Ñ::CategoríaTipo::TIPO_TEXTO;
 		l->dato = lexemas[cursor]->contenido;
 		cursor++;
 		return (Ñ::Nodo*)l;
@@ -114,7 +106,6 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			cursor++;
 
 			l = new Ñ::Literal();
-			l->tipo = Ñ::CategoríaTipo::TIPO_VECTOR;
 
 			while(lexemas[cursor]->contenido != "]")
 			{
@@ -134,6 +125,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					break;
 				}
 			}
+			
+			l->tipo = Ñ::CategoríaTipo::TIPO_VECTOR;
 
 			if(!notación("]"))
 			{

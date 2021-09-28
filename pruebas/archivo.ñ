@@ -1,28 +1,28 @@
-//externo ent hola();
-//externo ent mundo();
+externo ent hola();
+externo ent mundo();
 externo ent holamundo();
-//externo ent duplica(ent x);
+externo ent duplica(ent x);
 
 público ent inicia()
 {
     //ent[] vector = [0, 1, 2, 3];
 
-    ent número = 288;
+    ent número = 288 * 2;
+
+    //holamundo();
+    
+    si (42 < 2)
+    {
+        //ent y = duplica(42);
+        ent y = duplica(número);
+        número = y;
+    }
+    sino
+    {
+        número = número;
+    }
 
     holamundo();
-    
-    //si (42 < 2)
-    //{
-    //    //ent y = duplica(42);
-    //    ent y = duplica(número);
-    //    número = y;
-    //}
-    //sino
-    //{
-    //    número = número;
-    //}
-
-    //devuelve holamundo();
 
     devuelve número;
 }

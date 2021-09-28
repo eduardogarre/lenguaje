@@ -1551,10 +1551,6 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 			tipo = Ñ::CategoríaTipo::TIPO_REAL_64;
 			break;
 		
-		case Ñ::CategoríaTipo::TIPO_TEXTO:
-			tipo = Ñ::CategoríaTipo::TIPO_TEXTO;
-			break;
-		
 		default:
 			tipo = Ñ::CategoríaTipo::TIPO_NADA;
 			break;

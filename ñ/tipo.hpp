@@ -40,6 +40,7 @@ namespace Ñ
         ~Tipo();
 
         void muestra();
+        uint64_t tamaño();
     };
 
     Ñ::Tipo* obténTipoMínimoComún(Ñ::Tipo* t1, Ñ::Tipo* t2);

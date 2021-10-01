@@ -76,6 +76,11 @@ void Ñ::Tipo::muestra()
 	}
 }
 
+uint64_t Ñ::Tipo::tamaño()
+{
+	return ((Ñ::Nodo*)this)->ramas.size();
+}
+
 Ñ::Tipo* Ñ::obténTipoMínimoComún(Ñ::Tipo* t1, Ñ::Tipo* t2)
 {
 	Ñ::Tipo* tmc = new Ñ::Tipo;

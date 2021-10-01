@@ -788,7 +788,9 @@ namespace Ñ
 
                 llvm::Value* vLia = rLia.valor();
             
+                std::cout << "construyeAsignación() LDA" << std::endl;
                 Ñ::ResultadoLlvm rLda = construyeLDA(nodo->ramas[1]);
+                std::cout << "construyeAsignación() LDA Hecho" << std::endl;
                 if(rLda.error())
                 {
                     return rLda;
@@ -916,7 +918,9 @@ namespace Ñ
             switch (nodo->categoría)
             {
             case Ñ::CategoríaNodo::NODO_LITERAL:
+                std::cout << "construyeLDA(NODO_LITERAL)" << std::endl;
                 resultado = construyeLiteral(nodo);
+                std::cout << "construyeLDA(NODO_LITERAL) Hecho" << std::endl;
                 break;
             
             case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
@@ -1118,6 +1122,122 @@ namespace Ñ
             return resultado;
         }
 
+        llvm::Value* convierteValorLlvmATipoLlvm(llvm::Value* valor, Ñ::Tipo* tipoInicial, Ñ::Tipo* tipoDestino)
+        {
+            llvm::Value* valorFinal;
+
+            if(valor == nullptr)
+            {
+                return nullptr;
+            }
+
+            if(tipoInicial == nullptr)
+            {
+                return nullptr;
+            }
+
+            if(((Ñ::Nodo*)tipoInicial)->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+            {
+                return nullptr;
+            }
+
+            if(tipoDestino == nullptr)
+            {
+                return nullptr;
+            }
+
+            if(((Ñ::Nodo*)tipoDestino)->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+            {
+                return nullptr;
+            }
+            
+            llvm::Type* tDestinoLlvm = creaTipoLlvm(tipoDestino);
+            
+            switch (tipoDestino->tipo)
+            {
+            case TIPO_BOOLEANO:
+            case TIPO_NATURAL_8:
+            case TIPO_NATURAL_16:
+            case TIPO_NATURAL_32:
+            case TIPO_NATURAL_64:
+                valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, false);
+                break;
+            
+            case TIPO_ENTERO_8:
+            case TIPO_ENTERO_16:
+            case TIPO_ENTERO_32:
+            case TIPO_ENTERO_64:
+                valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, true);
+                break;
+            
+            case TIPO_REAL_32:
+            case TIPO_REAL_64:
+                switch (tipoInicial->tipo)
+                {
+                case TIPO_BOOLEANO:
+                case TIPO_NATURAL_8:
+                case TIPO_NATURAL_16:
+                case TIPO_NATURAL_32:
+                case TIPO_NATURAL_64:
+                    valorFinal = entorno->constructorLlvm.CreateUIToFP(valor, tDestinoLlvm);
+                    break;
+                
+                case TIPO_ENTERO_8:
+                case TIPO_ENTERO_16:
+                case TIPO_ENTERO_32:
+                case TIPO_ENTERO_64:
+                    valorFinal = entorno->constructorLlvm.CreateSIToFP(valor, tDestinoLlvm);
+                    break;
+            
+                case TIPO_REAL_32:
+                case TIPO_REAL_64:
+                    valorFinal = entorno->constructorLlvm.CreateFPCast(valor, tDestinoLlvm);
+                    break;
+                
+                default:
+                    valorFinal = nullptr;
+                    break;
+                }
+                break;
+
+            case TIPO_VECTOR:
+                if(valor->getType()->isVectorTy())
+                {
+                    llvm::Type* tipVector = valor->getType();
+                    llvm::Type* tipElemento = tipVector->getScalarType();
+                    uint64_t tamañoVector = tipoInicial->tamaño();
+                    
+                    llvm::Value *vectorVacío = llvm::UndefValue::get(tipVector);
+                    valorFinal = vectorVacío;
+
+                    for(int i = 0; i < tamañoVector; i++)
+                    {
+                        llvm::Constant* índice = llvm::Constant::getIntegerValue(tipVector->getScalarType(), llvm::APInt(64, i));
+                        llvm::Value* valElemento = llvm::ExtractElementInst::Create(valor, índice);
+                        entorno->constructorLlvm.Insert(valElemento);
+                        Ñ::Tipo* subtipoInicial = (Ñ::Tipo*)((Ñ::Nodo*)tipoInicial)->ramas[i];
+                        Ñ::Tipo* subtipoDestino = (Ñ::Tipo*)((Ñ::Nodo*)tipoDestino)->ramas[i];
+                        valElemento = convierteValorLlvmATipoLlvm(valElemento, subtipoInicial, subtipoDestino);
+                        
+                        valorFinal = llvm::InsertElementInst::Create(valorFinal, valElemento, índice);
+                        
+                        entorno->constructorLlvm.Insert(valorFinal);
+                    }
+                }
+                else
+                {
+                    valorFinal = nullptr;
+                }
+                break;
+
+            default:
+                valorFinal = nullptr;
+                break;
+            }
+
+            return valorFinal;
+        }
+
         Ñ::ResultadoLlvm construyeConversorTipos(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
@@ -1148,69 +1268,22 @@ namespace Ñ
                 return resultado;
             }
 
-            llvm::Type* tDestino = creaTipoLlvm(conv->destino);
+            llvm::Value* valorPrevio = resultado.valor();
+            Ñ::Tipo* tOrigen = conv->origen;
+            Ñ::Tipo* tDestino = conv->destino;
+            llvm::Value* valorFinal = convierteValorLlvmATipoLlvm(valorPrevio, tOrigen, tDestino);
             
-            if(tDestino == nullptr)
+            if(valorFinal == nullptr)
             {
-                resultado.error("Error al obtener el tipoLlvm");
+                resultado.error("No he conseguido convertir con éxito el valor");
                 return resultado;
             }
-
-            llvm::Value* valor;
-
-            switch (conv->destino->tipo)
+            else
             {
-            case TIPO_NATURAL_8:
-            case TIPO_NATURAL_16:
-            case TIPO_NATURAL_32:
-            case TIPO_NATURAL_64:
-                valor = entorno->constructorLlvm.CreateIntCast(resultado.valor(), tDestino, false);
-                break;
-            
-            case TIPO_ENTERO_8:
-            case TIPO_ENTERO_16:
-            case TIPO_ENTERO_32:
-            case TIPO_ENTERO_64:
-                valor = entorno->constructorLlvm.CreateIntCast(resultado.valor(), tDestino, true);
-                break;
-            
-            case TIPO_REAL_32:
-            case TIPO_REAL_64:
-                switch (conv->origen->tipo)
-                {
-                case TIPO_NATURAL_8:
-                case TIPO_NATURAL_16:
-                case TIPO_NATURAL_32:
-                case TIPO_NATURAL_64:
-                    valor = entorno->constructorLlvm.CreateUIToFP(resultado.valor(), tDestino);
-                    break;
-                
-                case TIPO_ENTERO_8:
-                case TIPO_ENTERO_16:
-                case TIPO_ENTERO_32:
-                case TIPO_ENTERO_64:
-                    valor = entorno->constructorLlvm.CreateSIToFP(resultado.valor(), tDestino);
-                    break;
-            
-                case TIPO_REAL_32:
-                case TIPO_REAL_64:
-                    valor = entorno->constructorLlvm.CreateFPCast(resultado.valor(), tDestino);
-                    break;
-                
-                default:
-                    valor = nullptr;
-                    break;
-                }
-                break;
-
-            default:
-                valor = nullptr;
-                break;
+                resultado.éxito();
+                resultado.valor(valorFinal);
+                return resultado;
             }
-            
-            resultado.éxito();
-            resultado.valor(valor);
-            return resultado;
         }
 
         Ñ::ResultadoLlvm construyeLiteral(Ñ::Nodo* nodo)
@@ -1306,6 +1379,46 @@ namespace Ñ
                 real64 = std::stod(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipoLlvm, real64));
+                break;
+            
+            case Ñ::CategoríaTipo::TIPO_VECTOR:
+                {
+                    std::cout << "construyeLiteral(TIPO_VECTOR)" << std::endl;
+
+                    tipoLlvm = creaTipoLlvm(tipo);
+                    llvm::Value *vectorVacío = llvm::UndefValue::get(tipoLlvm);
+                    llvm::Value* vectorFinal = vectorVacío;
+                    int64_t índice = 0;
+                    for(Ñ::Nodo* subnodo : ((Ñ::Nodo*)literal)->ramas)
+                    {
+                        std::cout << "construyeLiteral(TIPO_VECTOR) subtipo" << índice << std::endl;
+
+                        std::cout << "construyeLiteral(TIPO_VECTOR) extraigo subvalor de subnodo" << índice << std::endl;
+
+                        llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getScalarType(), llvm::APInt(64, índice));
+                        ResultadoLlvm rSubvalor = construyeLiteral(subnodo);
+                        if(rSubvalor.error())
+                        {
+                            return rSubvalor;
+                        }
+                        llvm::Value* subvalor = rSubvalor.valor();
+
+                        std::cout << "construyeLiteral(TIPO_VECTOR) inserto subvalor en vector" << índice << std::endl;
+
+                        vectorFinal = llvm::InsertElementInst::Create(vectorFinal, subvalor, índiceLlvm);
+                        
+                        std::cout << "construyeLiteral(TIPO_VECTOR) añado la instrucción al constructor" << índice << std::endl;
+
+                        entorno->constructorLlvm.Insert(vectorFinal);
+                        
+                        índice++;
+                    }
+                    
+                    std::cout << "construyeLiteral(TIPO_VECTOR) éxito"<< std::endl;
+
+                    resultado.éxito();
+                    resultado.valor(vectorFinal);
+                }
                 break;
             
             default:

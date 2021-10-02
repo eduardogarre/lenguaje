@@ -1,32 +1,30 @@
-//externo ent hola();
-//externo ent mundo();
-//externo ent holamundo();
-//externo ent duplica(ent x);
+externo ent hola();
+externo ent mundo();
+externo ent holamundo();
+externo ent duplica(ent x);
 
 público ent inicia()
 {
     nat16[] vector = [288, 42];
 
-    nat16 número = vector[1] / 2;
-
-    devuelve número;
+    ent número = vector[0] / 2;
 
     //ent número = 288 / 2;
 
-    //holamundo();
-    
-    //si (42 < 2)
-    //{
-    //    //ent y = duplica(42);
-    //    ent y = duplica(número);
-    //    número = y;
-    //}
-    //sino
-    //{
-    //    número = número;
-    //}
+    holamundo();
 
-    //holamundo();
+    si (número < 2)
+    {
+        //ent y = duplica(42);
+        ent y = duplica(número);
+        número = y;
+    }
+    sino
+    {
+        número = número;
+    }
 
-    //devuelve número;
+    holamundo();
+
+    devuelve número;
 }

@@ -110,6 +110,8 @@ std::string creaNombreMódulo(std::string archivo)
 
 	Ñ::TablaSímbolos* tablaSímbolos = new Ñ::TablaSímbolos;
 	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
+	
+	muestraNodos(nodos, tablaSímbolos);
 	delete tablaSímbolos;
 
 	if(rSemántico.error())

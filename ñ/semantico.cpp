@@ -56,6 +56,8 @@
         return resultado;
     }
 
+    Ñ::Resultado rCondición = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+
     resultado.éxito();
     return resultado;
 }
@@ -332,7 +334,13 @@
         std::string nombre = ((Ñ::Identificador*)nodo)->id;
         if(tablaSímbolos->nombreReservadoEnCualquierÁmbito(nombre))
         {
-            return tablaSímbolos->leeTipo(((Ñ::Identificador*)nodo)->id);
+            Ñ::Resultado rTipo = tablaSímbolos->leeTipo(((Ñ::Identificador*)nodo)->id);
+            if(!rTipo.error())
+            {
+                Ñ::Tipo* tipo = (Ñ::Tipo*) (rTipo.nodo());
+                std::cout << "IDENTIFICADOR: " << nombre << " TIPO: " << obténNombreDeTipo(tipo) << std::endl;
+            }
+            return rTipo;
         }
         else
         {
@@ -462,6 +470,85 @@
             delete r.nodo();
             resultado.éxito();
             resultado.nodo(t);
+            return resultado;
+        }
+        else if(nodo->ramas.size() > 1)
+        {
+            std::cout << std::endl << "Realizando operación de comparación" << std::endl << std::endl;
+            Ñ::Tipo* tipoResultado;
+            Ñ::Nodo* t1;
+            Ñ::Resultado r = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+            if(r.error())
+            {
+                return r;
+            }
+            t1 = r.nodo();
+            tipoResultado = (Ñ::Tipo*)t1;
+            
+            for(int i = 1; i < nodo->ramas.size(); i++)
+            {
+                if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                {
+                    resultado.error("Comparación no ha recibido una operación válida");
+                    return resultado;
+                }
+                Ñ::Nodo* op = nodo->ramas[i];
+                if(op->ramas.size() != 1)
+                {
+                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    return resultado;
+                }
+
+                Ñ::Nodo* t2;
+                Ñ::Resultado r2 = _analizaLDA(op->ramas[0], tablaSímbolos);
+                if(r2.error())
+                {
+                    return r2;
+                }
+
+                t2 = r2.nodo();
+
+                Ñ::Tipo* tmc = Ñ::obténTipoMínimoComún(tipoResultado, (Ñ::Tipo*)t2);
+            
+                if(sonÁrbolesDuplicados((Ñ::Nodo*)tmc, (Ñ::Nodo*)tipoResultado))
+                {
+                    // Tipos idénticos, no hace falta comprobar compatibilidad
+                }
+                else if(tiposAsignables(tmc, tipoResultado))
+                {
+                    // Son tipos distintos pero compatibles, hay que convertir
+                    //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(tipoResultado) << "' a '" << Ñ::obténNombreDeTipo(tmp) << "' para la suma/resta 1" << std::endl;
+                    
+                    _insertaConversión(nodo, 0, tipoResultado, tmc);
+                    tipoResultado = tmc;
+                }
+                else
+                {
+                    resultado.error("Comparación 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
+                    return resultado;
+                }
+            
+                if(sonÁrbolesDuplicados(t2, (Ñ::Nodo*)tipoResultado))
+                {
+                    // Tipos idénticos, no hace falta comprobar compatibilidad
+                    ((Ñ::OperaciónBinaria*)op)->tipo = tipoResultado;
+                }
+                else if(tiposAsignables(tipoResultado, (Ñ::Tipo*)t2))
+                {
+                    // Son tipos distintos pero compatibles, hay que convertir
+                    //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta 2" << std::endl;
+                   _insertaConversión(nodo->ramas[i], 0, (Ñ::Tipo*)t2, tipoResultado);
+                    ((Ñ::OperaciónBinaria*)op)->tipo = tipoResultado;
+                }
+                else
+                {
+                    resultado.error("Comparación 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    return resultado;
+                }
+            }
+
+            resultado.éxito();
+            resultado.nodo((Ñ::Nodo*)tipoResultado);
             return resultado;
         }
         else if(nodo->ramas.size() > 1)
@@ -829,9 +916,9 @@
         else
         {
             std::cout << "LDA" << std::endl;
-            muestraNodos((Ñ::Nodo*)lda);
+            muestraNodos((Ñ::Nodo*)lda, tablaSímbolos);
             std::cout << "LIA" << std::endl;
-            muestraNodos((Ñ::Nodo*)lia);
+            muestraNodos((Ñ::Nodo*)lia, tablaSímbolos);
             resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(lda) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(lia) + "'.");
             return resultado;
         }

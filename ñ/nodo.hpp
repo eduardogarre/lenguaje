@@ -6,6 +6,7 @@
 namespace Ñ
 {
     extern enum CategoríaTipo;
+    extern class TablaSímbolos;
     extern class Tipo;
 
     // Análisis sintáctico
@@ -66,7 +67,7 @@ namespace Ñ
 
         void imprimeAjuste();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Literal : Nodo
@@ -78,7 +79,7 @@ namespace Ñ
         Literal();
         ~Literal();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Identificador : Nodo
@@ -89,7 +90,7 @@ namespace Ñ
         Identificador();
         ~Identificador();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class ConvierteTipos : Nodo
@@ -101,7 +102,7 @@ namespace Ñ
         ConvierteTipos();
         ~ConvierteTipos();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class LadoIzquierdoAsignación : Nodo
@@ -110,7 +111,7 @@ namespace Ñ
         LadoIzquierdoAsignación();
         ~LadoIzquierdoAsignación();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class LadoDerechoAsignación : Nodo
@@ -119,7 +120,7 @@ namespace Ñ
         LadoDerechoAsignación();
         ~LadoDerechoAsignación();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Igualdad : Nodo
@@ -128,7 +129,7 @@ namespace Ñ
         Igualdad();
         ~Igualdad();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Comparación : Nodo
@@ -137,7 +138,7 @@ namespace Ñ
         Comparación();
         ~Comparación();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Término : Nodo
@@ -146,7 +147,7 @@ namespace Ñ
         Término();
         ~Término();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Factor : Nodo
@@ -155,7 +156,7 @@ namespace Ñ
         Factor();
         ~Factor();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class OperaciónBinaria : Nodo
@@ -167,7 +168,7 @@ namespace Ñ
         OperaciónBinaria();
         ~OperaciónBinaria();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class OperaciónUnaria : Nodo
@@ -178,7 +179,7 @@ namespace Ñ
         OperaciónUnaria();
         ~OperaciónUnaria();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class ElementoVector : Nodo
@@ -189,7 +190,7 @@ namespace Ñ
         ElementoVector();
         ~ElementoVector();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Primario : Nodo
@@ -200,7 +201,7 @@ namespace Ñ
         Primario();
         ~Primario();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class DeclaraVariable : Nodo
@@ -211,7 +212,7 @@ namespace Ñ
         DeclaraVariable();
         ~DeclaraVariable();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Asigna : Nodo
@@ -220,7 +221,7 @@ namespace Ñ
         Asigna();
         ~Asigna();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Argumento : Nodo
@@ -229,7 +230,7 @@ namespace Ñ
         Argumento();
         ~Argumento();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Argumentos : Nodo
@@ -238,7 +239,7 @@ namespace Ñ
         Argumentos();
         ~Argumentos();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class LlamaFunción : Nodo
@@ -249,7 +250,7 @@ namespace Ñ
         LlamaFunción();
         ~LlamaFunción();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Devuelve : Nodo
@@ -258,7 +259,7 @@ namespace Ñ
         Devuelve();
         ~Devuelve();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Expresión : Nodo
@@ -267,7 +268,7 @@ namespace Ñ
         Expresión();
         ~Expresión();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Bloque : Nodo
@@ -276,7 +277,7 @@ namespace Ñ
         Bloque();
         ~Bloque();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class SiCondicional : Nodo
@@ -285,7 +286,7 @@ namespace Ñ
         SiCondicional();
         ~SiCondicional();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class DefineFunción : Nodo
@@ -297,7 +298,7 @@ namespace Ñ
         DefineFunción();
         ~DefineFunción();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class DeclaraFunción : Nodo
@@ -309,7 +310,7 @@ namespace Ñ
         DeclaraFunción();
         ~DeclaraFunción();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Función : Nodo
@@ -320,7 +321,7 @@ namespace Ñ
         Función();
         ~Función();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class FunciónEjecutable : Nodo
@@ -332,7 +333,7 @@ namespace Ñ
         FunciónEjecutable();
         ~FunciónEjecutable();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     class Módulo : Nodo
@@ -343,13 +344,13 @@ namespace Ñ
         Módulo();
         ~Módulo();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
 
     std::string obténNombreDeNodo(Ñ::CategoríaNodo n);
     void borraNodos(Ñ::Nodo* nodos);
-    void muestraNodos(Nodo* nodo);
+    void muestraNodos(Nodo* nodo, TablaSímbolos* tablaSímbolos = nullptr);
     bool sonÁrbolesDuplicados(Nodo* nodo1, Nodo* nodo2);
     Nodo* duplicaÁrbol(Nodo* nodo);
 }

@@ -59,7 +59,7 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	if(rSemántico.error())
 	{
 		std::cout << rSemántico.mensaje() << std::endl;
-		muestraNodos(nodos);
+		muestraNodos(nodos, tablaSímbolos);
 		return;
 	}
 	//else

@@ -71,7 +71,7 @@ bool Ñ::esBooleano(Ñ::Tipo* tipo)
 
 Ñ::Tipo::~Tipo() {}
 
-void Ñ::Tipo::muestra()
+void Ñ::Tipo::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << "(NODO_TIPO) [" + obténNombreDeTipo(this) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;

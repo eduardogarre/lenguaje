@@ -9,6 +9,8 @@
 
 namespace Ñ
 {
+    extern class TablaSímbolos;
+    
     class Valor : Nodo
     {
     private:
@@ -87,7 +89,7 @@ namespace Ñ
         void texto(std::string texto);
         bool esTexto();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
     Ñ::Valor* creaValor(Ñ::Literal* literal);

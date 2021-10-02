@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "nodo.hpp"
+#include "tablasimbolos.hpp"
 #include "tipo.hpp"
 #include "valor.hpp"
 
@@ -157,13 +158,13 @@ void Ñ::Nodo::imprimeAjuste()
 	}
 }
 
-void Ñ::Nodo::muestra()
+void Ñ::Nodo::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_VACÍO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -175,13 +176,13 @@ void Ñ::Nodo::muestra()
 
 Ñ::Literal::~Literal() {}
 
-void Ñ::Literal::muestra()
+void Ñ::Literal::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << "(NODO_LITERAL) [" + dato + "] - [" + obténNombreDeTipo(obténTipoDeLiteral(this)) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -192,13 +193,24 @@ void Ñ::Literal::muestra()
 
 Ñ::Identificador::~Identificador() {}
 
-void Ñ::Identificador::muestra()
+void Ñ::Identificador::muestra(TablaSímbolos* tablaSímbolos)
 {
+	Ñ::Tipo* tipo = nullptr;
+
+	if(tablaSímbolos != nullptr)
+	{
+		Ñ::Resultado rTipo = tablaSímbolos->leeTipo(id);
+		if(!(rTipo.error()))
+		{
+			tipo = (Ñ::Tipo*)(rTipo.nodo());
+		}
+	}
+
 	imprimeAjuste();
-	std::cout << "(NODO_IDENTIFICADOR) [" + id + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_IDENTIFICADOR) [" + id + "] [" + obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -209,13 +221,13 @@ void Ñ::Identificador::muestra()
 
 Ñ::ConvierteTipos::~ConvierteTipos() {}
 
-void Ñ::ConvierteTipos::muestra()
+void Ñ::ConvierteTipos::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << "(NODO_CONVIERTE_TIPOS) [ '" + Ñ::obténNombreDeTipo(origen) + "' -> '" + Ñ::obténNombreDeTipo(destino) + "' ] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -226,14 +238,14 @@ void Ñ::ConvierteTipos::muestra()
 
 Ñ::LadoIzquierdoAsignación::~LadoIzquierdoAsignación() {}
 
-void Ñ::LadoIzquierdoAsignación::muestra()
+void Ñ::LadoIzquierdoAsignación::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_LADO_IZQUIERDO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -244,14 +256,14 @@ void Ñ::LadoIzquierdoAsignación::muestra()
 
 Ñ::LadoDerechoAsignación::~LadoDerechoAsignación() {}
 
-void Ñ::LadoDerechoAsignación::muestra()
+void Ñ::LadoDerechoAsignación::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_LADO_DERECHO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -262,14 +274,14 @@ void Ñ::LadoDerechoAsignación::muestra()
 
 Ñ::OperaciónBinaria::~OperaciónBinaria() {}
 
-void Ñ::OperaciónBinaria::muestra()
+void Ñ::OperaciónBinaria::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_OP_BINARIA) [" + operación + "] - [" + Ñ::obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -280,14 +292,14 @@ void Ñ::OperaciónBinaria::muestra()
 
 Ñ::Igualdad::~Igualdad() {}
 
-void Ñ::Igualdad::muestra()
+void Ñ::Igualdad::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_IGUALDAD) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -298,14 +310,14 @@ void Ñ::Igualdad::muestra()
 
 Ñ::Comparación::~Comparación() {}
 
-void Ñ::Comparación::muestra()
+void Ñ::Comparación::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_COMPARACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -316,14 +328,14 @@ void Ñ::Comparación::muestra()
 
 Ñ::Término::~Término() {}
 
-void Ñ::Término::muestra()
+void Ñ::Término::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_TÉRMINO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos, los términos
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -334,14 +346,14 @@ void Ñ::Término::muestra()
 
 Ñ::Factor::~Factor() {}
 
-void Ñ::Factor::muestra()
+void Ñ::Factor::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_FACTOR) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos, los factores
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -352,14 +364,14 @@ void Ñ::Factor::muestra()
 
 Ñ::OperaciónUnaria::~OperaciónUnaria() {}
 
-void Ñ::OperaciónUnaria::muestra()
+void Ñ::OperaciónUnaria::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << "(NODO_OP_UNARIA) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -370,13 +382,13 @@ void Ñ::OperaciónUnaria::muestra()
 
 Ñ::ElementoVector::~ElementoVector() {}
 
-void Ñ::ElementoVector::muestra()
+void Ñ::ElementoVector::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_ELEMENTO_VECTOR) #" << posición << " - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -387,14 +399,14 @@ void Ñ::ElementoVector::muestra()
 
 Ñ::Primario::~Primario() {}
 
-void Ñ::Primario::muestra()
+void Ñ::Primario::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << "(NODO_PRIMARIO) [" + primario + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -405,14 +417,14 @@ void Ñ::Primario::muestra()
 
 Ñ::DeclaraVariable::~DeclaraVariable() {}
 
-void Ñ::DeclaraVariable::muestra()
+void Ñ::DeclaraVariable::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << "(NODO_DECLARA_VARIABLE) [" + variable + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	// Queda imprimir el hijo, el tipo
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -423,13 +435,13 @@ void Ñ::DeclaraVariable::muestra()
 
 Ñ::Asigna::~Asigna() {}
 
-void Ñ::Asigna::muestra()
+void Ñ::Asigna::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_ASIGNA) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -440,13 +452,13 @@ void Ñ::Asigna::muestra()
 
 Ñ::Argumentos::~Argumentos() {}
 
-void Ñ::Argumentos::muestra()
+void Ñ::Argumentos::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_ARGUMENTOS) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -457,13 +469,13 @@ void Ñ::Argumentos::muestra()
 
 Ñ::Argumento::~Argumento() {}
 
-void Ñ::Argumento::muestra()
+void Ñ::Argumento::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_ARGUMENTO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -474,13 +486,13 @@ void Ñ::Argumento::muestra()
 
 Ñ::LlamaFunción::~LlamaFunción() {}
 
-void Ñ::LlamaFunción::muestra()
+void Ñ::LlamaFunción::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_LLAMA_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -491,13 +503,13 @@ void Ñ::LlamaFunción::muestra()
 
 Ñ::Devuelve::~Devuelve() {}
 
-void Ñ::Devuelve::muestra()
+void Ñ::Devuelve::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_DEVUELVE) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -508,13 +520,13 @@ void Ñ::Devuelve::muestra()
 
 Ñ::Expresión::~Expresión() {}
 
-void Ñ::Expresión::muestra()
+void Ñ::Expresión::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_EXPRESIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -525,13 +537,13 @@ void Ñ::Expresión::muestra()
 
 Ñ::Bloque::~Bloque() {}
 
-void Ñ::Bloque::muestra()
+void Ñ::Bloque::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_BLOQUE) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -542,13 +554,13 @@ void Ñ::Bloque::muestra()
 
 Ñ::SiCondicional::~SiCondicional() {}
 
-void Ñ::SiCondicional::muestra()
+void Ñ::SiCondicional::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_SI_CONDICIONAL) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -559,7 +571,7 @@ void Ñ::SiCondicional::muestra()
 
 Ñ::DefineFunción::~DefineFunción() {}
 
-void Ñ::DefineFunción::muestra()
+void Ñ::DefineFunción::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::string txtpúblico = "público ";
@@ -567,7 +579,7 @@ void Ñ::DefineFunción::muestra()
 	std::cout << u8"(NODO_DEFINE_FUNCIÓN) [" + (público ? txtpúblico : txtvacío) + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -578,7 +590,7 @@ void Ñ::DefineFunción::muestra()
 
 Ñ::DeclaraFunción::~DeclaraFunción() {}
 
-void Ñ::DeclaraFunción::muestra()
+void Ñ::DeclaraFunción::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::string txtexterno = "externo ";
@@ -586,7 +598,7 @@ void Ñ::DeclaraFunción::muestra()
 	std::cout << u8"(NODO_DECLARA_FUNCIÓN) [" + (externo ? txtexterno : txtvacío) + nombre + "()] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -597,13 +609,13 @@ void Ñ::DeclaraFunción::muestra()
 
 Ñ::Función::~Función() {}
 
-void Ñ::Función::muestra()
+void Ñ::Función::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -614,13 +626,13 @@ void Ñ::Función::muestra()
 
 Ñ::FunciónEjecutable::~FunciónEjecutable() {}
 
-void Ñ::FunciónEjecutable::muestra()
+void Ñ::FunciónEjecutable::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_FUNCIÓN_EJECUTABLE) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -631,13 +643,13 @@ void Ñ::FunciónEjecutable::muestra()
 
 Ñ::Módulo::~Módulo() {}
 
-void Ñ::Módulo::muestra()
+void Ñ::Módulo::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_MÓDULO) [" + módulo + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
 	for(auto rama : ramas)
 	{
-		muestraNodos(rama);
+		muestraNodos(rama, tablaSímbolos);
 	}
 }
 
@@ -651,7 +663,7 @@ void Ñ::borraNodos(Ñ::Nodo* nodos)
 	delete nodos;
 }
 
-void Ñ::muestraNodos(Ñ::Nodo* nodo)
+void Ñ::muestraNodos(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
 	if(nodo == nullptr)
 	{
@@ -662,123 +674,123 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 
 	if(nodo->categoría == Ñ::CategoríaNodo::NODO_VACÍO)
 	{
-		((Ñ::Nodo*)nodo)->muestra();
+		((Ñ::Nodo*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_VALOR)
 	{
-		((Ñ::Valor*)nodo)->muestra();
+		((Ñ::Valor*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LITERAL)
 	{
-		((Ñ::Literal*)nodo)->muestra();
+		((Ñ::Literal*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TIPO)
 	{
-		((Ñ::Tipo*)nodo)->muestra();
+		((Ñ::Tipo*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
 	{
-		((Ñ::Identificador*)nodo)->muestra();
+		((Ñ::Identificador*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
 	{
-		((Ñ::ConvierteTipos*)nodo)->muestra();
+		((Ñ::ConvierteTipos*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR)
 	{
-		((Ñ::ElementoVector*)nodo)->muestra();
+		((Ñ::ElementoVector*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
 	{
-		((Ñ::OperaciónUnaria*)nodo)->muestra();
+		((Ñ::OperaciónUnaria*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_BINARIA)
 	{
-		((Ñ::OperaciónBinaria*)nodo)->muestra();
+		((Ñ::OperaciónBinaria*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PRIMARIO)
 	{
-		((Ñ::Primario*)nodo)->muestra();
+		((Ñ::Primario*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_TÉRMINO)
 	{
-		((Ñ::Término*)nodo)->muestra();
+		((Ñ::Término*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FACTOR)
 	{
-		((Ñ::Factor*)nodo)->muestra();
+		((Ñ::Factor*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_COMPARACIÓN)
 	{
-		((Ñ::Comparación*)nodo)->muestra();
+		((Ñ::Comparación*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
 	{
-		((Ñ::Igualdad*)nodo)->muestra();
+		((Ñ::Igualdad*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN)
 	{
-		((Ñ::LadoDerechoAsignación*)nodo)->muestra();
+		((Ñ::LadoDerechoAsignación*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN)
 	{
-		((Ñ::LadoIzquierdoAsignación*)nodo)->muestra();
+		((Ñ::LadoIzquierdoAsignación*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
 	{
-		((Ñ::Asigna*)nodo)->muestra();
+		((Ñ::Asigna*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
 	{
-		((Ñ::DeclaraVariable*)nodo)->muestra();
+		((Ñ::DeclaraVariable*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTO)
 	{
-		((Ñ::Argumento*)nodo)->muestra();
+		((Ñ::Argumento*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ARGUMENTOS)
 	{
-		((Ñ::Argumentos*)nodo)->muestra();
+		((Ñ::Argumentos*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
 	{
-		((Ñ::LlamaFunción*)nodo)->muestra();
+		((Ñ::LlamaFunción*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEVUELVE)
 	{
-		((Ñ::Devuelve*)nodo)->muestra();
+		((Ñ::Devuelve*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
 	{
-		((Ñ::Expresión*)nodo)->muestra();
+		((Ñ::Expresión*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BLOQUE)
 	{
-		((Ñ::Bloque*)nodo)->muestra();
+		((Ñ::Bloque*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
 	{
-		((Ñ::SiCondicional*)nodo)->muestra();
+		((Ñ::SiCondicional*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
 	{
-		((Ñ::DefineFunción*)nodo)->muestra();
+		((Ñ::DefineFunción*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
 	{
-		((Ñ::DeclaraFunción*)nodo)->muestra();
+		((Ñ::DeclaraFunción*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN)
 	{
-		((Ñ::DefineFunción*)nodo)->muestra();
+		((Ñ::DefineFunción*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE)
 	{
-		((Ñ::DefineFunción*)nodo)->muestra();
+		((Ñ::DefineFunción*)nodo)->muestra(tablaSímbolos);
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
 	{
-		((Ñ::Módulo*)nodo)->muestra();
+		((Ñ::Módulo*)nodo)->muestra(tablaSímbolos);
 	}
 
 	ajuste--;

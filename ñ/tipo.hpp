@@ -9,6 +9,9 @@
 
 namespace Ñ
 {
+
+    extern class TablaSímbolos;
+    
     enum CategoríaTipo
     {
         TIPO_NADA = 0,
@@ -43,7 +46,7 @@ namespace Ñ
         Tipo();
         ~Tipo();
 
-        void muestra();
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
         uint64_t tamaño();
         void tamaño(uint64_t nuevotamaño);
         Ñ::Tipo* subtipo();

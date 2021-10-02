@@ -359,7 +359,7 @@ bool Ñ::Valor::esVector()
 
 
 
-void Ñ::Valor::muestra()
+void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << "(NODO_VALOR) [";

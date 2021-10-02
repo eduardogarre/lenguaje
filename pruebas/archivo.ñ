@@ -5,9 +5,11 @@
 
 público ent inicia()
 {
-    nat8[] vector = [42];
+    nat16[] vector = [288];
 
-    devuelve vector[0];
+    nat16 número = vector[0] / 2;
+
+    devuelve número;
 
     //ent número = 288 / 2;
 

@@ -870,7 +870,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("No puedo construir este nodo como LDA");
+                resultado.error("No puedo construir este nodo como LIA");
                 break;
             }
 
@@ -898,7 +898,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("No puedo construir este nodo como LDA");
+                resultado.error("No puedo construir este nodo como LIA");
                 break;
             }
 
@@ -941,6 +941,10 @@ namespace Ñ
 
             case Ñ::CategoríaNodo::NODO_FACTOR:
                 resultado = construyeOperaciónFactor(nodo);
+                break;
+
+            case Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR:
+                resultado = construyeLeeElementoVector(nodo);
                 break;
 
             case Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN:
@@ -1650,6 +1654,33 @@ namespace Ñ
 
             resultado.éxito();
             resultado.valor(v1);
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeLeeElementoVector(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+            llvm::Value* vec;
+            llvm::Value* pos;
+
+            Ñ::ResultadoLlvm rVec = construyeLDA(nodo->ramas[0]);
+            if(rVec.error())
+            {
+                return rVec;
+            }
+            vec = rVec.valor();
+
+            Ñ::ResultadoLlvm rPos = construyeLDA(nodo->ramas[1]);
+            if(rPos.error())
+            {
+                return rPos;
+            }
+            pos = rPos.valor();
+
+            llvm::Value* vElemento = entorno->constructorLlvm.CreateExtractElement(vec, pos);
+
+            resultado.éxito();
+            resultado.valor(vElemento);
             return resultado;
         }
 

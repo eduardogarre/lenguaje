@@ -60,11 +60,24 @@
     for(i = 0; i < nodo->ramas.size()-2; i+=2)
     {
         Ñ::Resultado rCondición = _analizaLDA(nodo->ramas[i], tablaSímbolos);
+        if(rCondición.error())
+        {
+            return rCondición;
+        }
         Ñ::Resultado rBloque = _analiza(nodo->ramas[i+1], tablaSímbolos);
+        if(rBloque.error())
+        {
+            return rBloque;
+        }
     }
+    
     if(i == nodo->ramas.size()-1)
     {
         Ñ::Resultado rBloque = _analiza(nodo->ramas[i], tablaSímbolos);
+        if(rBloque.error())
+        {
+            return rBloque;
+        }
     }
 
     resultado.éxito();

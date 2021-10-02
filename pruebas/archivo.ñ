@@ -15,7 +15,6 @@ público ent inicia()
 
     si (número < 2)
     {
-        //ent y = duplica(42);
         ent y = duplica(número);
         número = y;
     }

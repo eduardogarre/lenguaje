@@ -56,7 +56,16 @@
         return resultado;
     }
 
-    Ñ::Resultado rCondición = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+    int i = 0;
+    for(i = 0; i < nodo->ramas.size()-2; i+=2)
+    {
+        Ñ::Resultado rCondición = _analizaLDA(nodo->ramas[i], tablaSímbolos);
+        Ñ::Resultado rBloque = _analiza(nodo->ramas[i+1], tablaSímbolos);
+    }
+    if(i == nodo->ramas.size()-1)
+    {
+        Ñ::Resultado rBloque = _analiza(nodo->ramas[i], tablaSímbolos);
+    }
 
     resultado.éxito();
     return resultado;
@@ -128,7 +137,7 @@
         Ñ::Tipo* tipoLIA = (Ñ::Tipo*)(rTipoLIA.nodo());
         Ñ::Tipo* tipoLDA = (Ñ::Tipo*)(rTipoLDA.nodo());
 
-        if(tipoLIA->tipo == tipoLDA->tipo) 
+        if(sonÁrbolesDuplicados((Ñ::Nodo*)tipoLIA, (Ñ::Nodo*)tipoLDA))
         {
             // No hace falta convertir tipos
         }

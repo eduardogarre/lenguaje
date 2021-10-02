@@ -7,7 +7,7 @@ público ent inicia()
 {
     nat16[] vector = [288, 42];
 
-    ent número = vector[0] / 2;
+    ent32 número = vector[1] / 42;
 
     //ent número = 288 / 2;
 

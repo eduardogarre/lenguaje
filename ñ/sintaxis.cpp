@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -674,12 +675,20 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(notación("["))
 		{
+			uint64_t tamaño = 0;
+			if(Ñ::Nodo* lit = literal())
+			{
+				Ñ::Literal* l = (Ñ::Literal*)lit;
+				tamaño = std::stoull(l->dato);
+			}
+
 			if(notación("]"))
 			{
 				Ñ::Tipo* t = new Ñ::Tipo();
 				Ñ::Tipo* subT = new Ñ::Tipo();
 				subT->tipo = tipo;
 				t->tipo = CategoríaTipo::TIPO_VECTOR;
+				t->tamaño(tamaño);
 				((Ñ::Nodo*)t)->ramas.push_back((Ñ::Nodo*)subT);
 				return (Ñ::Nodo*)t;
 			}

@@ -1519,12 +1519,6 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	}
 	
 	Ñ::Valor* valor = new Ñ::Valor;
-
-	for(auto subliteral : ((Ñ::Nodo*)literal)->ramas)
-	{
-		Ñ::Valor* subvalor = creaValor((Ñ::Literal*)subliteral);
-		((Ñ::Nodo*)valor)->ramas.push_back((Ñ::Nodo*)subvalor);
-	}
 	
 	switch (literal->tipo)
 	{
@@ -1595,8 +1589,31 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 		break;
 
 	case Ñ::CategoríaTipo::TIPO_VECTOR:
-		valor->vector(((Ñ::Nodo*)valor)->ramas.size());
-		return valor;
+		{
+			Ñ::Tipo* subtmc = nullptr;
+
+			for(auto subliteral : ((Ñ::Nodo*)literal)->ramas)
+			{
+				if(subtmc == nullptr)
+				{
+					subtmc = obténTipoDeLiteral((Ñ::Literal*)subliteral);
+				}
+				else
+				{
+					subtmc = obténTipoMínimoComún(subtmc, obténTipoDeLiteral((Ñ::Literal*)subliteral));
+				}
+			}
+
+			for(auto subliteral : ((Ñ::Nodo*)literal)->ramas)
+			{
+				((Ñ::Literal*)subliteral)->tipo = subtmc->tipo;
+				Ñ::Valor* subvalor = creaValor((Ñ::Literal*)subliteral);
+				((Ñ::Nodo*)valor)->ramas.push_back((Ñ::Nodo*)subvalor);
+			}
+
+			valor->vector(((Ñ::Nodo*)valor)->ramas.size());
+			return valor;
+		}
 		break;
 	
 	default:

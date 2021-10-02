@@ -196,14 +196,8 @@ namespace Ñ
             case TIPO_VECTOR:
                 {
                     Ñ::Nodo* nodo = (Ñ::Nodo*)tipo;
-                    uint64_t tamaño = nodo->ramas.size();
-                    if(tamaño < 1)
-                    {
-                        return nullptr;
-                    }
-
-                    Ñ::Nodo* subnodo = nodo->ramas[0];
-                    Ñ::Tipo* subtipo = (Ñ::Tipo*)subnodo;
+                    uint64_t tamaño = tipo->tamaño();
+                    Ñ::Tipo* subtipo = tipo->subtipo();
                     return llvm::VectorType::get(creaTipoLlvm(subtipo), tamaño, false);
                 }
                 break;
@@ -1219,8 +1213,8 @@ namespace Ñ
                         llvm::Constant* índice = llvm::Constant::getIntegerValue(tipVector->getScalarType(), llvm::APInt(64, i));
                         llvm::Value* valElemento = llvm::ExtractElementInst::Create(valor, índice);
                         entorno->constructorLlvm.Insert(valElemento);
-                        Ñ::Tipo* subtipoInicial = (Ñ::Tipo*)((Ñ::Nodo*)tipoInicial)->ramas[i];
-                        Ñ::Tipo* subtipoDestino = (Ñ::Tipo*)((Ñ::Nodo*)tipoDestino)->ramas[i];
+                        Ñ::Tipo* subtipoInicial = tipoInicial->subtipo();
+                        Ñ::Tipo* subtipoDestino = tipoDestino->subtipo();
                         valElemento = convierteValorLlvmATipoLlvm(valElemento, subtipoInicial, subtipoDestino);
                         
                         valorFinal = llvm::InsertElementInst::Create(valorFinal, valElemento, índice);
@@ -1399,7 +1393,7 @@ namespace Ñ
 
                         std::cout << "construyeLiteral(TIPO_VECTOR) extraigo subvalor de subnodo" << índice << std::endl;
 
-                        llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getScalarType(), llvm::APInt(64, índice));
+                        //llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getScalarType(), llvm::APInt(64, índice));
                         ResultadoLlvm rSubvalor = construyeLiteral(subnodo);
                         if(rSubvalor.error())
                         {
@@ -1409,11 +1403,14 @@ namespace Ñ
 
                         std::cout << "construyeLiteral(TIPO_VECTOR) inserto subvalor en vector" << índice << std::endl;
 
-                        vectorFinal = llvm::InsertElementInst::Create(vectorFinal, subvalor, índiceLlvm);
-                        
-                        std::cout << "construyeLiteral(TIPO_VECTOR) añado la instrucción al constructor" << índice << std::endl;
+                        llvm::Value* nuevoVectorFinal = entorno->constructorLlvm.CreateInsertElement(vectorFinal, subvalor, índice);
 
-                        entorno->constructorLlvm.Insert(vectorFinal);
+                        //llvm::Value* nuevoVectorFinal = llvm::InsertElementInst::Create(vectorFinal, subvalor, índiceLlvm);
+                        vectorFinal = nuevoVectorFinal;
+                        
+                        //std::cout << "construyeLiteral(TIPO_VECTOR) añado la instrucción al constructor" << índice << std::endl;
+
+                        //entorno->constructorLlvm.Insert(vectorFinal);
                         
                         índice++;
                     }

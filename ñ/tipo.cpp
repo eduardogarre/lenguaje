@@ -81,9 +81,31 @@ void Ñ::Tipo::muestra()
 	}
 }
 
-uint64_t Ñ::Tipo::tamaño()
+uint64_t Ñ::Tipo::_ramas()
 {
 	return ((Ñ::Nodo*)this)->ramas.size();
+}
+
+uint64_t Ñ::Tipo::tamaño()
+{
+	return _tamaño;
+}
+
+void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
+{
+	_tamaño = nuevotamaño;
+}
+
+Ñ::Tipo* Ñ::Tipo::subtipo()
+{
+	if(_ramas() == 1)
+	{
+		return (Ñ::Tipo*)((Ñ::Nodo*)this)->ramas[0];
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 Ñ::Tipo* Ñ::obténTipoMínimoComún(Ñ::Tipo* t1, Ñ::Tipo* t2)
@@ -375,6 +397,14 @@ uint64_t Ñ::Tipo::tamaño()
 		default:
 			break;
 		}
+
+	case TIPO_VECTOR:
+		{
+			tmc->tamaño(t2->tamaño());
+			Ñ::Tipo* subtipo = obténTipoMínimoComún(t1->subtipo(), t2->subtipo());
+			((Ñ::Nodo*)tmc)->ramas.push_back((Ñ::Nodo*)subtipo);
+		}
+		break;
 	
 	default:
 		break;
@@ -524,7 +554,9 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 		Ñ::Nodo* subnodo = n->ramas[0];
 		Ñ::Tipo* subtipo = (Ñ::Tipo*)subnodo;
 		nombre = obténNombreDeTipo(subtipo);
-		nombre += "[]";
+		nombre += "[";
+		nombre += std::to_string(t->tamaño());
+		nombre += "]";
 	}
 
 	return nombre;
@@ -556,12 +588,21 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 		}
 		else
 		{
+			Ñ::Tipo* subtipo = nullptr;
 			for(Ñ::Nodo* subliteral : ((Ñ::Nodo*)literal)->ramas)
 			{
-				Ñ::Tipo* subtipo = new Ñ::Tipo;
-				subtipo->tipo = ((Ñ::Literal*)subliteral)->tipo;
-				((Ñ::Nodo*)tipo)->ramas.push_back((Ñ::Nodo*)subtipo);
+				if(subtipo != nullptr)
+				{
+					subtipo = obténTipoMínimoComún(subtipo, obténTipoDeLiteral((Ñ::Literal*)subliteral));
+				}
+				else
+				{
+					subtipo = obténTipoDeLiteral((Ñ::Literal*)subliteral);
+				}
 			}
+				
+			((Ñ::Nodo*)tipo)->ramas.push_back((Ñ::Nodo*)subtipo);
+			tipo->tamaño(tamaño);
 
 			return tipo;
 		}
@@ -594,12 +635,21 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 		}
 		else
 		{
+			Ñ::Tipo* subtipo = nullptr;
 			for(Ñ::Nodo* subvalor : ((Ñ::Nodo*)valor)->ramas)
 			{
-				Ñ::Tipo* subtipo = new Ñ::Tipo;
-				subtipo->tipo = ((Ñ::Valor*)subvalor)->tipo;
-				((Ñ::Nodo*)tipo)->ramas.push_back((Ñ::Nodo*)subtipo);
+				if(subtipo != nullptr)
+				{
+					subtipo = obténTipoMínimoComún(subtipo, obténTipoDeValor((Ñ::Valor*)subvalor));
+				}
+				else
+				{
+					subtipo = obténTipoDeValor((Ñ::Valor*)subvalor);
+				}
 			}
+				
+			((Ñ::Nodo*)tipo)->ramas.push_back((Ñ::Nodo*)subtipo);
+			tipo->tamaño(tamaño);
 
 			return tipo;
 		}

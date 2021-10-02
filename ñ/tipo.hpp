@@ -33,6 +33,10 @@ namespace Ñ
     
     class Tipo : Nodo
     {
+    private:
+        uint64_t _tamaño = 0;
+        uint64_t _ramas();
+
     public:
         CategoríaTipo tipo;
 
@@ -41,6 +45,8 @@ namespace Ñ
 
         void muestra();
         uint64_t tamaño();
+        void tamaño(uint64_t nuevotamaño);
+        Ñ::Tipo* subtipo();
     };
 
     Ñ::Tipo* obténTipoMínimoComún(Ñ::Tipo* t1, Ñ::Tipo* t2);

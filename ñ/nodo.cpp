@@ -907,7 +907,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		case Ñ::CategoríaNodo::NODO_TIPO:
 			t1 = (Ñ::Tipo*)nodo1;
 			t2 = (Ñ::Tipo*)nodo2;
-			if(t1->tipo == t2->tipo)
+			if(t1->tipo == t2->tipo && t1->tamaño() == t2->tamaño())
 			{
 				return true;
 			}
@@ -1158,6 +1158,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::Tipo* n = (Ñ::Tipo*)nodo;
 		Ñ::Tipo* t = new Ñ::Tipo();
 		t->tipo = n->tipo;
+		t->tamaño(n->tamaño());
 
 		duplicado = (Ñ::Nodo*)t;
 	}

@@ -674,6 +674,60 @@
             return resultado;
         }
     }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR)
+    {
+        if(nodo->ramas.size() != 2)
+        {
+            resultado.error("El nodo de acceso al elemento de un vector debe tener 2 hijos");
+            return resultado;
+        }
+        
+        Ñ::Resultado rVector = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+        if(rVector.error())
+        {
+            return rVector;
+        }
+
+        Ñ::Resultado rPosición = _analizaLDA(nodo->ramas[1], tablaSímbolos);
+        if(rPosición.error())
+        {
+            return rPosición;
+        }
+        
+        //Comprobar que el tipo leído es un vector
+        Ñ::Nodo* vector = rVector.nodo();
+        if(vector == nullptr)
+        {
+            resultado.error("Esperaba recibir un nodo");
+            return resultado;
+        }
+
+        if(vector->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+        {
+            resultado.error("Esperaba recibir un tipo");
+            return resultado;
+        }
+
+        if(((Ñ::Tipo*)vector)->tipo != Ñ::CategoríaTipo::TIPO_VECTOR)
+        {
+            resultado.error("Esperaba que el tipo fuera un vector");
+            return resultado;
+        }
+        
+        //Comprobar que la posición no excede el límite del vector
+        // PENDIENTE
+
+        //Devolver el tipo del componente al que accedemos
+        if(vector->ramas.size() < 1)
+        {
+            resultado.error("El vector no contiene subtipo");
+            return resultado;
+        }
+
+        resultado.éxito();
+        resultado.nodo(vector->ramas[0]);
+        return resultado;
+    }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
         return _analizaLlamadaFunción(nodo, tablaSímbolos);

@@ -363,6 +363,23 @@ void Ñ::OperaciónUnaria::muestra()
 	}
 }
 
+Ñ::ElementoVector::ElementoVector() : Ñ::Nodo()
+{
+	categoría = Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR;
+}
+
+Ñ::ElementoVector::~ElementoVector() {}
+
+void Ñ::ElementoVector::muestra()
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_ELEMENTO_VECTOR) #" << posición << " - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama);
+	}
+}
+
 Ñ::Primario::Primario() : Ñ::Nodo()
 {
 	categoría = Ñ::CategoríaNodo::NODO_PRIMARIO;
@@ -666,6 +683,10 @@ void Ñ::muestraNodos(Ñ::Nodo* nodo)
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
 	{
 		((Ñ::ConvierteTipos*)nodo)->muestra();
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR)
+	{
+		((Ñ::ElementoVector*)nodo)->muestra();
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_UNARIA)
 	{

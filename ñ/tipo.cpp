@@ -47,6 +47,11 @@ bool Ñ::esReal(Ñ::Tipo* tipo)
 	}
 }
 
+bool Ñ::esVector(Ñ::Tipo* tipo)
+{
+	return tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR;
+}
+
 bool Ñ::esBooleano(Ñ::Tipo* tipo)
 {
 	if( tipo->tipo == Ñ::CategoríaTipo::TIPO_BOOLEANO )

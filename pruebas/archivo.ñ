@@ -7,7 +7,7 @@ público ent inicia()
 {
     nat8[] vector = [42];
 
-    devuelve 42;
+    devuelve vector[0];
 
     //ent número = 288 / 2;
 

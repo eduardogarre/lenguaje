@@ -472,6 +472,43 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::elementoVector()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Nodo* u1;
+
+		if(Ñ::Nodo* prim = primario())
+		{
+			if(!notación("["))
+			{
+				return prim;
+			}
+
+			if(Ñ::Nodo* lda = ladoDerechoAsignación())
+			{
+				if(!notación("]"))
+				{
+					delete lda;
+					delete prim;
+					cursor = c;
+					return nullptr;
+				}
+
+				Ñ::ElementoVector* ev = new Ñ::ElementoVector;
+				Ñ::Nodo* nev = (Ñ::Nodo*)ev;
+				nev->ramas.push_back(prim);
+				nev->ramas.push_back(lda);
+				return nev;
+			}
+		}
+	}	
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::operaciónUnaria()
 {
 	uint32_t c = cursor;
@@ -498,9 +535,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return (Ñ::Nodo*)op;
 			}
 		}
-		else if(Ñ::Nodo* p = primario())
+		else if(Ñ::Nodo* ev = elementoVector())
 		{
-			return p;
+			return ev;
 		}
 	}
 

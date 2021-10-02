@@ -30,6 +30,7 @@ namespace Ñ
         NODO_FACTOR,
         NODO_OP_BINARIA,
         NODO_OP_UNARIA,
+        NODO_ELEMENTO_VECTOR,
         NODO_PRIMARIO,
 
         NODO_DECLARA_VARIABLE,
@@ -176,6 +177,17 @@ namespace Ñ
 
         OperaciónUnaria();
         ~OperaciónUnaria();
+
+        void muestra();
+    };
+
+    class ElementoVector : Nodo
+    {
+    public:
+        uint64_t posición = 0;
+
+        ElementoVector();
+        ~ElementoVector();
 
         void muestra();
     };

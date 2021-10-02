@@ -57,4 +57,5 @@ namespace Ñ
     bool esNatural(Ñ::Tipo* tipo);
     bool esEntero(Ñ::Tipo* tipo);
     bool esReal(Ñ::Tipo* tipo);
+    bool esVector(Ñ::Tipo* tipo);
 }

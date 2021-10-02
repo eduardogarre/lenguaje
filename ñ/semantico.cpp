@@ -788,22 +788,31 @@
     }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ASIGNA)
     {
-        Ñ::Resultado rTipoLIA = _analizaLIA(nodo->ramas[0], tablaSímbolos);
         Ñ::Resultado rTipoLDA = _analizaLDA(nodo->ramas[1], tablaSímbolos);
-
-        if(rTipoLIA.error())
-        {
-            return rTipoLIA;
-        }
         if(rTipoLDA.error())
         {
             return rTipoLDA;
         }
-
-        Ñ::Tipo* lia = (Ñ::Tipo*)(rTipoLIA.nodo());
         Ñ::Tipo* lda = (Ñ::Tipo*)(rTipoLDA.nodo());
 
-        if(lia == lda)
+        if(    nodo->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE
+                &&  esVector((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))
+                &&  ((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))->tamaño() == 0
+                &&  sonÁrbolesDuplicados(nodo->ramas[0]->ramas[0]->ramas[0], ((Ñ::Nodo*)lda)->ramas[0]))
+        {
+            std::cout << "Defino tamaño aprovechando la definición" << std::endl;
+            // nat[] mi_vector = [1, 2, 3];
+            ((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))->tamaño(lda->tamaño());
+        }
+
+        Ñ::Resultado rTipoLIA = _analizaLIA(nodo->ramas[0], tablaSímbolos);
+        if(rTipoLIA.error())
+        {
+            return rTipoLIA;
+        }
+        Ñ::Tipo* lia = (Ñ::Tipo*)(rTipoLIA.nodo());
+
+        if(sonÁrbolesDuplicados((Ñ::Nodo*)lia, (Ñ::Nodo*)lda))
         {
             // Tipos idénticos, no hace falta comprobar compatibilidad
             resultado.éxito();

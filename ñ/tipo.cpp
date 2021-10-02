@@ -998,6 +998,11 @@ bool Ñ::tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda)
 						return false;
 					}
 				}
+				
+				if(lia->tamaño() != lda->tamaño())
+				{
+					return false;
+				}
 			}
 			else
 			{

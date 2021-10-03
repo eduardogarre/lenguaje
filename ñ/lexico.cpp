@@ -315,7 +315,7 @@ namespace Ñ
 
             if(Ñ::espuntuación(carácter))
             {
-                posición->lexema(posición->cursor());
+                posición->lexema(carácter.size());
                 Ñ::Lexema* l = new Ñ::Lexema(posición);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NOTACIÓN;
                 l->contenido = carácter;
@@ -449,7 +449,7 @@ namespace Ñ
                 {
                     resultado = true;
                     
-                    p.lexema(posición->cursor() - p.cursor());
+                    p.lexema(s.size());
                     Ñ::Lexema* l = new Ñ::Lexema(&p);
                     l->categoría = Ñ::CategoríaLexema::LEXEMA_RESERVADO;
                     l->contenido = s;
@@ -567,7 +567,7 @@ namespace Ñ
 
                 //double n = to!double(s);
 
-                p.lexema(posición->cursor() - p.cursor());
+                p.lexema(s.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
@@ -675,7 +675,7 @@ namespace Ñ
 
                 //double n = to!double(s);
 
-                p.lexema(posición->cursor() - p.cursor());
+                p.lexema(s.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
@@ -743,7 +743,7 @@ namespace Ñ
 
                 //int n = to!int(s);
 
-                p.lexema(posición->cursor() - p.cursor());
+                p.lexema(s.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO;
                 l->contenido = s;
@@ -833,9 +833,6 @@ namespace Ñ
 
                 std::string texto;
 
-                p.lexema(posición->cursor() - p.cursor());
-                Ñ::Lexema* l = new Ñ::Lexema(&p);
-
                 while((carácter != "\"") && (posición->cursor() < txt.length()-1))
                 {
                     if(carácter == "\\")
@@ -879,6 +876,9 @@ namespace Ñ
                     incrementaCursor(txt);
                     carácter = siguienteCarácter(txt);
                 }
+
+                p.lexema(texto.size());
+                Ñ::Lexema* l = new Ñ::Lexema(&p);
 
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_TEXTO;
                 l->contenido = texto;
@@ -947,7 +947,7 @@ namespace Ñ
 
                 //std::cout << "identificador->contenido" << texto << std::endl;
 
-                p.lexema(posición->cursor() - p.cursor());
+                p.lexema(texto.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
 
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
@@ -1083,7 +1083,7 @@ namespace Ñ
             return vacía;
         }
 
-        posición->lexema(posición->cursor());
+        posición->lexema(0);
         Ñ::Lexema* fin = new Ñ::Lexema(posición);
         fin->categoría = Ñ::CategoríaLexema::LEXEMA_FIN;
         fin->contenido = "";

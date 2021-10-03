@@ -2,10 +2,9 @@
 
 #include <string>
 
-#include "posicion.hpp"
-
 namespace Ñ
 {
+    extern class Posición;
 
     class Resultado
     {
@@ -13,12 +12,12 @@ namespace Ñ
         bool _error;
         std::string _mensaje;
         Ñ::Nodo* _nodo;
-        Posición _posición;
+        Posición* _posición;
 
     public:
-        Resultado(Posición posición = {}) : _error(true), _nodo(nullptr) {}
+        Resultado(Posición* posición = nullptr) : _error(true), _nodo(nullptr) {}
 
-        Posición posición();
+        Posición* posición() {return _posición;}
 
         bool error() { return _error; }
         void error(std::string mensaje) { _error = true; _mensaje = mensaje; }

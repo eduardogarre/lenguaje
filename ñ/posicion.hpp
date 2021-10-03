@@ -25,6 +25,7 @@ namespace Ñ
 
         void incCursor();
         void incLínea();
+        void empiezaColumna();
         void incColumna();
         void lexema(uint64_t lexema);
         void archivo(std::string archivo);

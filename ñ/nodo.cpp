@@ -145,7 +145,7 @@ void Ñ::Nodo::imprimeAjuste()
 	}
 }
 
-Ñ::Nodo::Nodo(Posición posición) : _posición(posición)
+Ñ::Nodo::Nodo(Posición* posición) : _posición(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_VACÍO;
 }
@@ -168,13 +168,13 @@ void Ñ::Nodo::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Posición Ñ::Nodo::posición()
+Ñ::Posición* Ñ::Nodo::posición()
 {
 	return _posición;
 }
 
 
-Ñ::Literal::Literal(Posición posición) : Ñ::Nodo(posición)
+Ñ::Literal::Literal(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_LITERAL;
 }
@@ -191,7 +191,7 @@ void Ñ::Literal::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Identificador::Identificador(Posición posición) : Ñ::Nodo(posición)
+Ñ::Identificador::Identificador(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_IDENTIFICADOR;
 }
@@ -219,7 +219,7 @@ void Ñ::Identificador::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::ConvierteTipos::ConvierteTipos(Posición posición) : Ñ::Nodo(posición)
+Ñ::ConvierteTipos::ConvierteTipos(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS;
 }
@@ -236,7 +236,7 @@ void Ñ::ConvierteTipos::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::LadoIzquierdoAsignación::LadoIzquierdoAsignación(Posición posición) : Ñ::Nodo(posición)
+Ñ::LadoIzquierdoAsignación::LadoIzquierdoAsignación(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_LADO_IZQUIERDO_ASIGNACIÓN;
 }
@@ -254,7 +254,7 @@ void Ñ::LadoIzquierdoAsignación::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::LadoDerechoAsignación::LadoDerechoAsignación(Posición posición) : Ñ::Nodo(posición)
+Ñ::LadoDerechoAsignación::LadoDerechoAsignación(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN;
 }
@@ -272,7 +272,7 @@ void Ñ::LadoDerechoAsignación::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::OperaciónBinaria::OperaciónBinaria(Posición posición) : Ñ::Nodo(posición)
+Ñ::OperaciónBinaria::OperaciónBinaria(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_OP_BINARIA;
 }
@@ -290,7 +290,7 @@ void Ñ::OperaciónBinaria::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Igualdad::Igualdad(Posición posición) : Ñ::Nodo(posición)
+Ñ::Igualdad::Igualdad(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_IGUALDAD;
 }
@@ -308,7 +308,7 @@ void Ñ::Igualdad::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Comparación::Comparación(Posición posición) : Ñ::Nodo(posición)
+Ñ::Comparación::Comparación(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_COMPARACIÓN;
 }
@@ -326,7 +326,7 @@ void Ñ::Comparación::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Término::Término(Posición posición) : Ñ::Nodo(posición)
+Ñ::Término::Término(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_TÉRMINO;
 }
@@ -344,7 +344,7 @@ void Ñ::Término::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Factor::Factor(Posición posición) : Ñ::Nodo(posición)
+Ñ::Factor::Factor(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_FACTOR;
 }
@@ -362,7 +362,7 @@ void Ñ::Factor::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::OperaciónUnaria::OperaciónUnaria(Posición posición) : Ñ::Nodo(posición)
+Ñ::OperaciónUnaria::OperaciónUnaria(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_OP_UNARIA;
 }
@@ -380,7 +380,7 @@ void Ñ::OperaciónUnaria::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::ElementoVector::ElementoVector(Posición posición) : Ñ::Nodo(posición)
+Ñ::ElementoVector::ElementoVector(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR;
 }
@@ -397,7 +397,7 @@ void Ñ::ElementoVector::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Primario::Primario(Posición posición) : Ñ::Nodo(posición)
+Ñ::Primario::Primario(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_PRIMARIO;
 }
@@ -415,7 +415,7 @@ void Ñ::Primario::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::DeclaraVariable::DeclaraVariable(Posición posición) : Ñ::Nodo(posición)
+Ñ::DeclaraVariable::DeclaraVariable(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE;
 }
@@ -433,7 +433,7 @@ void Ñ::DeclaraVariable::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Asigna::Asigna(Posición posición) : Ñ::Nodo(posición)
+Ñ::Asigna::Asigna(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_ASIGNA;
 }
@@ -450,7 +450,7 @@ void Ñ::Asigna::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Argumentos::Argumentos(Posición posición) : Ñ::Nodo(posición)
+Ñ::Argumentos::Argumentos(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTOS;
 }
@@ -467,7 +467,7 @@ void Ñ::Argumentos::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Argumento::Argumento(Posición posición) : Ñ::Nodo(posición)
+Ñ::Argumento::Argumento(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_ARGUMENTO;
 }
@@ -484,7 +484,7 @@ void Ñ::Argumento::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::LlamaFunción::LlamaFunción(Posición posición) : Ñ::Nodo(posición)
+Ñ::LlamaFunción::LlamaFunción(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN;
 }
@@ -501,7 +501,7 @@ void Ñ::LlamaFunción::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Devuelve::Devuelve(Posición posición) : Ñ::Nodo(posición)
+Ñ::Devuelve::Devuelve(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_DEVUELVE;
 }
@@ -518,7 +518,7 @@ void Ñ::Devuelve::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Expresión::Expresión(Posición posición) : Ñ::Nodo(posición)
+Ñ::Expresión::Expresión(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_EXPRESIÓN;
 }
@@ -535,7 +535,7 @@ void Ñ::Expresión::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Bloque::Bloque(Posición posición) : Ñ::Nodo(posición)
+Ñ::Bloque::Bloque(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_BLOQUE;
 }
@@ -552,7 +552,7 @@ void Ñ::Bloque::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::SiCondicional::SiCondicional(Posición posición) : Ñ::Nodo(posición)
+Ñ::SiCondicional::SiCondicional(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_SI_CONDICIONAL;
 }
@@ -569,7 +569,7 @@ void Ñ::SiCondicional::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::DefineFunción::DefineFunción(Posición posición) : Ñ::Nodo(posición)
+Ñ::DefineFunción::DefineFunción(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN;
 }
@@ -588,7 +588,7 @@ void Ñ::DefineFunción::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::DeclaraFunción::DeclaraFunción(Posición posición) : Ñ::Nodo(posición)
+Ñ::DeclaraFunción::DeclaraFunción(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN;
 }
@@ -607,7 +607,7 @@ void Ñ::DeclaraFunción::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Función::Función(Posición posición) : Ñ::Nodo(posición)
+Ñ::Función::Función(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN;
 }
@@ -624,7 +624,7 @@ void Ñ::Función::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::FunciónEjecutable::FunciónEjecutable(Posición posición) : Ñ::Nodo(posición)
+Ñ::FunciónEjecutable::FunciónEjecutable(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_FUNCIÓN_EJECUTABLE;
 }
@@ -641,7 +641,7 @@ void Ñ::FunciónEjecutable::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::Módulo::Módulo(Posición posición) : Ñ::Nodo(posición)
+Ñ::Módulo::Módulo(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_MÓDULO;
 }

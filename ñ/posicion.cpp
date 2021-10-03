@@ -3,8 +3,8 @@
 void Ñ::Posición::inicia()
 {
     _cursor = 0;
-    _línea = 0;
-    _columna = 0;
+    _línea = 1;
+    _columna = 1;
     _lexema = 0;
     _archivo = "";
 }
@@ -43,6 +43,11 @@ void Ñ::Posición::incCursor()
 void Ñ::Posición::incLínea()
 {
     _línea++;
+    _columna = 0;
+}
+
+void Ñ::Posición::empiezaColumna()
+{
     _columna = 0;
 }
 

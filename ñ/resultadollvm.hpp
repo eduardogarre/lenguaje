@@ -9,6 +9,8 @@
 
 namespace Ñ
 {
+    extern class Posición;
+
     enum CategoríaLlvm {
         BLOQUE_LLVM,
         FUNCIÓN_LLVM,
@@ -22,7 +24,7 @@ namespace Ñ
         bool _error;
         std::string _mensaje;
         CategoríaLlvm categoría;
-        Posición _posición;
+        Posición* _posición;
 
         union {
             llvm::BasicBlock *  _bloque;
@@ -32,9 +34,9 @@ namespace Ñ
         } entidad;
 
     public:
-        ResultadoLlvm(Posición posición = {}) : _error(true) {}
+        ResultadoLlvm(Posición* posición = nullptr) : _error(true) {}
 
-        Posición posición();
+        Posición* posición() {return _posición;}
 
         bool error() { return _error; }
         void error(std::string mensaje) { _error = true; _mensaje = mensaje; }

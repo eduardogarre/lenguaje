@@ -7,6 +7,7 @@
 
 #include "lexema.hpp"
 #include "lexico.hpp"
+#include "posicion.hpp"
 #include "salida.hpp"
 
 namespace Ñ
@@ -23,35 +24,40 @@ namespace Ñ
 #endif
     void Léxico::incrementaCursor(std::string txt)
     {
-        uint64_t paso = std::mblen(txt.c_str() + posición.cursor(), std::min((uint64_t)MB_CUR_MAX, (uint64_t)txt.size() - posición.cursor()));
+        uint64_t paso = std::mblen(txt.c_str() + posición->cursor(), std::min((uint64_t)MB_CUR_MAX, (uint64_t)txt.size() - posición->cursor()));
 
-        //std::cout << "incrementaCursor(" << txt << ") - paso:" << paso << "  - posición.cursor():" << posición.cursor() << "  - txt.size():" << txt.size() << std::endl;
+        //std::cout << "incrementaCursor(" << txt << ") - paso:" << paso << "  - posición->cursor():" << posición->cursor() << "  - txt.size():" << txt.size() << std::endl;
 
-        if(txt.size() > posición.cursor() && paso <= txt.size() - posición.cursor())
+        if(txt.size() > posición->cursor() && paso <= txt.size() - posición->cursor())
         {
             while(paso--)
             {
-                posición.incCursor();
+                posición->incCursor();
             }
         }
     }
 
     std::string Léxico::siguienteCarácter(std::string txt)
     {
-        uint64_t paso = std::mblen(txt.c_str() + posición.cursor(), std::min((uint64_t)MB_CUR_MAX, (uint64_t)txt.size() - posición.cursor()));
+        uint64_t paso = std::mblen(txt.c_str() + posición->cursor(), std::min((uint64_t)MB_CUR_MAX, (uint64_t)txt.size() - posición->cursor()));
         std::string c = "";
 
-        //std::cout << "siguienteCarácter(" << txt << ") - paso:" << paso << "  - posición.cursor():" << posición.cursor() << "  - txt.size():" << txt.size() << std::endl;
+        //std::cout << "siguienteCarácter(" << txt << ") - paso:" << paso << "  - posición->cursor():" << posición->cursor() << "  - txt.size():" << txt.size() << std::endl;
         
 
-        if(txt.size() > posición.cursor() && paso <= txt.size() - posición.cursor())
+        if(txt.size() > posición->cursor() && paso <= txt.size() - posición->cursor())
         {
-            c = txt.substr(posición.cursor(), paso);
+            c = txt.substr(posición->cursor(), paso);
+        }
+
+        if(c == "\n")
+        {
+            posición->incLínea();
         }
 
         if(esnuevalínea(c))
         {
-            posición.incLínea();
+            posición->empiezaColumna();
         }
 
         return c;
@@ -100,7 +106,8 @@ namespace Ñ
     {
         try {
             bool resultado = false;
-            Posición p = posición;
+            
+            Posición p = *posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -122,7 +129,8 @@ namespace Ñ
                 }
             }
             
-            posición = p;
+            *posición = p;
+            
             return resultado;
         }
         catch(const std::runtime_error& re)
@@ -150,7 +158,7 @@ namespace Ñ
     {
         try {
             bool resultado = false;
-            Posición p = posición;
+            Posición p = *posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -163,7 +171,7 @@ namespace Ñ
                 {
                     resultado = true;
 
-                    while(posición.cursor() < txt.length()-1)
+                    while(posición->cursor() < txt.length()-1)
                     {
                         incrementaCursor(txt);
                         carácter = siguienteCarácter(txt);
@@ -183,7 +191,7 @@ namespace Ñ
                 }
             }
             
-            posición = p;
+            *posición = p;
             return resultado;
         }
         catch(const std::runtime_error& re)
@@ -213,7 +221,7 @@ namespace Ñ
             //std::cout << "nuevaLínea(" << txt << ")" << std::endl;
 
             bool resultado = false;
-            Posición p = posición;
+            Posición p = *posición;
 
             std::string carácter = "";
 
@@ -227,7 +235,7 @@ namespace Ñ
             }
             else
             {
-                posición = p;
+                *posición = p;
                 return false;
             }
         }
@@ -265,7 +273,7 @@ namespace Ñ
             {
                 resultado = true;
                 
-                if(posición.cursor() == (txt.length() - 1))
+                if(posición->cursor() == (txt.length() - 1))
                 {
                     return false;
                 }
@@ -307,7 +315,7 @@ namespace Ñ
 
             if(Ñ::espuntuación(carácter))
             {
-                posición.lexema(lexemas.size());
+                posición->lexema(posición->cursor());
                 Ñ::Lexema* l = new Ñ::Lexema(posición);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NOTACIÓN;
                 l->contenido = carácter;
@@ -351,7 +359,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            Posición p = posición;
+            Posición p = *posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -361,7 +369,7 @@ namespace Ñ
                 
                 resultado = true;
                 do {
-                    if(posición.cursor() == (txt.length()+1))
+                    if(posición->cursor() == (txt.length()+1))
                     {
                         return true;
                     }
@@ -403,11 +411,11 @@ namespace Ñ
             
             bool resultado = false;
 
-            Posición p = posición;
+            Posición p = *posición;
 
             if(_nombre(txt))
             {
-                std::string s = txt.substr(p.cursor(), posición.cursor() - p.cursor());
+                std::string s = txt.substr(p.cursor(), posición->cursor() - p.cursor());
 
                 if( (s == "cierto")
                  || (s == "falso")
@@ -441,8 +449,8 @@ namespace Ñ
                 {
                     resultado = true;
                     
-                    posición.lexema(lexemas.size());
-                    Ñ::Lexema* l = new Ñ::Lexema(posición);
+                    p.lexema(posición->cursor() - p.cursor());
+                    Ñ::Lexema* l = new Ñ::Lexema(&p);
                     l->categoría = Ñ::CategoríaLexema::LEXEMA_RESERVADO;
                     l->contenido = s;
 
@@ -451,7 +459,7 @@ namespace Ñ
                 }
                 else
                 {
-                    posición = p;
+                    *posición = p;
                 }
             }
 
@@ -485,7 +493,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            Posición p = posición;
+            Posición p = *posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -495,7 +503,7 @@ namespace Ñ
                 carácter = siguienteCarácter(txt);
             }
                 
-            while(Ñ::esdígito(carácter) && (posición.cursor() < (txt.length()-1)))
+            while(Ñ::esdígito(carácter) && (posición->cursor() < (txt.length()-1)))
             {
                 resultado = true;
                 incrementaCursor(txt);
@@ -504,13 +512,13 @@ namespace Ñ
 
             if(carácter != ".")
             {
-                posición = p;
+                *posición = p;
                 return false;
             }
             
-            if(posición.cursor() == (txt.length()-1))
+            if(posición->cursor() == (txt.length()-1))
             {
-                posición = p;
+                *posición = p;
                 return false;
             }
 
@@ -521,32 +529,32 @@ namespace Ñ
                 resultado = true;
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
-            } while(Ñ::esdígito(carácter) && (posición.cursor() < (txt.length()-1)));
+            } while(Ñ::esdígito(carácter) && (posición->cursor() < (txt.length()-1)));
 
             std::string e = "e";
             std::string E = "E";
             if((carácter != e) && (carácter != E))
             {
-                posición = p;
+                *posición = p;
                 return false;
             }
             
-            if(posición.cursor() == (txt.length()-1))
+            if(posición->cursor() == (txt.length()-1))
             {
-                posición = p;
+                *posición = p;
                 return false;
             }
 
             incrementaCursor(txt);
             carácter = siguienteCarácter(txt);
             
-            if(posición.cursor() < (txt.length() - 1) && (carácter == "-") || (carácter == "+") )
+            if(posición->cursor() < (txt.length() - 1) && (carácter == "-") || (carácter == "+") )
             {
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
             }
 
-            while(Ñ::esdígito(carácter) && (posición.cursor() < (txt.length()-1)))
+            while(Ñ::esdígito(carácter) && (posición->cursor() < (txt.length()-1)))
             {
                 resultado = true;
                 incrementaCursor(txt);
@@ -555,12 +563,12 @@ namespace Ñ
 
             if(resultado)
             {
-                std::string s = txt.substr(p.cursor(), posición.cursor() - p.cursor());
+                std::string s = txt.substr(p.cursor(), posición->cursor() - p.cursor());
 
                 //double n = to!double(s);
 
-                posición.lexema(lexemas.size());
-                Ñ::Lexema* l = new Ñ::Lexema(posición);
+                p.lexema(posición->cursor() - p.cursor());
+                Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
 
@@ -598,7 +606,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            Posición p = posición;
+            Posición p = *posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -613,10 +621,10 @@ namespace Ñ
             {
                 //std::cout << ":: añado dígito entero" << std::endl;
                 resultado = true;
-                if(posición.cursor() == (txt.length()-1))
+                if(posición->cursor() == (txt.length()-1))
                 {
                     //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                    posición = p;
+                    *posición = p;
                     return false;
                 }
                 incrementaCursor(txt);
@@ -626,14 +634,14 @@ namespace Ñ
             if(carácter != ".")
             {
                 //std::cout << ":: Salida -> falta el punto decimal" << std::endl;
-                posición = p;
+                *posición = p;
                 return false;
             }
             
-            if(posición.cursor() == (txt.length()-1))
+            if(posición->cursor() == (txt.length()-1))
             {
                 //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                posición = p;
+                *posición = p;
                 return false;
             }
             
@@ -643,17 +651,17 @@ namespace Ñ
             if(!Ñ::esdígito(carácter))
             {
                 //std::cout << ":: Salida -> no es un dígito" << std::endl;
-                posición = p;
+                *posición = p;
                 return false;
             }
 
             do {
                 //std::cout << ":: añado dígito decimal" << std::endl;
                 resultado = true;
-                if(posición.cursor() == (txt.length()-1))
+                if(posición->cursor() == (txt.length()-1))
                 {
                     //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                    posición = p;
+                    *posición = p;
                     return false;
                 }
                 incrementaCursor(txt);
@@ -663,12 +671,12 @@ namespace Ñ
             if(resultado)
             {
                 //std::cout << ":: resultado" << std::endl;
-                std::string s = txt.substr(p.cursor(), posición.cursor() - p.cursor());
+                std::string s = txt.substr(p.cursor(), posición->cursor() - p.cursor());
 
                 //double n = to!double(s);
 
-                posición.lexema(lexemas.size());
-                Ñ::Lexema* l = new Ñ::Lexema(posición);
+                p.lexema(posición->cursor() - p.cursor());
+                Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
                 
@@ -706,7 +714,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            Posición p = posición;
+            Posición p = *posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -720,7 +728,7 @@ namespace Ñ
             {
                 resultado = true;
                 do {
-                    if(posición.cursor() == (txt.length()+1))
+                    if(posición->cursor() == (txt.length()+1))
                     {
                         return true;
                     }
@@ -731,12 +739,12 @@ namespace Ñ
 
             if(resultado)
             {
-                std::string s = txt.substr(p.cursor(), posición.cursor() - p.cursor());
+                std::string s = txt.substr(p.cursor(), posición->cursor() - p.cursor());
 
                 //int n = to!int(s);
 
-                posición.lexema(lexemas.size());
-                Ñ::Lexema* l = new Ñ::Lexema(posición);
+                p.lexema(posición->cursor() - p.cursor());
+                Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO;
                 l->contenido = s;
                 
@@ -821,14 +829,14 @@ namespace Ñ
             {
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
-                Posición p = posición;
+                Posición p = *posición;
 
                 std::string texto;
 
-                posición.lexema(lexemas.size());
-                Ñ::Lexema* l = new Ñ::Lexema(posición);
+                p.lexema(posición->cursor() - p.cursor());
+                Ñ::Lexema* l = new Ñ::Lexema(&p);
 
-                while((carácter != "\"") && (posición.cursor() < txt.length()-1))
+                while((carácter != "\"") && (posición->cursor() < txt.length()-1))
                 {
                     if(carácter == "\\")
                     {
@@ -877,7 +885,7 @@ namespace Ñ
 
                 if(carácter != "\"")
                 {
-                    posición = p;
+                    *posición = p;
                     Ñ::errorConsola(u8"Error, esperaba un cierre de comilla doble [\"]");
                 }
 
@@ -923,7 +931,7 @@ namespace Ñ
         try {
             //std::cout << "identificador(" << txt << ")" << std::endl;
             
-            Posición p = posición;
+            Posición p = *posición;
 
             //std::cout << "c: " << c << std::endl;
             //std::cout << "cursor: " << cursor << std::endl;
@@ -935,12 +943,13 @@ namespace Ñ
             
             if(resultado)
             {
-                std::string texto = txt.substr(p.cursor(), posición.cursor() - p.cursor());
+                std::string texto = txt.substr(p.cursor(), posición->cursor() - p.cursor());
 
                 //std::cout << "identificador->contenido" << texto << std::endl;
 
-                posición.lexema(lexemas.size());
-                Ñ::Lexema* l = new Ñ::Lexema(posición);
+                p.lexema(posición->cursor() - p.cursor());
+                Ñ::Lexema* l = new Ñ::Lexema(&p);
+
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
                 l->contenido = texto;
 
@@ -979,6 +988,9 @@ namespace Ñ
 
     std::vector<Ñ::Lexema*> Léxico::analiza(std::string comando)
     {
+        posición = new Ñ::Posición;
+        posición->inicia();
+
         std::vector<Ñ::Lexema*> vacía;
         if(!lexemas.empty())
         {
@@ -990,59 +1002,59 @@ namespace Ñ
 
             std::string cmd = comando + " ";
 
-            posición.inicia();
+            posición->inicia();
 
-            while(posición.cursor() <= cmd.length())
+            while(posición->cursor() <= cmd.length())
             {
                 //std::cout << "cursor: " << cursor << std::endl;
-                Posición p = posición;
+                Posición p = *posición;
                 if(comentario(cmd))
                 {
                     continue;
                 }
-                posición = p;
+                *posición = p;
                 
                 if(nuevaLínea(cmd))
                 {
                     continue;
                 }
-                posición = p;
+                *posición = p;
                 
                 if(espacio(cmd))
                 {
                     continue;
                 }
-                posición = p;
+                *posición = p;
 
                 if(texto(cmd))
                 {
                     continue;
                 }
-                posición = p;
+                *posición = p;
 
                 if(notación(cmd))
                 {
                     continue;
                 }
-                posición = p;
+                *posición = p;
 
                 if(reservada(cmd))
                 {
                     continue;
                 }
-                posición = p;
+                *posición = p;
 
                 if(número(cmd))
                 {
                     continue;
                 }
-                posición = p;
+                *posición = p;
 
                 if(identificador(cmd))
                 {
                     continue;
                 }
-                posición = p;
+                *posición = p;
 
                 break;
             }
@@ -1071,7 +1083,7 @@ namespace Ñ
             return vacía;
         }
 
-        posición.lexema(lexemas.size());
+        posición->lexema(posición->cursor());
         Ñ::Lexema* fin = new Ñ::Lexema(posición);
         fin->categoría = Ñ::CategoríaLexema::LEXEMA_FIN;
         fin->contenido = "";

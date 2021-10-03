@@ -4,10 +4,11 @@
 #include <vector>
 
 #include "lexema.hpp"
-#include "posicion.hpp"
 
 namespace Ñ
 {
+    extern class Posición;
+    
     class Léxico // Análisis léxico
     {
     public:
@@ -19,7 +20,7 @@ namespace Ñ
 #else
     private:
 #endif
-        Posición posición = {};
+        Posición* posición;
         
         std::vector<Ñ::Lexema*> lexemas;
 

@@ -71,6 +71,8 @@ std::string creaNombreMódulo(std::string archivo)
 
 	lexemas = léxico.analiza(código);
 
+	Ñ::muestraLexemas(lexemas);
+
 	if(lexemas.empty())
 	{
 		Ñ::errorConsola(u8"Error durante el análisis léxico, código incorrecto.");

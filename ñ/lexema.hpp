@@ -2,10 +2,10 @@
 
 #include <string>
 
-#include "posicion.hpp"
-
 namespace Ñ
 {
+    extern class Posición;
+
     // Análisis léxico
     enum CategoríaLexema {
         LEXEMA_RESERVADO,
@@ -21,14 +21,15 @@ namespace Ñ
     class Lexema
     {
     private:
-        Posición _posición;
+        Posición* _posición = nullptr;
     public:
-        Lexema(Posición posición = {});
+        Lexema(Posición* posición = nullptr);
+        ~Lexema();
 
         CategoríaLexema categoría;
         std::string contenido;
 
-        Posición posición();
+        Posición* posición();
     };
     
     void muestraLexemas(std::vector<Ñ::Lexema*> _lexemas);

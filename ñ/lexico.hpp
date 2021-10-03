@@ -18,7 +18,10 @@ namespace Ñ
 #else
     private:
 #endif
-        int cursor = 0;
+        uint64_t cursor = 0;
+        uint64_t línea = 0;
+        uint64_t columna = 0;
+        uint64_t lexema = 0;
         std::vector<Ñ::Lexema*> lexemas;
 
         void incrementaCursor(std::string txt);

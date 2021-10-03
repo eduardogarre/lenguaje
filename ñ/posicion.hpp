@@ -11,7 +11,7 @@ namespace Ñ
         uint64_t _cursor;
         uint64_t _línea;
         uint64_t _columna;
-        uint64_t _lexema;
+        uint64_t _longitud;
         std::string _archivo;
 
     public:
@@ -20,14 +20,14 @@ namespace Ñ
         uint64_t cursor();
         uint64_t línea();
         uint64_t columna();
-        uint64_t lexema();
+        uint64_t longitud();
         std::string archivo();
 
         void incCursor();
         void incLínea();
         void empiezaColumna();
         void incColumna();
-        void lexema(uint64_t lexema);
+        void longitud(uint64_t longitud);
         void archivo(std::string archivo);
     };
 

@@ -5,7 +5,7 @@ void Ñ::Posición::inicia()
     _cursor = 0;
     _línea = 1;
     _columna = 1;
-    _lexema = 0;
+    _longitud = 0;
     _archivo = "";
 }
 
@@ -24,9 +24,9 @@ uint64_t Ñ::Posición::columna()
     return _columna;
 }
 
-uint64_t Ñ::Posición::lexema()
+uint64_t Ñ::Posición::longitud()
 {
-    return _lexema;
+    return _longitud;
 }
 
 std::string Ñ::Posición::archivo()
@@ -56,9 +56,9 @@ void Ñ::Posición::incColumna()
     _columna++;
 }
 
-void Ñ::Posición::lexema(uint64_t lexema)
+void Ñ::Posición::longitud(uint64_t longitud)
 {
-    _lexema = lexema;
+    _longitud = longitud;
 }
 
 void Ñ::Posición::archivo(std::string archivo)

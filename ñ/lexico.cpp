@@ -315,12 +315,12 @@ namespace Ñ
 
             if(Ñ::espuntuación(carácter))
             {
-                posición->lexema(carácter.size());
+                posición->longitud(carácter.size());
                 Ñ::Lexema* l = new Ñ::Lexema(posición);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NOTACIÓN;
                 l->contenido = carácter;
 
-                //std::cout << "Creo nuevo lexema" << std::endl;
+                //std::cout << "Creo nuevo longitud" << std::endl;
                 lexemas.push_back(l);
 
                 incrementaCursor(txt);
@@ -449,12 +449,12 @@ namespace Ñ
                 {
                     resultado = true;
                     
-                    p.lexema(s.size());
+                    p.longitud(s.size());
                     Ñ::Lexema* l = new Ñ::Lexema(&p);
                     l->categoría = Ñ::CategoríaLexema::LEXEMA_RESERVADO;
                     l->contenido = s;
 
-                    //std::cout << "Creo nuevo lexema" << std::endl;
+                    //std::cout << "Creo nuevo longitud" << std::endl;
                     lexemas.push_back(l);
                 }
                 else
@@ -567,12 +567,12 @@ namespace Ñ
 
                 //double n = to!double(s);
 
-                p.lexema(s.size());
+                p.longitud(s.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
 
-                //std::cout << "Creo nuevo lexema" << std::endl;
+                //std::cout << "Creo nuevo longitud" << std::endl;
                 lexemas.push_back(l);
             }
 
@@ -675,12 +675,12 @@ namespace Ñ
 
                 //double n = to!double(s);
 
-                p.lexema(s.size());
+                p.longitud(s.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
                 
-                //std::cout << "Creo nuevo lexema" << std::endl;
+                //std::cout << "Creo nuevo longitud" << std::endl;
                 lexemas.push_back(l);
             }
 
@@ -743,12 +743,12 @@ namespace Ñ
 
                 //int n = to!int(s);
 
-                p.lexema(s.size());
+                p.longitud(s.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO;
                 l->contenido = s;
                 
-                //std::cout << "Creo nuevo lexema" << std::endl;
+                //std::cout << "Creo nuevo longitud" << std::endl;
                 lexemas.push_back(l);
             }
 
@@ -877,7 +877,7 @@ namespace Ñ
                     carácter = siguienteCarácter(txt);
                 }
 
-                p.lexema(texto.size());
+                p.longitud(texto.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
 
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_TEXTO;
@@ -891,7 +891,7 @@ namespace Ñ
 
                 incrementaCursor(txt);
 
-                //std::cout << "Creo nuevo lexema" << std::endl;
+                //std::cout << "Creo nuevo longitud" << std::endl;
                 lexemas.push_back(l);
 
                 return true;
@@ -947,16 +947,16 @@ namespace Ñ
 
                 //std::cout << "identificador->contenido" << texto << std::endl;
 
-                p.lexema(texto.size());
+                p.longitud(texto.size());
                 Ñ::Lexema* l = new Ñ::Lexema(&p);
 
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
                 l->contenido = texto;
 
 
-                //std::cout << "Creo nuevo lexema" << std::endl;
+                //std::cout << "Creo nuevo longitud" << std::endl;
                 lexemas.push_back(l);
-                //std::cout << "lexema creado" << std::endl;
+                //std::cout << "longitud creado" << std::endl;
             }
 
             return resultado;
@@ -1083,7 +1083,7 @@ namespace Ñ
             return vacía;
         }
 
-        posición->lexema(0);
+        posición->longitud(0);
         Ñ::Lexema* fin = new Ñ::Lexema(posición);
         fin->categoría = Ñ::CategoríaLexema::LEXEMA_FIN;
         fin->contenido = "";

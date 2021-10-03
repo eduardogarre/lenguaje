@@ -33,7 +33,7 @@ void Ñ::muestraLexemas(std::vector<Ñ::Lexema*> _lexemas)
         std::cout << "LIN:" << _lexemas.front()->posición()->línea();
         std::cout << ", COL:" << _lexemas.front()->posición()->columna();
         std::cout << ", CUR:" << _lexemas.front()->posición()->cursor();
-        std::cout << ", LEX:" << _lexemas.front()->posición()->lexema();
+        std::cout << ", LON:" << _lexemas.front()->posición()->longitud();
 
         switch (_lexemas.front()->categoría)
         {

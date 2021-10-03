@@ -1,5 +1,14 @@
 #include "posicion.hpp"
 
+void Ñ::Posición::inicia()
+{
+    _cursor = 0;
+    _línea = 0;
+    _columna = 0;
+    _lexema = 0;
+    _archivo = "";
+}
+
 uint64_t Ñ::Posición::cursor()
 {
     return _cursor;
@@ -25,19 +34,21 @@ std::string Ñ::Posición::archivo()
     return _archivo;
 }
 
-void Ñ::Posición::cursor(uint64_t cursor)
+void Ñ::Posición::incCursor()
 {
-    _cursor = cursor;
+    _cursor++;
+    _columna++;
 }
 
-void Ñ::Posición::línea(uint64_t línea)
+void Ñ::Posición::incLínea()
 {
-    _línea = línea;
+    _línea++;
+    _columna = 0;
 }
 
-void Ñ::Posición::columna(uint64_t columna)
+void Ñ::Posición::incColumna()
 {
-    _columna = columna;
+    _columna++;
 }
 
 void Ñ::Posición::lexema(uint64_t lexema)

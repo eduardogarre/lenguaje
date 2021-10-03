@@ -29,7 +29,10 @@ namespace Ñ
 
         if(txt.size() > posición.cursor() && paso <= txt.size() - posición.cursor())
         {
-            posición.cursor(posición.cursor() + paso);
+            while(paso--)
+            {
+                posición.incCursor();
+            }
         }
     }
 
@@ -44,6 +47,11 @@ namespace Ñ
         if(txt.size() > posición.cursor() && paso <= txt.size() - posición.cursor())
         {
             c = txt.substr(posición.cursor(), paso);
+        }
+
+        if(esnuevalínea(c))
+        {
+            posición.incLínea();
         }
 
         return c;
@@ -213,7 +221,6 @@ namespace Ñ
 
             if(esnuevalínea(carácter))
             {
-                
                 resultado = true;
                 incrementaCursor(txt);
                 return resultado;
@@ -300,8 +307,8 @@ namespace Ñ
 
             if(Ñ::espuntuación(carácter))
             {
-
-                Ñ::Lexema* l = new Ñ::Lexema();
+                posición.lexema(lexemas.size());
+                Ñ::Lexema* l = new Ñ::Lexema(posición);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NOTACIÓN;
                 l->contenido = carácter;
 
@@ -434,7 +441,8 @@ namespace Ñ
                 {
                     resultado = true;
                     
-                    Ñ::Lexema* l = new Ñ::Lexema();
+                    posición.lexema(lexemas.size());
+                    Ñ::Lexema* l = new Ñ::Lexema(posición);
                     l->categoría = Ñ::CategoríaLexema::LEXEMA_RESERVADO;
                     l->contenido = s;
 
@@ -551,7 +559,8 @@ namespace Ñ
 
                 //double n = to!double(s);
 
-                Ñ::Lexema* l = new Ñ::Lexema();
+                posición.lexema(lexemas.size());
+                Ñ::Lexema* l = new Ñ::Lexema(posición);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
 
@@ -658,7 +667,8 @@ namespace Ñ
 
                 //double n = to!double(s);
 
-                Ñ::Lexema* l = new Ñ::Lexema();
+                posición.lexema(lexemas.size());
+                Ñ::Lexema* l = new Ñ::Lexema(posición);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
                 l->contenido = s;
                 
@@ -725,7 +735,8 @@ namespace Ñ
 
                 //int n = to!int(s);
 
-                Ñ::Lexema* l = new Ñ::Lexema();
+                posición.lexema(lexemas.size());
+                Ñ::Lexema* l = new Ñ::Lexema(posición);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO;
                 l->contenido = s;
                 
@@ -814,7 +825,8 @@ namespace Ñ
 
                 std::string texto;
 
-                Ñ::Lexema* l = new Ñ::Lexema();
+                posición.lexema(lexemas.size());
+                Ñ::Lexema* l = new Ñ::Lexema(posición);
 
                 while((carácter != "\"") && (posición.cursor() < txt.length()-1))
                 {
@@ -927,7 +939,8 @@ namespace Ñ
 
                 //std::cout << "identificador->contenido" << texto << std::endl;
 
-                Ñ::Lexema* l = new Ñ::Lexema();
+                posición.lexema(lexemas.size());
+                Ñ::Lexema* l = new Ñ::Lexema(posición);
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
                 l->contenido = texto;
 
@@ -977,7 +990,7 @@ namespace Ñ
 
             std::string cmd = comando + " ";
 
-            posición.cursor(0);
+            posición.inicia();
 
             while(posición.cursor() <= cmd.length())
             {
@@ -1058,7 +1071,8 @@ namespace Ñ
             return vacía;
         }
 
-        Ñ::Lexema* fin = new Ñ::Lexema();
+        posición.lexema(lexemas.size());
+        Ñ::Lexema* fin = new Ñ::Lexema(posición);
         fin->categoría = Ñ::CategoríaLexema::LEXEMA_FIN;
         fin->contenido = "";
         lexemas.push_back(fin);

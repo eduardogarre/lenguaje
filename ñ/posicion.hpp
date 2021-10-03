@@ -15,15 +15,17 @@ namespace Ñ
         std::string _archivo;
 
     public:
+        void inicia();
+        
         uint64_t cursor();
         uint64_t línea();
         uint64_t columna();
         uint64_t lexema();
         std::string archivo();
 
-        void cursor(uint64_t cursor);
-        void línea(uint64_t línea);
-        void columna(uint64_t columna);
+        void incCursor();
+        void incLínea();
+        void incColumna();
         void lexema(uint64_t lexema);
         void archivo(std::string archivo);
     };

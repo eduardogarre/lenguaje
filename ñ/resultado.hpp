@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "posicion.hpp"
+
 namespace Ñ
 {
 
@@ -11,9 +13,12 @@ namespace Ñ
         bool _error;
         std::string _mensaje;
         Ñ::Nodo* _nodo;
+        Posición _posición;
 
     public:
-        Resultado() : _error(true), _nodo(nullptr) {}
+        Resultado(Posición posición = {}) : _error(true), _nodo(nullptr) {}
+
+        Posición posición();
 
         bool error() { return _error; }
         void error(std::string mensaje) { _error = true; _mensaje = mensaje; }

@@ -21,8 +21,8 @@ namespace Ñ
     private:
         bool _error;
         std::string _mensaje;
-
         CategoríaLlvm categoría;
+        Posición _posición;
 
         union {
             llvm::BasicBlock *  _bloque;
@@ -32,7 +32,9 @@ namespace Ñ
         } entidad;
 
     public:
-        ResultadoLlvm() : _error(true) {}
+        ResultadoLlvm(Posición posición = {}) : _error(true) {}
+
+        Posición posición();
 
         bool error() { return _error; }
         void error(std::string mensaje) { _error = true; _mensaje = mensaje; }

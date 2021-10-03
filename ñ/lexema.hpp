@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "posicion.hpp"
+
 namespace Ñ
 {
     // Análisis léxico
@@ -18,11 +20,15 @@ namespace Ñ
 
     class Lexema
     {
+    private:
+        Posición _posición;
     public:
-        Lexema();
+        Lexema(Posición posición = {});
 
         CategoríaLexema categoría;
         std::string contenido;
+
+        Posición posición();
     };
     
     void muestraLexemas(std::vector<Ñ::Lexema*> _lexemas);

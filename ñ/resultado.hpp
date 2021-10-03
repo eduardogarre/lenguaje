@@ -12,19 +12,20 @@ namespace Ñ
         bool _error;
         std::string _mensaje;
         Ñ::Nodo* _nodo;
-        Posición* _posición;
+        Ñ::Posición* _posición = nullptr;
 
     public:
-        Resultado(Posición* posición = nullptr) : _error(true), _nodo(nullptr) {}
+        Resultado();
 
-        Posición* posición() {return _posición;}
+        Ñ::Posición* posición();
+        void posición(Ñ::Posición* pos);
 
-        bool error() { return _error; }
-        void error(std::string mensaje) { _error = true; _mensaje = mensaje; }
-        void éxito() { _error = false; }
-        std::string mensaje() { return (_error ? _mensaje : ""); }
+        bool error();
+        void error(std::string mensaje);
+        void éxito();
+        std::string mensaje();
 
-        void nodo(Ñ::Nodo* nodo) { _nodo = nodo; }
-        Ñ::Nodo* nodo() { return (_error ? nullptr : _nodo); }
+        void nodo(Ñ::Nodo* nodo);
+        Ñ::Nodo* nodo();
     };
 }

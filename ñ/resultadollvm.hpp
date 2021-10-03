@@ -34,25 +34,26 @@ namespace Ñ
         } entidad;
 
     public:
-        ResultadoLlvm(Posición* posición = nullptr) : _error(true) {}
+        ResultadoLlvm();
 
-        Posición* posición() {return _posición;}
+        Posición* posición();
+        void posición(Ñ::Posición* pos);
 
-        bool error() { return _error; }
-        void error(std::string mensaje) { _error = true; _mensaje = mensaje; }
-        void éxito() { _error = false; }
-        std::string mensaje() { return (_error ? _mensaje : ""); }
+        bool error();
+        void error(std::string mensaje);
+        void éxito();
+        std::string mensaje();
 
-        void bloque(llvm::BasicBlock* blq) { categoría = Ñ::CategoríaLlvm::BLOQUE_LLVM; entidad._bloque = blq; }
-        llvm::BasicBlock* bloque() { return (_error ? nullptr : entidad._bloque); }
+        void bloque(llvm::BasicBlock* blq);
+        llvm::BasicBlock* bloque();
 
-        void función(llvm::Function* fn) { categoría = Ñ::CategoríaLlvm::FUNCIÓN_LLVM; entidad._función = fn; }
-        llvm::Function* función() { return (_error ? nullptr : entidad._función); }
+        void función(llvm::Function* fn);
+        llvm::Function* función();
 
-        void módulo(llvm::Module* mod) { categoría = Ñ::CategoríaLlvm::MÓDULO_LLVM; entidad._módulo = mod; }
-        llvm::Module* módulo() { return (_error ? nullptr : entidad._módulo); }
+        void módulo(llvm::Module* mod);
+        llvm::Module* módulo();
 
-        void valor(llvm::Value* val) { categoría = Ñ::CategoríaLlvm::VALOR_LLVM; entidad._valor = val; }
-        llvm::Value* valor() { return (_error ? nullptr : entidad._valor); }
+        void valor(llvm::Value* val);
+        llvm::Value* valor();
     };
 }

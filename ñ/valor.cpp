@@ -3,11 +3,12 @@
 #include <string>
 
 #include "nodo.hpp"
+#include "posicion.hpp"
 #include "resultado.hpp"
 #include "tipo.hpp"
 #include "valor.hpp"
 
-Ñ::Valor::Valor() : Ñ::Nodo()
+Ñ::Valor::Valor(Ñ::Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_VALOR;
 	tipo = Ñ::CategoríaTipo::TIPO_NADA;
@@ -435,7 +436,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aBooleano(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -466,7 +467,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aNat8(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -503,7 +504,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aNat16(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -547,7 +548,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aNat32(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -598,7 +599,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aNat64(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -657,7 +658,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aEnt8(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -694,7 +695,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aEnt16(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -745,7 +746,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aEnt32(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -810,7 +811,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aEnt64(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -916,7 +917,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aReal32(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -1009,7 +1010,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aReal64(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -1109,7 +1110,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 Ñ::Resultado Ñ::aTexto(Ñ::Valor* valor)
 {
 	Ñ::Resultado resultado;
-	Ñ::Valor* v = new Ñ::Valor;
+	Ñ::Valor* v = new Ñ::Valor(valor->posición());
 
 	if(valor->esBooleano())
 	{
@@ -1215,7 +1216,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 	case Ñ::CategoríaTipo::TIPO_NADA:
 		delete valor;
 		resultado.éxito();
-		resultado.nodo((Ñ::Nodo*)(new Ñ::Valor));
+		resultado.nodo((Ñ::Nodo*)(new Ñ::Valor(valor->posición())));
 		return resultado;
 		break;
 	
@@ -1414,90 +1415,90 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	switch (valor->obténTipo())
 	{
 	case TIPO_NADA:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		return v;
 		break;
 	
 	case TIPO_PUNTERO:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->puntero(valor->puntero());
 		return v;
 		break;
 	
 	case TIPO_TEXTO:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->texto(valor->texto());
 		return v;
 		break;
 	
 	case TIPO_BOOLEANO:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->booleano(valor->booleano());
 		return v;
 		break;
 	
 	case TIPO_NATURAL_8:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->nat8(valor->nat8());
 		return v;
 		break;
 	
 	case TIPO_NATURAL_16:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->nat16(valor->nat16());
 		return v;
 		break;
 	
 	case TIPO_NATURAL_32:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->nat32(valor->nat32());
 		return v;
 		break;
 	
 	case TIPO_NATURAL_64:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->nat64(valor->nat64());
 		return v;
 		break;
 	
 	case TIPO_ENTERO_8:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->ent8(valor->ent8());
 		return v;
 		break;
 	
 	case TIPO_ENTERO_16:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->ent16(valor->ent16());
 		return v;
 		break;
 	
 	case TIPO_ENTERO_32:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->ent32(valor->ent32());
 		return v;
 		break;
 	
 	case TIPO_ENTERO_64:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->ent64(valor->ent64());
 		return v;
 		break;
 	
 	case TIPO_REAL_32:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->real32(valor->real32());
 		return v;
 		break;
 	
 	case TIPO_REAL_64:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		v->real64(valor->real64());
 		return v;
 		break;
 	
 	default:
-		v = new Ñ::Valor;
+		v = new Ñ::Valor(valor->posición());
 		return v;
 		break;
 	}
@@ -1515,10 +1516,10 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	}
 	else if(literal->dato == "nulo")
 	{
-		return new Ñ::Valor;
+		return new Ñ::Valor(literal->posición());
 	}
 	
-	Ñ::Valor* valor = new Ñ::Valor;
+	Ñ::Valor* valor = new Ñ::Valor(literal->posición());
 	
 	switch (literal->tipo)
 	{

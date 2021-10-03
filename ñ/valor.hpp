@@ -9,6 +9,7 @@
 
 namespace Ñ
 {
+    extern class Posición;
     extern class TablaSímbolos;
     
     class Valor : public Nodo
@@ -35,7 +36,7 @@ namespace Ñ
     public:
         CategoríaTipo tipo;
         
-        Valor();
+        Valor(Ñ::Posición* posición = nullptr);
         ~Valor();
 
         Ñ::CategoríaTipo obténTipo();

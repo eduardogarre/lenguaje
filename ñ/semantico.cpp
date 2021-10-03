@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "nodo.hpp"
+#include "posicion.hpp"
 #include "resultado.hpp"
 #include "semantico.hpp"
 #include "tablasimbolos.hpp"

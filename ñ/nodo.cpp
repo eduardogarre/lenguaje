@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "nodo.hpp"
+#include "posicion.hpp"
 #include "tablasimbolos.hpp"
 #include "tipo.hpp"
 #include "valor.hpp"
@@ -145,8 +146,13 @@ void Ñ::Nodo::imprimeAjuste()
 	}
 }
 
-Ñ::Nodo::Nodo(Posición* posición) : _posición(posición)
+Ñ::Nodo::Nodo(Posición* posición)
 {
+	_posición = new Ñ::Posición;
+	if(posición != nullptr)
+	{
+		*_posición = *posición;
+	}
 	categoría = Ñ::CategoríaNodo::NODO_VACÍO;
 }
 

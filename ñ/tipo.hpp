@@ -11,6 +11,7 @@ namespace Ñ
 {
 
     extern class TablaSímbolos;
+    extern class Posición;
     
     enum CategoríaTipo
     {
@@ -43,7 +44,7 @@ namespace Ñ
     public:
         CategoríaTipo tipo;
 
-        Tipo();
+        Tipo(Ñ::Posición* posición = nullptr);
         ~Tipo();
 
         void muestra(TablaSímbolos* tablaSímbolos = nullptr);

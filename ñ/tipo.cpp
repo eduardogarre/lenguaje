@@ -2,6 +2,7 @@
 
 #include "apoyo.hpp"
 #include "nodo.hpp"
+#include "posicion.hpp"
 #include "tipo.hpp"
 
 bool Ñ::esNatural(Ñ::Tipo* tipo)
@@ -64,7 +65,7 @@ bool Ñ::esBooleano(Ñ::Tipo* tipo)
 	}
 }
 
-Ñ::Tipo::Tipo() : Ñ::Nodo()
+Ñ::Tipo::Tipo(Ñ::Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_TIPO;
 }
@@ -110,7 +111,7 @@ void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
 
 Ñ::Tipo* Ñ::obténTipoMínimoComún(Ñ::Tipo* t1, Ñ::Tipo* t2)
 {
-	Ñ::Tipo* tmc = new Ñ::Tipo;
+	Ñ::Tipo* tmc = new Ñ::Tipo(t1->posición());
 
 	switch (t1->tipo)
 	{
@@ -574,7 +575,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 		return nullptr;
 	}
 
-	Ñ::Tipo* tipo = new Ñ::Tipo;
+	Ñ::Tipo* tipo = new Ñ::Tipo(literal->posición());
 	tipo->tipo = literal->tipo;
 
 	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
@@ -621,7 +622,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 		return nullptr;
 	}
 
-	Ñ::Tipo* tipo = new Ñ::Tipo;
+	Ñ::Tipo* tipo = new Ñ::Tipo(valor->posición());
 	tipo->tipo = valor->tipo;
 
 	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)

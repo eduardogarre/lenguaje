@@ -931,7 +931,8 @@ namespace Ñ
         try {
             //std::cout << "identificador(" << txt << ")" << std::endl;
             
-            Posición p = *posición;
+            Ñ::Posición* p = new Ñ::Posición;
+            *p = *posición;
 
             //std::cout << "c: " << c << std::endl;
             //std::cout << "cursor: " << cursor << std::endl;
@@ -943,12 +944,12 @@ namespace Ñ
             
             if(resultado)
             {
-                std::string texto = txt.substr(p.cursor(), posición->cursor() - p.cursor());
+                std::string texto = txt.substr(p->cursor(), posición->cursor() - p->cursor());
 
                 //std::cout << "identificador->contenido" << texto << std::endl;
 
-                p.longitud(texto.size());
-                Ñ::Lexema* l = new Ñ::Lexema(&p);
+                posición->longitud(texto.size());
+                Ñ::Lexema* l = new Ñ::Lexema(posición);
 
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
                 l->contenido = texto;
@@ -959,6 +960,7 @@ namespace Ñ
                 //std::cout << "longitud creado" << std::endl;
             }
 
+            delete p;
             return resultado;
         }
         catch(const std::runtime_error& re)

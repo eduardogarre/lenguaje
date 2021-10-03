@@ -23,27 +23,27 @@ namespace Ñ
 #endif
     void Léxico::incrementaCursor(std::string txt)
     {
-        int paso = std::mblen(txt.c_str() + cursor, std::min((uint64_t)MB_CUR_MAX, (uint64_t)txt.size() - cursor));
+        uint64_t paso = std::mblen(txt.c_str() + posición.cursor(), std::min((uint64_t)MB_CUR_MAX, (uint64_t)txt.size() - posición.cursor()));
 
-        //std::cout << "incrementaCursor(" << txt << ") - paso:" << paso << "  - cursor:" << cursor << "  - txt.size():" << txt.size() << std::endl;
+        //std::cout << "incrementaCursor(" << txt << ") - paso:" << paso << "  - posición.cursor():" << posición.cursor() << "  - txt.size():" << txt.size() << std::endl;
 
-        if(txt.size() > cursor && paso <= txt.size() - cursor)
+        if(txt.size() > posición.cursor() && paso <= txt.size() - posición.cursor())
         {
-            cursor += paso;
+            posición.cursor(posición.cursor() + paso);
         }
     }
 
     std::string Léxico::siguienteCarácter(std::string txt)
     {
-        int paso = std::mblen(txt.c_str() + cursor, std::min((uint64_t)MB_CUR_MAX, (uint64_t)txt.size() - cursor));
+        uint64_t paso = std::mblen(txt.c_str() + posición.cursor(), std::min((uint64_t)MB_CUR_MAX, (uint64_t)txt.size() - posición.cursor()));
         std::string c = "";
 
-        //std::cout << "siguienteCarácter(" << txt << ") - paso:" << paso << "  - cursor:" << cursor << "  - txt.size():" << txt.size() << std::endl;
+        //std::cout << "siguienteCarácter(" << txt << ") - paso:" << paso << "  - posición.cursor():" << posición.cursor() << "  - txt.size():" << txt.size() << std::endl;
         
 
-        if(txt.size() > cursor && paso <= txt.size() - cursor)
+        if(txt.size() > posición.cursor() && paso <= txt.size() - posición.cursor())
         {
-            c = txt.substr(cursor, paso);
+            c = txt.substr(posición.cursor(), paso);
         }
 
         return c;
@@ -92,7 +92,7 @@ namespace Ñ
     {
         try {
             bool resultado = false;
-            int c = cursor;
+            Posición p = posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -114,7 +114,7 @@ namespace Ñ
                 }
             }
             
-            cursor = c;
+            posición = p;
             return resultado;
         }
         catch(const std::runtime_error& re)
@@ -142,7 +142,7 @@ namespace Ñ
     {
         try {
             bool resultado = false;
-            int c = cursor;
+            Posición p = posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -155,7 +155,7 @@ namespace Ñ
                 {
                     resultado = true;
 
-                    while(cursor < txt.length()-1)
+                    while(posición.cursor() < txt.length()-1)
                     {
                         incrementaCursor(txt);
                         carácter = siguienteCarácter(txt);
@@ -175,7 +175,7 @@ namespace Ñ
                 }
             }
             
-            cursor = c;
+            posición = p;
             return resultado;
         }
         catch(const std::runtime_error& re)
@@ -205,7 +205,7 @@ namespace Ñ
             //std::cout << "nuevaLínea(" << txt << ")" << std::endl;
 
             bool resultado = false;
-            int c = cursor;
+            Posición p = posición;
 
             std::string carácter = "";
 
@@ -220,7 +220,7 @@ namespace Ñ
             }
             else
             {
-                cursor = c;
+                posición = p;
                 return false;
             }
         }
@@ -258,7 +258,7 @@ namespace Ñ
             {
                 resultado = true;
                 
-                if(cursor == (txt.length() - 1))
+                if(posición.cursor() == (txt.length() - 1))
                 {
                     return false;
                 }
@@ -344,7 +344,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor;
+            Posición p = posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -354,7 +354,7 @@ namespace Ñ
                 
                 resultado = true;
                 do {
-                    if(cursor == (txt.length()+1))
+                    if(posición.cursor() == (txt.length()+1))
                     {
                         return true;
                     }
@@ -396,11 +396,11 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor;
+            Posición p = posición;
 
             if(_nombre(txt))
             {
-                std::string s = txt.substr(c, cursor-c);
+                std::string s = txt.substr(p.cursor(), posición.cursor() - p.cursor());
 
                 if( (s == "cierto")
                  || (s == "falso")
@@ -443,7 +443,7 @@ namespace Ñ
                 }
                 else
                 {
-                    cursor = c;
+                    posición = p;
                 }
             }
 
@@ -477,7 +477,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor;
+            Posición p = posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -487,7 +487,7 @@ namespace Ñ
                 carácter = siguienteCarácter(txt);
             }
                 
-            while(Ñ::esdígito(carácter) && (cursor < (txt.length()-1)))
+            while(Ñ::esdígito(carácter) && (posición.cursor() < (txt.length()-1)))
             {
                 resultado = true;
                 incrementaCursor(txt);
@@ -496,13 +496,13 @@ namespace Ñ
 
             if(carácter != ".")
             {
-                cursor = c;
+                posición = p;
                 return false;
             }
             
-            if(cursor == (txt.length()-1))
+            if(posición.cursor() == (txt.length()-1))
             {
-                cursor = c;
+                posición = p;
                 return false;
             }
 
@@ -513,32 +513,32 @@ namespace Ñ
                 resultado = true;
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
-            } while(Ñ::esdígito(carácter) && (cursor < (txt.length()-1)));
+            } while(Ñ::esdígito(carácter) && (posición.cursor() < (txt.length()-1)));
 
             std::string e = "e";
             std::string E = "E";
             if((carácter != e) && (carácter != E))
             {
-                cursor = c;
+                posición = p;
                 return false;
             }
             
-            if(cursor == (txt.length()-1))
+            if(posición.cursor() == (txt.length()-1))
             {
-                cursor = c;
+                posición = p;
                 return false;
             }
 
             incrementaCursor(txt);
             carácter = siguienteCarácter(txt);
             
-            if(cursor < (txt.length() - 1) && (carácter == "-") || (carácter == "+") )
+            if(posición.cursor() < (txt.length() - 1) && (carácter == "-") || (carácter == "+") )
             {
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
             }
 
-            while(Ñ::esdígito(carácter) && (cursor < (txt.length()-1)))
+            while(Ñ::esdígito(carácter) && (posición.cursor() < (txt.length()-1)))
             {
                 resultado = true;
                 incrementaCursor(txt);
@@ -547,7 +547,7 @@ namespace Ñ
 
             if(resultado)
             {
-                std::string s = txt.substr(c, cursor-c);
+                std::string s = txt.substr(p.cursor(), posición.cursor() - p.cursor());
 
                 //double n = to!double(s);
 
@@ -589,7 +589,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor;
+            Posición p = posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -604,10 +604,10 @@ namespace Ñ
             {
                 //std::cout << ":: añado dígito entero" << std::endl;
                 resultado = true;
-                if(cursor == (txt.length()-1))
+                if(posición.cursor() == (txt.length()-1))
                 {
                     //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                    cursor = c;
+                    posición = p;
                     return false;
                 }
                 incrementaCursor(txt);
@@ -617,14 +617,14 @@ namespace Ñ
             if(carácter != ".")
             {
                 //std::cout << ":: Salida -> falta el punto decimal" << std::endl;
-                cursor = c;
+                posición = p;
                 return false;
             }
             
-            if(cursor == (txt.length()-1))
+            if(posición.cursor() == (txt.length()-1))
             {
                 //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                cursor = c;
+                posición = p;
                 return false;
             }
             
@@ -634,17 +634,17 @@ namespace Ñ
             if(!Ñ::esdígito(carácter))
             {
                 //std::cout << ":: Salida -> no es un dígito" << std::endl;
-                cursor = c;
+                posición = p;
                 return false;
             }
 
             do {
                 //std::cout << ":: añado dígito decimal" << std::endl;
                 resultado = true;
-                if(cursor == (txt.length()-1))
+                if(posición.cursor() == (txt.length()-1))
                 {
                     //std::cout << ":: Salida -> hemos llegado al final del código" << std::endl;
-                    cursor = c;
+                    posición = p;
                     return false;
                 }
                 incrementaCursor(txt);
@@ -654,7 +654,7 @@ namespace Ñ
             if(resultado)
             {
                 //std::cout << ":: resultado" << std::endl;
-                std::string s = txt.substr(c, cursor-c);
+                std::string s = txt.substr(p.cursor(), posición.cursor() - p.cursor());
 
                 //double n = to!double(s);
 
@@ -696,7 +696,7 @@ namespace Ñ
             
             bool resultado = false;
 
-            int c = cursor;
+            Posición p = posición;
 
             std::string carácter = siguienteCarácter(txt);
 
@@ -710,7 +710,7 @@ namespace Ñ
             {
                 resultado = true;
                 do {
-                    if(cursor == (txt.length()+1))
+                    if(posición.cursor() == (txt.length()+1))
                     {
                         return true;
                     }
@@ -721,7 +721,7 @@ namespace Ñ
 
             if(resultado)
             {
-                std::string s = txt.substr(c, cursor-c);
+                std::string s = txt.substr(p.cursor(), posición.cursor() - p.cursor());
 
                 //int n = to!int(s);
 
@@ -810,13 +810,13 @@ namespace Ñ
             {
                 incrementaCursor(txt);
                 carácter = siguienteCarácter(txt);
-                int c = cursor;
+                Posición p = posición;
 
                 std::string texto;
 
                 Ñ::Lexema* l = new Ñ::Lexema();
 
-                while((carácter != "\"") && (cursor < txt.length()-1))
+                while((carácter != "\"") && (posición.cursor() < txt.length()-1))
                 {
                     if(carácter == "\\")
                     {
@@ -865,7 +865,7 @@ namespace Ñ
 
                 if(carácter != "\"")
                 {
-                    cursor = c;
+                    posición = p;
                     Ñ::errorConsola(u8"Error, esperaba un cierre de comilla doble [\"]");
                 }
 
@@ -911,7 +911,7 @@ namespace Ñ
         try {
             //std::cout << "identificador(" << txt << ")" << std::endl;
             
-            int c = cursor;
+            Posición p = posición;
 
             //std::cout << "c: " << c << std::endl;
             //std::cout << "cursor: " << cursor << std::endl;
@@ -923,7 +923,7 @@ namespace Ñ
             
             if(resultado)
             {
-                std::string texto = txt.substr(c, cursor-c);
+                std::string texto = txt.substr(p.cursor(), posición.cursor() - p.cursor());
 
                 //std::cout << "identificador->contenido" << texto << std::endl;
 
@@ -977,59 +977,59 @@ namespace Ñ
 
             std::string cmd = comando + " ";
 
-            cursor = 0;
+            posición.cursor(0);
 
-            while(cursor <= cmd.length())
+            while(posición.cursor() <= cmd.length())
             {
                 //std::cout << "cursor: " << cursor << std::endl;
-                int c = cursor;
+                Posición p = posición;
                 if(comentario(cmd))
                 {
                     continue;
                 }
-                cursor = c;
+                posición = p;
                 
                 if(nuevaLínea(cmd))
                 {
                     continue;
                 }
-                cursor = c;
+                posición = p;
                 
                 if(espacio(cmd))
                 {
                     continue;
                 }
-                cursor = c;
+                posición = p;
 
                 if(texto(cmd))
                 {
                     continue;
                 }
-                cursor = c;
+                posición = p;
 
                 if(notación(cmd))
                 {
                     continue;
                 }
-                cursor = c;
+                posición = p;
 
                 if(reservada(cmd))
                 {
                     continue;
                 }
-                cursor = c;
+                posición = p;
 
                 if(número(cmd))
                 {
                     continue;
                 }
-                cursor = c;
+                posición = p;
 
                 if(identificador(cmd))
                 {
                     continue;
                 }
-                cursor = c;
+                posición = p;
 
                 break;
             }

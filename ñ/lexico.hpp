@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "lexema.hpp"
+#include "posicion.hpp"
 
 namespace Ñ
 {
@@ -18,10 +19,8 @@ namespace Ñ
 #else
     private:
 #endif
-        uint64_t cursor = 0;
-        uint64_t línea = 0;
-        uint64_t columna = 0;
-        uint64_t lexema = 0;
+        Posición posición = {};
+        
         std::vector<Ñ::Lexema*> lexemas;
 
         void incrementaCursor(std::string txt);

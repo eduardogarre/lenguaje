@@ -24,7 +24,7 @@ namespace Ñ
         bool _error;
         std::string _mensaje;
         CategoríaLlvm categoría;
-        Posición* _posición;
+        Posición* _posición = nullptr;
 
         union {
             llvm::BasicBlock *  _bloque;

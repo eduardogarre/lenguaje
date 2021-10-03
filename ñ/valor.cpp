@@ -1406,7 +1406,7 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	{
 		return nullptr;
 	}
-	else if(((Ñ::Nodo*)valor)->categoría != Ñ::CategoríaNodo::NODO_VALOR)
+	else if(valor->categoría != Ñ::CategoríaNodo::NODO_VALOR)
 	{
 		return nullptr;
 	}
@@ -1509,7 +1509,7 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	{
 		return nullptr;
 	}
-	else if(((Ñ::Nodo*)literal)->categoría != Ñ::CategoríaNodo::NODO_LITERAL)
+	else if(literal->categoría != Ñ::CategoríaNodo::NODO_LITERAL)
 	{
 		return nullptr;
 	}
@@ -1592,7 +1592,7 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 		{
 			Ñ::Tipo* subtmc = nullptr;
 
-			for(auto subliteral : ((Ñ::Nodo*)literal)->ramas)
+			for(auto subliteral : literal->ramas)
 			{
 				if(subtmc == nullptr)
 				{
@@ -1604,14 +1604,14 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 				}
 			}
 
-			for(auto subliteral : ((Ñ::Nodo*)literal)->ramas)
+			for(auto subliteral : literal->ramas)
 			{
 				((Ñ::Literal*)subliteral)->tipo = subtmc->tipo;
 				Ñ::Valor* subvalor = creaValor((Ñ::Literal*)subliteral);
-				((Ñ::Nodo*)valor)->ramas.push_back((Ñ::Nodo*)subvalor);
+				valor->ramas.push_back((Ñ::Nodo*)subvalor);
 			}
 
-			valor->vector(((Ñ::Nodo*)valor)->ramas.size());
+			valor->vector(valor->ramas.size());
 			return valor;
 		}
 		break;

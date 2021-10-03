@@ -67,10 +67,10 @@ namespace Ñ
 
         void imprimeAjuste();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        virtual void muestra(TablaSímbolos* tablaSímbolos = nullptr);
     };
 
-    class Literal : Nodo
+    class Literal : public Nodo
     {
     public:
         Ñ::CategoríaTipo tipo;
@@ -79,10 +79,10 @@ namespace Ñ
         Literal();
         ~Literal();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Identificador : Nodo
+    class Identificador : public Nodo
     {
     public:
         std::string id;
@@ -90,10 +90,10 @@ namespace Ñ
         Identificador();
         ~Identificador();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class ConvierteTipos : Nodo
+    class ConvierteTipos : public Nodo
     {
     public:
         Ñ::Tipo* origen;
@@ -102,64 +102,64 @@ namespace Ñ
         ConvierteTipos();
         ~ConvierteTipos();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class LadoIzquierdoAsignación : Nodo
+    class LadoIzquierdoAsignación : public Nodo
     {
     public:
         LadoIzquierdoAsignación();
         ~LadoIzquierdoAsignación();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class LadoDerechoAsignación : Nodo
+    class LadoDerechoAsignación : public Nodo
     {
     public:
         LadoDerechoAsignación();
         ~LadoDerechoAsignación();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Igualdad : Nodo
+    class Igualdad : public Nodo
     {
     public:
         Igualdad();
         ~Igualdad();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Comparación : Nodo
+    class Comparación : public Nodo
     {
     public:
         Comparación();
         ~Comparación();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Término : Nodo
+    class Término : public Nodo
     {
     public:
         Término();
         ~Término();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Factor : Nodo
+    class Factor : public Nodo
     {
     public:
         Factor();
         ~Factor();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class OperaciónBinaria : Nodo
+    class OperaciónBinaria : public Nodo
     {
     public:
         std::string operación;
@@ -168,10 +168,10 @@ namespace Ñ
         OperaciónBinaria();
         ~OperaciónBinaria();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class OperaciónUnaria : Nodo
+    class OperaciónUnaria : public Nodo
     {
     public:
         std::string operación;
@@ -179,10 +179,10 @@ namespace Ñ
         OperaciónUnaria();
         ~OperaciónUnaria();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class ElementoVector : Nodo
+    class ElementoVector : public Nodo
     {
     public:
         uint64_t posición = 0;
@@ -190,10 +190,10 @@ namespace Ñ
         ElementoVector();
         ~ElementoVector();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Primario : Nodo
+    class Primario : public Nodo
     {
     public:
         std::string primario;
@@ -201,10 +201,10 @@ namespace Ñ
         Primario();
         ~Primario();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class DeclaraVariable : Nodo
+    class DeclaraVariable : public Nodo
     {
     public:
         std::string variable;
@@ -212,37 +212,37 @@ namespace Ñ
         DeclaraVariable();
         ~DeclaraVariable();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Asigna : Nodo
+    class Asigna : public Nodo
     {
     public:
         Asigna();
         ~Asigna();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Argumento : Nodo
+    class Argumento : public Nodo
     {
     public:
         Argumento();
         ~Argumento();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Argumentos : Nodo
+    class Argumentos : public Nodo
     {
     public:
         Argumentos();
         ~Argumentos();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class LlamaFunción : Nodo
+    class LlamaFunción : public Nodo
     {
     public:
         std::string nombre;
@@ -250,46 +250,46 @@ namespace Ñ
         LlamaFunción();
         ~LlamaFunción();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Devuelve : Nodo
+    class Devuelve : public Nodo
     {
     public:
         Devuelve();
         ~Devuelve();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Expresión : Nodo
+    class Expresión : public Nodo
     {
     public:
         Expresión();
         ~Expresión();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Bloque : Nodo
+    class Bloque : public Nodo
     {
     public:
         Bloque();
         ~Bloque();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class SiCondicional : Nodo
+    class SiCondicional : public Nodo
     {
     public:
         SiCondicional();
         ~SiCondicional();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class DefineFunción : Nodo
+    class DefineFunción : public Nodo
     {
     public:
         std::string nombre;
@@ -298,10 +298,10 @@ namespace Ñ
         DefineFunción();
         ~DefineFunción();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class DeclaraFunción : Nodo
+    class DeclaraFunción : public Nodo
     {
     public:
         std::string nombre;
@@ -310,10 +310,10 @@ namespace Ñ
         DeclaraFunción();
         ~DeclaraFunción();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Función : Nodo
+    class Función : public Nodo
     {
     public:
         std::string nombre;
@@ -321,10 +321,10 @@ namespace Ñ
         Función();
         ~Función();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class FunciónEjecutable : Nodo
+    class FunciónEjecutable : public Nodo
     {
     public:
         std::string nombre;
@@ -333,10 +333,10 @@ namespace Ñ
         FunciónEjecutable();
         ~FunciónEjecutable();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class Módulo : Nodo
+    class Módulo : public Nodo
     {
     public:
         std::string módulo;
@@ -344,7 +344,7 @@ namespace Ñ
         Módulo();
         ~Módulo();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
 

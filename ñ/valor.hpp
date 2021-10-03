@@ -11,7 +11,7 @@ namespace Ñ
 {
     extern class TablaSímbolos;
     
-    class Valor : Nodo
+    class Valor : public Nodo
     {
     private:
         union {

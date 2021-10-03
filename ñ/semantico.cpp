@@ -26,7 +26,7 @@
     Ñ::ConvierteTipos* conv = new Ñ::ConvierteTipos;
     conv->origen = tipoOrigen;
     conv->destino = tipoDestino;
-    ((Ñ::Nodo*)conv)->ramas.push_back(padre->ramas[índiceHijo]);
+    conv->ramas.push_back(padre->ramas[índiceHijo]);
 
     padre->ramas[índiceHijo] = (Ñ::Nodo*)conv;
 
@@ -907,7 +907,7 @@
         if(    nodo->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE
                 &&  esVector((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))
                 &&  ((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))->tamaño() == 0
-                &&  sonÁrbolesDuplicados(nodo->ramas[0]->ramas[0]->ramas[0], ((Ñ::Nodo*)lda)->ramas[0]))
+                &&  sonÁrbolesDuplicados(nodo->ramas[0]->ramas[0]->ramas[0], lda->ramas[0]))
         {
             std::cout << "Defino tamaño aprovechando la definición" << std::endl;
             // nat[] mi_vector = [1, 2, 3];

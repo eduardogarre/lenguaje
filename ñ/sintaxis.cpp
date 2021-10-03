@@ -112,7 +112,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			{
 				if(Ñ::Nodo* n = literal())
 				{
-					((Ñ::Nodo*)l)->ramas.push_back(n);
+					l->ramas.push_back(n);
 				}
 				else
 				{
@@ -522,7 +522,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			{
 				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria;
 				op->operación = "!";
-				((Ñ::Nodo*)op)->ramas.push_back(u);
+				op->ramas.push_back(u);
 				return (Ñ::Nodo*)op;
 			}
 		}
@@ -532,7 +532,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			{
 				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria;
 				op->operación = "-";
-				((Ñ::Nodo*)op)->ramas.push_back(u);
+				op->ramas.push_back(u);
 				return (Ñ::Nodo*)op;
 			}
 		}
@@ -689,7 +689,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				subT->tipo = tipo;
 				t->tipo = CategoríaTipo::TIPO_VECTOR;
 				t->tamaño(tamaño);
-				((Ñ::Nodo*)t)->ramas.push_back((Ñ::Nodo*)subT);
+				t->ramas.push_back((Ñ::Nodo*)subT);
 				return (Ñ::Nodo*)t;
 			}
 			else
@@ -750,7 +750,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 
 		Ñ::DeclaraVariable* dvar = new Ñ::DeclaraVariable();
-		((Ñ::Nodo*)dvar)->ramas.push_back(t);
+		dvar->ramas.push_back(t);
 		dvar->variable = v;
 		return ((Ñ::Nodo*)dvar);
 	}
@@ -779,8 +779,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				if(Ñ::Nodo* lda = ladoDerechoAsignación())
 				{
 					Ñ::Asigna* a = new Ñ::Asigna();
-					((Ñ::Nodo*)a)->ramas.push_back(lia);
-					((Ñ::Nodo*)a)->ramas.push_back(lda);
+					a->ramas.push_back(lia);
+					a->ramas.push_back(lda);
 
 					return ((Ñ::Nodo*)a);
 				}
@@ -817,12 +817,12 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(Ñ::Nodo* arg1 = declaraArgumento())
 		{
-			((Ñ::Nodo*)args)->ramas.push_back(arg1);
+			args->ramas.push_back(arg1);
 
 			while(notación(","))
 			{
 				Ñ::Nodo* arg2 = declaraArgumento();
-				((Ñ::Nodo*)args)->ramas.push_back(arg2);
+				args->ramas.push_back(arg2);
 			}
 
 			return (Ñ::Nodo*)args;
@@ -858,12 +858,12 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(Ñ::Nodo* arg1 = ponArgumento())
 		{
-			((Ñ::Nodo*)args)->ramas.push_back(arg1);
+			args->ramas.push_back(arg1);
 
 			while(notación(","))
 			{
 				Ñ::Nodo* arg2 = ponArgumento();
-				((Ñ::Nodo*)args)->ramas.push_back(arg2);
+				args->ramas.push_back(arg2);
 			}
 
 			return (Ñ::Nodo*)args;
@@ -917,7 +917,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		Ñ::LlamaFunción* fn = new Ñ::LlamaFunción();
 		fn->nombre = nombre;
-		((Ñ::Nodo*)fn)->ramas.push_back(args);
+		fn->ramas.push_back(args);
 		return (Ñ::Nodo*)fn;
 	}
 
@@ -1004,8 +1004,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(Ñ::Nodo* blq = bloque())
 			{
 				sc = new Ñ::SiCondicional();
-				((Ñ::Nodo*)sc)->ramas.push_back(lda);
-				((Ñ::Nodo*)sc)->ramas.push_back(blq);
+				sc->ramas.push_back(lda);
+				sc->ramas.push_back(blq);
 			}
 			else
 			{
@@ -1026,7 +1026,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			{
 				if(Ñ::Nodo* blq = bloque())
 				{
-					((Ñ::Nodo*)sc)->ramas.push_back(blq);
+					sc->ramas.push_back(blq);
 					break;
 				}
 				else
@@ -1056,8 +1056,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 				if(Ñ::Nodo* blq = bloque())
 				{
-					((Ñ::Nodo*)sc)->ramas.push_back(lda);
-					((Ñ::Nodo*)sc)->ramas.push_back(blq);
+					sc->ramas.push_back(lda);
+					sc->ramas.push_back(blq);
 				}
 				else
 				{
@@ -1093,7 +1093,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(notación(";"))
 			{
 				Ñ::Expresión* ex = new Ñ::Expresión();
-				((Ñ::Nodo*)ex)->ramas.push_back(as);
+				ex->ramas.push_back(as);
 				return ((Ñ::Nodo*)ex);
 			}
 			else
@@ -1107,7 +1107,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(notación(";"))
 			{
 				Ñ::Expresión* ex = new Ñ::Expresión();
-				((Ñ::Nodo*)ex)->ramas.push_back(fn);
+				ex->ramas.push_back(fn);
 				return ((Ñ::Nodo*)ex);
 			}
 			else
@@ -1121,7 +1121,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(notación(";"))
 			{
 				Ñ::Expresión* ex = new Ñ::Expresión();
-				((Ñ::Nodo*)ex)->ramas.push_back(dv);
+				ex->ramas.push_back(dv);
 				return ((Ñ::Nodo*)ex);
 			}
 			else
@@ -1135,7 +1135,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(notación(";"))
 			{
 				Ñ::Expresión* ex = new Ñ::Expresión();
-				((Ñ::Nodo*)ex)->ramas.push_back(v);
+				ex->ramas.push_back(v);
 				return ((Ñ::Nodo*)ex);
 			}
 			else
@@ -1149,7 +1149,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(notación(";"))
 			{
 				Ñ::Expresión* ex = new Ñ::Expresión();
-				((Ñ::Nodo*)ex)->ramas.push_back(dv);
+				ex->ramas.push_back(dv);
 				return ((Ñ::Nodo*)ex);
 			}
 			else
@@ -1161,7 +1161,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		if(Ñ::Nodo* sc = siCondicional())
 		{
 			Ñ::Expresión* ex = new Ñ::Expresión();
-			((Ñ::Nodo*)ex)->ramas.push_back(sc);
+			ex->ramas.push_back(sc);
 			return ((Ñ::Nodo*)ex);
 		}
 	}
@@ -1278,9 +1278,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		dfn = new Ñ::DefineFunción();
 		dfn->nombre = nombreFunción;
 		dfn->público = público;
-		((Ñ::Nodo*)dfn)->ramas.push_back(t);
-		((Ñ::Nodo*)dfn)->ramas.push_back(args);
-		((Ñ::Nodo*)dfn)->ramas.push_back(bq);
+		dfn->ramas.push_back(t);
+		dfn->ramas.push_back(args);
+		dfn->ramas.push_back(bq);
 
 		return (Ñ::Nodo*)dfn;
 	}
@@ -1359,8 +1359,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		dcfn = new Ñ::DeclaraFunción();
 		dcfn->nombre = nombreFunción;
 		dcfn->externo = externo;
-		((Ñ::Nodo*)dcfn)->ramas.push_back(t);
-		((Ñ::Nodo*)dcfn)->ramas.push_back(args);
+		dcfn->ramas.push_back(t);
+		dcfn->ramas.push_back(args);
 
 		return (Ñ::Nodo*)dcfn;
 	}

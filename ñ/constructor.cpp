@@ -618,7 +618,7 @@ namespace Ñ
             switch (n->categoría)
             {
             case Ñ::CategoríaNodo::NODO_DEVUELVE:
-                resultado = construyeRetorno(n);
+                resultado = construyeDevolución(n);
                 break;
             
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
@@ -804,7 +804,7 @@ namespace Ñ
             }
         }
 
-        Ñ::ResultadoLlvm construyeRetorno(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeDevolución(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
@@ -824,6 +824,11 @@ namespace Ñ
                 }
 
                 entorno->constructorLlvm.CreateRet(resultado.valor());
+                
+                llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
+                llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
+                entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
+
                 entorno->constructorLlvm.CreateUnreachable();
 
                 resultado.éxito();
@@ -1134,7 +1139,7 @@ namespace Ñ
                 return nullptr;
             }
 
-            if(((Ñ::Nodo*)tipoInicial)->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+            if(tipoInicial->categoría != Ñ::CategoríaNodo::NODO_TIPO)
             {
                 return nullptr;
             }
@@ -1144,7 +1149,7 @@ namespace Ñ
                 return nullptr;
             }
 
-            if(((Ñ::Nodo*)tipoDestino)->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+            if(tipoDestino->categoría != Ñ::CategoríaNodo::NODO_TIPO)
             {
                 return nullptr;
             }
@@ -1204,7 +1209,7 @@ namespace Ñ
                     llvm::Type* tipVector = valor->getType();
                     llvm::Type* tipElemento = tipVector->getScalarType();
                     uint64_t tamañoVector = tipoInicial->tamaño();
-                    
+
                     llvm::Value *vectorVacío = llvm::UndefValue::get(tipVector);
                     valorFinal = vectorVacío;
 
@@ -1387,7 +1392,7 @@ namespace Ñ
                     llvm::Value *vectorVacío = llvm::UndefValue::get(tipoLlvm);
                     llvm::Value* vectorFinal = vectorVacío;
                     int64_t índice = 0;
-                    for(Ñ::Nodo* subnodo : ((Ñ::Nodo*)literal)->ramas)
+                    for(Ñ::Nodo* subnodo : literal->ramas)
                     {
                         std::cout << "construyeLiteral(TIPO_VECTOR) subtipo" << índice << std::endl;
 

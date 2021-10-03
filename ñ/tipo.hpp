@@ -34,7 +34,7 @@ namespace Ñ
         TIPO_VECTOR
     };
     
-    class Tipo : Nodo
+    class Tipo : public Nodo
     {
     private:
         uint64_t _tamaño = 0;

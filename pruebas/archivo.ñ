@@ -1,7 +1,10 @@
-externo ent hola();
-externo ent mundo();
 externo ent holamundo();
 externo ent duplica(ent x);
+
+//ent prueba(ent[2] vec)
+//{
+//    devuelve vec[1];
+//}
 
 público ent inicia()
 {
@@ -17,13 +20,13 @@ público ent inicia()
     {
         ent y = duplica(número);
         número = y;
+        devuelve número;
     }
     sino
     {
-        número = número;
+        //número = prueba(vector);
+        devuelve número;
     }
-
-    holamundo();
 
     devuelve número;
 }

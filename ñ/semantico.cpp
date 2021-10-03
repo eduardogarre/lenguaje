@@ -24,7 +24,7 @@
         return resultado;
     }
 
-    Ñ::ConvierteTipos* conv = new Ñ::ConvierteTipos;
+    Ñ::ConvierteTipos* conv = new Ñ::ConvierteTipos(tipoOrigen->posición());
     conv->origen = tipoOrigen;
     conv->destino = tipoDestino;
     conv->ramas.push_back(padre->ramas[índiceHijo]);

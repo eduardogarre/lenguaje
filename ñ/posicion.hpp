@@ -16,6 +16,8 @@ namespace Ñ
 
     public:
         void inicia();
+
+        std::string muestra();
         
         uint64_t cursor();
         uint64_t línea();

@@ -189,8 +189,6 @@ namespace Ñ
     class ElementoVector : public Nodo
     {
     public:
-        uint64_t posición = 0;
-
         ElementoVector(Posición* posición = nullptr);
         ~ElementoVector();
 

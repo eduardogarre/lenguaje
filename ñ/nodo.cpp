@@ -149,6 +149,7 @@ void Ñ::Nodo::imprimeAjuste()
 Ñ::Nodo::Nodo(Posición* posición)
 {
 	_posición = new Ñ::Posición;
+	_posición->inicia();
 	if(posición != nullptr)
 	{
 		*_posición = *posición;
@@ -167,7 +168,7 @@ void Ñ::Nodo::imprimeAjuste()
 void Ñ::Nodo::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_VACÍO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_VACÍO) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -190,7 +191,7 @@ void Ñ::Nodo::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Literal::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << "(NODO_LITERAL) [" + dato + "] - [" + obténNombreDeTipo(obténTipoDeLiteral(this)) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_LITERAL) [" + dato + "] - [" + obténNombreDeTipo(obténTipoDeLiteral(this)) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -218,7 +219,7 @@ void Ñ::Identificador::muestra(TablaSímbolos* tablaSímbolos)
 	}
 
 	imprimeAjuste();
-	std::cout << "(NODO_IDENTIFICADOR) [" + id + "] [" + obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_IDENTIFICADOR) [" + id + "] [" + obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -235,7 +236,7 @@ void Ñ::Identificador::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::ConvierteTipos::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << "(NODO_CONVIERTE_TIPOS) [ '" + Ñ::obténNombreDeTipo(origen) + "' -> '" + Ñ::obténNombreDeTipo(destino) + "' ] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_CONVIERTE_TIPOS) [ '" + Ñ::obténNombreDeTipo(origen) + "' -> '" + Ñ::obténNombreDeTipo(destino) + "' ] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -252,7 +253,7 @@ void Ñ::ConvierteTipos::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::LadoIzquierdoAsignación::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_LADO_IZQUIERDO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_LADO_IZQUIERDO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -270,7 +271,7 @@ void Ñ::LadoIzquierdoAsignación::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::LadoDerechoAsignación::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_LADO_DERECHO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_LADO_DERECHO_ASIGNACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -288,7 +289,7 @@ void Ñ::LadoDerechoAsignación::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::OperaciónBinaria::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_OP_BINARIA) [" + operación + "] - [" + Ñ::obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_OP_BINARIA) [" + operación + "] - [" + Ñ::obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -306,7 +307,7 @@ void Ñ::OperaciónBinaria::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Igualdad::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_IGUALDAD) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_IGUALDAD) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -324,7 +325,7 @@ void Ñ::Igualdad::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Comparación::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_COMPARACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_COMPARACIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -342,7 +343,7 @@ void Ñ::Comparación::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Término::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_TÉRMINO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_TÉRMINO) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos, los términos
 	for(auto rama : ramas)
 	{
@@ -360,7 +361,7 @@ void Ñ::Término::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Factor::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_FACTOR) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_FACTOR) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos, los factores
 	for(auto rama : ramas)
 	{
@@ -378,7 +379,7 @@ void Ñ::Factor::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::OperaciónUnaria::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << "(NODO_OP_UNARIA) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_OP_UNARIA) [" + operación + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -396,7 +397,7 @@ void Ñ::OperaciónUnaria::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::ElementoVector::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_ELEMENTO_VECTOR) #" << posición << " - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_ELEMENTO_VECTOR) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -413,7 +414,7 @@ void Ñ::ElementoVector::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Primario::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << "(NODO_PRIMARIO) [" + primario + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_PRIMARIO) [" + primario + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -431,7 +432,7 @@ void Ñ::Primario::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::DeclaraVariable::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << "(NODO_DECLARA_VARIABLE) [" + variable + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "(NODO_DECLARA_VARIABLE) [" + variable + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir el hijo, el tipo
 	for(auto rama : ramas)
 	{
@@ -449,7 +450,7 @@ void Ñ::DeclaraVariable::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Asigna::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_ASIGNA) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_ASIGNA) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -466,7 +467,7 @@ void Ñ::Asigna::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Argumentos::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_ARGUMENTOS) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_ARGUMENTOS) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -483,7 +484,7 @@ void Ñ::Argumentos::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Argumento::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_ARGUMENTO) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_ARGUMENTO) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -500,7 +501,7 @@ void Ñ::Argumento::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::LlamaFunción::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_LLAMA_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_LLAMA_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -517,7 +518,7 @@ void Ñ::LlamaFunción::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Devuelve::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_DEVUELVE) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_DEVUELVE) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -534,7 +535,7 @@ void Ñ::Devuelve::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Expresión::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_EXPRESIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_EXPRESIÓN) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -551,7 +552,7 @@ void Ñ::Expresión::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Bloque::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_BLOQUE) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_BLOQUE) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -568,7 +569,7 @@ void Ñ::Bloque::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::SiCondicional::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_SI_CONDICIONAL) - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_SI_CONDICIONAL) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -587,7 +588,7 @@ void Ñ::DefineFunción::muestra(TablaSímbolos* tablaSímbolos)
 	imprimeAjuste();
 	std::string txtpúblico = "público ";
 	std::string txtvacío = "";
-	std::cout << u8"(NODO_DEFINE_FUNCIÓN) [" + (público ? txtpúblico : txtvacío) + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_DEFINE_FUNCIÓN) [" + (público ? txtpúblico : txtvacío) + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -606,7 +607,7 @@ void Ñ::DeclaraFunción::muestra(TablaSímbolos* tablaSímbolos)
 	imprimeAjuste();
 	std::string txtexterno = "externo ";
 	std::string txtvacío = "";
-	std::cout << u8"(NODO_DECLARA_FUNCIÓN) [" + (externo ? txtexterno : txtvacío) + nombre + "()] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_DECLARA_FUNCIÓN) [" + (externo ? txtexterno : txtvacío) + nombre + "()] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -623,7 +624,7 @@ void Ñ::DeclaraFunción::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Función::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_FUNCIÓN) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -640,7 +641,7 @@ void Ñ::Función::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::FunciónEjecutable::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_FUNCIÓN_EJECUTABLE) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_FUNCIÓN_EJECUTABLE) [" + nombre + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -657,7 +658,7 @@ void Ñ::FunciónEjecutable::muestra(TablaSímbolos* tablaSímbolos)
 void Ñ::Módulo::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_MÓDULO) [" + módulo + "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << u8"(NODO_MÓDULO) [" + módulo + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);

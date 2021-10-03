@@ -1,3 +1,5 @@
+#include <string>
+
 #include "posicion.hpp"
 
 void Ñ::Posición::inicia()
@@ -7,6 +9,15 @@ void Ñ::Posición::inicia()
     _columna = 1;
     _longitud = 0;
     _archivo = "";
+}
+
+std::string Ñ::Posición::muestra()
+{
+    std::string texto = "";
+    texto += " [LIN:" + std::to_string(línea()) + ", ";
+    texto += "COL:" + std::to_string(columna()) + ", ";
+    texto += "LON:" + std::to_string(longitud()) + "]";
+    return texto;
 }
 
 uint64_t Ñ::Posición::cursor()

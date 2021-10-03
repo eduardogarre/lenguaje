@@ -424,7 +424,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		std::cout << "nada";
 	}
 
-	std::cout << "] - [hijos:" + std::to_string(ramas.size()) + "]" << std::endl;
+	std::cout << "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	
 	for(auto rama : ramas)
 	{

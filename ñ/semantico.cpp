@@ -1074,13 +1074,13 @@
         resultado.error("SEMÁNTICO :: El nodo raíz es nulo");
         return resultado;
     }
-
+/*
     if(nodo->ramas.size() < 1)
     {
         resultado.error("SEMÁNTICO :: El nodo raíz está vacío");
         return resultado;
     }
-    
+*/
     Ñ::Resultado rAnálisisSemántico = _analiza(nodo, tablaSímbolos);
     if(rAnálisisSemántico.error())
     {

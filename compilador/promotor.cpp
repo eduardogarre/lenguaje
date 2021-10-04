@@ -73,9 +73,10 @@ std::string creaNombreMódulo(std::string archivo)
 
 	Ñ::muestraLexemas(lexemas);
 
-	if(lexemas.empty())
+	/*
+	if(lexemas.size() <= 1)
 	{
-		Ñ::errorConsola(u8"Error durante el análisis léxico, código incorrecto.");
+		Ñ::errorConsola(u8"El análisis léxico no encontró código.");
 		
 		for(auto l : lexemas)
 		{
@@ -83,9 +84,10 @@ std::string creaNombreMódulo(std::string archivo)
 		}
 		lexemas.clear();
 
-		resultado.error("Error durante el análisis léxico, código incorrecto.");
+		resultado.éxito();
 		return resultado;
 	}
+	*/
 	
 	std::cout << "ANALIZANDO SINTAXIS" << std::endl;
 

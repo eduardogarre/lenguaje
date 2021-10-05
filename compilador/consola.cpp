@@ -55,8 +55,9 @@ namespace Compilador
         std::cout << "\x1B[91m";
         std::cout << "Error: ";
         std::cout << "\033[0m";
-        std::cout << "[" << archivo << ":";
-        std::cout << posición->línea() << "] ";
+        std::cout << "[" << archivo;
+        std::cout << ":" << posición->línea();
+        std::cout << ":" << posición->columna() << "] ";
         std::cout << texto;
         std::cout << std::endl;
         std::cout << "L" << posición->línea() << ": ";
@@ -106,8 +107,9 @@ namespace Compilador
         std::cout << "\x1B[93m";
         std::cout << "Aviso: ";
         std::cout << "\033[0m";
-        std::cout << "[" << archivo << ":";
-        std::cout << posición->línea() << "] ";
+        std::cout << "[" << archivo;
+        std::cout << ":" << posición->línea();
+        std::cout << ":" << posición->columna() << "] ";
         std::cout << texto;
         std::cout << std::endl;
         std::cout << "L" << posición->línea() << ": ";

@@ -336,6 +336,7 @@ void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
 			break;
 		}
 	
+	case TIPO_PUNTERO:
 	case TIPO_ENTERO_64:
 		switch (t2->tipo)
 		{

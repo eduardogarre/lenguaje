@@ -488,6 +488,21 @@
                 resultado.nodo(puntero);
                 return resultado;
             }
+            else if(op->operación == "*")
+            {
+                if(tipo->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
+                {
+                    resultado.éxito();
+                    resultado.nodo(tipo->subtipo());
+                    return resultado;
+                }
+                else
+                {
+                    resultado.error("No sé leer el contenido en esta dirección.");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
+            }
 
             resultado.error("No reconozco la operación unaria '" + op->operación + "'.");
             resultado.posición(op->posición());
@@ -721,7 +736,7 @@
                 else
                 {
                     resultado.error("Suma/Resta 1: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
-                    resultado.posición(tipoResultado->posición());
+                    resultado.posición(nodo->posición());
                     return resultado;
                 }
             

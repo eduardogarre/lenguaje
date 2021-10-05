@@ -1871,6 +1871,35 @@ namespace Ñ
                 resultado.valor(valorFinal);
                 return resultado;
             }
+            else if(op->operación == "*")
+            {
+                if(hijo == nullptr)
+                {
+                    resultado.error("No puedo leer la dirección de memoria");
+                    resultado.posición(nodo->posición());
+                    return resultado;
+                }
+
+                Ñ::ResultadoLlvm rValor = construyeLDA(hijo);
+                if(rValor.error())
+                {
+                    return rValor;
+                }
+                
+                // Lee contenido de dirección de memoria
+                valorFinal = entorno->constructorLlvm.CreateLoad(rValor.valor());
+
+                if(valorFinal == nullptr)
+                {
+                    resultado.error("No puedo leer el contenido de la dirección de memoria.");
+                    resultado.posición(nodo->posición());
+                    return resultado;
+                }
+
+                resultado.éxito();
+                resultado.valor(valorFinal);
+                return resultado;
+            }
 
             resultado.error("No sé construir la operación '" + op->operación + "'");
             resultado.posición(nodo->posición());

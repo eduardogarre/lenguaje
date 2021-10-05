@@ -6,7 +6,7 @@ externo ent duplica(ent x);
 //    devuelve vec[1];
 //}
 
-público ent* inicia()
+público ent inicia()
 {
     nat16[] vector = [288, 42];
 
@@ -17,8 +17,9 @@ público ent* inicia()
 
     holamundo();
 
-    ent* pruebaPuntero = @número;
-    devuelve pruebaPuntero;
+    ent* pruebaPuntero = &número;
+    pruebaPuntero = pruebaPuntero;
+    devuelve *pruebaPuntero;
 /*
 
     si (número < 2)

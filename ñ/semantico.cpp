@@ -311,7 +311,7 @@
         // Compruebo que el identificador no esté en uso en este ámbito
         if(tablaSímbolos->nombreReservadoEnEsteÁmbito(nombre))
         {
-            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" ya se había declarado previamente");
+            resultado.error("Ya habías declarado el identificador '" + nombre + "'.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -353,14 +353,14 @@
         }
         else
         {
-            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" no se había declarado previamente");
+            resultado.error("Todavía no habías declarado el identificador '" + nombre + "'.");
             resultado.posición(nodo->posición());
             return resultado;
         }
     }
     else
     {
-        resultado.error("El nodo tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría));
+        resultado.error("El LIA tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría));
         resultado.posición(nodo->posición());
         return resultado;
     }
@@ -385,7 +385,7 @@
         }
         else
         {
-            resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" no se había declarado previamente");
+            resultado.error("Todavía no habías declarado el identificador '" + nombre + "'.");
             resultado.posición(nodo->posición());
             return resultado;
         }

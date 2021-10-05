@@ -6,18 +6,20 @@ externo ent duplica(ent x);
 //    devuelve vec[1];
 //}
 
-público ent inicia()
+público ent* inicia()
 {
     nat16[] vector = [288, 42];
 
-    ent número = vector[1] / 42;
+    ent número = vector[1] / 1;
 
     // Caracteres UTF-8 de "¡Hola mundo!\0"
     nat8[] caracteres = [194, 161, 72, 111, 108, 97, 32, 109, 117, 110, 100, 111, 33, 0];
 
-    ent*[1] pruebaPuntero; // = número;
-
     holamundo();
+
+    ent* pruebaPuntero = @número;
+    devuelve pruebaPuntero;
+/*
 
     si (número < 2)
     {
@@ -32,4 +34,5 @@ público ent inicia()
     }
 
     devuelve número;
+    */
 }

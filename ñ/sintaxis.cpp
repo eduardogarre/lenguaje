@@ -549,6 +549,26 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return (Ñ::Nodo*)op;
 			}
 		}
+		else if(notación("@"))
+		{
+			if(Ñ::Nodo* u = operaciónUnaria())
+			{
+				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria(pop);
+				op->operación = "@";
+				op->ramas.push_back(u);
+				return (Ñ::Nodo*)op;
+			}
+		}
+		else if(notación("&"))
+		{
+			if(Ñ::Nodo* u = operaciónUnaria())
+			{
+				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria(pop);
+				op->operación = "@";
+				op->ramas.push_back(u);
+				return (Ñ::Nodo*)op;
+			}
+		}
 		else if(Ñ::Nodo* ev = elementoVector())
 		{
 			return ev;

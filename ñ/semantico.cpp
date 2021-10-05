@@ -429,6 +429,33 @@
             {
                 switch (tipo->tipo)
                 {
+                case Ñ::CategoríaTipo::TIPO_NATURAL_8:
+                    tipo->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_16;
+                    resultado.éxito();
+                    resultado.nodo((Ñ::Nodo*)tipo);
+                    return resultado;
+                    break;
+
+                case Ñ::CategoríaTipo::TIPO_NATURAL_16:
+                    tipo->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_32;
+                    resultado.éxito();
+                    resultado.nodo((Ñ::Nodo*)tipo);
+                    return resultado;
+                    break;
+
+                case Ñ::CategoríaTipo::TIPO_NATURAL_32:
+                    tipo->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_64;
+                    resultado.éxito();
+                    resultado.nodo((Ñ::Nodo*)tipo);
+                    return resultado;
+                    break;
+
+                case Ñ::CategoríaTipo::TIPO_NATURAL_64:
+                    resultado.error("Has intentado negativizar un 'nat64', que es demasiado grande.");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                    break;
+                
                 case Ñ::CategoríaTipo::TIPO_ENTERO_8:
                 case Ñ::CategoríaTipo::TIPO_ENTERO_16:
                 case Ñ::CategoríaTipo::TIPO_ENTERO_32:
@@ -452,8 +479,17 @@
                     break;
                 }
             }
+            else if(op->operación == "@")
+            {
+                Ñ::Tipo* puntero = new Ñ::Tipo(tipo->posición());
+                puntero->tipo = Ñ::CategoríaTipo::TIPO_PUNTERO;
+                puntero->ramas.push_back(tipo);
+                resultado.éxito();
+                resultado.nodo(puntero);
+                return resultado;
+            }
 
-            resultado.error("No reconozco la operación binaria '" + op->operación + "'.");
+            resultado.error("No reconozco la operación unaria '" + op->operación + "'.");
             resultado.posición(op->posición());
             return resultado;
         }

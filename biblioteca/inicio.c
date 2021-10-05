@@ -1,4 +1,4 @@
-extern int inicia();
+extern int* inicia();
 extern void __security_init_cookie(void);
 
 #include "es.h"
@@ -11,5 +11,6 @@ extern int holamundo()
 
 int __lugar_de_inicio()
 {
-    return inicia();
+    int* devuelto = inicia();
+    return *devuelto;
 }

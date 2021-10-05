@@ -1,5 +1,3 @@
-#include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,26 +9,10 @@
 #include "llvm/Target/TargetMachine.h"
 
 #include "configuracion.hpp"
+#include "consola.hpp"
 #include "herramientas.hpp"
 #include "ñ/ñ.hpp"
 #include "promotor.hpp"
-
-std::string leeArchivo(std::filesystem::path archivo)
-{
-    // Open the stream to 'lock' the file.
-    std::ifstream arc(archivo, std::ios::in | std::ios::binary);
-
-    // Obtain the size of the file.
-    const auto tamaño = std::filesystem::file_size(archivo);
-
-    // Create a buffer.
-    std::string resultado(tamaño, '\0');
-
-    // Read the whole file into the buffer.
-    arc.read(resultado.data(), tamaño);
-
-    return resultado;
-}
 
 std::string creaNombreMódulo(std::string archivo)
 {
@@ -131,6 +113,7 @@ std::string creaNombreMódulo(std::string archivo)
 		delete nodos;
 		
 		resultado.error(rSemántico.mensaje());
+		resultado.posición(rSemántico.posición());
 		return resultado;
 	}
 	else
@@ -196,7 +179,8 @@ int Compilador::compila(Compilador::Configuración cfg)
         Ñ::ResultadoLlvm resultado = construyeArchivo(archivo, entorno);
         if(resultado.error())
         {
-			std::cout << "ERROR FATAL: " << resultado.mensaje() << std::endl;
+			Compilador::escribeError(resultado.mensaje(), archivo, resultado.posición());
+			//Compilador::escribeAviso(resultado.mensaje(), archivo, resultado.posición());
             return -1;
         }
 

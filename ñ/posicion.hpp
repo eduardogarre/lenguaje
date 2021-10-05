@@ -15,7 +15,7 @@ namespace Ñ
         std::string _archivo;
 
     public:
-        void inicia();
+        Posición();
 
         std::string muestra();
         

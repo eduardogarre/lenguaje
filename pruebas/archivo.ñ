@@ -1,5 +1,5 @@
 externo ent holamundo();
-//externo ent duplica(ent x);
+externo ent duplica(real x);
 
 //ent prueba(ent[2] vec)
 //{
@@ -18,8 +18,8 @@ público ent inicia()
 
     si (número < 2)
     {
-        //ent y = duplica(número);
-        //número = y;
+        ent y = duplica(número);
+        número = y;
         devuelve número;
     }
     sino

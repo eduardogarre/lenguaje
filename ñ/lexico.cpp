@@ -948,8 +948,8 @@ namespace Ñ
 
                 //std::cout << "identificador->contenido" << texto << std::endl;
 
-                posición->longitud(texto.size());
-                Ñ::Lexema* l = new Ñ::Lexema(posición);
+                p->longitud(texto.size());
+                Ñ::Lexema* l = new Ñ::Lexema(p);
 
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
                 l->contenido = texto;
@@ -991,7 +991,6 @@ namespace Ñ
     std::vector<Ñ::Lexema*> Léxico::analiza(std::string comando)
     {
         posición = new Ñ::Posición;
-        posición->inicia();
 
         std::vector<Ñ::Lexema*> vacía;
         if(!lexemas.empty())
@@ -1003,8 +1002,6 @@ namespace Ñ
             //std::cout << "_analizaLéxico(" << comando << ")" << std::endl;
 
             std::string cmd = comando + " ";
-
-            posición->inicia();
 
             while(posición->cursor() <= cmd.length())
             {

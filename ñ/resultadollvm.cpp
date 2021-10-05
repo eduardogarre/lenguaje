@@ -6,7 +6,7 @@
 
 Ñ::ResultadoLlvm::ResultadoLlvm() : _error(true)
 {
-
+    _posición = new Ñ::Posición;
 }
 
 Ñ::Posición* Ñ::ResultadoLlvm::posición()
@@ -18,7 +18,6 @@ void Ñ::ResultadoLlvm::posición(Ñ::Posición* pos)
 {
     if(pos != nullptr)
     {
-        _posición = new Ñ::Posición;
         *_posición = *pos;
     }
 }

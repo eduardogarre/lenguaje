@@ -48,12 +48,14 @@
     if(nodo->categoría != Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
     {
         resultado.error("El árbol de nodos es incorrecto, esperaba un si-condicional.");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
     if(nodo->ramas.size() < 2)
     {
         resultado.error("El árbol de nodos es incorrecto, esperaba al menos una condición y un bloque.");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
@@ -98,12 +100,14 @@
     if(nodo->categoría != Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {
         resultado.error("El árbol de nodos es incorrecto, esperaba una llamada a una función.");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
     if(nodo->ramas.size() != 1)
     {
         resultado.error("El árbol de nodos es incorrecto, esperaba que se aportaran argumentos.");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
@@ -112,6 +116,7 @@
     if(!tablaSímbolos->nombreReservadoEnCualquierÁmbito(fn->nombre))
     {
         resultado.error("La función " + fn->nombre + "() no ha sido declarada previamente.");
+        resultado.posición(fn->posición());
         return resultado;
     }
 
@@ -128,6 +133,7 @@
     if(argsDeclarados->ramas.size() != argsDefinidos->ramas.size())
     {
         resultado.error("Has pasado " + std::to_string(argsDefinidos->ramas.size()) + " argumentos a " + fn->nombre + "(), que espera " + std::to_string(argsDeclarados->ramas.size()) + " argumentos");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
@@ -166,6 +172,7 @@
         {
             delete subTabla;
             resultado.error("Esperaba un argumento de tipo '" + Ñ::obténNombreDeTipo(tipoLIA) + "', pero he recibido un '" + Ñ::obténNombreDeTipo(tipoLDA) + "'");
+            resultado.posición(tipoLDA->posición());
             return resultado;
         }     
     }
@@ -189,12 +196,14 @@
     if(nodo->categoría != Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
     {
         resultado.error("El árbol de nodos es incorrecto, esperaba una definición de función.");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
     if(nodo->ramas.size() != 3)
     {
         resultado.error("El árbol de nodos es incorrecto, la definición de una función debe tener 3 ramas: 'tipo', 'argumentos' y 'bloque'.");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
@@ -203,6 +212,7 @@
     if(tablaSímbolos->nombreReservadoEnEsteÁmbito(fn->nombre))
     {
         resultado.error("El identificador '" + fn->nombre + "' ya está en uso, no puedo definir una nueva función '" + fn->nombre + "()'");
+        resultado.posición(nodo->posición());
         return resultado;
     }
     else
@@ -246,12 +256,14 @@
     if(nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
     {
         resultado.error("El árbol de nodos es incorrecto, esperaba una declaración de función.");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
     if(nodo->ramas.size() != 2)
     {
         resultado.error("El árbol de nodos es incorrecto, la declaración de una función debe tener 2 ramas: 'tipo' y 'argumentos'.");
+        resultado.posición(nodo->posición());
         return resultado;
     }
 
@@ -270,6 +282,7 @@
     else
     {
         resultado.error("El identificador " + fn->nombre + " ya está en uso, no puedo declarar una nueva función '" + fn->nombre + "()'");
+        resultado.posición(nodo->posición());
         return resultado;
     }
     
@@ -284,6 +297,7 @@
     if(nodo == nullptr)
     {
         resultado.error("ANÁLISIS DE TIPOS :: El nodo es nulo");
+        resultado.posición(nodo->posición());
         return resultado;
     }
     
@@ -298,6 +312,7 @@
         if(tablaSímbolos->nombreReservadoEnEsteÁmbito(nombre))
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" ya se había declarado previamente");
+            resultado.posición(nodo->posición());
             return resultado;
         }
 
@@ -305,6 +320,7 @@
         if( nodo->ramas.size() != 1)
         {
             resultado.error("Árbol de la declaración de variable mal construido");
+            resultado.posición(nodo->posición());
             return resultado;
         }
 
@@ -338,12 +354,14 @@
         else
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" no se había declarado previamente");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
     else
     {
         resultado.error("El nodo tiene una categoría inesperada. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodo->categoría));
+        resultado.posición(nodo->posición());
         return resultado;
     }
 }
@@ -368,6 +386,7 @@
         else
         {
             resultado.error("RESOLUCIÓN DE SÍMBOLOS :: El identificador \"" + nombre + "\" no se había declarado previamente");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
@@ -398,6 +417,7 @@
                 if(tipo->tipo != Ñ::CategoríaTipo::TIPO_BOOLEANO)
                 {
                     resultado.error("Has intentado negar un tipo '" + obténNombreDeTipo(tipo) + "'. Sólo puedes negar un tipo booleano.");
+                    resultado.posición(tipo->posición());
                     return resultado;
                 }
 
@@ -427,17 +447,20 @@
                 
                 default:
                     resultado.error("Has intentado negativizar un tipo '" + obténNombreDeTipo(tipo) + "'.");
+                    resultado.posición(tipo->posición());
                     return resultado;
                     break;
                 }
             }
 
             resultado.error("No reconozco la operación binaria '" + op->operación + "'.");
+            resultado.posición(op->posición());
             return resultado;
         }
         else
         {
             resultado.error("El nodo Ñ::OpUnaria tenía " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
@@ -472,11 +495,13 @@
         else if(nodo->ramas.size() > 1)
         {
             resultado.error("Pendiente de implementar operaciones de igualdad");
+            resultado.posición(nodo->posición());
             return resultado;
         }
         else
         {
             resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
@@ -513,12 +538,14 @@
                 if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
                     resultado.error("Comparación no ha recibido una operación válida");
+                    resultado.posición(nodo->ramas[i]->posición());
                     return resultado;
                 }
                 Ñ::Nodo* op = nodo->ramas[i];
                 if(op->ramas.size() != 1)
                 {
                     resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    resultado.posición(op->posición());
                     return resultado;
                 }
 
@@ -548,6 +575,7 @@
                 else
                 {
                     resultado.error("Comparación 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
+                    resultado.posición(tipoResultado->posición());
                     return resultado;
                 }
             
@@ -566,6 +594,7 @@
                 else
                 {
                     resultado.error("Comparación 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.posición(t2->posición());
                     return resultado;
                 }
             }
@@ -577,11 +606,13 @@
         else if(nodo->ramas.size() > 1)
         {
             resultado.error("Pendiente de implementar operaciones de comparación");
+            resultado.posición(nodo->posición());
             return resultado;
         }
         else
         {
             resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
@@ -617,12 +648,14 @@
                 if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
                     resultado.error("Término no ha recibido una operación válida");
+                    resultado.posición(nodo->ramas[i]->posición());
                     return resultado;
                 }
                 Ñ::Nodo* op = nodo->ramas[i];
                 if(op->ramas.size() != 1)
                 {
                     resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    resultado.posición(op->posición());
                     return resultado;
                 }
 
@@ -652,6 +685,7 @@
                 else
                 {
                     resultado.error("Suma/Resta 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
+                    resultado.posición(tipoResultado->posición());
                     return resultado;
                 }
             
@@ -670,6 +704,7 @@
                 else
                 {
                     resultado.error("Suma/Resta 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.posición(t2->posición());
                     return resultado;
                 }
             }
@@ -681,6 +716,7 @@
         else
         {
             resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
@@ -716,12 +752,14 @@
                 if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
                     resultado.error("Término no ha recibido una operación válida");
+                    resultado.posición(nodo->ramas[i]->posición());
                     return resultado;
                 }
                 Ñ::Nodo* op = nodo->ramas[i];
                 if(op->ramas.size() != 1)
                 {
                     resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    resultado.posición(op->posición());
                     return resultado;
                 }
 
@@ -751,6 +789,7 @@
                 else
                 {
                     resultado.error("Multiplicación/División 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
+                    resultado.posición(tipoResultado->posición());
                     return resultado;
                 }
             
@@ -770,6 +809,7 @@
                 else
                 {
                     resultado.error("Multiplicación/División 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.posición(t2->posición());
                     return resultado;
                 }
             }
@@ -781,6 +821,7 @@
         else
         {
             resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
@@ -789,6 +830,7 @@
         if(nodo->ramas.size() != 2)
         {
             resultado.error("El nodo de acceso al elemento de un vector debe tener 2 hijos");
+            resultado.posición(nodo->posición());
             return resultado;
         }
         
@@ -815,12 +857,14 @@
         if(vector->categoría != Ñ::CategoríaNodo::NODO_TIPO)
         {
             resultado.error("Esperaba recibir un tipo");
+            resultado.posición(vector->posición());
             return resultado;
         }
 
         if(((Ñ::Tipo*)vector)->tipo != Ñ::CategoríaTipo::TIPO_VECTOR)
         {
             resultado.error("Esperaba que el tipo fuera un vector");
+            resultado.posición(vector->posición());
             return resultado;
         }
         
@@ -831,6 +875,7 @@
         if(vector->ramas.size() < 1)
         {
             resultado.error("El vector no contiene subtipo");
+            resultado.posición(vector->posición());
             return resultado;
         }
 
@@ -844,6 +889,7 @@
     }
 
     resultado.error("El árbol de nodos es incorrecto, esperaba Lado Derecho de Asignación. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodo->categoría));
+    resultado.posición(nodo->posición());
     return resultado;
 }
 
@@ -943,6 +989,7 @@
             std::cout << "LIA" << std::endl;
             muestraNodos((Ñ::Nodo*)lia, tablaSímbolos);
             resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(lda) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(lia) + "'.");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
@@ -1006,6 +1053,7 @@
         else // más de 1 rama
         {
             resultado.error("El nodo 'NODO_DEVUELVE' tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.posición(nodo->posición());
             return resultado;
         }
     }
@@ -1061,6 +1109,7 @@
     else
     {
         resultado.error("El nodo tiene una categoría inesperada. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodo->categoría));
+        resultado.posición(nodo->posición());
         return resultado;
     }
 }
@@ -1071,20 +1120,15 @@
 
     if(nodo == nullptr)
     {
-        resultado.error("SEMÁNTICO :: El nodo raíz es nulo");
+        resultado.error("El nodo raíz es nulo");
         return resultado;
     }
-/*
-    if(nodo->ramas.size() < 1)
-    {
-        resultado.error("SEMÁNTICO :: El nodo raíz está vacío");
-        return resultado;
-    }
-*/
+
     Ñ::Resultado rAnálisisSemántico = _analiza(nodo, tablaSímbolos);
     if(rAnálisisSemántico.error())
     {
-        resultado.error("SEMÁNTICO :: " + rAnálisisSemántico.mensaje());
+        resultado.error(rAnálisisSemántico.mensaje());
+        resultado.posición(rAnálisisSemántico.posición());
         return resultado;
     }
 

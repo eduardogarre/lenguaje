@@ -2,7 +2,7 @@
 
 #include "posicion.hpp"
 
-void Ñ::Posición::inicia()
+Ñ::Posición::Posición()
 {
     _cursor = 0;
     _línea = 1;

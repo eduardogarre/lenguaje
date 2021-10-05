@@ -5,6 +5,7 @@
 #include "lexema.hpp"
 #include "lexico.hpp"
 #include "nodo.hpp"
+#include "posicion.hpp"
 #include "resultado.hpp"
 #include "salida.hpp"
 #include "semantico.hpp"

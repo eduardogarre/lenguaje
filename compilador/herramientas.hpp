@@ -1,6 +1,7 @@
 #pragma once
 
+#include <filesystem>
 #include <string>
-#include <vector>
 
 int ejecutaPrograma(std::string ruta, std::string argumentos);
+std::string leeArchivo(std::filesystem::path archivo);

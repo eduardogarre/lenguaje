@@ -1,6 +1,5 @@
-/*
+
 público ent duplica(ent x)
 {
     devuelve x * 2;
 }
-*/

@@ -7,7 +7,6 @@
 
 Ñ::Lexema::Lexema(Posición* posición) {
     _posición = new Ñ::Posición;
-    _posición->inicia();
     if(posición != nullptr)
     {
         *_posición = *posición;

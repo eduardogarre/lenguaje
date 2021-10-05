@@ -785,6 +785,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	{
 		if(Ñ::Nodo* lia = ladoIzquierdoAsignación())
 		{
+			Posición* pos = lexemas[cursor]->posición();
+				
 			if(notación("="))
 			{
 				if(notación("=")) // "=="
@@ -796,7 +798,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				
 				if(Ñ::Nodo* lda = ladoDerechoAsignación())
 				{
-					Ñ::Asigna* a = new Ñ::Asigna(lia->posición());
+					Ñ::Asigna* a = new Ñ::Asigna(pos);
 					a->ramas.push_back(lia);
 					a->ramas.push_back(lda);
 

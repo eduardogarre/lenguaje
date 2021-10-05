@@ -6,7 +6,7 @@
 
 Ñ::Resultado::Resultado() : _error(true), _nodo(nullptr)
 {
-
+    _posición = new Ñ::Posición;
 }
 
 Ñ::Posición* Ñ::Resultado::posición()
@@ -18,7 +18,6 @@ void Ñ::Resultado::posición(Ñ::Posición* pos)
 {
     if(pos != nullptr)
     {
-        _posición = new Ñ::Posición;
         *_posición = *pos;
     }
 }

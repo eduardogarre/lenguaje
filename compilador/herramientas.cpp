@@ -1,4 +1,26 @@
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <string>
+
 #include "herramientas.hpp"
+
+std::string leeArchivo(std::filesystem::path archivo)
+{
+    // Open the stream to 'lock' the file.
+    std::ifstream arc(archivo, std::ios::in | std::ios::binary);
+
+    // Obtain the size of the file.
+    const auto tamaño = std::filesystem::file_size(archivo);
+
+    // Create a buffer.
+    std::string resultado(tamaño, '\0');
+
+    // Read the whole file into the buffer.
+    arc.read(resultado.data(), tamaño);
+
+    return resultado;
+}
 
 #ifdef __linux__  //// LINUX ////
 #include <iostream>

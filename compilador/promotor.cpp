@@ -33,7 +33,7 @@ std::string creaNombreMódulo(std::string archivo)
 
 	std::string nombreMódulo = creaNombreMódulo(archivo);
 
-	std::cout << "LEYENDO EL CODIGO DEL ARCHIVO" << std::endl;
+	//std::cout << "LEYENDO EL CODIGO DEL ARCHIVO" << std::endl;
 
 	try{
 		código = leeArchivo(archivo);
@@ -50,7 +50,7 @@ std::string creaNombreMódulo(std::string archivo)
 	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
 	
-	std::cout << "ANALIZANDO LEXICO" << std::endl;
+	//std::cout << "ANALIZANDO LEXICO" << std::endl;
 
 	lexemas = léxico.analiza(código);
 
@@ -72,7 +72,7 @@ std::string creaNombreMódulo(std::string archivo)
 	}
 	*/
 	
-	std::cout << "ANALIZANDO SINTAXIS" << std::endl;
+	//std::cout << "ANALIZANDO SINTAXIS" << std::endl;
 
 	nodos = sintaxis.analiza(lexemas, nombreMódulo);
 	
@@ -97,7 +97,7 @@ std::string creaNombreMódulo(std::string archivo)
 	Ñ::TablaSímbolos* tablaSímbolos = new Ñ::TablaSímbolos;
 	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 	
-	muestraNodos(nodos, tablaSímbolos);
+	//muestraNodos(nodos, tablaSímbolos);
 	delete tablaSímbolos;
 
 	if(rSemántico.error())
@@ -126,7 +126,7 @@ std::string creaNombreMódulo(std::string archivo)
 		//}
 	}
 	
-	std::cout << "CONSTRUYENDO MODULO" << std::endl;
+	//std::cout << "CONSTRUYENDO MODULO" << std::endl;
 
 	resultado = Ñ::construye(nodos, entorno);
 

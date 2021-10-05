@@ -360,7 +360,7 @@
     }
     else
     {
-        resultado.error("El nodo tiene una categoría inesperada. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodo->categoría));
+        resultado.error("El nodo tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría));
         resultado.posición(nodo->posición());
         return resultado;
     }
@@ -1159,7 +1159,7 @@
     }
     else
     {
-        resultado.error("El nodo tiene una categoría inesperada. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodo->categoría));
+        resultado.error("El nodo tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría));
         resultado.posición(nodo->posición());
         return resultado;
     }

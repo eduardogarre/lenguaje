@@ -40,7 +40,7 @@ std::string creaNombreMódulo(std::string archivo)
 	}
 	catch (std::exception& e)
 	{
-		resultado.error("Error al leer el archivo " + archivo);
+		resultado.error("No puedo leer el archivo " + archivo);
 		return resultado;
 	}
 

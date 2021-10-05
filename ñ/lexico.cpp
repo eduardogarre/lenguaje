@@ -883,11 +883,11 @@ namespace Ñ
                 l->categoría = Ñ::CategoríaLexema::LEXEMA_TEXTO;
                 l->contenido = texto;
 
-                if(carácter != "\"")
-                {
-                    *posición = p;
-                    Ñ::errorConsola(u8"Error, esperaba un cierre de comilla doble [\"]");
-                }
+                //if(carácter != "\"")
+                //{
+                //    *posición = p;
+                //    Ñ::errorConsola(u8"Error, esperaba un cierre de comilla doble [\"]");
+                //}
 
                 incrementaCursor(txt);
 

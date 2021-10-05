@@ -34,7 +34,7 @@ namespace Ñ
         {
             if(tabla.size() < 1)
             {
-                std::cout << "Error, no es posible guardar el identificador '" << id << "', la tabla de símbolos tiene " << std::to_string(tabla.size()) << " niveles" << std::endl;
+                std::cout << "Error, no puedo guardar el identificador '" << id << "', la tabla de símbolos tiene " << std::to_string(tabla.size()) << " niveles" << std::endl;
                 return;
             }
 

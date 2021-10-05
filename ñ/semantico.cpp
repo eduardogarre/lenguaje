@@ -115,7 +115,7 @@
     
     if(!tablaSímbolos->nombreReservadoEnCualquierÁmbito(fn->nombre))
     {
-        resultado.error("La función " + fn->nombre + "() no ha sido declarada previamente.");
+        resultado.error("Todavía no has declarado la función " + fn->nombre + "().");
         resultado.posición(fn->posición());
         return resultado;
     }
@@ -574,7 +574,7 @@
                 }
                 else
                 {
-                    resultado.error("Comparación 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
+                    resultado.error("Comparación 1: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
                     resultado.posición(tipoResultado->posición());
                     return resultado;
                 }
@@ -593,7 +593,7 @@
                 }
                 else
                 {
-                    resultado.error("Comparación 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.error("Comparación 2: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
                     resultado.posición(t2->posición());
                     return resultado;
                 }
@@ -684,7 +684,7 @@
                 }
                 else
                 {
-                    resultado.error("Suma/Resta 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
+                    resultado.error("Suma/Resta 1: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
                     resultado.posición(tipoResultado->posición());
                     return resultado;
                 }
@@ -703,7 +703,7 @@
                 }
                 else
                 {
-                    resultado.error("Suma/Resta 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.error("Suma/Resta 2: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
                     resultado.posición(t2->posición());
                     return resultado;
                 }
@@ -788,7 +788,7 @@
                 }
                 else
                 {
-                    resultado.error("Multiplicación/División 1: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
+                    resultado.error("Multiplicación/División 1: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
                     resultado.posición(tipoResultado->posición());
                     return resultado;
                 }
@@ -808,7 +808,7 @@
                 }
                 else
                 {
-                    resultado.error("Multiplicación/División 2: No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.error("Multiplicación/División 2: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
                     resultado.posición(t2->posición());
                     return resultado;
                 }
@@ -988,7 +988,7 @@
             //muestraNodos((Ñ::Nodo*)lda, tablaSímbolos);
             //std::cout << "LIA" << std::endl;
             //muestraNodos((Ñ::Nodo*)lia, tablaSímbolos);
-            resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(lda) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(lia) + "'.");
+            resultado.error("No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo(lda) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(lia) + "'.");
             resultado.posición(nodo->posición());
             return resultado;
         }

@@ -109,7 +109,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 
     if(nombreReservadoEnEsteÁmbito(nombre))
     {
-        resultado.error("Error, el identificador \"" + nombre + "\" ya existe en este ámbito.");
+        resultado.error("El identificador \"" + nombre + "\" ya existe en este ámbito.");
         return resultado;
     }
     
@@ -126,7 +126,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 
     if(!nombreReservadoEnCualquierÁmbito(nombre))
     {
-        resultado.error("Error, el identificador '" + nombre + "'no se ha declarado previamente.");
+        resultado.error("Todavía no has declarado el identificador '" + nombre + "'.");
         return resultado;
     }
 
@@ -139,7 +139,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     
     if(valor == nullptr)
     {
-        resultado.error("Error, el identificador '" + nombre + "'no ha sido definido todavía");
+        resultado.error("Todavía no has definido el identificador '" + nombre + "'.");
         return resultado;
     }
 
@@ -154,7 +154,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 
     if(!nombreReservadoEnCualquierÁmbito(nombre))
     {
-        resultado.error("Error, el identificador '" + nombre + "' no se ha declarado previamente.");
+        resultado.error("Todavía no has declarado el identificador '" + nombre + "'.");
         return resultado;
     }
 
@@ -167,7 +167,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     
     if(tipo == nullptr)
     {
-        resultado.error("Error, el identificador '" + nombre + "' no ha sido declarado correctamente, no dispongo de su tipo.");
+        resultado.error("No has declarado correctamente el identificador '" + nombre + "', no sé su tipo.");
         return resultado;
     }
 
@@ -182,13 +182,14 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     
     if(valor == nullptr)
     {
-        resultado.error("Error, definición errónea");
+        resultado.error("Definición errónea");
         return resultado;
     }
 
     if(!nombreReservadoEnCualquierÁmbito(nombre))
     {
-        resultado.error("Error, el identificador '" + nombre + "'no se ha declarado previamente.");
+        resultado.error("Todavía no has declarado el identificador '" + nombre + "'.");
+        resultado.posición(valor->posición());
         return resultado;
     }
 

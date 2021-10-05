@@ -312,12 +312,12 @@ namespace Ñ
 
             if(!funciónLlvm)
             {
-                resultado.error("Error, no se ha registrado la función '" + función->nombre + "()'");
+                resultado.error("Todavía no has registrado la función '" + función->nombre + "()'");
                 return resultado;
             }
             else if(!funciónLlvm->empty())
             {
-                resultado.error("La función ya está definida, no puedo redefinirla.");
+                resultado.error("Ya habías definido la función '" + función->nombre + "()', no puedo redefinirla.");
                 return resultado;
             }
 
@@ -550,12 +550,12 @@ namespace Ñ
 
             if(!funciónLlvm)
             {
-                resultado.error("Error, no se ha registrado la función '__función_anónima__()'");
+                resultado.error("Todavía no has registrado la función '__función_anónima__()'");
                 return resultado;
             }
             else if(!funciónLlvm->empty())
             {
-                resultado.error("La función ya está definida, no puedo redefinirla.");
+                resultado.error("Ya habías definido la función '__función_anónima__()', no puedo redefinirla.");
                 return resultado;
             }
 
@@ -1428,7 +1428,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("Error, no reconozco el tipo del literal");
+                resultado.error("No reconozco el tipo del literal");
                 break;
             }
 
@@ -1454,12 +1454,12 @@ namespace Ñ
 
                 if(nOp == nullptr)
                 {
-                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo nulo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo");
                     return resultado;
                 }
                 else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo");
                     return resultado;
                 }
 
@@ -1518,12 +1518,12 @@ namespace Ñ
 
                 if(nOp == nullptr)
                 {
-                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo nulo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo");
                     return resultado;
                 }
                 else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo");
                     return resultado;
                 }
 
@@ -1596,12 +1596,12 @@ namespace Ñ
 
                 if(nOp == nullptr)
                 {
-                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo nulo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo");
                     return resultado;
                 }
                 else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Error, esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo");
                     return resultado;
                 }
 

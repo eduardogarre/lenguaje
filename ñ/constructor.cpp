@@ -72,7 +72,7 @@ namespace Ñ
             // Creo el módulo LLVM y le asigno el nombre de mi módulo
             móduloLlvm = new llvm::Module(nombre, entorno->contextoLlvm);
 
-            std::cout << "Nombre del módulo: " << móduloLlvm->getModuleIdentifier() << std::endl;
+            //std::cout << "Nombre del módulo: " << móduloLlvm->getModuleIdentifier() << std::endl;
 
             preparaPasesDeOptimización();
         }
@@ -115,7 +115,7 @@ namespace Ñ
             }
             else
             {
-                std::cout << "Error, no puedo guardar el símbolo '" << id << "' en la tabla" << std::endl;
+                //std::cout << "Error, no puedo guardar el símbolo '" << id << "' en la tabla" << std::endl;
             }
         }
 
@@ -133,10 +133,10 @@ namespace Ñ
             }
             else
             {
-                std::cout << "Error, no se ha iniciado la tabla, no puedo guardar el símbolo '" << id << "'" << std::endl;
+                //std::cout << "Error, no se ha iniciado la tabla, no puedo guardar el símbolo '" << id << "'" << std::endl;
             }
 
-            std::cout << "Error, no he encontrado el símbolo '" << id << "'" << std::endl;
+            //std::cout << "Error, no he encontrado el símbolo '" << id << "'" << std::endl;
             
             return nullptr;
         }
@@ -360,11 +360,11 @@ namespace Ñ
 
             llvm::verifyFunction(*funciónLlvm);
 
-            std::cout << "Ejecuto optimizaciones" << std::endl;
+            //std::cout << "Ejecuto optimizaciones" << std::endl;
             
             entorno->gestorPasesOptimización->run(*funciónLlvm);
             
-            funciónLlvm->print(llvm::errs(), nullptr);
+            //funciónLlvm->print(llvm::errs(), nullptr);
 
             entorno->tablaSímbolos->cierraBloque();
             delete entorno->tablaSímbolos;
@@ -468,7 +468,7 @@ namespace Ñ
                     }
                     else
                     {
-                        muestraNodos(a);
+                        //muestraNodos(a);
                         resultado.error("He recibido un argumento de un tipo que no reconozco");
                         return resultado;
                     }
@@ -653,7 +653,7 @@ namespace Ñ
             
             default:
                 resultado.error("No reconozco la expresión");
-                muestraNodos(nodo);
+                //muestraNodos(nodo);
                 break;
             }
 
@@ -782,9 +782,9 @@ namespace Ñ
 
                 llvm::Value* vLia = rLia.valor();
             
-                std::cout << "construyeAsignación() LDA" << std::endl;
+                //std::cout << "construyeAsignación() LDA" << std::endl;
                 Ñ::ResultadoLlvm rLda = construyeLDA(nodo->ramas[1]);
-                std::cout << "construyeAsignación() LDA Hecho" << std::endl;
+                //std::cout << "construyeAsignación() LDA Hecho" << std::endl;
                 if(rLda.error())
                 {
                     return rLda;
@@ -917,9 +917,9 @@ namespace Ñ
             switch (nodo->categoría)
             {
             case Ñ::CategoríaNodo::NODO_LITERAL:
-                std::cout << "construyeLDA(NODO_LITERAL)" << std::endl;
+                //std::cout << "construyeLDA(NODO_LITERAL)" << std::endl;
                 resultado = construyeLiteral(nodo);
-                std::cout << "construyeLDA(NODO_LITERAL) Hecho" << std::endl;
+                //std::cout << "construyeLDA(NODO_LITERAL) Hecho" << std::endl;
                 break;
             
             case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
@@ -1386,7 +1386,7 @@ namespace Ñ
             
             case Ñ::CategoríaTipo::TIPO_VECTOR:
                 {
-                    std::cout << "construyeLiteral(TIPO_VECTOR)" << std::endl;
+                    //std::cout << "construyeLiteral(TIPO_VECTOR)" << std::endl;
 
                     tipoLlvm = creaTipoLlvm(tipo);
                     llvm::Value *vectorVacío = llvm::UndefValue::get(tipoLlvm);
@@ -1394,9 +1394,9 @@ namespace Ñ
                     int64_t índice = 0;
                     for(Ñ::Nodo* subnodo : literal->ramas)
                     {
-                        std::cout << "construyeLiteral(TIPO_VECTOR) subtipo" << índice << std::endl;
+                        //std::cout << "construyeLiteral(TIPO_VECTOR) subtipo" << índice << std::endl;
 
-                        std::cout << "construyeLiteral(TIPO_VECTOR) extraigo subvalor de subnodo" << índice << std::endl;
+                        //std::cout << "construyeLiteral(TIPO_VECTOR) extraigo subvalor de subnodo" << índice << std::endl;
 
                         //llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getScalarType(), llvm::APInt(64, índice));
                         ResultadoLlvm rSubvalor = construyeLiteral(subnodo);
@@ -1406,7 +1406,7 @@ namespace Ñ
                         }
                         llvm::Value* subvalor = rSubvalor.valor();
 
-                        std::cout << "construyeLiteral(TIPO_VECTOR) inserto subvalor en vector" << índice << std::endl;
+                        //std::cout << "construyeLiteral(TIPO_VECTOR) inserto subvalor en vector" << índice << std::endl;
 
                         llvm::Value* nuevoVectorFinal = entorno->constructorLlvm.CreateInsertElement(vectorFinal, subvalor, índice);
 
@@ -1420,7 +1420,7 @@ namespace Ñ
                         índice++;
                     }
                     
-                    std::cout << "construyeLiteral(TIPO_VECTOR) éxito"<< std::endl;
+                    //std::cout << "construyeLiteral(TIPO_VECTOR) éxito"<< std::endl;
 
                     resultado.éxito();
                     resultado.valor(vectorFinal);
@@ -1749,7 +1749,7 @@ namespace Ñ
 
     Ñ::ResultadoLlvm construye(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo)
     {
-        std::cout << "construye(nodo)" << std::endl;
+        //std::cout << "construye(nodo)" << std::endl;
 
         Ñ::entorno = entorno;
 
@@ -1757,12 +1757,12 @@ namespace Ñ
 
         Ñ::Constructor* constructor = new Ñ::Constructor;
 
-        std::cout << std::endl;
+        //std::cout << std::endl;
 
-        muestraNodos(árbol);
+        //muestraNodos(árbol);
 
-        std::cout << std::endl;
-        std::cout << std::endl;
+        //std::cout << std::endl;
+        //std::cout << std::endl;
 
         if(categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
@@ -1776,7 +1776,7 @@ namespace Ñ
         }
         else if(categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {
-            std::cout << "Preparando construcción 'justo a tiempo'" << std::endl << std::endl;
+            //std::cout << "Preparando construcción 'justo a tiempo'" << std::endl << std::endl;
             
             llvm::InitializeNativeTarget();
             llvm::InitializeNativeTargetAsmPrinter();
@@ -1787,35 +1787,21 @@ namespace Ñ
                 jat = Ñ::ConstructorJAT::Crea();
             }
             
-            std::cout << "1" << std::endl;
-
             Ñ::ResultadoLlvm rExpresión = constructor->construyeExpresiónPrimerNivel(árbol);
             
-            std::cout << "2" << std::endl;
-
             if(rExpresión.error())
             {
-                std::cout << "3" << std::endl;
-
                 resultado.error(rExpresión.mensaje());
                 return resultado;
             }
 
-            std::cout << "4" << std::endl;
-
             constructor->móduloLlvm->print(llvm::outs(), nullptr);
             resultado.módulo(constructor->móduloLlvm);
-
-            std::cout << "5" << std::endl;
 
             std::unique_ptr<llvm::Module> módulo(constructor->móduloLlvm);
             jat->añadeMódulo(std::move(módulo));
 
-            std::cout << "6" << std::endl;
-
             llvm::Expected<llvm::JITEvaluatedSymbol> funciónEvaluadaJAT = jat->busca("__función_anónima__");
-
-            std::cout << "7" << std::endl;
 
             if(auto error = funciónEvaluadaJAT.takeError())
             {
@@ -1823,25 +1809,17 @@ namespace Ñ
                 return resultado;
             }
             
-            std::cout << "8" << std::endl;
-
             void (*funciónJAT)() = (void (*)())(*funciónEvaluadaJAT).getAddress();
 
             std::cout << "ejecutando '__función_anónima__()' ...";
 
             funciónJAT();
 
-            std::cout << " hecho." << std::endl;
-
             std::cout << "Elimino '__función_anónima__()' ...";
             
             jat->eliminaSímbolo("__función_anónima__");
 
-            std::cout << " hecho." << std::endl;
-
             llvm::Expected<llvm::JITEvaluatedSymbol> variableEvaluadaJAT = jat->busca("a");
-
-            std::cout << "9" << std::endl;
 
             if(auto error = variableEvaluadaJAT.takeError())
             {
@@ -1849,8 +1827,6 @@ namespace Ñ
                 return resultado;
             }
             
-            std::cout << "10" << std::endl;
-
             int64_t* entero = (int64_t*)(*variableEvaluadaJAT).getAddress();
 
             std::cout << "La variable global 'a' vale " << std::to_string(*entero) << std::endl;

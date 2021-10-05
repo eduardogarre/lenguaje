@@ -19,8 +19,8 @@ std::string creaNombreMódulo(std::string archivo)
 	std::filesystem::path p = archivo;
 	std::string antes = p.string();
 	std::string después = p.stem().string();
-    std::cout << "Antes: " << antes << std::endl;
-    std::cout << "Después: " << después << std::endl;
+    //std::cout << "Antes: " << antes << std::endl;
+    //std::cout << "Después: " << después << std::endl;
 
 	return después;
 }
@@ -33,14 +33,15 @@ std::string creaNombreMódulo(std::string archivo)
 
 	std::string nombreMódulo = creaNombreMódulo(archivo);
 
-	std::cout << "LEYENDO EL CODIGO DEL ARCHIVO" << std::endl;
+	//std::cout << "LEYENDO EL CODIGO DEL ARCHIVO" << std::endl;
 
 	try{
 		código = leeArchivo(archivo);
 	}
 	catch (std::exception& e)
 	{
-		std::cout << "Error al leer el archivo" << '\n';
+		resultado.error("Error al leer el archivo " + archivo);
+		return resultado;
 	}
 
 	std::vector<Ñ::Lexema*> lexemas;
@@ -49,11 +50,11 @@ std::string creaNombreMódulo(std::string archivo)
 	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
 	
-	std::cout << "ANALIZANDO LEXICO" << std::endl;
+	//std::cout << "ANALIZANDO LEXICO" << std::endl;
 
 	lexemas = léxico.analiza(código);
 
-	Ñ::muestraLexemas(lexemas);
+	//Ñ::muestraLexemas(lexemas);
 
 	/*
 	if(lexemas.size() <= 1)
@@ -71,16 +72,15 @@ std::string creaNombreMódulo(std::string archivo)
 	}
 	*/
 	
-	std::cout << "ANALIZANDO SINTAXIS" << std::endl;
+	//std::cout << "ANALIZANDO SINTAXIS" << std::endl;
 
 	nodos = sintaxis.analiza(lexemas, nombreMódulo);
 	
-	muestraNodos(nodos);
+	//muestraNodos(nodos);
 
 	if(nodos == nullptr)
 	{
-		Ñ::errorConsola(u8"Error durante el análisis sintáctico, código incorrecto.");
-		muestraLexemas(lexemas);
+		//muestraLexemas(lexemas);
 
 		for(auto l : lexemas)
 		{
@@ -92,18 +92,18 @@ std::string creaNombreMódulo(std::string archivo)
 		return resultado;
 	}
 	
-	std::cout << "ANALIZANDO SEMANTICA" << std::endl;
+	//std::cout << "ANALIZANDO SEMANTICA" << std::endl;
 
 	Ñ::TablaSímbolos* tablaSímbolos = new Ñ::TablaSímbolos;
 	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 	
-	muestraNodos(nodos, tablaSímbolos);
+	//muestraNodos(nodos, tablaSímbolos);
 	delete tablaSímbolos;
 
 	if(rSemántico.error())
 	{
-		std::cout << rSemántico.mensaje() << std::endl;
-		muestraNodos(nodos);
+		//std::cout << rSemántico.mensaje() << std::endl;
+		//muestraNodos(nodos);
 	
 		for(auto l : lexemas)
 		{
@@ -126,7 +126,7 @@ std::string creaNombreMódulo(std::string archivo)
 		//}
 	}
 	
-	std::cout << "CONSTRUYENDO MODULO" << std::endl;
+	//std::cout << "CONSTRUYENDO MODULO" << std::endl;
 
 	resultado = Ñ::construye(nodos, entorno);
 
@@ -139,7 +139,7 @@ std::string creaNombreMódulo(std::string archivo)
 
 	if(resultado.error())
 	{
-		std::cout << resultado.mensaje() << std::endl;
+		//std::cout << resultado.mensaje() << std::endl;
 		return resultado;
 	}
 
@@ -156,7 +156,7 @@ int Compilador::compila(Compilador::Configuración cfg)
 	llvm::InitializeNativeTargetAsmPrinter();
 
 	std::string tripleteDestino = llvm::sys::getDefaultTargetTriple();
-	std::cout << "Tripleta de Destino: " << tripleteDestino << std::endl;
+	//std::cout << "Tripleta de Destino: " << tripleteDestino << std::endl;
 
 	std::string error;
 	auto destino = llvm::TargetRegistry::lookupTarget(tripleteDestino, error);
@@ -172,7 +172,7 @@ int Compilador::compila(Compilador::Configuración cfg)
 	auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
 	auto máquinaDestino = destino->createTargetMachine(tripleteDestino, procesador, características, opciones, modeloReordenamiento);
 
-	std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
+	//std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
 
     for(std::string archivo : cfg.archivos)
     {
@@ -189,8 +189,8 @@ int Compilador::compila(Compilador::Configuración cfg)
 		móduloLlvm->setDataLayout(máquinaDestino->createDataLayout());
 		móduloLlvm->setTargetTriple(tripleteDestino);
 
-		std::cout << std::endl << "Archivo de representación intermedia:" << std::endl << std::endl;
-		móduloLlvm->print(llvm::outs(), nullptr);
+		//std::cout << std::endl << "Archivo de representación intermedia:" << std::endl << std::endl;
+		//móduloLlvm->print(llvm::outs(), nullptr);
 
 		std::string nombreMódulo = creaNombreMódulo(archivo);
 
@@ -215,7 +215,7 @@ int Compilador::compila(Compilador::Configuración cfg)
 		paseDeCódigoObjeto.run(*(móduloLlvm));
 		archivoDestino.flush();
 
-		std::cout << "He construido el archivo \"" + nombreArchivoDestino + "\"." << std::endl;
+		//std::cout << "He construido el archivo \"" + nombreArchivoDestino + "\"." << std::endl;
     }
 
 	std::string archivoDestino = cfg.nombreArchivoDestino + cfg.extensión;

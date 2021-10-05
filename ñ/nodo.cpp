@@ -1238,7 +1238,7 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	}
 	else
 	{
-		std::cout << "Error, no he reconocido el nodo. Devuelvo nullptr." << std::endl;
+		//std::cout << "Error, no he reconocido el nodo. Devuelvo nullptr." << std::endl;
 		return nullptr;
 	}
 

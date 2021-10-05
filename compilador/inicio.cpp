@@ -174,18 +174,18 @@ int main(int argc, char** argv)
 		cfg.nombreArchivoDestino = args["--salida"].asString();
 	}
 
-	std::cout << "Crearé el programa '" << cfg.nombreArchivoDestino << cfg.extensión << "'" << std::endl << std::endl;
+	//std::cout << "Crearé el programa '" << cfg.nombreArchivoDestino << cfg.extensión << "'" << std::endl << std::endl;
 
 	if(args["<archivo>"].isStringList())
 	{
 		cfg.archivos = args["<archivo>"].asStringList();
 
-		std::cout << "Construyendo";
-		for(std::string archivo : cfg.archivos)
-		{
-			std::cout << " " << archivo;
-		}
-		std::cout << std::endl << std::endl;
+		//std::cout << "Construyendo";
+		//for(std::string archivo : cfg.archivos)
+		//{
+		//	std::cout << " " << archivo;
+		//}
+		//std::cout << std::endl << std::endl;
 
 		return Compilador::compila(cfg);
 	}

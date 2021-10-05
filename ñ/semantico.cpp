@@ -379,7 +379,7 @@
             if(!rTipo.error())
             {
                 Ñ::Tipo* tipo = (Ñ::Tipo*) (rTipo.nodo());
-                std::cout << "IDENTIFICADOR: " << nombre << " TIPO: " << obténNombreDeTipo(tipo) << std::endl;
+                //std::cout << "IDENTIFICADOR: " << nombre << " TIPO: " << obténNombreDeTipo(tipo) << std::endl;
             }
             return rTipo;
         }
@@ -522,7 +522,7 @@
         }
         else if(nodo->ramas.size() > 1)
         {
-            std::cout << std::endl << "Realizando operación de comparación" << std::endl << std::endl;
+            //std::cout << std::endl << "Realizando operación de comparación" << std::endl << std::endl;
             Ñ::Tipo* tipoResultado;
             Ñ::Nodo* t1;
             Ñ::Resultado r = _analizaLDA(nodo->ramas[0], tablaSímbolos);
@@ -956,7 +956,7 @@
                 &&  ((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))->tamaño() == 0
                 &&  sonÁrbolesDuplicados(nodo->ramas[0]->ramas[0]->ramas[0], lda->ramas[0]))
         {
-            std::cout << "Defino tamaño aprovechando la definición" << std::endl;
+            //std::cout << "Defino tamaño aprovechando la definición" << std::endl;
             // nat[] mi_vector = [1, 2, 3];
             ((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))->tamaño(lda->tamaño());
         }
@@ -984,10 +984,10 @@
         }
         else
         {
-            std::cout << "LDA" << std::endl;
-            muestraNodos((Ñ::Nodo*)lda, tablaSímbolos);
-            std::cout << "LIA" << std::endl;
-            muestraNodos((Ñ::Nodo*)lia, tablaSímbolos);
+            //std::cout << "LDA" << std::endl;
+            //muestraNodos((Ñ::Nodo*)lda, tablaSímbolos);
+            //std::cout << "LIA" << std::endl;
+            //muestraNodos((Ñ::Nodo*)lia, tablaSímbolos);
             resultado.error("No es posible almacenar un valor de tipo '" + Ñ::obténNombreDeTipo(lda) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(lia) + "'.");
             resultado.posición(nodo->posición());
             return resultado;

@@ -1262,8 +1262,18 @@ namespace Ñ
             case TIPO_ENTERO_8:
             case TIPO_ENTERO_16:
             case TIPO_ENTERO_32:
-            case TIPO_ENTERO_64:
                 valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, true);
+                break;
+
+            case TIPO_ENTERO_64:
+                if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
+                {
+                    valorFinal = entorno->constructorLlvm.CreatePointerCast(valor, tDestinoLlvm);
+                }
+                else
+                {
+                    valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, true);
+                }
                 break;
             
             case TIPO_REAL_32:
@@ -1324,6 +1334,18 @@ namespace Ñ
                 {
                     valorFinal = nullptr;
                 }
+                break;
+
+            case TIPO_PUNTERO:
+                //if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
+                //{
+                //    valorFinal = entorno->constructorLlvm.CreatePointerCast(valor, tDestinoLlvm);
+                //}
+                //else
+                //{
+                //    valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, true);
+                //}
+                valorFinal = entorno->constructorLlvm.CreateIntToPtr(valor, tDestinoLlvm);
                 break;
 
             default:

@@ -931,6 +931,21 @@ bool Ñ::tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda)
 		case TIPO_NATURAL_8:
 		case TIPO_NATURAL_16:
 		case TIPO_NATURAL_32:
+		case TIPO_PUNTERO:
+			return true;
+			break;
+		
+		default:
+			return false;
+			break;
+		}
+		break;
+	
+	case TIPO_PUNTERO:
+		switch (lda->tipo)
+		{
+		case TIPO_ENTERO_64:
+		case TIPO_PUNTERO:
 			return true;
 			break;
 		

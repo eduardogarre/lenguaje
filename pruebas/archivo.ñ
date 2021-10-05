@@ -1,5 +1,5 @@
 externo ent holamundo();
-externo ent duplica(real x);
+externo ent duplica(ent x);
 
 //ent prueba(ent[2] vec)
 //{

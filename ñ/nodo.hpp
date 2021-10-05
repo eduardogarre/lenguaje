@@ -21,6 +21,7 @@ namespace Ñ
 
         NODO_LITERAL,
         NODO_IDENTIFICADOR,
+        NODO_PUNTERO,
 
         NODO_CONVIERTE_TIPOS,
 
@@ -93,6 +94,17 @@ namespace Ñ
 
         Identificador(Posición* posición = nullptr);
         ~Identificador();
+
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+    };
+
+    class Puntero : public Nodo
+    {
+    public:
+        std::string id;
+
+        Puntero(Posición* posición = nullptr);
+        ~Puntero();
 
         void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };

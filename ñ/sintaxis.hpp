@@ -23,6 +23,7 @@ namespace Ñ
         Ñ::Nodo* literal();
         Ñ::Nodo* tipo();
         Ñ::Nodo* identificador();
+        Ñ::Nodo* puntero();
         Ñ::Nodo* primario();
         Ñ::Nodo* operaciónUnaria();
         Ñ::Nodo* elementoVector();

@@ -18,9 +18,9 @@ público ent inicia()
     holamundo();
 
     ent* pruebaPuntero = &número;
-    pruebaPuntero = pruebaPuntero + 1;
-    devuelve *pruebaPuntero;
-/*
+    *pruebaPuntero = *pruebaPuntero + 1;
+
+    //nat8* texto = caracteres;
 
     si (número < 2)
     {
@@ -35,5 +35,4 @@ público ent inicia()
     }
 
     devuelve número;
-    */
 }

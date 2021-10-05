@@ -36,6 +36,10 @@ std::string Ñ::obténNombreDeNodo(Ñ::CategoríaNodo n)
 		return "NODO_IDENTIFICADOR";
 		break;
 	
+	case NODO_PUNTERO:
+		return "NODO_PUNTERO";
+		break;
+	
 	case NODO_CONVIERTE_TIPOS:
 		return "NODO_CONVIERTE_TIPOS";
 		break;
@@ -220,6 +224,34 @@ void Ñ::Identificador::muestra(TablaSímbolos* tablaSímbolos)
 
 	imprimeAjuste();
 	std::cout << "(NODO_IDENTIFICADOR) [" + id + "] [" + obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama, tablaSímbolos);
+	}
+}
+
+Ñ::Puntero::Puntero(Posición* posición) : Ñ::Nodo(posición)
+{
+	categoría = Ñ::CategoríaNodo::NODO_PUNTERO;
+}
+
+Ñ::Puntero::~Puntero() {}
+
+void Ñ::Puntero::muestra(TablaSímbolos* tablaSímbolos)
+{
+	Ñ::Tipo* tipo = nullptr;
+
+	if(tablaSímbolos != nullptr)
+	{
+		Ñ::Resultado rTipo = tablaSímbolos->leeTipo(id);
+		if(!(rTipo.error()))
+		{
+			tipo = (Ñ::Tipo*)(rTipo.nodo());
+		}
+	}
+
+	imprimeAjuste();
+	std::cout << "(NODO_PUNTERO) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -720,6 +752,8 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::Literal* l2;
 		Ñ::Identificador* id1;
 		Ñ::Identificador* id2;
+		Ñ::Puntero* ptr1;
+		Ñ::Puntero* ptr2;
 		Ñ::ConvierteTipos* conv1;
 		Ñ::ConvierteTipos* conv2;
 		Ñ::Tipo* t1;
@@ -794,6 +828,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			{
 				return false;
 			}
+			break;
+		
+		case Ñ::CategoríaNodo::NODO_PUNTERO:
+			return true;
 			break;
 		
 		case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
@@ -1074,6 +1112,13 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		i->id = n->id;
 
 		duplicado = (Ñ::Nodo*)i;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PUNTERO)
+	{
+		Ñ::Puntero* n = (Ñ::Puntero*)nodo;
+		Ñ::Puntero* p = new Ñ::Puntero();
+
+		duplicado = (Ñ::Nodo*)p;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_OP_BINARIA)
 	{

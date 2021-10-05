@@ -161,6 +161,10 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		{
 			return id;
 		}
+		else if(Ñ::Nodo* ptr = puntero())
+		{
+			return ptr;
+		}
 	}
 
 	cursor = c;
@@ -656,6 +660,31 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			id->id = lexemas[cursor]->contenido;
 			cursor++;
 			return (Ñ::Nodo*)id;
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
+Ñ::Nodo* Ñ::Sintaxis::puntero()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::Posición* p = lexemas[cursor]->posición();
+
+		if(notación("*"))
+		{
+			Ñ::Puntero* ptr;
+
+			if(Ñ::Nodo* id = identificador())
+			{
+				ptr = new Ñ::Puntero(p);
+				ptr->ramas.push_back(id);
+				return ptr;
+			}
 		}
 	}
 

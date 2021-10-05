@@ -198,7 +198,25 @@ namespace Ñ
                     Ñ::Nodo* nodo = (Ñ::Nodo*)tipo;
                     uint64_t tamaño = tipo->tamaño();
                     Ñ::Tipo* subtipo = tipo->subtipo();
-                    return llvm::VectorType::get(creaTipoLlvm(subtipo), tamaño, false);
+                    llvm::Type* subtipollvm = creaTipoLlvm(subtipo);
+                    if(subtipollvm == nullptr)
+                    {
+                        return nullptr;
+                    }
+                    return llvm::VectorType::get(subtipollvm, tamaño, false);
+                }
+                break;
+            
+            case TIPO_PUNTERO:
+                {
+                    Ñ::Nodo* nodo = (Ñ::Nodo*)tipo;
+                    Ñ::Tipo* subtipo = tipo->subtipo();
+                    llvm::Type* subtipollvm = creaTipoLlvm(subtipo);
+                    if(subtipollvm == nullptr)
+                    {
+                        return nullptr;
+                    }
+                    return llvm::PointerType::get(subtipollvm, 0);
                 }
                 break;
             
@@ -434,6 +452,12 @@ namespace Ñ
             {
                 Ñ::Tipo* tDevuelto = (Ñ::Tipo*)devuelto;
                 tRetorno = creaTipoLlvm(tDevuelto);
+                if(tRetorno == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tDevuelto) + "'");
+                    resultado.posición(tDevuelto->posición());
+                    return resultado;
+                }
             }
 
             if(argumentos == nullptr)
@@ -459,12 +483,26 @@ namespace Ñ
                     if(a->categoría == Ñ::CategoríaNodo::NODO_TIPO)
                     {
                         Ñ::Tipo* arg = (Ñ::Tipo*)a;
-                        vArgumentos.push_back(creaTipoLlvm(arg));
+                        llvm::Type* tipoarg = creaTipoLlvm(arg);
+                        if(tipoarg == nullptr)
+                        {
+                            resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(arg) + "'");
+                            resultado.posición(arg->posición());
+                            return resultado;
+                        }
+                        vArgumentos.push_back(tipoarg);
                     }
                     else if(a->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
                     {
                         Ñ::Tipo* arg = (Ñ::Tipo*)(a->ramas[0]);
-                        vArgumentos.push_back(creaTipoLlvm(arg));
+                        llvm::Type* tipoarg = creaTipoLlvm(arg);
+                        if(tipoarg == nullptr)
+                        {
+                            resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(arg) + "'");
+                            resultado.posición(arg->posición());
+                            return resultado;
+                        }
+                        vArgumentos.push_back(tipoarg);
                     }
                     else
                     {
@@ -986,6 +1024,12 @@ namespace Ñ
             Ñ::DeclaraVariable* dv = (Ñ::DeclaraVariable*)nodo;
             Ñ::Tipo* t = (Ñ::Tipo*)(nodo->ramas[0]);
             tipo = creaTipoLlvm(t);
+            if(tipo == nullptr)
+            {
+                resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(t) + "'");
+                resultado.posición(t->posición());
+                return resultado;
+            }
 
             nombre = dv->variable;
 
@@ -1026,6 +1070,12 @@ namespace Ñ
             Ñ::DeclaraVariable* dv = (Ñ::DeclaraVariable*)nodo;
             Ñ::Tipo* t = (Ñ::Tipo*)(nodo->ramas[0]);
             tipo = creaTipoLlvm(t);
+            if(tipo == nullptr)
+            {
+                resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(t) + "'");
+                resultado.posición(t->posición());
+                return resultado;
+            }
 
             nombre = dv->variable;
 
@@ -1155,6 +1205,10 @@ namespace Ñ
             }
             
             llvm::Type* tDestinoLlvm = creaTipoLlvm(tipoDestino);
+            if(tDestinoLlvm == nullptr)
+            {
+                return nullptr;
+            }
             
             switch (tipoDestino->tipo)
             {
@@ -1316,6 +1370,12 @@ namespace Ñ
             {
             case Ñ::CategoríaTipo::TIPO_NATURAL_8:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
@@ -1323,6 +1383,12 @@ namespace Ñ
                 
             case Ñ::CategoríaTipo::TIPO_NATURAL_16:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
@@ -1330,6 +1396,12 @@ namespace Ñ
                 
             case Ñ::CategoríaTipo::TIPO_NATURAL_32:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
@@ -1337,6 +1409,12 @@ namespace Ñ
 
             case Ñ::CategoríaTipo::TIPO_NATURAL_64:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 número = std::stoull(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
@@ -1344,6 +1422,12 @@ namespace Ñ
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_8:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número, true));
@@ -1351,6 +1435,12 @@ namespace Ñ
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_16:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número, true));
@@ -1358,6 +1448,12 @@ namespace Ñ
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_32:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número, true));
@@ -1365,6 +1461,12 @@ namespace Ñ
             
             case Ñ::CategoríaTipo::TIPO_ENTERO_64:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 número = std::stoll(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número, true));
@@ -1372,6 +1474,12 @@ namespace Ñ
             
             case Ñ::CategoríaTipo::TIPO_REAL_32:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 real32 = std::stof(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipoLlvm, real32));
@@ -1379,6 +1487,12 @@ namespace Ñ
             
             case Ñ::CategoríaTipo::TIPO_REAL_64:
                 tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
                 real64 = std::stod(literal->dato);
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipoLlvm, real64));
@@ -1389,6 +1503,12 @@ namespace Ñ
                     //std::cout << "construyeLiteral(TIPO_VECTOR)" << std::endl;
 
                     tipoLlvm = creaTipoLlvm(tipo);
+                    if(tipoLlvm == nullptr)
+                    {
+                        resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                        resultado.posición(tipo->posición());
+                        return resultado;
+                    }
                     llvm::Value *vectorVacío = llvm::UndefValue::get(tipoLlvm);
                     llvm::Value* vectorFinal = vectorVacío;
                     int64_t índice = 0;

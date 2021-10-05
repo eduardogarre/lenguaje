@@ -12,7 +12,10 @@ público ent inicia()
 
     ent número = vector[1] / 42;
 
-    //ent número = 288 / 2;
+    // Caracteres UTF-8 de "¡Hola mundo!"
+    nat8[] caracteres = [194, 161, 72, 111, 108, 97, 32, 109, 117, 110, 100, 111, 33];
+
+    ent*[1] puntero; // = número;
 
     holamundo();
 

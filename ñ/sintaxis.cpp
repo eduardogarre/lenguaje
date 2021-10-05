@@ -103,11 +103,13 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	}
 	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN)
 	{
+		Posición* p = lexemas[cursor]->posición();
+
 		if(lexemas[cursor]->contenido == "[")
 		{
 			cursor++;
 
-			l = new Ñ::Literal(lexemas[cursor]->posición());
+			l = new Ñ::Literal(p);
 
 			while(lexemas[cursor]->contenido != "]")
 			{
@@ -639,6 +641,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	{
 		CategoríaTipo tipo;
 
+		Posición* ptp = lexemas[cursor]->posición();
+
 		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
 			tipo = obténTipoDeNombre(lexemas[cursor]->contenido);
@@ -687,7 +691,22 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		uint32_t c2 = cursor;
 
-		Posición* ptp = lexemas[cursor]->posición();
+		Ñ::Tipo* t = new Ñ::Tipo(ptp);
+		t->tipo = tipo;
+
+		if(notación("*"))
+		{
+			Ñ::Tipo* subT = t;
+			t = new Ñ::Tipo(ptp);
+			t->tipo = CategoríaTipo::TIPO_PUNTERO;
+			t->ramas.push_back((Ñ::Nodo*)subT);
+		}
+		else
+		{
+			cursor = c2;
+		}
+
+		c2 = cursor;
 
 		if(notación("["))
 		{
@@ -700,13 +719,11 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 			if(notación("]"))
 			{
-				Ñ::Tipo* t = new Ñ::Tipo(ptp);
-				Ñ::Tipo* subT = new Ñ::Tipo(ptp);
-				subT->tipo = tipo;
+				Ñ::Tipo* subT = t;
+				t = new Ñ::Tipo(ptp);
 				t->tipo = CategoríaTipo::TIPO_VECTOR;
 				t->tamaño(tamaño);
 				t->ramas.push_back((Ñ::Nodo*)subT);
-				return (Ñ::Nodo*)t;
 			}
 			else
 			{
@@ -718,8 +735,6 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			cursor = c2;
 		}
 		
-		Ñ::Tipo* t = new Ñ::Tipo(ptp);
-		t->tipo = tipo;
 		return (Ñ::Nodo*)t;
 	}
 
@@ -1419,10 +1434,13 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 	if(cursor < lexemas.size())
 	{
-		Ñ::Nodo* m = (Ñ::Nodo*)(new Ñ::Módulo(lexemas[cursor]->posición()));
+		Ñ::Posición* p;
+		Ñ::Nodo* m;
 
 		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR && lexemas[cursor]->contenido == "módulo")
 		{
+			p = lexemas[cursor]->posición();
+			m =  (Ñ::Nodo*)new Ñ::Módulo(p);
 			cursor++;
 
 			if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
@@ -1448,6 +1466,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 		else
 		{
+			p = new Ñ::Posición;
+			m =  (Ñ::Nodo*)new Ñ::Módulo(p);
 			((Ñ::Módulo*)m)->módulo = nombreMódulo;
 		}
 

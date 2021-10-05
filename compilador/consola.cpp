@@ -39,7 +39,11 @@ namespace Compilador
 
         }
 
-        inicio = i + 1;
+        while(código[i] == '\r' || código[i] == '\n')
+        {
+            i++;
+        }
+        inicio = i;
 
         for(i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i++)
         {
@@ -91,7 +95,11 @@ namespace Compilador
 
         }
 
-        inicio = i + 1;
+        while(código[i] == '\r' || código[i] == '\n')
+        {
+            i++;
+        }
+        inicio = i;
 
         for(i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i++)
         {

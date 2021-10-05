@@ -944,6 +944,7 @@ bool Ñ::tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda)
 	case TIPO_PUNTERO:
 		switch (lda->tipo)
 		{
+		case TIPO_VECTOR:
 		case TIPO_ENTERO_64:
 		case TIPO_PUNTERO:
 			return true;

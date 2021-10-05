@@ -15,7 +15,7 @@ público ent inicia()
     ent* pruebaPuntero = &número;
     *pruebaPuntero = *pruebaPuntero + 1 + 42;
 
-    //nat8* texto = caracteres;
+    nat8* texto = caracteres;
 
     si (número < 2)
     {

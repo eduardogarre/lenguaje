@@ -1393,15 +1393,34 @@ namespace Ñ
                 break;
 
             case TIPO_PUNTERO:
-                //if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
-                //{
-                //    valorFinal = entorno->constructorLlvm.CreatePointerCast(valor, tDestinoLlvm);
-                //}
-                //else
-                //{
-                //    valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, true);
-                //}
-                valorFinal = entorno->constructorLlvm.CreateIntToPtr(valor, tDestinoLlvm);
+                if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    if(!(valor->getType()->isVectorTy()))
+                    {
+                        return nullptr;
+                    }
+
+                    llvm::Type* tipoEnt32 = llvm::IntegerType::getInt32Ty(entorno->contextoLlvm);
+                    llvm::Constant *índicePrimerElemento = llvm::ConstantInt::get(tipoEnt32, 0, false);
+                    llvm::Type* tipoInicialLlvm = creaTipoLlvm(tipoInicial);
+                    llvm::Type* tipoDestinoLlvm = creaTipoLlvm(tipoDestino);
+                    if( tipoEnt32 == nullptr ||
+                        índicePrimerElemento == nullptr ||
+                        tipoInicialLlvm == nullptr ||
+                        !(tipoInicialLlvm->isVectorTy()) ||
+                        tipoDestinoLlvm == nullptr ||
+                        !(tipoDestinoLlvm->isVectorTy())
+                      )
+                    {
+                        return nullptr;
+                    }
+                    //valorFinal = entorno->constructorLlvm.CreateGEP(tipoInicialLlvm, valor, índicePrimerElemento);
+                    valorFinal = entorno->constructorLlvm.CreateBitCast(valor, tipoDestinoLlvm);
+                }
+                else
+                {
+                    valorFinal = entorno->constructorLlvm.CreateIntToPtr(valor, tDestinoLlvm);
+                }
                 break;
 
             default:

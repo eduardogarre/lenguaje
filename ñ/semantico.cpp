@@ -358,6 +358,37 @@
             return resultado;
         }
     }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PUNTERO)
+    {
+        if(nodo->ramas.size() != 1)
+        {
+            resultado.error("No encuentro una referencia para acceder al puntero.");
+            resultado.posición(nodo->posición());
+            return resultado;
+        }
+
+        std::string nombre = ((Ñ::Identificador*)nodo->ramas[0])->id;
+        if(tablaSímbolos->nombreReservadoEnCualquierÁmbito(nombre))
+        {
+            Ñ::Resultado rTipoPuntero = tablaSímbolos->leeTipo(nombre);
+            if(rTipoPuntero.error())
+            {
+                rTipoPuntero.posición(nodo->ramas[0]->posición());
+                return rTipoPuntero;
+            }
+            Ñ::Tipo* tipoPuntero = (Ñ::Tipo*)rTipoPuntero.nodo();
+
+            resultado.éxito();
+            resultado.nodo(tipoPuntero->subtipo());
+            return resultado;
+        }
+        else
+        {
+            resultado.error("Todavía no habías declarado el identificador '" + nombre + "'.");
+            resultado.posición(nodo->posición());
+            return resultado;
+        }
+    }
     else
     {
         resultado.error("El LIA tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría));

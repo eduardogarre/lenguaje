@@ -930,8 +930,12 @@ namespace Ñ
                 resultado = construyeVariableLIA(nodo);
                 break;
             
+            case Ñ::CategoríaNodo::NODO_PUNTERO:
+                resultado = construyePunteroLIA(nodo);
+                break;
+            
             default:
-                resultado.error("No sé cómo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA");
+                resultado.error("No sé construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA");
                 resultado.posición(nodo->posición());
                 break;
             }
@@ -960,7 +964,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("No sé cómo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA");
+                resultado.error("No puedo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA");
                 resultado.posición(nodo->posición());
                 break;
             }
@@ -1126,6 +1130,58 @@ namespace Ñ
 
             resultado.éxito();
             resultado.valor(varGlobal);
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyePunteroLIA(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_PUNTERO)
+            {
+                resultado.error("El nodo no es un puntero, no puedo construir su lectura");
+                resultado.posición(nodo->posición());
+                return resultado;
+            }
+            
+            if(nodo->ramas.size() != 1)
+            {
+                resultado.error("El nodo 'puntero' no tiene las ramas esperadas, no puedo construir su lectura");
+                resultado.posición(nodo->posición());
+                return resultado;
+            }
+
+            std::string nombre;
+            Ñ::Identificador* id;
+            llvm::Value* variable;
+
+            id = (Ñ::Identificador*)nodo->ramas[0];
+            nombre = id->id;
+
+            variable = leeId(nombre);
+            if(variable == nullptr)
+            {
+                resultado.error("No puedo leer la variable '" + nombre + "'");
+                resultado.posición(id->posición());
+                return resultado;
+            }
+
+            llvm::Value* variableFinal = entorno->constructorLlvm.CreateLoad(variable);
+            if(variableFinal == nullptr)
+            {
+                resultado.error("No puedo leer la referencia guardada en '" + nombre + "'");
+                resultado.posición(id->posición());
+                return resultado;
+            }
+
+            resultado.éxito();
+            resultado.valor(variableFinal);
             return resultado;
         }
 

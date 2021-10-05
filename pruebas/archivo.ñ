@@ -1,11 +1,6 @@
 externo ent holamundo();
 externo ent duplica(ent x);
 
-//ent prueba(ent[2] vec)
-//{
-//    devuelve vec[1];
-//}
-
 público ent inicia()
 {
     nat16[] vector = [288, 42];
@@ -18,7 +13,7 @@ público ent inicia()
     holamundo();
 
     ent* pruebaPuntero = &número;
-    *pruebaPuntero = *pruebaPuntero + 1;
+    *pruebaPuntero = *pruebaPuntero + 1 + 42;
 
     //nat8* texto = caracteres;
 
@@ -26,7 +21,7 @@ público ent inicia()
     {
         ent y = duplica(número);
         número = y;
-        devuelve número;
+        devuelve número + 2;
     }
     sino
     {

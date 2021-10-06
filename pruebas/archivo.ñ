@@ -1,31 +1,24 @@
-externo ent holamundo();
 externo ent duplica(ent x);
+externo ent escribeln(nat8* _texto);
+externo ent holamundo();
 
 público ent inicia()
 {
     nat16[] vector = [288, 42];
 
-    ent número = vector[1] / 1;
+    ent número = vector[1] / 42;
 
-    // Caracteres UTF-8 de "¡Hola mundo!\0"
-    nat8[] caracteres = [194, 161, 72, 111, 108, 97, 32, 109, 117, 110, 100, 111, 33, 0];
-
-    holamundo();
-
-    ent* pruebaPuntero = &número;
-    *pruebaPuntero = *pruebaPuntero + 2;
-
-    nat8* texto = caracteres;
+    nat8[] hola = "¡Hola, mundo!";
+    nat8[] adiós = "¡Adiós, mundo!";
 
     si (número < 2)
     {
-        ent y = duplica(número);
-        número = y;
-        devuelve número + 2;
+        escribeln(hola);
+        devuelve duplica(número);
     }
     sino
     {
-        //número = prueba(vector);
+        escribeln(adiós);
         devuelve número;
     }
 

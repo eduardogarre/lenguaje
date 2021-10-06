@@ -754,17 +754,16 @@ namespace Ñ
 
             llvm::Value* valorCondición = resultadoCondición.valor();
 
-            //Bloque
+            //Bloque SiEntonces
             ++índice;
             Ñ::Nodo* nodoBloque = nodo->ramas[índice];
-            //PENDIENTE: Construir bloque entonces
             //Obtengo la función actual
             llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
             
             llvm::BasicBlock *bloqueEntonces = llvm::BasicBlock::Create(entorno->contextoLlvm, "entonces", funciónActual);
-            //llvm::BasicBlock *bloqueSino = llvm::BasicBlock::Create(entorno->contextoLlvm, "sino");
+            llvm::BasicBlock *bloqueSino = llvm::BasicBlock::Create(entorno->contextoLlvm, "sino");
             llvm::BasicBlock *bloqueContinúa = llvm::BasicBlock::Create(entorno->contextoLlvm, "sigue");
-            llvm::BasicBlock *bloqueSino = bloqueContinúa;
+            //llvm::BasicBlock *bloqueSino = bloqueContinúa;
 
             // Inserto salto condicional en el bloque de donde venimos
             entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueEntonces, bloqueSino);
@@ -788,7 +787,7 @@ namespace Ñ
                 && nodo->ramas[índice] != nullptr
                 && nodo->ramas[índice]->categoría == Ñ::NODO_BLOQUE)
             {
-                bloqueSino = llvm::BasicBlock::Create(entorno->contextoLlvm, "sino");
+                //bloqueSino = llvm::BasicBlock::Create(entorno->contextoLlvm, "sino");
                 //Inserto el bloque Sino al final de la función
                 funciónActual->getBasicBlockList().push_back(bloqueSino);
                 entorno->constructorLlvm.SetInsertPoint(bloqueSino);

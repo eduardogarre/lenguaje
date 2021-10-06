@@ -101,6 +101,24 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return (Ñ::Nodo*)l;
 		}
 	}
+	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_TEXTO)
+	{
+		l = new Ñ::Literal(lexemas[cursor]->posición());
+		l->tipo = Ñ::CategoríaTipo::TIPO_VECTOR;
+		l->dato = lexemas[cursor]->contenido;
+
+		const char* texto = l->dato.c_str();
+		for(int i = 0; i < strlen(texto); i++)
+		{
+			Ñ::Literal* sublit = new Ñ::Literal(l->posición());
+			sublit->tipo = Ñ::CategoríaTipo::TIPO_NATURAL_8;
+			sublit->dato = std::to_string((int)texto[i]);
+			l->ramas.push_back(sublit);
+		}
+
+		cursor++;
+		return (Ñ::Nodo*)l;
+	}
 	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN)
 	{
 		Posición* p = lexemas[cursor]->posición();

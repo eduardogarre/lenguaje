@@ -1514,6 +1514,10 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 	{
 		return nullptr;
 	}
+	else if(literal->dato == "")
+	{
+		literal->dato = "0";
+	}
 	else if(literal->dato == "nulo")
 	{
 		return new Ñ::Valor(literal->posición());
@@ -1532,7 +1536,7 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 		{
 			valor->booleano(true);
 		}
-		else if(literal->dato == "falso")
+		else
 		{
 			valor->booleano(false);
 		}

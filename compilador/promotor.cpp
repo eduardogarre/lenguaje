@@ -50,11 +50,11 @@ std::string creaNombreMódulo(std::string archivo)
 	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
 	
-	//std::cout << "ANALIZANDO LEXICO" << std::endl;
+	std::cout << "ANALIZANDO LEXICO" << std::endl;
 
 	lexemas = léxico.analiza(código);
 
-	//Ñ::muestraLexemas(lexemas);
+	Ñ::muestraLexemas(lexemas);
 
 	/*
 	if(lexemas.size() <= 1)
@@ -72,11 +72,11 @@ std::string creaNombreMódulo(std::string archivo)
 	}
 	*/
 	
-	//std::cout << "ANALIZANDO SINTAXIS" << std::endl;
+	std::cout << "ANALIZANDO SINTAXIS" << std::endl;
 
 	nodos = sintaxis.analiza(lexemas, nombreMódulo);
 	
-	//muestraNodos(nodos);
+	muestraNodos(nodos);
 
 	if(nodos == nullptr)
 	{

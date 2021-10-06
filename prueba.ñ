@@ -1,0 +1,10 @@
+externo ent64 escribeln(nat8* _texto);
+
+público ent64 inicia()
+{
+    nat8[] texto = "¡Hola, mundo!";
+
+    escribeln("texto");
+
+    devuelve 42;
+}

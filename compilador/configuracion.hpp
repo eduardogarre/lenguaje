@@ -7,6 +7,8 @@ namespace Compilador
 {
     struct Configuración
     {
+        bool HABLADOR = false;
+        
         std::vector<std::string> archivos;
         
         std::string nombreArchivoDestino = "programa";

@@ -4,7 +4,7 @@ público ent64 inicia()
 {
     nat8[] texto = "¡Hola, mundo!";
 
-    escribeln("texto");
+    escribeln(texto);
 
     devuelve 42;
 }

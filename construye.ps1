@@ -2,6 +2,7 @@
 rm proyecto -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
 rm -ErrorAction SilentlyContinue *.o
+rm -ErrorAction SilentlyContinue *.exe
 
 mkdir obra
 mkdir proyecto

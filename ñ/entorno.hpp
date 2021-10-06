@@ -16,6 +16,7 @@ namespace Ñ
     class EntornoConstrucción
     {
     public:
+        bool                                HABLADOR = false;
         llvm::LLVMContext                   contextoLlvm;
         llvm::legacy::FunctionPassManager*  gestorPasesOptimización = nullptr;
         llvm::IRBuilder<>                   constructorLlvm;

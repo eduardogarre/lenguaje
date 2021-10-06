@@ -110,20 +110,21 @@ int interpretaEnLínea()
 	return 0;
 }
 
-static const char VERSIÓN[] = u8R"(Ñ 0.1)";
+static const char VERSIÓN[] = u8R"(Ñ 0.0.1)";
 
-static const char USO[] =
-u8R"(Compilador Ñ.
+static const char USO[] = 
+u8R"(Ñ 0.0.1 - Constructor del lenguaje de programación Ñ
 
     Usage:
 	  ñ
-	  ñ <archivo>... [--salida <nombre>]
+	  ñ <archivo>... [--salida <nombre>] [--hablador]
       ñ (-a | --ayuda)
       ñ (-v | --version)
 
     Options:
-      -a --ayuda      Muestra este mensaje
-	  -s <nombre>, --salida <nombre>   Pon nombre al archivo producido
+      -a --ayuda      Muestra este mensaje.
+	  -h, --hablador  Muestra mensajes sobre el funcionamiento interno.
+	  -s <nombre>, --salida <nombre>  Pon nombre al archivo producido.
       -v --version    Muestra versión.
 )";
 
@@ -174,18 +175,14 @@ int main(int argc, char** argv)
 		cfg.nombreArchivoDestino = args["--salida"].asString();
 	}
 
-	//std::cout << "Crearé el programa '" << cfg.nombreArchivoDestino << cfg.extensión << "'" << std::endl << std::endl;
+	if(args["--hablador"].isBool())
+	{
+		cfg.HABLADOR = args["--hablador"].asBool();
+	}
 
 	if(args["<archivo>"].isStringList())
 	{
 		cfg.archivos = args["<archivo>"].asStringList();
-
-		//std::cout << "Construyendo";
-		//for(std::string archivo : cfg.archivos)
-		//{
-		//	std::cout << " " << archivo;
-		//}
-		//std::cout << std::endl << std::endl;
 
 		return Compilador::compila(cfg);
 	}

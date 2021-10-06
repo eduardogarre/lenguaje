@@ -17,6 +17,7 @@ namespace Ñ
     {
     public:
         bool                                HABLADOR = false;
+        uint8_t                             optimización = 0;
         llvm::LLVMContext                   contextoLlvm;
         llvm::legacy::FunctionPassManager*  gestorPasesOptimización = nullptr;
         llvm::IRBuilder<>                   constructorLlvm;

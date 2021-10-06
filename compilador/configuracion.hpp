@@ -8,6 +8,7 @@ namespace Compilador
     struct Configuración
     {
         bool HABLADOR = false;
+        uint8_t optimización = 1;
         
         std::vector<std::string> archivos;
         

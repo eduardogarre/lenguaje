@@ -161,6 +161,7 @@ std::string creaNombreMódulo(std::string archivo)
 int Compilador::compila(Compilador::Configuración cfg)
 {
 	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
+	entorno->optimización = cfg.optimización;
 	
 	llvm::InitializeNativeTarget();
 	llvm::InitializeNativeTargetAsmParser();

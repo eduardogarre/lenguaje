@@ -90,19 +90,25 @@ namespace Ñ
         {
             entorno->gestorPasesOptimización = new llvm::legacy::FunctionPassManager(móduloLlvm);
 
-            // Optimizaciones se secuencias cortas y pequeños reordenamientos.
-            entorno->gestorPasesOptimización->add(llvm::createInstructionCombiningPass());
-            // Reassociate expressions.
-            entorno->gestorPasesOptimización->add(llvm::createReassociatePass());
-            // Elimina subexpresiones comunes.
-            entorno->gestorPasesOptimización->add(llvm::createGVNPass());
-            // Simplifica el grafo de flujo de ejecución (elimina bloques inalcanzables, etc)
-            entorno->gestorPasesOptimización->add(llvm::createCFGSimplificationPass());
             // Intenta convertir variables en RAM a registros
             entorno->gestorPasesOptimización->add(llvm::createPromoteMemoryToRegisterPass());
-            // Intenta simplificar el control de flujo cuando los saltos condicionales están
-            // predeterminados por valores ya establecidos
-            entorno->gestorPasesOptimización->add(llvm::createJumpThreadingPass());
+
+            if(entorno->optimización > 0)
+            {
+                // Optimizaciones se secuencias cortas y pequeños reordenamientos.
+                entorno->gestorPasesOptimización->add(llvm::createInstructionCombiningPass());
+                // Reassociate expressions.
+                entorno->gestorPasesOptimización->add(llvm::createReassociatePass());
+                // Elimina subexpresiones comunes.
+                entorno->gestorPasesOptimización->add(llvm::createGVNPass());
+                // Simplifica el grafo de flujo de ejecución (elimina bloques inalcanzables, etc)
+                entorno->gestorPasesOptimización->add(llvm::createCFGSimplificationPass());
+                // Intenta convertir variables en RAM a registros
+                entorno->gestorPasesOptimización->add(llvm::createPromoteMemoryToRegisterPass());
+                // Intenta simplificar el control de flujo cuando los saltos condicionales están
+                // predeterminados por valores ya establecidos
+                entorno->gestorPasesOptimización->add(llvm::createJumpThreadingPass());
+            }
 
             entorno->gestorPasesOptimización->doInitialization();
         }

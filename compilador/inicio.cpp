@@ -115,17 +115,18 @@ static const char VERSIÓN[] = u8R"(Ñ 0.0.1)";
 static const char USO[] = 
 u8R"(Ñ 0.0.1 - Constructor del lenguaje de programación Ñ
 
-    Usage:
+    Uso:
 	  ñ
-	  ñ <archivo>... [--salida <nombre>] [--hablador]
+	  ñ <archivo>... [--salida <nombre>] [--hablador] [-O=<nivel>]
       ñ (-a | --ayuda)
       ñ (-v | --version)
 
-    Options:
-      -a --ayuda      Muestra este mensaje.
-	  -h, --hablador  Muestra mensajes sobre el funcionamiento interno.
-	  -s <nombre>, --salida <nombre>  Pon nombre al archivo producido.
-      -v --version    Muestra versión.
+    Opciones:
+      -a --ayuda      		Muestra este mensaje.
+	  -h, --hablador  		Muestra mensajes sobre el funcionamiento interno.
+	  -O=<nivel>			Escoge el nivel de optimización. [predefinido: 0]
+	  -s=<nombre>, --salida=<nombre>	Pon nombre al archivo producido.
+      -v, --version    		Muestra versión.
 )";
 
 void muestraAyuda()
@@ -146,7 +147,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-    std::map<std::string, docopt::value> args;
+	std::map<std::string, docopt::value> args;
 	args = docopt::docopt(USO, { argv + 1, argv + argc }, false);
 
 	if(args["--ayuda"].isBool())
@@ -173,6 +174,22 @@ int main(int argc, char** argv)
 	if(args["--salida"].isString())
 	{
 		cfg.nombreArchivoDestino = args["--salida"].asString();
+	}
+
+	uint8_t optimización = 0;
+	if(args["-O"].isString())
+	{
+		std::string opttxt = args["-O"].asString();
+
+		optimización = std::stoi(opttxt.c_str());
+	}
+	if(optimización > 0)
+	{
+		cfg.optimización = 1;
+	}
+	else
+	{
+		cfg.optimización = 0;
 	}
 
 	if(args["--hablador"].isBool())

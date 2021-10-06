@@ -115,6 +115,12 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			sublit->dato = std::to_string((int)texto[i]);
 			l->ramas.push_back(sublit);
 		}
+		
+		// Añado el carácter de fin de cadena
+		Ñ::Literal* sublit = new Ñ::Literal(l->posición());
+		sublit->tipo = Ñ::CategoríaTipo::TIPO_NATURAL_8;
+		sublit->dato = std::to_string(0);
+		l->ramas.push_back(sublit);
 
 		cursor++;
 		return (Ñ::Nodo*)l;

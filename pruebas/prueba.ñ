@@ -1,0 +1,11 @@
+público ent inicia()
+{
+    // Caracteres "a\0"
+    nat8[] cars = [108, 0];
+
+    nat8* texto = cars;
+
+    ent número = *texto;
+
+    devuelve número;
+}

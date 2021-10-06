@@ -1395,27 +1395,37 @@ namespace Ñ
             case TIPO_PUNTERO:
                 if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
                 {
-                    if(!(valor->getType()->isVectorTy()))
-                    {
-                        return nullptr;
-                    }
+                    //if(!(valor->getType()->isVectorTy()))
+                    //{
+                    //    return nullptr;
+                    //}
 
-                    llvm::Type* tipoEnt32 = llvm::IntegerType::getInt32Ty(entorno->contextoLlvm);
-                    llvm::Constant *índicePrimerElemento = llvm::ConstantInt::get(tipoEnt32, 0, false);
+                    llvm::Type* tipoEnt64 = llvm::IntegerType::getInt64Ty(entorno->contextoLlvm);
+                    auto cero = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0, false));
+                    llvm::Constant* índicePrimerElemento = llvm::ConstantInt::get(tipoEnt64, 0, false);
                     llvm::Type* tipoInicialLlvm = creaTipoLlvm(tipoInicial);
                     llvm::Type* tipoDestinoLlvm = creaTipoLlvm(tipoDestino);
-                    if( tipoEnt32 == nullptr ||
+                    llvm::Type* subtipoInicialLlvm = creaTipoLlvm(tipoInicial->subtipo());
+                    llvm::Type* subtipoDestinoLlvm = creaTipoLlvm(tipoDestino->subtipo());
+                    if( tipoEnt64 == nullptr ||
                         índicePrimerElemento == nullptr ||
                         tipoInicialLlvm == nullptr ||
+                        subtipoInicialLlvm == nullptr ||
                         !(tipoInicialLlvm->isVectorTy()) ||
                         tipoDestinoLlvm == nullptr ||
-                        !(tipoDestinoLlvm->isVectorTy())
+                        subtipoDestinoLlvm == nullptr ||
+                        subtipoDestinoLlvm != subtipoInicialLlvm ||
+                        !(tipoDestinoLlvm->isPointerTy())
                       )
                     {
                         return nullptr;
                     }
                     //valorFinal = entorno->constructorLlvm.CreateGEP(tipoInicialLlvm, valor, índicePrimerElemento);
+                    //valorFinal = entorno->constructorLlvm.CreateGEP(valor, {cero, índicePrimerElemento});
                     valorFinal = entorno->constructorLlvm.CreateBitCast(valor, tipoDestinoLlvm);
+                    //valorFinal = llvm::GetElementPtrInst::Create(tipoDestinoLlvm, valor, { cero, índicePrimerElemento });
+                    //valorFinal = llvm::GetElementPtrInst::Create(subtipoInicialLlvm, valor, { cero, índicePrimerElemento }, "", entorno->constructorLlvm.GetInsertBlock());
+                    //entorno->constructorLlvm.Insert(valorFinal);
                 }
                 else
                 {
@@ -1457,7 +1467,14 @@ namespace Ñ
 
             Ñ::ConvierteTipos* conv = (Ñ::ConvierteTipos*)nodo;
 
-            resultado = construyeLDA(nodo->ramas[0]);
+            if(esPuntero(conv->destino))
+            {
+                resultado = construyeLIA(nodo->ramas[0]);
+            }
+            else
+            {
+                resultado = construyeLDA(nodo->ramas[0]);
+            }
             if(resultado.error())
             {
                 return resultado;
@@ -1471,7 +1488,7 @@ namespace Ñ
             if(valorFinal == nullptr)
             {
                 resultado.error("No he conseguido convertir con éxito el valor");
-                resultado.posición(tOrigen->posición());
+                resultado.posición(tDestino->posición());
                 return resultado;
             }
             else

@@ -64,8 +64,9 @@ namespace Ñ
     Ñ::CategoríaTipo obténMínimoEnteroVálido(int64_t e);
     bool tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda);
     bool esBooleano(Ñ::Tipo* tipo);
-    bool esNatural(Ñ::Tipo* tipo);
     bool esEntero(Ñ::Tipo* tipo);
+    bool esNatural(Ñ::Tipo* tipo);
+    bool esPuntero(Ñ::Tipo* tipo);
     bool esReal(Ñ::Tipo* tipo);
     bool esVector(Ñ::Tipo* tipo);
 }

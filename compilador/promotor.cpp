@@ -92,12 +92,12 @@ std::string creaNombreMódulo(std::string archivo)
 		return resultado;
 	}
 	
-	//std::cout << "ANALIZANDO SEMANTICA" << std::endl;
+	std::cout << "ANALIZANDO SEMANTICA" << std::endl;
 
 	Ñ::TablaSímbolos* tablaSímbolos = new Ñ::TablaSímbolos;
 	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 	
-	//muestraNodos(nodos, tablaSímbolos);
+	muestraNodos(nodos, tablaSímbolos);
 	delete tablaSímbolos;
 
 	if(rSemántico.error())

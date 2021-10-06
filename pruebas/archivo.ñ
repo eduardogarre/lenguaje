@@ -13,7 +13,7 @@ público ent inicia()
     holamundo();
 
     ent* pruebaPuntero = &número;
-    *pruebaPuntero = *pruebaPuntero + 1 + 42;
+    *pruebaPuntero = *pruebaPuntero + 2;
 
     nat8* texto = caracteres;
 

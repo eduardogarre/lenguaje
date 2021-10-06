@@ -1,11 +1,11 @@
+externo ent escribeln(nat8* _texto);
+
 público ent inicia()
 {
-    // Caracteres "a\0"
-    nat8[] cars = [108, 0];
+    // Caracteres "¡Hola mundo!\0"
+    nat8[] texto = [194, 161, 72, 111, 108, 97, 32, 109, 117, 110, 100, 111, 33, 0];
 
-    nat8* texto = cars;
+    nat8* ptrTxt = texto;
 
-    ent número = *texto;
-
-    devuelve número;
+    devuelve escribeln(texto);
 }

@@ -37,3 +37,31 @@ extern int escribe(txt texto)
 
     return escrito;
 }
+
+extern int escribeln(char* texto)
+{
+    int escritotxt = 0;
+    int escritoln = 0;
+
+    char* nuevalinea = "\n";
+    int longitudln;
+    for(longitudln = 0; nuevalinea[longitudln] != 0; longitudln++)
+    {
+
+    }
+
+    if(texto > 0)
+    {
+        int longitudtxt;
+        for(longitudtxt = 0; texto[longitudtxt] != 0; longitudtxt++)
+        {
+
+        }
+        int escritotxt;
+        WriteConsoleA(GetStdHandle(ASA_COMUN_SALIDA), (const void*) texto, longitudtxt, &escritotxt, 0);
+    }
+
+    WriteConsoleA(GetStdHandle(ASA_COMUN_SALIDA), (const void*) nuevalinea, longitudln, &escritoln, 0);
+
+    return escritotxt + escritoln;
+}

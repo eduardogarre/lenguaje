@@ -30,7 +30,7 @@ extern __declspec(dllimport) int __stdcall WriteConsoleA(
 
 extern void* __stdcall GetStdHandle( unsigned long asaComún );
 
-extern int escribe(txt texto)
+extern int escribetxt(txt texto)
 {
     int escrito;
     WriteConsoleA(GetStdHandle(ASA_COMUN_SALIDA), (const void*) cadenaCdeTxt(texto), longTxt(texto), &escrito, 0);
@@ -38,17 +38,9 @@ extern int escribe(txt texto)
     return escrito;
 }
 
-extern int escribeln(char* texto)
+extern int escribe(char* texto)
 {
     int escritotxt = 0;
-    int escritoln = 0;
-
-    char* nuevalinea = "\n";
-    int longitudln;
-    for(longitudln = 0; nuevalinea[longitudln] != 0; longitudln++)
-    {
-
-    }
 
     if(texto > 0)
     {
@@ -59,6 +51,21 @@ extern int escribeln(char* texto)
         }
         int escritotxt;
         WriteConsoleA(GetStdHandle(ASA_COMUN_SALIDA), (const void*) texto, longitudtxt, &escritotxt, 0);
+    }
+
+    return escritotxt;
+}
+
+extern int escribeln(char* texto)
+{
+    int escritotxt = escribe(texto);
+    int escritoln = 0;
+
+    char* nuevalinea = "\n";
+    int longitudln;
+    for(longitudln = 0; nuevalinea[longitudln] != 0; longitudln++)
+    {
+
     }
 
     WriteConsoleA(GetStdHandle(ASA_COMUN_SALIDA), (const void*) nuevalinea, longitudln, &escritoln, 0);

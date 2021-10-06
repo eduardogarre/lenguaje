@@ -6,7 +6,7 @@ extern void __security_init_cookie(void);
 extern int holamundo()
 {
     txt texto = sumaTxt(creaTxt("¡hola, "), creaTxt("mundo!\n"));
-    return escribe(texto);
+    return escribetxt(texto);
 }
 
 int __lugar_de_inicio()

@@ -2,5 +2,6 @@
 
 #include "txt.h"
 
-int escribe(txt texto);
+int escribetxt(txt texto);
+int escribe(char* _texto);
 int escribeln(char* _texto);

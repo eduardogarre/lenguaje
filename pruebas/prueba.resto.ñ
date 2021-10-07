@@ -8,19 +8,19 @@ externo ent escribeln(nat8* _texto);
 // Proceso
 externo ent idprocesoactual();
 
-público nada prueba_resta()
+público nada prueba_resto()
 {
     nat8[] correcto = ".";
     nat8[] error = "\nERROR\n";
 
     ////// NAT8 //////
 
-    nat8 nat8_a = 3;
+    nat8 nat8_a = 6;
     nat8 nat8_b = 2;
-    nat8 nat8_c = 1;
+    nat8 nat8_c = 3;
 
     // Cierto
-    si (nat8_c == nat8_a % nat8_b)
+    si (nat8_c == nat8_a / nat8_b)
     {
         escribe(correcto);
     }
@@ -30,7 +30,7 @@ público nada prueba_resta()
     }
 
     // Falso
-    si (nat8_a == nat8_a % nat8_c)
+    si (nat8_a == nat8_a / nat8_c)
     {
         escribe(error);
     }
@@ -41,12 +41,12 @@ público nada prueba_resta()
 
     ////// NAT16 //////
 
-    nat16 nat16_a = 3;
+    nat16 nat16_a = 6;
     nat16 nat16_b = 2;
-    nat16 nat16_c = 1;
+    nat16 nat16_c = 3;
 
     // Cierto
-    si (nat16_c == nat16_a % nat16_b)
+    si (nat16_c == nat16_a / nat16_b)
     {
         escribe(correcto);
     }
@@ -56,7 +56,7 @@ público nada prueba_resta()
     }
 
     // Falso
-    si (nat16_a == nat16_a % nat16_c)
+    si (nat16_a == nat16_a / nat16_c)
     {
         escribe(error);
     }
@@ -67,12 +67,12 @@ público nada prueba_resta()
 
     ////// NAT32 //////
 
-    nat32 nat32_a = 3;
+    nat32 nat32_a = 6;
     nat32 nat32_b = 2;
-    nat32 nat32_c = 1;
+    nat32 nat32_c = 3;
 
     // Cierto
-    si (nat32_c == nat32_a % nat32_b)
+    si (nat32_c == nat32_a / nat32_b)
     {
         escribe(correcto);
     }
@@ -82,7 +82,7 @@ público nada prueba_resta()
     }
 
     // Falso
-    si (nat32_a == nat32_a % nat32_c)
+    si (nat32_a == nat32_a / nat32_c)
     {
         escribe(error);
     }
@@ -93,12 +93,12 @@ público nada prueba_resta()
 
     ////// NAT64 //////
 
-    nat64 nat64_a = 3;
+    nat64 nat64_a = 6;
     nat64 nat64_b = 2;
-    nat64 nat64_c = 1;
+    nat64 nat64_c = 3;
 
     // Cierto
-    si (nat64_c == nat64_a % nat64_b)
+    si (nat64_c == nat64_a / nat64_b)
     {
         escribe(correcto);
     }
@@ -108,7 +108,7 @@ público nada prueba_resta()
     }
 
     // Falso
-    si (nat64_a == nat64_a % nat64_c)
+    si (nat64_a == nat64_a / nat64_c)
     {
         escribe(error);
     }
@@ -120,12 +120,12 @@ público nada prueba_resta()
     ////// ENT8 //////
     //  PENDIENTE   //
 /*
-    ent8 ent8_a = 3;
+    ent8 ent8_a = 6;
     ent8 ent8_b = 2;
-    ent8 ent8_c = 1;
+    ent8 ent8_c = 3;
 
     // Cierto
-    si (ent8_c == ent8_a % ent8_b)
+    si (ent8_c == ent8_a / ent8_b)
     {
         escribe(correcto);
     }
@@ -135,7 +135,7 @@ público nada prueba_resta()
     }
 
     // Falso
-    si (ent8_a == ent8_a % ent8_c)
+    si (ent8_a == ent8_a / ent8_c)
     {
         escribe(error);
     }
@@ -146,12 +146,12 @@ público nada prueba_resta()
 */
     ////// ENT16 //////
 
-    ent16 ent16_a = 3;
+    ent16 ent16_a = 6;
     ent16 ent16_b = 2;
-    ent16 ent16_c = 1;
+    ent16 ent16_c = 3;
 
     // Cierto
-    si (ent16_c == ent16_a % ent16_b)
+    si (ent16_c == ent16_a / ent16_b)
     {
         escribe(correcto);
     }
@@ -161,7 +161,7 @@ público nada prueba_resta()
     }
 
     // Falso
-    si (ent16_a == ent16_a % ent16_c)
+    si (ent16_a == ent16_a / ent16_c)
     {
         escribe(error);
     }
@@ -172,12 +172,12 @@ público nada prueba_resta()
 
     ////// ENT32 //////
 
-    ent32 ent32_a = 3;
+    ent32 ent32_a = 6;
     ent32 ent32_b = 2;
-    ent32 ent32_c = 1;
+    ent32 ent32_c = 3;
 
     // Cierto
-    si (ent32_c == ent32_a % ent32_b)
+    si (ent32_c == ent32_a / ent32_b)
     {
         escribe(correcto);
     }
@@ -187,7 +187,7 @@ público nada prueba_resta()
     }
 
     // Falso
-    si (ent32_a == ent32_a % ent32_c)
+    si (ent32_a == ent32_a / ent32_c)
     {
         escribe(error);
     }
@@ -198,12 +198,12 @@ público nada prueba_resta()
 
     ////// ENT64 //////
 
-    ent64 ent64_a = 3;
+    ent64 ent64_a = 6;
     ent64 ent64_b = 2;
-    ent64 ent64_c = 1;
+    ent64 ent64_c = 3;
 
     // Cierto
-    si (ent64_c == ent64_a % ent64_b)
+    si (ent64_c == ent64_a / ent64_b)
     {
         escribe(correcto);
     }
@@ -213,7 +213,7 @@ público nada prueba_resta()
     }
 
     // Falso
-    si (ent64_a == ent64_a % ent64_c)
+    si (ent64_a == ent64_a / ent64_c)
     {
         escribe(error);
     }

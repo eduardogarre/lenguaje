@@ -870,7 +870,7 @@
                 }
                 else
                 {
-                    resultado.error("Multiplicación/División 1: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
+                    resultado.error("Multiplicación/División/Resto 1: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tmc) + "'.");
                     resultado.posición(tipoResultado->posición());
                     return resultado;
                 }
@@ -890,7 +890,7 @@
                 }
                 else
                 {
-                    resultado.error("Multiplicación/División 2: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
+                    resultado.error("Multiplicación/División/Resto 2: No puedes guardar un valor de tipo '" + Ñ::obténNombreDeTipo((Ñ::Tipo*)t2) + "' en un destino de tipo '" + Ñ::obténNombreDeTipo(tipoResultado) + "'.");
                     resultado.posición(t2->posición());
                     return resultado;
                 }

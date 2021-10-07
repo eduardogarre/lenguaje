@@ -471,6 +471,10 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				{
 					operación = "/";
 				}
+				else if(notación("%"))
+				{
+					operación = "%";
+				}
 				else
 				{
 					cursor = cN;

@@ -1964,6 +1964,12 @@ namespace Ñ
                         return resultado;
                     }
                 }
+                else
+                {
+                    resultado.error("No reconozco la operación '" + op->operación + "'");
+                    resultado.posición(op->posición());
+                    return resultado; 
+                }
             }
 
             resultado.éxito();
@@ -2049,6 +2055,12 @@ namespace Ñ
                         resultado.posición(op->posición());
                         return resultado;
                     }
+                }
+                else
+                {
+                    resultado.error("No reconozco la operación '" + op->operación + "'");
+                    resultado.posición(op->posición());
+                    return resultado; 
                 }
             }
 

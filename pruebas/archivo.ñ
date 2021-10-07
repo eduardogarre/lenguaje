@@ -23,7 +23,7 @@ público ent inicia()
     saleatorio(idp);
 
     // Obtengo número aleatorio
-    ent64 aleat = aleatorio();
+    ent64 aleat = aleatorio() % 5;
 
     nat8[] hola = "¡Hola, mundo!";
     nat8[] adiós = "¡Adiós, mundo!";

@@ -1,0 +1,26 @@
+// Biblioteca estándar
+
+// Aleatorio
+externo ent aleatorio();
+externo ent saleatorio(ent semilla);
+// ES
+externo ent escribe(nat8* _texto);
+externo ent escribeln(nat8* _texto);
+// Proceso
+externo ent idprocesoactual();
+
+// Módulos incorporados
+externo nada prueba_suma();
+externo nada prueba_resta();
+externo nada prueba_multiplicación();
+externo nada prueba_división();
+
+público ent inicia()
+{
+    prueba_suma();
+    prueba_resta();
+    prueba_multiplicación();
+    prueba_división();
+
+    devuelve 0;
+}

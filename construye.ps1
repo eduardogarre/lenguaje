@@ -17,6 +17,8 @@ rm obra -Force -Recurse -ErrorAction SilentlyContinue
 
 ./construyeBiblioteca.ps1
 
+./pruebasFuncionales.ps1
+
 #echo ""
 #echo ""
 #echo "Paso Pruebas"

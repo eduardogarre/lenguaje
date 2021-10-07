@@ -1,0 +1,226 @@
+// Biblioteca estándar
+// Aleatorio
+externo ent aleatorio();
+externo ent saleatorio(ent semilla);
+// ES
+externo ent escribe(nat8* _texto);
+externo ent escribeln(nat8* _texto);
+// Proceso
+externo ent idprocesoactual();
+
+público nada prueba_suma()
+{
+    nat8[] correcto = ".";
+    nat8[] error = "\nERROR\n";
+
+    ////// NAT8 //////
+
+    nat8 nat8_a = 1;
+    nat8 nat8_b = 2;
+    nat8 nat8_c = 3;
+
+    // Cierto
+    si (nat8_c == nat8_a + nat8_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (nat8_a == nat8_a + nat8_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// NAT16 //////
+
+    nat16 nat16_a = 1;
+    nat16 nat16_b = 2;
+    nat16 nat16_c = 3;
+
+    // Cierto
+    si (nat16_c == nat16_a + nat16_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (nat16_a == nat16_a + nat16_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// NAT32 //////
+
+    nat32 nat32_a = 1;
+    nat32 nat32_b = 2;
+    nat32 nat32_c = 3;
+
+    // Cierto
+    si (nat32_c == nat32_a + nat32_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (nat32_a == nat32_a + nat32_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// NAT64 //////
+
+    nat64 nat64_a = 1;
+    nat64 nat64_b = 2;
+    nat64 nat64_c = 3;
+
+    // Cierto
+    si (nat64_c == nat64_a + nat64_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (nat64_a == nat64_a + nat64_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// ENT8 //////
+    //  PENDIENTE   //
+/*
+    ent8 ent8_a = 1;
+    ent8 ent8_b = 2;
+    ent8 ent8_c = 3;
+
+    // Cierto
+    si (ent8_c == ent8_a + ent8_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent8_a == ent8_a + ent8_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+*/
+    ////// ENT16 //////
+
+    ent16 ent16_a = 1;
+    ent16 ent16_b = 2;
+    ent16 ent16_c = 3;
+
+    // Cierto
+    si (ent16_c == ent16_a + ent16_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent16_a == ent16_a + ent16_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// ENT32 //////
+
+    ent32 ent32_a = 1;
+    ent32 ent32_b = 2;
+    ent32 ent32_c = 3;
+
+    // Cierto
+    si (ent32_c == ent32_a + ent32_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent32_a == ent32_a + ent32_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// ENT64 //////
+
+    ent64 ent64_a = 1;
+    ent64 ent64_b = 2;
+    ent64 ent64_c = 3;
+
+    // Cierto
+    si (ent64_c == ent64_a + ent64_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent64_a == ent64_a + ent64_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    vuelve;
+}

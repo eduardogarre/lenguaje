@@ -2022,11 +2022,11 @@ namespace Ñ
                 {
                     if(esReal(tipo))
                     {
-                        v1 = entorno->constructorLlvm.CreateFMul(v1, v2, "mul_tmp");
+                        v1 = entorno->constructorLlvm.CreateFMul(v1, v2, "multiplicación");
                     }
                     else if(esEntero(tipo) || esNatural(tipo))
                     {
-                        v1 = entorno->constructorLlvm.CreateMul(v1, v2, "mul_tmp");
+                        v1 = entorno->constructorLlvm.CreateMul(v1, v2, "multiplicación");
                     }
                     else
                     {
@@ -2039,15 +2039,36 @@ namespace Ñ
                 {
                     if(esReal(tipo))
                     {
-                        v1 = entorno->constructorLlvm.CreateFDiv(v1, v2, "div_tmp");
+                        v1 = entorno->constructorLlvm.CreateFDiv(v1, v2, "división");
                     }
                     else if(esEntero(tipo))
                     {
-                        v1 = entorno->constructorLlvm.CreateSDiv(v1, v2, "div_tmp");
+                        v1 = entorno->constructorLlvm.CreateSDiv(v1, v2, "división");
                     }
                     else if(esNatural(tipo))
                     {
-                        v1 = entorno->constructorLlvm.CreateUDiv(v1, v2, "div_tmp");
+                        v1 = entorno->constructorLlvm.CreateUDiv(v1, v2, "división");
+                    }
+                    else
+                    {
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        resultado.posición(op->posición());
+                        return resultado;
+                    }
+                }
+                else if(op->operación == "%")
+                {
+                    if(esReal(tipo))
+                    {
+                        v1 = entorno->constructorLlvm.CreateFRem(v1, v2, "resto");
+                    }
+                    else if(esEntero(tipo))
+                    {
+                        v1 = entorno->constructorLlvm.CreateSRem(v1, v2, "resto");
+                    }
+                    else if(esNatural(tipo))
+                    {
+                        v1 = entorno->constructorLlvm.CreateURem(v1, v2, "resto");
                     }
                     else
                     {

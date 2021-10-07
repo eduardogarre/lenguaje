@@ -260,9 +260,30 @@ int Compilador::compila(Compilador::Configuración cfg)
     }
 
 	std::string archivoDestino = cfg.nombreArchivoDestino + cfg.extensión;
-	
-	ejecutaPrograma("proyecto/lld-link.exe",
-					"lld *.o proyecto/biblioteca.lib proyecto/base.lib /entry:__lugar_de_inicio /subsystem:console /nodefaultlib /out:" + archivoDestino);
 
-    return 0;
+	std::string carpeta = ".\\proyecto\\";
+	std::string enlazador = "lld-link.exe";
+	std::string archivosObjeto = " ";
+	std::string bibliotecaEstándar = "biblioteca.lib ";
+	std::string bibliotecaBase = "base.lib ";
+	std::string lugar_de_inicio = "__lugar_de_inicio ";
+
+	for(std::string archivo : cfg.archivos)
+	{
+		archivosObjeto += creaNombreMódulo(archivo) + ".o ";
+	}
+
+	std::string comando = enlazador + archivosObjeto
+			+ carpeta + bibliotecaEstándar
+			+ carpeta + bibliotecaBase
+			+ " /nodefaultlib"
+			+ " /entry:" + lugar_de_inicio
+			+ " /subsystem:console /out:" + archivoDestino;
+
+	if(cfg.HABLADOR)
+	{
+		std::cout << "Ejecutando enlazador: " << comando << std::endl;
+	}
+
+    return ejecutaPrograma(carpeta + enlazador, comando);
 }

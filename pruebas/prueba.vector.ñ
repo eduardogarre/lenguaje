@@ -1,0 +1,686 @@
+// Biblioteca estándar
+// Aleatorio
+externo ent aleatorio();
+externo ent saleatorio(ent semilla);
+// ES
+externo ent escribe(nat8* _texto);
+externo ent escribeln(nat8* _texto);
+// Proceso
+externo ent idprocesoactual();
+
+público nada prueba_vector()
+{
+    nat8[] correcto = ".";
+    nat8[] error = "\nERROR\n";
+
+    ////// NAT8 //////
+    nat8[]      nat8v0 = [0, 1];
+    nat8[2]     nat8v2 = [2, 3];
+    nat8        nat8n0;
+    nat8        nat8n1;
+    nat8        nat8n2;
+    nat8        nat8n3;
+    nat8n0  =   nat8v0[0];
+    nat8n1  =   nat8v0[1];
+    nat8n2  =   nat8v2[0];
+    nat8n3  =   nat8v2[1];
+
+    // Cierto
+    si (nat8n0 == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat8n1 == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat8n2 == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat8n3 == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (nat8n0 == 3)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat8n1 == 2)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat8n2 == 1)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat8n3 == 0)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// NAT16 //////
+    nat16[]      nat16v0 = [0, 1];
+    nat16[2]     nat16v2 = [2, 3];
+    nat16        nat16n0;
+    nat16        nat16n1;
+    nat16        nat16n2;
+    nat16        nat16n3;
+    nat16n0  =   nat16v0[0];
+    nat16n1  =   nat16v0[1];
+    nat16n2  =   nat16v2[0];
+    nat16n3  =   nat16v2[1];
+
+    // Cierto
+    si (nat16n0 == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat16n1 == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat16n2 == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat16n3 == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (nat16n0 == 3)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat16n1 == 2)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat16n2 == 1)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat16n3 == 0)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+
+    ////// NAT32 //////
+    nat32[]      nat32v0 = [0, 1];
+    nat32[2]     nat32v2 = [2, 3];
+    nat32        nat32n0;
+    nat32        nat32n1;
+    nat32        nat32n2;
+    nat32        nat32n3;
+    nat32n0  =   nat32v0[0];
+    nat32n1  =   nat32v0[1];
+    nat32n2  =   nat32v2[0];
+    nat32n3  =   nat32v2[1];
+
+    // Cierto
+    si (nat32n0 == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat32n1 == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat32n2 == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat32n3 == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (nat32n0 == 3)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat32n1 == 2)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat32n2 == 1)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat32n3 == 0)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// NAT64 //////
+    nat64[]      nat64v0 = [0, 1];
+    nat64[2]     nat64v2 = [2, 3];
+    nat64        nat64n0;
+    nat64        nat64n1;
+    nat64        nat64n2;
+    nat64        nat64n3;
+    nat64n0  =   nat64v0[0];
+    nat64n1  =   nat64v0[1];
+    nat64n2  =   nat64v2[0];
+    nat64n3  =   nat64v2[1];
+
+    // Cierto
+    si (nat64n0 == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat64n1 == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat64n2 == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (nat64n3 == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (nat64n0 == 3)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat64n1 == 2)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat64n2 == 1)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (nat64n3 == 0)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+
+    ////// ENT8 //////
+    //  PENDIENTE   //
+/*
+    ent8[]      ent8v0 = [0, 1];
+    ent8[2]     ent8v2 = [2, 3];
+    ent8        ent8n0;
+    ent8        ent8n1;
+    ent8        ent8n2;
+    ent8        ent8n3;
+    ent8n0  =   ent8v0[0];
+    ent8n1  =   ent8v0[1];
+    ent8n2  =   ent8v2[0];
+    ent8n3  =   ent8v2[1];
+
+    // Cierto
+    si (ent8n0 == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent8n1 == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent8n2 == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent8n3 == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent8n0 == 3)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent8n1 == 2)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent8n2 == 1)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent8n3 == 0)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+*/
+    ////// ENT16 //////
+    ent16[]      ent16v0 = [0, 1];
+    ent16[2]     ent16v2 = [2, 3];
+    ent16        ent16n0;
+    ent16        ent16n1;
+    ent16        ent16n2;
+    ent16        ent16n3;
+    ent16n0  =   ent16v0[0];
+    ent16n1  =   ent16v0[1];
+    ent16n2  =   ent16v2[0];
+    ent16n3  =   ent16v2[1];
+
+    // Cierto
+    si (ent16n0 == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent16n1 == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent16n2 == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent16n3 == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent16n0 == 3)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent16n1 == 2)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent16n2 == 1)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent16n3 == 0)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// ENT32 //////
+    ent32[]      ent32v0 = [0, 1];
+    ent32[2]     ent32v2 = [2, 3];
+    ent32        ent32n0;
+    ent32        ent32n1;
+    ent32        ent32n2;
+    ent32        ent32n3;
+    ent32n0  =   ent32v0[0];
+    ent32n1  =   ent32v0[1];
+    ent32n2  =   ent32v2[0];
+    ent32n3  =   ent32v2[1];
+
+    // Cierto
+    si (ent32n0 == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent32n1 == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent32n2 == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent32n3 == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent32n0 == 3)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent32n1 == 2)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent32n2 == 1)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent32n3 == 0)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ////// ENT64 //////
+    ent64[]      ent64v0 = [0, 1];
+    ent64[2]     ent64v2 = [2, 3];
+    ent64        ent64n0;
+    ent64        ent64n1;
+    ent64        ent64n2;
+    ent64        ent64n3;
+    ent64n0  =   ent64v0[0];
+    ent64n1  =   ent64v0[1];
+    ent64n2  =   ent64v2[0];
+    ent64n3  =   ent64v2[1];
+
+    // Cierto
+    si (ent64n0 == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent64n1 == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent64n2 == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+    si (ent64n3 == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent64n0 == 3)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent64n1 == 2)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent64n2 == 1)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (ent64n3 == 0)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    vuelve;
+}

@@ -15,6 +15,7 @@ externo nada prueba_resta();
 externo nada prueba_multiplicación();
 externo nada prueba_división();
 externo nada prueba_resto();
+externo nada prueba_vector();
 
 público ent inicia()
 {
@@ -23,6 +24,7 @@ público ent inicia()
     prueba_multiplicación();
     prueba_división();
     prueba_resto();
+    prueba_vector();
 
     devuelve 0;
 }

@@ -1,5 +1,16 @@
-externo ent duplica(ent x);
+// Biblioteca estándar
+
+// Aleatorio
+externo ent aleatorio();
+externo ent saleatorio(ent semilla);
+// ES
+externo ent escribe(nat8* _texto);
 externo ent escribeln(nat8* _texto);
+// Proceso
+externo ent idprocesoactual();
+
+// Módulos de Ñ
+externo ent duplica(ent x);
 
 público ent inicia()
 {
@@ -7,10 +18,17 @@ público ent inicia()
 
     ent número = vector[1] / 42;
 
+    // Prepara aleatorio
+    ent64 idp = idprocesoactual();
+    saleatorio(idp);
+
+    // Obtengo número aleatorio
+    ent64 aleat = aleatorio();
+
     nat8[] hola = "¡Hola, mundo!";
     nat8[] adiós = "¡Adiós, mundo!";
 
-    si (número < 2)
+    si (aleat < 2)
     {
         escribeln(hola);
         devuelve duplica(número);
@@ -21,5 +39,5 @@ público ent inicia()
         devuelve número;
     }
 
-    devuelve número;
+    devuelve aleat;
 }

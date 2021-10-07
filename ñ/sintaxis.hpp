@@ -30,7 +30,6 @@ namespace Ñ
         Ñ::Nodo* factor();
         Ñ::Nodo* término();
         Ñ::Nodo* comparación();
-        Ñ::Nodo* igualdad();
         Ñ::Nodo* ladoIzquierdoAsignación();
         Ñ::Nodo* ladoDerechoAsignación();
         Ñ::Nodo* declaraVariable();

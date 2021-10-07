@@ -559,34 +559,6 @@
         }
         return rTipoLiteral;
     }
-    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
-    {
-        if(nodo->ramas.size() == 1)
-        {
-            Ñ::Resultado r = _analizaLDA(nodo->ramas[0], tablaSímbolos);
-            if(r.error())
-            {
-                return r;
-            }
-            Ñ::Nodo* t = duplicaÁrbol(r.nodo());
-            delete r.nodo();
-            resultado.éxito();
-            resultado.nodo(t);
-            return resultado;
-        }
-        else if(nodo->ramas.size() > 1)
-        {
-            resultado.error("Pendiente de implementar operaciones de igualdad");
-            resultado.posición(nodo->posición());
-            return resultado;
-        }
-        else
-        {
-            resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodo->ramas.size()) + " ramas");
-            resultado.posición(nodo->posición());
-            return resultado;
-        }
-    }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_COMPARACIÓN)
     {
         if(nodo->ramas.size() == 1)
@@ -596,10 +568,12 @@
             {
                 return r;
             }
-            Ñ::Nodo* t = duplicaÁrbol(r.nodo());
+            //Ñ::Nodo* t = duplicaÁrbol(r.nodo());
+            Ñ::Tipo* tipoBooleano = new Ñ::Tipo(r.nodo()->posición());
+            tipoBooleano->tipo = Ñ::CategoríaTipo::TIPO_BOOLEANO;
             delete r.nodo();
             resultado.éxito();
-            resultado.nodo(t);
+            resultado.nodo(tipoBooleano);
             return resultado;
         }
         else if(nodo->ramas.size() > 1)
@@ -614,6 +588,8 @@
             }
             t1 = r.nodo();
             tipoResultado = (Ñ::Tipo*)t1;
+            Ñ::Tipo* tipoBooleano = new Ñ::Tipo(r.nodo()->posición());
+            tipoBooleano->tipo = Ñ::CategoríaTipo::TIPO_BOOLEANO;
             
             for(int i = 1; i < nodo->ramas.size(); i++)
             {
@@ -682,18 +658,12 @@
             }
 
             resultado.éxito();
-            resultado.nodo((Ñ::Nodo*)tipoResultado);
-            return resultado;
-        }
-        else if(nodo->ramas.size() > 1)
-        {
-            resultado.error("Pendiente de implementar operaciones de comparación");
-            resultado.posición(nodo->posición());
+            resultado.nodo((Ñ::Nodo*)tipoBooleano);
             return resultado;
         }
         else
         {
-            resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.error("El nodo Ñ::Comparación tiene " + std::to_string(nodo->ramas.size()) + " ramas");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -797,7 +767,7 @@
         }
         else
         {
-            resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.error("El nodo Ñ::Término tiene " + std::to_string(nodo->ramas.size()) + " ramas");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -902,7 +872,7 @@
         }
         else
         {
-            resultado.error("El nodo Ñ::Igualdad tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.error("El nodo Ñ::Factor tiene " + std::to_string(nodo->ramas.size()) + " ramas");
             resultado.posición(nodo->posición());
             return resultado;
         }

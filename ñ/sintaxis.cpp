@@ -201,93 +201,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 	if(cursor < lexemas.size())
 	{
-		Ñ::Nodo* ig = igualdad();
+		Ñ::Nodo* cmp = comparación();
 		
-		return ig;
-	}
-
-	cursor = c;
-	return nullptr;
-}
-
-Ñ::Nodo* Ñ::Sintaxis::igualdad()
-{
-	uint32_t c = cursor;
-
-	if(cursor < lexemas.size())
-	{
-		Ñ::Nodo* cmp1;
-
-		if(cmp1 = comparación())
-		{
-			Ñ::Nodo* ig = nullptr;
-
-			while(true)
-			{
-				std::string operación;
-				uint32_t cN = cursor;
-
-				Posición* pop = lexemas[cursor]->posición();
-
-				if(notación("!"))
-				{
-					if(notación("="))
-					{
-						operación = "!=";
-					}
-					else
-					{
-						cursor = cN;
-						break;
-					}
-				}
-				else if(notación("="))
-				{
-					if(notación("="))
-					{
-						operación = "==";
-					}
-					else
-					{
-						cursor = cN;
-						break;
-					}
-				}
-				else
-				{
-					cursor = cN;
-					break;
-				}
-
-				if(Ñ::Nodo* cmpN = comparación())
-				{
-					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria(pop));
-					((Ñ::OperaciónBinaria*)op)->operación = operación;
-					op->ramas.push_back(cmpN);
-					if(ig == nullptr)
-					{
-						ig = (Ñ::Nodo*)(new Ñ::Igualdad(pop));
-						ig->ramas.push_back(cmp1);
-					}
-					ig->ramas.push_back(op);
-				}
-				else
-				{
-					delete ig;
-					cursor = cN;
-					return nullptr;
-				}
-			}
-
-			if(ig == nullptr)
-			{
-				return cmp1;
-			}
-			else
-			{
-				return ig;
-			}
-		}
+		return cmp;
 	}
 
 	cursor = c;
@@ -318,10 +234,12 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					if(notación("="))
 					{
 						operación = ">=";
+						goto operacionEncontrada;
 					}
 					else
 					{
 						operación = ">";
+						goto operacionEncontrada;
 					}
 				}
 				else if(notación("<"))
@@ -329,17 +247,61 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					if(notación("="))
 					{
 						operación = "<=";
+						goto operacionEncontrada;
 					}
 					else
 					{
 						operación = "<";
+						goto operacionEncontrada;
 					}
 				}
 				else
 				{
 					cursor = cN;
+				}
+
+				if(notación("!"))
+				{
+					if(notación("="))
+					{
+						operación = "<=";
+						goto operacionEncontrada;
+					}
+					else
+					{
+						cursor = cN;
+					}
+				}
+				else
+				{
+					cursor = cN;
+				}
+				
+				if(notación("="))
+				{
+					if(notación("="))
+					{
+						operación = "==";
+						goto operacionEncontrada;
+					}
+					else
+					{
+						cursor = cN;
+					}
+				}
+				else
+				{
+					cursor = cN;
+				}
+
+				cursor = cN;
+				
+				if(cursor == cN) // Si no hemos avanzado
+				{
 					break;
 				}
+
+				operacionEncontrada:
 
 				if(Ñ::Nodo* tN = término())
 				{

@@ -14,30 +14,32 @@ externo ent duplica(ent x);
 
 público ent inicia()
 {
-    nat16[] vector = [288, 42];
+    //nat16[] vector = [288, 42];
 
-    ent número = vector[1] / 42;
+    //ent número = vector[1] / 42;
 
     // Prepara aleatorio
     ent64 idp = idprocesoactual();
     saleatorio(idp);
 
     // Obtengo número aleatorio
-    ent64 aleat = aleatorio() % 5;
+    ent número = aleatorio();
 
-    nat8[] hola = "¡Hola, mundo!";
-    nat8[] adiós = "¡Adiós, mundo!";
+    bool paridad = (número % 2) == 0;
 
-    si (aleat < 2)
+    nat8[] par = "¡Par!";
+    nat8[] impar = "¡Impar!";
+
+    si (paridad)
     {
-        escribeln(hola);
-        devuelve duplica(número);
+        escribeln(par);
+        devuelve número;
     }
     sino
     {
-        escribeln(adiós);
+        escribeln(impar);
         devuelve número;
     }
 
-    devuelve aleat;
+    devuelve número;
 }

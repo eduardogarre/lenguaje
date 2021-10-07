@@ -52,10 +52,6 @@ std::string Ñ::obténNombreDeNodo(Ñ::CategoríaNodo n)
 		return "NODO_LADO_DERECHO_ASIGNACIÓN";
 		break;
 	
-	case NODO_IGUALDAD:
-		return "NODO_IGUALDAD";
-		break;
-	
 	case NODO_COMPARACIÓN:
 		return "NODO_COMPARACIÓN";
 		break;
@@ -322,24 +318,6 @@ void Ñ::OperaciónBinaria::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_OP_BINARIA) [" + operación + "] - [" + Ñ::obténNombreDeTipo(tipo) + "] - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
-	// Queda imprimir los hijos
-	for(auto rama : ramas)
-	{
-		muestraNodos(rama, tablaSímbolos);
-	}
-}
-
-Ñ::Igualdad::Igualdad(Posición* posición) : Ñ::Nodo(posición)
-{
-	categoría = Ñ::CategoríaNodo::NODO_IGUALDAD;
-}
-
-Ñ::Igualdad::~Igualdad() {}
-
-void Ñ::Igualdad::muestra(TablaSímbolos* tablaSímbolos)
-{
-	imprimeAjuste();
-	std::cout << u8"(NODO_IGUALDAD) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	// Queda imprimir los hijos
 	for(auto rama : ramas)
 	{
@@ -762,8 +740,6 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 		Ñ::LadoIzquierdoAsignación* lia2;
 		Ñ::LadoDerechoAsignación* lda1;
 		Ñ::LadoDerechoAsignación* lda2;
-		Ñ::Igualdad* ig1;
-		Ñ::Igualdad* ig2;
 		Ñ::Comparación* cm1;
 		Ñ::Comparación* cm2;
 		Ñ::Término* tr1;
@@ -865,10 +841,6 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			break;
 
 		case Ñ::CategoríaNodo::NODO_LADO_DERECHO_ASIGNACIÓN:
-			return true;
-			break;
-
-		case Ñ::CategoríaNodo::NODO_IGUALDAD:
 			return true;
 			break;
 
@@ -1163,13 +1135,6 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		Ñ::Comparación* n = (Ñ::Comparación*)nodo;
 		Ñ::Comparación* o = new Ñ::Comparación();
-
-		duplicado = (Ñ::Nodo*)o;
-	}
-	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_IGUALDAD)
-	{
-		Ñ::Igualdad* n = (Ñ::Igualdad*)nodo;
-		Ñ::Igualdad* o = new Ñ::Igualdad();
 
 		duplicado = (Ñ::Nodo*)o;
 	}

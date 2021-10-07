@@ -27,7 +27,6 @@ namespace Ñ
 
         NODO_LADO_IZQUIERDO_ASIGNACIÓN,
         NODO_LADO_DERECHO_ASIGNACIÓN,
-        NODO_IGUALDAD,
         NODO_COMPARACIÓN,
         NODO_TÉRMINO,
         NODO_FACTOR,
@@ -135,15 +134,6 @@ namespace Ñ
     public:
         LadoDerechoAsignación(Posición* posición = nullptr);
         ~LadoDerechoAsignación();
-
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
-    };
-
-    class Igualdad : public Nodo
-    {
-    public:
-        Igualdad(Posición* posición = nullptr);
-        ~Igualdad();
 
         void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };

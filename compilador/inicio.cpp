@@ -113,20 +113,19 @@ int interpretaEnLínea()
 static const char VERSIÓN[] = u8R"(Ñ 0.0.1)";
 
 static const char USO[] = 
-u8R"(Ñ 0.0.1 - Constructor del lenguaje de programación Ñ
+u8R"(Ñ 0.0.1 - Compilador del lenguaje de programación Ñ
 
-    Uso:
-	  ñ
-	  ñ <archivo>... [--salida <nombre>] [--hablador] [-O=<nivel>]
-      ñ (-a | --ayuda)
-      ñ (-v | --version)
-
-    Opciones:
-      -a --ayuda      		Muestra este mensaje.
-	  -h, --hablador  		Muestra mensajes sobre el funcionamiento interno.
-	  -O=<nivel>			Escoge el nivel de optimización. [predefinido: 0]
-	  -s=<nombre>, --salida=<nombre>	Pon nombre al archivo producido.
-      -v, --version    		Muestra versión.
+Uso:
+ ñ
+ ñ <archivo>... [--salida <nombre>] [--hablador] [-O=<nivel>]
+ ñ --ayuda
+ ñ --version
+Opciones:
+ -a, --ayuda                      Muestra este mensaje.
+ -h, --hablador                   Muestra mensajes sobre el funcionamiento interno.
+ -O=<nivel>                       Escoge el nivel de optimización. [predefinido: 0]
+ -s=<nombre>, --salida=<nombre>   Pon nombre al archivo generado.
+ -v, --version                    Muestra versión.
 )";
 
 void muestraAyuda()

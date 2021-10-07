@@ -865,7 +865,7 @@ namespace Ñ
                         }
                         else if(carácter == "0")
                         {
-                            texto.append("\0");
+                            texto.append(std::string("\0", 1));
                         }
                     }
                     else

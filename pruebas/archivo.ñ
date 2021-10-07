@@ -6,7 +6,7 @@ público ent inicia()
 {
     nat16[] vector = [288, 42];
 
-    ent número = vector[1] / 42;
+    ent número = vector[1] / 2;
 
     nat8[] hola = "¡Hola, mundo!";
     nat8[] adiós = "¡Adiós, mundo!";

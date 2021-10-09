@@ -781,7 +781,7 @@ namespace Ñ
                 }
             }
 
-            for(índice = 0; índice < (nodo->ramas.size() - 2); índice+=2) // SI / SINO SI
+            for(índice = 0; índice < (nodo->ramas.size() - 1); índice+=2) // SI / SINO SI
             {
                 // CONDICIÓN
                 // Construye condición al final del bloque previo al SiCondicional

@@ -60,7 +60,7 @@
     }
 
     int i = 0;
-    for(i = 0; i < nodo->ramas.size()-2; i+=2)
+    for(i = 0; i < nodo->ramas.size() - 1; i += 2)
     {
         Ñ::Resultado rCondición = _analizaLDA(nodo->ramas[i], tablaSímbolos);
         if(rCondición.error())
@@ -646,7 +646,7 @@
                 {
                     // Son tipos distintos pero compatibles, hay que convertir
                     //std::cout << "Añadiendo conversión de '" << Ñ::obténNombreDeTipo(((Ñ::Tipo*)t2)->tipo) << "' a '" << Ñ::obténNombreDeTipo(tipoResultado) << "' para la suma/resta 2" << std::endl;
-                   _insertaConversión(nodo->ramas[i], 0, (Ñ::Tipo*)t2, tipoResultado);
+                    _insertaConversión(nodo->ramas[i], 0, (Ñ::Tipo*)t2, tipoResultado);
                     ((Ñ::OperaciónBinaria*)op)->tipo = tipoResultado;
                 }
                 else
@@ -655,6 +655,8 @@
                     resultado.posición(t2->posición());
                     return resultado;
                 }
+
+                ((Ñ::OperaciónBinaria*)nodo)->tipo = tipoResultado;
             }
 
             resultado.éxito();
@@ -759,6 +761,8 @@
                     resultado.posición(t2->posición());
                     return resultado;
                 }
+
+                ((Ñ::OperaciónBinaria*)nodo)->tipo = tipoResultado;
             }
 
             resultado.éxito();
@@ -864,6 +868,8 @@
                     resultado.posición(t2->posición());
                     return resultado;
                 }
+
+                ((Ñ::OperaciónBinaria*)nodo)->tipo = tipoResultado;
             }
 
             resultado.éxito();

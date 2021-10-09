@@ -202,7 +202,7 @@ namespace Ñ
             case TIPO_VECTOR:
                 {
                     Ñ::Nodo* nodo = (Ñ::Nodo*)tipo;
-                    uint64_t tamaño = tipo->tamaño();
+                    uint32_t tamaño = tipo->tamaño();
                     Ñ::Tipo* subtipo = tipo->subtipo();
                     llvm::Type* subtipollvm = creaTipoLlvm(subtipo);
                     if(subtipollvm == nullptr)
@@ -747,7 +747,7 @@ namespace Ñ
 
             llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
 
-            int64_t índice = 0;
+            uint64_t índice = 0;
             
             // Declaro y preparo punteros de los diferentes bloques
             llvm::BasicBlock *bloquePrevio = entorno->constructorLlvm.GetInsertBlock();
@@ -781,7 +781,7 @@ namespace Ñ
                 }
             }
 
-            for(índice = 0; índice < nodo->ramas.size()-2; índice+=2) // SI / SINO SI
+            for(índice = 0; índice < (nodo->ramas.size() - 2); índice+=2) // SI / SINO SI
             {
                 // CONDICIÓN
                 // Construye condición al final del bloque previo al SiCondicional
@@ -1411,24 +1411,27 @@ namespace Ñ
             case TIPO_VECTOR:
                 if(valor->getType()->isVectorTy())
                 {
-                    llvm::Type* tipVector = valor->getType();
-                    llvm::Type* tipElemento = tipVector->getScalarType();
+                    llvm::Type* tipVectorInicial = valor->getType();
+                    llvm::Type* tipElementoInicial = tipVectorInicial->getScalarType();
+                    llvm::Type* tipVectorDestino = creaTipoLlvm(tipoDestino);
+                    llvm::Type* tipElementoDestino = tipVectorDestino->getScalarType();
                     uint64_t tamañoVector = tipoInicial->tamaño();
 
-                    llvm::Value *vectorVacío = llvm::UndefValue::get(tipVector);
+                    llvm::Value *vectorVacío = llvm::UndefValue::get(tipVectorDestino);
                     valorFinal = vectorVacío;
+                    entorno->constructorLlvm.Insert(valorFinal);
 
                     for(int i = 0; i < tamañoVector; i++)
                     {
-                        llvm::Constant* índice = llvm::Constant::getIntegerValue(tipVector->getScalarType(), llvm::APInt(64, i));
+                        llvm::Constant* índice = llvm::Constant::getIntegerValue(tipElementoInicial, llvm::APInt(64, i));
                         llvm::Value* valElemento = llvm::ExtractElementInst::Create(valor, índice);
                         entorno->constructorLlvm.Insert(valElemento);
+
                         Ñ::Tipo* subtipoInicial = tipoInicial->subtipo();
                         Ñ::Tipo* subtipoDestino = tipoDestino->subtipo();
                         valElemento = convierteValorLlvmATipoLlvm(valElemento, subtipoInicial, subtipoDestino);
                         
                         valorFinal = llvm::InsertElementInst::Create(valorFinal, valElemento, índice);
-                        
                         entorno->constructorLlvm.Insert(valorFinal);
                     }
                 }

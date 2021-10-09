@@ -1,0 +1,153 @@
+// Biblioteca estándar
+// Aleatorio
+externo ent aleatorio();
+externo ent saleatorio(ent semilla);
+// ES
+externo ent escribe(nat8* _texto);
+externo ent escribeln(nat8* _texto);
+// Proceso
+externo ent idprocesoactual();
+
+nat8 devuelve_nat8(nat8 x)
+{
+    devuelve x;
+}
+
+nat16 devuelve_nat16(nat16 x)
+{
+    devuelve x;
+}
+
+nat32 devuelve_nat32(nat32 x)
+{
+    devuelve x;
+}
+
+nat64 devuelve_nat64(nat64 x)
+{
+    devuelve x;
+}
+
+ent8 devuelve_ent8(ent8 x)
+{
+    devuelve x;
+}
+
+ent16 devuelve_ent16(ent16 x)
+{
+    devuelve x;
+}
+
+ent32 devuelve_ent32(ent32 x)
+{
+    devuelve x;
+}
+
+ent64 devuelve_ent64(ent64 x)
+{
+    devuelve x;
+}
+
+público nada prueba_función()
+{
+    nat8[] correcto = ".";
+    nat8[] error = "\nERROR\n";
+
+    ////// NAT8 //////
+    nat8 nat8x = 42;
+    nat8 nat8y = devuelve_nat8(nat8x);
+    si (nat8x == nat8y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    ////// NAT16 //////
+    nat16 nat16x = 42;
+    nat16 nat16y = devuelve_nat16(nat16x);
+    si (nat16x == nat16y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    ////// NAT32 //////
+    nat32 nat32x = 42;
+    nat32 nat32y = devuelve_nat32(nat32x);
+    si (nat32x == nat32y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    ////// NAT64 //////
+    nat64 nat64x = 42;
+    nat64 nat64y = devuelve_nat64(nat64x);
+    si (nat64x == nat64y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+/*
+    ////// NAT8 //////
+    ent8 ent8x = 42;
+    ent8 ent8y = devuelve_ent8(ent8x);
+    si (ent8x == ent8y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+*/
+    ////// NAT16 //////
+    ent16 ent16x = 42;
+    ent16 ent16y = devuelve_ent16(ent16x);
+    si (ent16x == ent16y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    ////// NAT32 //////
+    ent32 ent32x = 42;
+    ent32 ent32y = devuelve_ent32(ent32x);
+    si (ent32x == ent32y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    ////// NAT64 //////
+    ent64 ent64x = 42;
+    ent64 ent64y = devuelve_ent64(ent64x);
+    si (ent64x == ent64y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    vuelve;
+}

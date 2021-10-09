@@ -31,13 +31,15 @@ std::string _esperaComando()
 
 void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 {
+	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
+
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
 
 	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
 	
-	lexemas = léxico.analiza(comando);
+	lexemas = léxico.analiza(comando, entorno);
 
 	if(lexemas.empty())
 	{
@@ -71,8 +73,6 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	//		muestraNodos(nodos);
 	//	}
 	//}
-
-	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
 
 	Ñ::ResultadoLlvm rConstrucción = Ñ::construye(nodos, entorno, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
 	if(rConstrucción.error())

@@ -16,6 +16,7 @@ std::string Ñ::Posición::muestra()
     std::string texto = "";
     texto += " [LIN:" + std::to_string(línea()) + ", ";
     texto += "COL:" + std::to_string(columna()) + ", ";
+    texto += "ARC:" + archivo() + ", ";
     texto += "LON:" + std::to_string(longitud()) + "]";
     return texto;
 }

@@ -59,7 +59,7 @@ std::string creaNombreMódulo(std::string archivo)
 		std::cout << "ANALIZANDO LEXICO" << std::endl;
 	}
 
-	lexemas = léxico.analiza(código);
+	lexemas = léxico.analiza(código, entorno);
 
 	if(entorno->HABLADOR)
 	{
@@ -211,6 +211,7 @@ int Compilador::compila(Compilador::Configuración cfg)
 			std::cout << "Construyendo '" << archivo << "'" << std::endl;
 		}
 		
+		entorno->archivoActual = archivo;
         Ñ::ResultadoLlvm resultado = construyeArchivo(archivo, entorno);
         if(resultado.error())
         {

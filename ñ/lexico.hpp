@@ -7,12 +7,13 @@
 
 namespace Ñ
 {
+    extern class EntornoConstrucción;
     extern class Posición;
     
     class Léxico // Análisis léxico
     {
     public:
-        std::vector<Lexema*> analiza(std::string comando);
+        std::vector<Lexema*> analiza(std::string código, Ñ::EntornoConstrucción* entorno);
 
 // Compilación condicional: si estamos en pruebas, expongo las funciones privadas de la clase Léxico
 #ifdef EVALUANDO_PRUEBAS

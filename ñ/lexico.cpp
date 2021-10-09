@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "entorno.hpp"
 #include "lexema.hpp"
 #include "lexico.hpp"
 #include "posicion.hpp"
@@ -988,9 +989,10 @@ namespace Ñ
         }
     }
 
-    std::vector<Ñ::Lexema*> Léxico::analiza(std::string comando)
+    std::vector<Ñ::Lexema*> Léxico::analiza(std::string código, Ñ::EntornoConstrucción* entorno)
     {
         posición = new Ñ::Posición;
+        posición->archivo(entorno->archivoActual);
 
         std::vector<Ñ::Lexema*> vacía;
         if(!lexemas.empty())
@@ -999,9 +1001,9 @@ namespace Ñ
         }
 
         try {
-            //std::cout << "_analizaLéxico(" << comando << ")" << std::endl;
+            //std::cout << "_analizaLéxico(" << código << ")" << std::endl;
 
-            std::string cmd = comando + " ";
+            std::string cmd = código + " ";
 
             while(posición->cursor() <= cmd.length())
             {

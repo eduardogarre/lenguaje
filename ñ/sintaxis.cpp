@@ -264,7 +264,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				{
 					if(notación("="))
 					{
-						operación = "<=";
+						operación = "!=";
 						goto operacionEncontrada;
 					}
 					else

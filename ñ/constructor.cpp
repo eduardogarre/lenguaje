@@ -1817,6 +1817,10 @@ namespace Ñ
                     {
                         v1 = entorno->constructorLlvm.CreateICmpEQ(v1, v2, "cmp_igualque_tmp");
                     }
+                    else if(op->operación == "!=")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpNE(v1, v2, "cmp_distintoa_tmp");
+                    }
                     else if(op->operación == "<=")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpULE(v1, v2, "cmp_menorigual_tmp");
@@ -1840,6 +1844,10 @@ namespace Ñ
                     {
                         v1 = entorno->constructorLlvm.CreateICmpEQ(v1, v2, "cmp_igualque_tmp");
                     }
+                    else if(op->operación == "!=")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpNE(v1, v2, "cmp_distintoa_tmp");
+                    }
                     else if(op->operación == "<=")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpSLE(v1, v2, "cmp_menorigual_tmp");
@@ -1862,6 +1870,10 @@ namespace Ñ
                     else if(op->operación == "==")
                     {
                         v1 = entorno->constructorLlvm.CreateFCmpUEQ(v1, v2, "cmp_igualque_tmp");
+                    }
+                    else if(op->operación == "==")
+                    {
+                        v1 = entorno->constructorLlvm.CreateFCmpUNE(v1, v2, "cmp_distintoa_tmp");
                     }
                     else if(op->operación == "<=")
                     {

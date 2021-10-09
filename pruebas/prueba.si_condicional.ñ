@@ -1,0 +1,60 @@
+// Biblioteca estándar
+// Aleatorio
+externo ent aleatorio();
+externo ent saleatorio(ent semilla);
+// ES
+externo ent escribe(nat8* _texto);
+externo ent escribeln(nat8* _texto);
+// Proceso
+externo ent idprocesoactual();
+
+público nada prueba_si_condicional()
+{
+    nat8[] correcto = ".";
+    nat8[] error = "\nERROR\n";
+
+    nat8 testigo = 0;
+
+    si (42 == 42)
+    {
+        escribe(correcto);
+        testigo = testigo + 1;
+    }
+
+    si (42 != 288)
+    {
+        escribe(correcto);
+        testigo = testigo + 1;
+    }
+
+    si (42 < 288)
+    {
+        escribe(correcto);
+        testigo = testigo + 1;
+    }
+
+    si (288 > 42)
+    {
+        escribe(correcto);
+        testigo = testigo + 1;
+    }
+
+    si (42 <= 288)
+    {
+        escribe(correcto);
+        testigo = testigo + 1;
+    }
+
+    si (288 >= 42)
+    {
+        escribe(correcto);
+        testigo = testigo + 1;
+    }
+
+    si (testigo != 6)
+    {
+        escribe(error);
+    }
+
+    vuelve;
+}

@@ -97,7 +97,7 @@ público nada prueba_vector()
     }
 
     ////// NAT16 //////
-    nat16[2]      nat16v0 = [0, 1];
+    nat16[]      nat16v0 = [0, 1];
     nat16[2]     nat16v2 = [2, 3];
     nat16        nat16n0;
     nat16        nat16n1;
@@ -181,7 +181,7 @@ público nada prueba_vector()
 
 
     ////// NAT32 //////
-    nat32[2]      nat32v0 = [0, 1];
+    nat32[]      nat32v0 = [0, 1];
     nat32[2]     nat32v2 = [2, 3];
     nat32        nat32n0;
     nat32        nat32n1;
@@ -264,7 +264,7 @@ público nada prueba_vector()
     }
 
     ////// NAT64 //////
-    nat64[2]      nat64v0 = [0, 1];
+    nat64[]      nat64v0 = [0, 1];
     nat64[2]     nat64v2 = [2, 3];
     nat64        nat64n0;
     nat64        nat64n1;
@@ -350,7 +350,7 @@ público nada prueba_vector()
     ////// ENT8 //////
     //  PENDIENTE   //
 /*
-    ent8[2]      ent8v0 = [0, 1];
+    ent8[]      ent8v0 = [0, 1];
     ent8[2]     ent8v2 = [2, 3];
     ent8        ent8n0;
     ent8        ent8n1;
@@ -434,7 +434,7 @@ público nada prueba_vector()
 
 */
     ////// ENT16 //////
-    ent16[2]      ent16v0 = [0, 1];
+    ent16[]      ent16v0 = [0, 1];
     ent16[2]     ent16v2 = [2, 3];
     ent16        ent16n0;
     ent16        ent16n1;
@@ -517,7 +517,7 @@ público nada prueba_vector()
     }
 
     ////// ENT32 //////
-    ent32[2]      ent32v0 = [0, 1];
+    ent32[]      ent32v0 = [0, 1];
     ent32[2]     ent32v2 = [2, 3];
     ent32        ent32n0;
     ent32        ent32n1;
@@ -600,7 +600,7 @@ público nada prueba_vector()
     }
 
     ////// ENT64 //////
-    ent64[2]      ent64v0 = [0, 1];
+    ent64[]      ent64v0 = [0, 1];
     ent64[2]     ent64v2 = [2, 3];
     ent64        ent64n0;
     ent64        ent64n1;

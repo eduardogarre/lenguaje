@@ -8,6 +8,20 @@ externo ent escribeln(nat8* _texto);
 // Proceso
 externo ent idprocesoactual();
 
+nat factorial(nat x)
+{
+    si (x == 1)
+    {
+        devuelve 1;
+    }
+    sino
+    {
+        devuelve x * factorial(x - 1);
+    }
+
+    devuelve 1;
+}
+
 nat8 devuelve_nat8(nat8 x)
 {
     devuelve x;
@@ -175,6 +189,49 @@ público nada prueba_función()
     real64 real64x = 1;
     real64 real64y = devuelve_real64(real64x);
     si (real64x == real64y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    ////// RECURSIÓN //////
+    nat nat_factorial = 0;
+
+    nat_factorial = factorial(1);
+    si (nat_factorial == 1)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    nat_factorial = factorial(2);
+    si (nat_factorial == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    nat_factorial = factorial(3);
+    si (nat_factorial == 6)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    nat_factorial = factorial(4);
+    si (nat_factorial == 24)
     {
         escribe(correcto);
     }

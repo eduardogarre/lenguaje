@@ -1801,25 +1801,82 @@ namespace Ñ
 
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
-                if(op->operación == "<")
+                Ñ::Tipo* tipo = op->tipo;
+
+                if(esBooleano(tipo) || esNatural(tipo))
                 {
-                    v1 = entorno->constructorLlvm.CreateICmpSLT(v1, v2, "cmp_menorque_tmp");
+                    if(op->operación == "<")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpULT(v1, v2, "cmp_menorque_tmp");
+                    }
+                    else if(op->operación == ">")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpUGT(v1, v2, "cmp_mayorque_tmp");
+                    }
+                    else if(op->operación == "==")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpEQ(v1, v2, "cmp_igualque_tmp");
+                    }
+                    else if(op->operación == "<=")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpULE(v1, v2, "cmp_menorigual_tmp");
+                    }
+                    else if(op->operación == ">=")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpUGE(v1, v2, "cmp_mayorigual_tmp");
+                    }
                 }
-                else if(op->operación == ">")
+                else if(esPuntero(tipo) || esEntero(tipo))
                 {
-                    v1 = entorno->constructorLlvm.CreateICmpSGT(v1, v2, "cmp_mayorque_tmp");
+                    if(op->operación == "<")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpSLT(v1, v2, "cmp_menorque_tmp");
+                    }
+                    else if(op->operación == ">")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpSGT(v1, v2, "cmp_mayorque_tmp");
+                    }
+                    else if(op->operación == "==")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpEQ(v1, v2, "cmp_igualque_tmp");
+                    }
+                    else if(op->operación == "<=")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpSLE(v1, v2, "cmp_menorigual_tmp");
+                    }
+                    else if(op->operación == ">=")
+                    {
+                        v1 = entorno->constructorLlvm.CreateICmpSGE(v1, v2, "cmp_mayorigual_tmp");
+                    }
                 }
-                else if(op->operación == "==")
+                else if(esReal(tipo))
                 {
-                    v1 = entorno->constructorLlvm.CreateICmpEQ(v1, v2, "cmp_igualque_tmp");
+                    if(op->operación == "<")
+                    {
+                        v1 = entorno->constructorLlvm.CreateFCmpULT(v1, v2, "cmp_menorque_tmp");
+                    }
+                    else if(op->operación == ">")
+                    {
+                        v1 = entorno->constructorLlvm.CreateFCmpUGT(v1, v2, "cmp_mayorque_tmp");
+                    }
+                    else if(op->operación == "==")
+                    {
+                        v1 = entorno->constructorLlvm.CreateFCmpUEQ(v1, v2, "cmp_igualque_tmp");
+                    }
+                    else if(op->operación == "<=")
+                    {
+                        v1 = entorno->constructorLlvm.CreateFCmpULE(v1, v2, "cmp_menorigual_tmp");
+                    }
+                    else if(op->operación == ">=")
+                    {
+                        v1 = entorno->constructorLlvm.CreateFCmpUGE(v1, v2, "cmp_mayorigual_tmp");
+                    }
                 }
-                else if(op->operación == "<=")
+                else
                 {
-                    v1 = entorno->constructorLlvm.CreateICmpSLE(v1, v2, "cmp_menorigual_tmp");
-                }
-                else if(op->operación == ">=")
-                {
-                    v1 = entorno->constructorLlvm.CreateICmpSGE(v1, v2, "cmp_mayorigual_tmp");
+                    resultado.error("No sé comparar operandos de tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(op->posición());
+                    return resultado;
                 }
             }
 

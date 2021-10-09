@@ -48,6 +48,16 @@ ent64 devuelve_ent64(ent64 x)
     devuelve x;
 }
 
+real32 devuelve_real32(real32 x)
+{
+    devuelve x;
+}
+
+real64 devuelve_real64(real64 x)
+{
+    devuelve x;
+}
+
 público nada prueba_función()
 {
     nat8[] correcto = ".";
@@ -101,7 +111,7 @@ público nada prueba_función()
         escribe(error);
     }
 /*
-    ////// NAT8 //////
+    ////// ENT8 //////
     ent8 ent8x = 42;
     ent8 ent8y = devuelve_ent8(ent8x);
     si (ent8x == ent8y)
@@ -113,7 +123,7 @@ público nada prueba_función()
         escribe(error);
     }
 */
-    ////// NAT16 //////
+    ////// ENT16 //////
     ent16 ent16x = 42;
     ent16 ent16y = devuelve_ent16(ent16x);
     si (ent16x == ent16y)
@@ -125,7 +135,7 @@ público nada prueba_función()
         escribe(error);
     }
 
-    ////// NAT32 //////
+    ////// ENT32 //////
     ent32 ent32x = 42;
     ent32 ent32y = devuelve_ent32(ent32x);
     si (ent32x == ent32y)
@@ -137,10 +147,34 @@ público nada prueba_función()
         escribe(error);
     }
 
-    ////// NAT64 //////
+    ////// ENT64 //////
     ent64 ent64x = 42;
     ent64 ent64y = devuelve_ent64(ent64x);
     si (ent64x == ent64y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    ////// REAL32 //////
+    real32 real32x = 1;
+    real32 real32y = devuelve_real32(real32x);
+    si (real32x == real32y)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    ////// REAL64 //////
+    real64 real64x = 1;
+    real64 real64y = devuelve_real64(real64x);
+    si (real64x == real64y)
     {
         escribe(correcto);
     }

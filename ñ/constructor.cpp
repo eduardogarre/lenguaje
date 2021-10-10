@@ -823,13 +823,13 @@ namespace Ñ
                     bloqueSiCnd = bloqueSiCndNuevo;
                 }
                 // ¿No, pero existe un SinoBlq al final del SiCondicional?
-                else if(índice == (((int64_t)(nodo->ramas.size())) - 3)
+                else if(índice == (((int64_t)(nodo->ramas.size())) - 3))
                 {
                     // Creo salto condicional entre SiBlq y SinoBlq existente
                     entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueSiBlq, bloqueSino);
                 }
                 // ¿No, y este par SiCnd-SiBlq es el último par del SiCondicional?
-                else if(índice == (((int64_t)(nodo->ramas.size())) - 2)
+                else if(índice == (((int64_t)(nodo->ramas.size())) - 2))
                 {
                     // ¿Existe el bloqueContinúa
                     if(continúa)

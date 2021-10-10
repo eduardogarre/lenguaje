@@ -586,6 +586,23 @@ void Ñ::SiCondicional::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
+Ñ::BucleMientras::BucleMientras(Posición* posición) : Ñ::Nodo(posición)
+{
+	categoría = Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS;
+}
+
+Ñ::BucleMientras::~BucleMientras() {}
+
+void Ñ::BucleMientras::muestra(TablaSímbolos* tablaSímbolos)
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_BUCLE_MIENTRAS) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama, tablaSímbolos);
+	}
+}
+
 Ñ::DefineFunción::DefineFunción(Posición* posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN;
@@ -949,6 +966,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			return true;
 			break;
 		
+		case Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS:
+			return true;
+			break;
+		
 		case Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN:
 			dfn1 = (Ñ::DefineFunción*)nodo1;
 			dfn2 = (Ñ::DefineFunción*)nodo2;
@@ -1201,6 +1222,11 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
 	{
 		Ñ::SiCondicional* sc = new Ñ::SiCondicional();
+		duplicado = (Ñ::Nodo*)sc;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS)
+	{
+		Ñ::BucleMientras* sc = new Ñ::BucleMientras();
 		duplicado = (Ñ::Nodo*)sc;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)

@@ -1183,6 +1183,63 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::bucleMientras()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		Ñ::BucleMientras* bm = nullptr;
+
+		Posición* pmi = lexemas[cursor]->posición();
+
+		if(!reservada("mientras"))
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		if(!notación("("))
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		if(Ñ::Nodo* lda = ladoDerechoAsignación())
+		{
+			if(!notación(")"))
+			{
+				delete lda;
+				cursor = c;
+				return nullptr;
+			}
+
+			if(Ñ::Nodo* blq = bloque())
+			{
+				bm = new Ñ::BucleMientras(pmi);
+				bm->ramas.push_back(lda);
+				bm->ramas.push_back(blq);
+			}
+			else
+			{
+				delete lda;
+				cursor = c;
+				return nullptr;
+			}
+		}
+		else
+		{
+			cursor = c;
+			return nullptr;
+		}
+
+		return (Ñ::Nodo*)bm;
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::expresión()
 {
 	uint32_t c = cursor;
@@ -1263,6 +1320,13 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		{
 			Ñ::Expresión* ex = new Ñ::Expresión(sc->posición());
 			ex->ramas.push_back(sc);
+			return ((Ñ::Nodo*)ex);
+		}
+		
+		if(Ñ::Nodo* bm = bucleMientras())
+		{
+			Ñ::Expresión* ex = new Ñ::Expresión(bm->posición());
+			ex->ramas.push_back(bm);
 			return ((Ñ::Nodo*)ex);
 		}
 	}

@@ -429,6 +429,7 @@ namespace Ñ
                  || (s == "privado")
                  || (s == "si")
                  || (s == "sino")
+                 || (s == "mientras")
                  || (s == "no")
                  || (s == "bool")
                  || (s == "ent")

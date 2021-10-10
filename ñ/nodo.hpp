@@ -50,6 +50,7 @@ namespace Ñ
         
         NODO_BLOQUE,
         NODO_SI_CONDICIONAL,
+        NODO_BUCLE_MIENTRAS,
         
         NODO_FUNCIÓN,
         NODO_FUNCIÓN_EJECUTABLE,
@@ -289,6 +290,15 @@ namespace Ñ
     public:
         SiCondicional(Posición* posición = nullptr);
         ~SiCondicional();
+
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+    };
+
+    class BucleMientras : public Nodo
+    {
+    public:
+        BucleMientras(Posición* posición = nullptr);
+        ~BucleMientras();
 
         void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };

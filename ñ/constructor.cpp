@@ -747,11 +747,12 @@ namespace Ñ
 
             llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
 
-            uint64_t índice = 0;
+            int64_t índice = 0;
             
             // Declaro y preparo punteros de los diferentes bloques
             llvm::BasicBlock *bloquePrevio = entorno->constructorLlvm.GetInsertBlock();
-            llvm::BasicBlock *bloqueSi = nullptr;
+            llvm::BasicBlock *bloqueSiCnd = nullptr;
+            llvm::BasicBlock *bloqueSiBlq = nullptr;
             llvm::BasicBlock *bloqueSino = nullptr;
             llvm::BasicBlock *bloqueContinúa = nullptr;
 
@@ -781,10 +782,20 @@ namespace Ñ
                 }
             }
 
+            // Crea nuevo bloqueSiCnd
+            bloqueSiCnd = llvm::BasicBlock::Create(entorno->contextoLlvm, "si_condic");
+
+            // Inserto salto en el bloque de donde venimos
+            entorno->constructorLlvm.CreateBr(bloqueSiCnd);
+
             for(índice = 0; índice < (nodo->ramas.size() - 1); índice+=2) // SI / SINO SI
             {
                 // CONDICIÓN
-                // Construye condición al final del bloque previo al SiCondicional
+                // Desde ahora inserto nuevas instrucciones en el bloqueSiCnd
+                funciónActual->getBasicBlockList().push_back(bloqueSiCnd);
+                entorno->constructorLlvm.SetInsertPoint(bloqueSiCnd);
+
+                // Construye condición dentro del bloqueSiCnd
                 Ñ::Nodo* condición = nodo->ramas[índice];
                 Ñ::ResultadoLlvm resultadoCondición = construyeLDA(condición);
 
@@ -795,30 +806,78 @@ namespace Ñ
 
                 llvm::Value* valorCondición = resultadoCondición.valor();
 
-                // EJECUTA BLOQUE SI
+                // SiCond# CndBr ->  [SiBlq#]   [SiCond#+1 || (SinoBlq || Continúa)]
+                // Debemos determinar si, en caso de incumplir la condición,
+                // saltaremos (y crearemos) un SiCond + 1, un SinoBlq o Continúa
+
+                bloqueSiBlq = llvm::BasicBlock::Create(entorno->contextoLlvm, "si_bloque");
+
+                llvm::BasicBlock* bloqueSiCndNuevo = nullptr;
+                // ¿Existe un nuevo par de bloques Si Condicional?
+                if(índice < (((int64_t)(nodo->ramas.size())) - 3))
+                {
+                    // Creo un nuevo SiCond
+                    bloqueSiCndNuevo = llvm::BasicBlock::Create(entorno->contextoLlvm, "si_condic");
+                    // Creo salto condicional entre SiBlq y nuevo SiCond
+                    entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueSiBlq, bloqueSiCndNuevo);
+                    bloqueSiCnd = bloqueSiCndNuevo;
+                }
+                // ¿No, pero existe un SinoBlq al final del SiCondicional?
+                else if(índice == (((int64_t)(nodo->ramas.size())) - 3)
+                {
+                    // Creo salto condicional entre SiBlq y SinoBlq existente
+                    entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueSiBlq, bloqueSino);
+                }
+                // ¿No, y este par SiCnd-SiBlq es el último par del SiCondicional?
+                else if(índice == (((int64_t)(nodo->ramas.size())) - 2)
+                {
+                    // ¿Existe el bloqueContinúa
+                    if(continúa)
+                    {
+                        // Creo salto condicional entre SiBlq y bloqueContinúa existente
+                        entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueSiBlq, bloqueContinúa);
+                    }
+                    else
+                    {
+                        // Error: (Cuando la función debe devolver un valor)
+                        // No se recogen todas las posibles vías de ejecución.
+                        resultado.error("No se definen todas las posibles vías de ejecución");
+                        resultado.posición(nodo->posición());
+                        return resultado;
+
+                        // Truco: (Cuando la función devuelve 'nada')
+                        // Creo un bloqueContinúa final
+                        // Creo salto condicional entre SiBlq y bloqueContinúa
+                        // Activo inserción en bloqueContinúa
+                        // Introduzco la instrucción 'vuelve'
+                    }
+                }
+
+                // Desde ahora inserto nuevas instrucciones en el bloqueSiBlq
+                funciónActual->getBasicBlockList().push_back(bloqueSiBlq);
+                entorno->constructorLlvm.SetInsertPoint(bloqueSiBlq);
+                // Relleno el bloqueSiBlq
 
                 Ñ::Nodo* nodoBloque = nodo->ramas[índice + 1];
-                
-                // Crea nuevo bloqueSi
-                bloqueSi = llvm::BasicBlock::Create(entorno->contextoLlvm, "si", funciónActual);
-
-                // Inserto salto condicional en el bloque de donde venimos
-                entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueSi, bloqueSino);
-                // Desde ahora inserto nuevas instrucciones en el bloqueSi
-                entorno->constructorLlvm.SetInsertPoint(bloqueSi);
 
                 construyeInteriorDeBloque(nodoBloque);
                 
                 //Después de construir el interior del bloque, puedo haber creado
                 //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
                 //puede haber cambiado. Por eso, releemos el bloque actual.
-                bloqueSi = entorno->constructorLlvm.GetInsertBlock();
+                bloqueSiBlq = entorno->constructorLlvm.GetInsertBlock();
 
                 //Introduzco, al final del bloque actual, un salto hasta el bloque tras el condicional
                 if(continúa)
                 {
                     entorno->constructorLlvm.CreateBr(bloqueContinúa);
                 }
+                //else
+                //{
+                //    resultado.error("No se definen todas las posibles vías de ejecución");
+                //    resultado.posición(nodoBloque->posición());
+                //    return resultado;
+                //}
             }
             
             // BLOQUE SINO
@@ -836,8 +895,11 @@ namespace Ñ
 
                 bloqueSino = entorno->constructorLlvm.GetInsertBlock();
 
-                entorno->constructorLlvm.CreateBr(bloqueContinúa);
-                
+                if(continúa)
+                {
+                    entorno->constructorLlvm.CreateBr(bloqueContinúa);
+                }
+
                 ++índice;
             }
             

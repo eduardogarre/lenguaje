@@ -56,5 +56,86 @@ público nada prueba_si_condicional()
         escribe(error);
     }
 
+    si (42 != 288)
+    {
+        escribe(correcto);
+    }
+    sino si (42 != 42)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    si (42 == 288)
+    {
+        escribe(error);
+    }
+    sino si (42 == 42)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    si (42 == 288)
+    {
+        escribe(error);
+    }
+    sino si (42 != 42)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (42 == 288)
+    {
+        escribe(error);
+    }
+    sino si (42 != 42)
+    {
+        escribe(error);
+    }
+    sino si (288 != 288)
+    {
+        escribe(error);
+    }
+    sino si (42 == 288)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    si (42 == 288)
+    {
+        escribe(error);
+    }
+    sino si (42 != 42)
+    {
+        escribe(error);
+    }
+    sino si (288 == 288)
+    {
+        escribe(correcto);
+    }
+    sino si (42 == 288)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
     vuelve;
 }

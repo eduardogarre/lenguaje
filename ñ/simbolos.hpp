@@ -9,13 +9,26 @@
 
 namespace Ñ
 {
+    enum Ámbito {
+        ÁMBITO_GLOBAL,
+        ÁMBITO_BLOQUE_FUNCIÓN,
+        ÁMBITO_SUBBLOQUE_FUNCIÓN
+    };
+
     class Tabla
     {
+    private:
+        Ñ::Ámbito ámbito;
+
         std::map<std::string, llvm::Value*> tabla;
         std::vector<llvm::BasicBlock*>      pila;
 
     public:
-        Tabla() {}
+        Tabla(Ñ::Ámbito ámbito)
+        {
+            ámbito = ámbito;
+        }
+
         ~Tabla() {}
 
         void ponId(std::string id, llvm::Value* valor)
@@ -30,6 +43,31 @@ namespace Ñ
             valor = tabla[id];
             return valor;
         }
+
+        void ponBloqueDestino(llvm::BasicBlock* bloqueDestino)
+        {
+            pila.push_back(bloqueDestino);
+        }
+
+        llvm::BasicBlock* leeBloqueDestino()
+        {
+            if(pila.empty())
+            {
+                return nullptr;
+            }
+            else
+            {
+                return pila.back();
+            }
+        }
+
+        void borraBloqueDestino()
+        {
+            if(!(pila.empty()))
+            {
+                pila.pop_back();
+            }
+        }
     };
 
 
@@ -43,15 +81,51 @@ namespace Ñ
 
         ~Símbolos() {}
 
-        void abreBloque()
+        void creaÁmbito(Ñ::Ámbito ámbito)
         {
-            Ñ::Tabla ámbito;
-            tablas.push_back(ámbito);
+            Ñ::Tabla tabla(ámbito);
+            tablas.push_back(tabla);
         }
 
-        void cierraBloque()
+        void borraÁmbito()
         {
-            tablas.pop_back();
+            if(!(tablas.empty()))
+            {
+                tablas.pop_back();
+            }
+        }
+
+        void ponBloqueDestino(llvm::BasicBlock* bloqueDestino)
+        {
+            if(tablas.size() < 1)
+            {
+                std::cout << "Error, no puedo guardar el bloque de destino, la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
+                return;
+            }
+
+            tablas.back().ponBloqueDestino(bloqueDestino);
+        }
+
+        llvm::BasicBlock* leeBloqueDestino()
+        {
+            if(tablas.size() < 1)
+            {
+                std::cout << "Error, no puedo leer el bloque de destino, la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
+                return nullptr;
+            }
+
+            return tablas.back().leeBloqueDestino();
+        }
+
+        void borraBloqueDestino()
+        {
+            if(tablas.size() < 1)
+            {
+                std::cout << "Error, no puedo leer el bloque de destino, la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
+                return;
+            }
+
+            return tablas.back().borraBloqueDestino();
         }
 
         void ponId(std::string id, llvm::Value* valor)

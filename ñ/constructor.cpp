@@ -57,7 +57,7 @@ namespace Ñ
 
         Constructor()
         {
-
+            tablaSímbolos = new Ñ::Símbolos;
         }
 
         ~Constructor()
@@ -76,7 +76,7 @@ namespace Ñ
 
             //std::cout << "Nombre del módulo: " << móduloLlvm->getModuleIdentifier() << std::endl;
 
-            preparaPasesDeOptimización();
+            //preparaPasesDeOptimización();
         }
 
         void preparaMóduloJAT(std::string nombre)
@@ -293,7 +293,7 @@ namespace Ñ
                     return resultado;
                 }
             }
-
+            
             resultado.éxito();
             return resultado;
         }
@@ -353,8 +353,7 @@ namespace Ñ
             }
 
             // Inicio construcción del bloque y definición de los argumentos
-            tablaSímbolos = new Símbolos;
-            tablaSímbolos->abreBloque();
+            tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN);
 
             std::string nombreBloque = "entrada";
             llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
@@ -384,11 +383,13 @@ namespace Ñ
 
             Ñ::Nodo* bloque = nodo->ramas[2];
 
-            resultado = construyeInteriorDeBloque(bloque);
+            construyeInteriorDeBloque(bloque);
             if(resultado.error())
             {
                 return resultado;
             }
+
+            
 
             llvm::verifyFunction(*funciónLlvm);
 
@@ -398,9 +399,7 @@ namespace Ñ
             
             //funciónLlvm->print(llvm::errs(), nullptr);
 
-            tablaSímbolos->cierraBloque();
-            delete tablaSímbolos;
-            tablaSímbolos = nullptr;
+            tablaSímbolos->borraÁmbito();
 
             resultado.éxito();
             resultado.valor((llvm::Value*)funciónLlvm);
@@ -619,8 +618,7 @@ namespace Ñ
 
             // Inicio construcción del bloque, no hay argumentos que definir
             // PENDIENTE: No debo usar una tabla de símbolos local
-            tablaSímbolos = new Símbolos;
-            tablaSímbolos->abreBloque();
+            tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN);
 
             std::string nombreBloque = "entrada";
             llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
@@ -646,7 +644,7 @@ namespace Ñ
 
             //funciónLlvm->print(llvm::errs(), nullptr);
 
-            tablaSímbolos->cierraBloque();
+            tablaSímbolos->borraÁmbito();
             delete tablaSímbolos;
             tablaSímbolos = nullptr;
 
@@ -866,8 +864,10 @@ namespace Ñ
 
                 Ñ::Nodo* nodoBloque = nodo->ramas[índice + 1];
 
+                tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_SUBBLOQUE_FUNCIÓN);
                 construyeInteriorDeBloque(nodoBloque);
-                
+                tablaSímbolos->borraÁmbito();
+            
                 //Después de construir el interior del bloque, puedo haber creado
                 //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
                 //puede haber cambiado. Por eso, releemos el bloque actual.
@@ -990,7 +990,11 @@ namespace Ñ
 
             Ñ::Nodo* nodoBloque = nodo->ramas[1];
 
+            tablaSímbolos->ponBloqueDestino(bloqueContinúa);
+            tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_SUBBLOQUE_FUNCIÓN);
             construyeInteriorDeBloque(nodoBloque);
+            tablaSímbolos->borraÁmbito();
+            tablaSímbolos->borraBloqueDestino();
             
             //Después de construir el interior del bloque, puedo haber creado
             //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual

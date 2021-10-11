@@ -17,6 +17,8 @@ público nada prueba_bucle_mientras()
 
     // Prueba 1
 
+    testigo = 0;
+
     mientras (falso)
     {
         testigo = testigo + 1;
@@ -31,9 +33,9 @@ público nada prueba_bucle_mientras()
         escribe(error);
     }
 
-    testigo = 0;
+    // Prueba 2
 
-    // Prueba 1
+    testigo = 0;
 
     mientras (testigo < 3)
     {
@@ -49,8 +51,29 @@ público nada prueba_bucle_mientras()
         escribe(error);
     }
 
+
+    // Prueba 3
+
     testigo = 0;
 
+    mientras (testigo < 4)
+    {
+        testigo = testigo + 1;
+
+        si (testigo == 2)
+        {
+            para;
+        }
+    }
+
+    si (testigo == 2)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
 
     // Termina prueba
     vuelve;

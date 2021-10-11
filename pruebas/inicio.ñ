@@ -18,6 +18,7 @@ externo nada prueba_resto();
 externo nada prueba_vector();
 externo nada prueba_función();
 externo nada prueba_si_condicional();
+externo nada prueba_bucle_mientras();
 
 público ent inicia()
 {
@@ -29,6 +30,7 @@ público ent inicia()
     prueba_vector();
     prueba_función();
     prueba_si_condicional();
+    prueba_bucle_mientras();
 
     devuelve 0;
 }

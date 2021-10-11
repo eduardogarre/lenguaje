@@ -1,0 +1,57 @@
+// Biblioteca estándar
+// Aleatorio
+externo ent aleatorio();
+externo ent saleatorio(ent semilla);
+// ES
+externo ent escribe(nat8* _texto);
+externo ent escribeln(nat8* _texto);
+// Proceso
+externo ent idprocesoactual();
+
+público nada prueba_bucle_mientras()
+{
+    nat8[] correcto = ".";
+    nat8[] error = "\nERROR\n";
+
+    nat8 testigo = 0;
+
+    // Prueba 1
+
+    mientras (falso)
+    {
+        testigo = testigo + 1;
+    }
+
+    si (testigo == 0)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    testigo = 0;
+
+    // Prueba 1
+
+    mientras (testigo < 3)
+    {
+        testigo = testigo + 1;
+    }
+
+    si (testigo == 3)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    testigo = 0;
+
+
+    // Termina prueba
+    vuelve;
+}

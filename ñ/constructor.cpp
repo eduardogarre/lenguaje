@@ -715,6 +715,10 @@ namespace Ñ
                 resultado = construyeSiCondicional(n);
                 break;
             
+            case Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS:
+                resultado = construyeBucleMientras(n);
+                break;
+            
             default:
                 resultado.error("No reconozco la expresión");
                 resultado.posición(nodo->posición());
@@ -902,6 +906,106 @@ namespace Ñ
 
                 ++índice;
             }
+            
+            // BLOQUE CONTINÚA
+            if(continúa)
+            {
+                funciónActual->getBasicBlockList().push_back(bloqueContinúa);
+                entorno->constructorLlvm.SetInsertPoint(bloqueContinúa);
+            }
+
+            resultado.éxito();
+            return resultado;
+        }
+
+        Ñ::ResultadoLlvm construyeBucleMientras(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("El nodo vale nullptr, esperaba un bucle-mientras");
+                return resultado;
+            }
+
+            if(nodo->categoría != Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS)
+            {
+                resultado.error("El nodo no es un bucle-mientras");
+                resultado.posición(nodo->posición());
+                return resultado;
+            }
+
+            bool continúa = true;
+
+            llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
+
+            int64_t índice = 0;
+            
+            // Declaro y preparo punteros de los diferentes bloques
+            llvm::BasicBlock *bloquePrevio = entorno->constructorLlvm.GetInsertBlock();
+            llvm::BasicBlock *bloqueMientrasCnd = llvm::BasicBlock::Create(entorno->contextoLlvm, "mientras_condic");
+            llvm::BasicBlock *bloqueMientrasBlq = llvm::BasicBlock::Create(entorno->contextoLlvm, "mientras_blq");
+            llvm::BasicBlock *bloqueContinúa = nullptr;
+
+            if(continúa) // La función contiene más expresiones después del SiCondicional
+            {
+                bloqueContinúa = llvm::BasicBlock::Create(entorno->contextoLlvm, "continúa");
+            }
+            else
+            {
+                resultado.error("No se definen todas las posibles vías de ejecución");
+                resultado.posición(nodo->posición());
+                return resultado;
+            }
+
+            // Inserto salto en el bloque de donde venimos
+            entorno->constructorLlvm.CreateBr(bloqueMientrasCnd);
+
+            // CONDICIÓN
+            // Desde ahora inserto nuevas instrucciones en el bloqueMientrasCnd
+            funciónActual->getBasicBlockList().push_back(bloqueMientrasCnd);
+            entorno->constructorLlvm.SetInsertPoint(bloqueMientrasCnd);
+
+            // Construye condición dentro del bloqueMientrasCnd
+            Ñ::Nodo* condición = nodo->ramas[0];
+            Ñ::ResultadoLlvm resultadoCondición = construyeLDA(condición);
+
+            if(resultadoCondición.error())
+            {
+                return resultadoCondición;
+            }
+
+            llvm::Value* valorCondición = resultadoCondición.valor();
+
+            // MientrasCond CndBr ->  [MientrasBlq]   [Continúa]
+            // Debemos determinar si saltaremos al MientrasBlq o ContinúaBlq
+            entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueMientrasBlq, bloqueContinúa);
+
+            // Desde ahora inserto nuevas instrucciones en el bloqueMientrasBlq
+            funciónActual->getBasicBlockList().push_back(bloqueMientrasBlq);
+            entorno->constructorLlvm.SetInsertPoint(bloqueMientrasBlq);
+            // Relleno el bloqueMientrasBlq
+
+            Ñ::Nodo* nodoBloque = nodo->ramas[1];
+
+            construyeInteriorDeBloque(nodoBloque);
+            
+            //Después de construir el interior del bloque, puedo haber creado
+            //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
+            //puede haber cambiado. Por eso, releemos el bloque actual.
+            bloqueMientrasBlq = entorno->constructorLlvm.GetInsertBlock();
+
+            //Introduzco al final del bloque un salto atrás, hasta el bloque MientrasCnd
+            if(continúa)
+            {
+                entorno->constructorLlvm.CreateBr(bloqueMientrasCnd);
+            }
+            //else
+            //{
+            //    resultado.error("No se definen todas las posibles vías de ejecución");
+            //    resultado.posición(nodoBloque->posición());
+            //    return resultado;
+            //}
             
             // BLOQUE CONTINÚA
             if(continúa)
@@ -1636,6 +1740,34 @@ namespace Ñ
 
             switch (tipo->tipo)
             {
+            case Ñ::CategoríaTipo::TIPO_BOOLEANO:
+                tipoLlvm = creaTipoLlvm(tipo);
+                if(tipoLlvm == nullptr)
+                {
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.posición(tipo->posición());
+                    return resultado;
+                }
+                if(literal->dato == "cierto")
+                {
+                    número = 1;
+                }
+                else if(literal->dato == "falso")
+                {
+                    número = 0;
+                }
+                else
+                {
+                    número = std::stoull(literal->dato);
+                    if(número != 0)
+                    {
+                        número = 1;
+                    }
+                }
+                resultado.éxito();
+                resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
+                break;
+                
             case Ñ::CategoríaTipo::TIPO_NATURAL_8:
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)

@@ -87,6 +87,45 @@
     return resultado;
 }
 
+Ñ::Resultado _analizaBucleMientras(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
+{
+    Ñ::Resultado resultado;
+
+    if(nodo == nullptr)
+    {
+        resultado.error("El árbol de nodos es un puntero nulo, esperaba un bucle-mientras.");
+        return resultado;
+    }
+
+    if(nodo->categoría != Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS)
+    {
+        resultado.error("El árbol de nodos es incorrecto, esperaba un bucle-mientras.");
+        resultado.posición(nodo->posición());
+        return resultado;
+    }
+
+    if(nodo->ramas.size() != 2)
+    {
+        resultado.error("El árbol de nodos es incorrecto, esperaba una condición y un bloque.");
+        resultado.posición(nodo->posición());
+        return resultado;
+    }
+
+    Ñ::Resultado rCondición = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+    if(rCondición.error())
+    {
+        return rCondición;
+    }
+    Ñ::Resultado rBloque = _analiza(nodo->ramas[1], tablaSímbolos);
+    if(rBloque.error())
+    {
+        return rBloque;
+    }
+
+    resultado.éxito();
+    return resultado;
+}
+
 Ñ::Resultado _analizaLlamadaFunción(Ñ::Nodo* nodo, Ñ::TablaSímbolos* tablaSímbolos)
 {
     Ñ::Resultado resultado;
@@ -1120,6 +1159,10 @@
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
     {
         return _analizaSiCondicional(nodo, tablaSímbolos);
+    }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS)
+    {
+        return _analizaBucleMientras(nodo, tablaSímbolos);
     }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
     {

@@ -88,6 +88,14 @@ std::string Ñ::obténNombreDeNodo(Ñ::CategoríaNodo n)
 		return "NODO_DECLARA_Y_ASIGNA_VARIABLE";
 		break;
 	
+	case NODO_SI_CONDICIONAL:
+		return "NODO_SI_CONDICIONAL";
+		break;
+	
+	case NODO_BUCLE_MIENTRAS:
+		return "NODO_BUCLE_MIENTRAS";
+		break;
+	
 	case NODO_ARGUMENTO:
 		return "NODO_ARGUMENTO";
 		break;

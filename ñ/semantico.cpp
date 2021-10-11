@@ -1156,6 +1156,11 @@
             return resultado;
         }
     }
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PARA_BUCLE)
+    {
+        resultado.éxito();
+        return resultado;
+    }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
     {
         return _analizaSiCondicional(nodo, tablaSímbolos);

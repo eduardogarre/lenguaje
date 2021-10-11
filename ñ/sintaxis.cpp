@@ -1071,6 +1071,27 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
+Ñ::Nodo* Ñ::Sintaxis::para()
+{
+	uint32_t c = cursor;
+
+	if(cursor < lexemas.size())
+	{
+		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		{
+			if(lexemas[cursor]->contenido == "para")
+			{
+				Ñ::Nodo* para = (Ñ::Nodo*)(new Ñ::ParaBucle(lexemas[cursor]->posición()));
+				cursor++;
+				return para;
+			}
+		}
+	}
+
+	cursor = c;
+	return nullptr;
+}
+
 Ñ::Nodo* Ñ::Sintaxis::siCondicional()
 {
 	uint32_t c = cursor;
@@ -1313,6 +1334,20 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete dv;
+			}
+		}
+		
+		if(Ñ::Nodo* pa = para())
+		{
+			if(notación(";"))
+			{
+				Ñ::Expresión* ex = new Ñ::Expresión(pa->posición());
+				ex->ramas.push_back(pa);
+				return ((Ñ::Nodo*)ex);
+			}
+			else
+			{
+				delete pa;
 			}
 		}
 		

@@ -41,6 +41,7 @@ namespace Ñ
         Ñ::Nodo* llamaFunción();
         Ñ::Nodo* vuelve();
         Ñ::Nodo* devuelve();
+        Ñ::Nodo* para();
         Ñ::Nodo* siCondicional();
         Ñ::Nodo* bucleMientras();
         Ñ::Nodo* expresión();

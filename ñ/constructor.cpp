@@ -129,22 +129,10 @@ namespace Ñ
 
         llvm::Value* leeId(std::string id)
         {
-            llvm::Value* valor = nullptr;
-
             if(tablaSímbolos != nullptr)
             {
-                valor = tablaSímbolos->leeId(id);
-                if(valor != nullptr)
-                {
-                    return valor;
-                }
+                return tablaSímbolos->leeId(id);
             }
-            else
-            {
-                //std::cout << "Error, no se ha iniciado la tabla, no puedo guardar el símbolo '" << id << "'" << std::endl;
-            }
-
-            //std::cout << "Error, no he encontrado el símbolo '" << id << "'" << std::endl;
             
             return nullptr;
         }
@@ -383,7 +371,7 @@ namespace Ñ
 
             Ñ::Nodo* bloque = nodo->ramas[2];
 
-            construyeInteriorDeBloque(bloque);
+            resultado = construyeInteriorDeBloque(bloque);
             if(resultado.error())
             {
                 return resultado;
@@ -685,6 +673,10 @@ namespace Ñ
                 resultado = construyeDevolución(n);
                 break;
             
+            case Ñ::CategoríaNodo::NODO_PARA_BUCLE:
+                resultado = construyeParaBucle(n);
+                break;
+            
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
                 if(jat)
                 {
@@ -865,8 +857,12 @@ namespace Ñ
                 Ñ::Nodo* nodoBloque = nodo->ramas[índice + 1];
 
                 tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_SUBBLOQUE_FUNCIÓN);
-                construyeInteriorDeBloque(nodoBloque);
+                resultado = construyeInteriorDeBloque(nodoBloque);
                 tablaSímbolos->borraÁmbito();
+                if(resultado.error())
+                {
+                    return resultado;
+                }
             
                 //Después de construir el interior del bloque, puedo haber creado
                 //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
@@ -897,7 +893,11 @@ namespace Ñ
 
                 //Relleno el bloque Sino
                 Ñ::Nodo* nodoBloque = nodo->ramas[índice];
-                construyeInteriorDeBloque(nodoBloque);
+                resultado = construyeInteriorDeBloque(nodoBloque);
+                if(resultado.error())
+                {
+                    return resultado;
+                }
 
                 bloqueSino = entorno->constructorLlvm.GetInsertBlock();
 
@@ -992,9 +992,14 @@ namespace Ñ
 
             tablaSímbolos->ponBloqueDestino(bloqueContinúa);
             tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_SUBBLOQUE_FUNCIÓN);
-            construyeInteriorDeBloque(nodoBloque);
+            resultado = construyeInteriorDeBloque(nodoBloque);
             tablaSímbolos->borraÁmbito();
             tablaSímbolos->borraBloqueDestino();
+
+            if(resultado.error())
+            {
+                return resultado;
+            }
             
             //Después de construir el interior del bloque, puedo haber creado
             //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
@@ -1116,6 +1121,11 @@ namespace Ñ
             else if(nodo->ramas.size() == 0)
             {
                 entorno->constructorLlvm.CreateRetVoid();
+
+                llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
+                llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
+                entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
+
                 entorno->constructorLlvm.CreateUnreachable();
                 resultado.éxito();
                 return resultado;
@@ -1123,6 +1133,44 @@ namespace Ñ
             else
             {
                 resultado.error("He recibido un nodo de devolución que tiene más de 1 hijo");
+                resultado.posición(nodo->posición());
+                return resultado;
+            }
+        }
+
+        Ñ::ResultadoLlvm construyeParaBucle(Ñ::Nodo* nodo)
+        {
+            Ñ::ResultadoLlvm resultado;
+
+            if(nodo == nullptr)
+            {
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                return resultado;
+            }
+
+            if(nodo->ramas.size() == 0)
+            {
+                llvm::BasicBlock* bucleDestino = tablaSímbolos->leeBloqueDestino();
+                if(bucleDestino == nullptr)
+                {
+                    resultado.error("Instrucción 'para' fuera de un bucle");
+                    resultado.posición(nodo->posición());
+                    return resultado;
+                }
+                entorno->constructorLlvm.CreateBr(bucleDestino);
+
+                llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
+                llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
+                entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
+
+                entorno->constructorLlvm.CreateUnreachable();
+
+                resultado.éxito();
+                return resultado;
+            }
+            else
+            {
+                resultado.error("He recibido un nodo de parada de bucle que tiene hijos ¿?");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1435,6 +1483,12 @@ namespace Ñ
             nombre = id->id;
 
             variable = leeId(nombre);
+            if(variable == nullptr)
+            {
+                resultado.error("No puedo leer la variable '" + nombre + "'");
+                resultado.posición(id->posición());
+                return resultado;
+            }
 
             resultado.éxito();
             resultado.valor(variable);
@@ -1479,6 +1533,12 @@ namespace Ñ
             else
             {
                 variable = leeId(nombre);
+                if(variable == nullptr)
+                {
+                    resultado.error("No puedo leer la variable '" + nombre + "'");
+                    resultado.posición(id->posición());
+                    return resultado;
+                }
             }
 
             llvm::Value* valor = entorno->constructorLlvm.CreateLoad(variable, nombre);

@@ -423,6 +423,7 @@ namespace Ñ
                  || (s == "nulo")
                  || (s == "vuelve")
                  || (s == "devuelve")
+                 || (s == "para")
                  || (s == "var")
                  || (s == "externo")
                  || (s == "público")

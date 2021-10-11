@@ -45,6 +45,7 @@ namespace Ñ
         NODO_LLAMA_FUNCIÓN,
         
         NODO_DEVUELVE,
+        NODO_PARA_BUCLE,
 
         NODO_EXPRESIÓN,
         
@@ -263,6 +264,15 @@ namespace Ñ
     public:
         Devuelve(Posición* posición = nullptr);
         ~Devuelve();
+
+        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+    };
+
+    class ParaBucle : public Nodo
+    {
+    public:
+        ParaBucle(Posición* posición = nullptr);
+        ~ParaBucle();
 
         void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };

@@ -120,6 +120,10 @@ std::string Ñ::obténNombreDeNodo(Ñ::CategoríaNodo n)
 		return "NODO_DEVUELVE";
 		break;
 	
+	case NODO_PARA_BUCLE:
+		return "NODO_PARA_BUCLE";
+		break;
+	
 	case NODO_EXPRESIÓN:
 		return "NODO_EXPRESIÓN";
 		break;
@@ -537,6 +541,23 @@ void Ñ::Devuelve::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
 	std::cout << u8"(NODO_DEVUELVE) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
+	for(auto rama : ramas)
+	{
+		muestraNodos(rama, tablaSímbolos);
+	}
+}
+
+Ñ::ParaBucle::ParaBucle(Posición* posición) : Ñ::Nodo(posición)
+{
+	categoría = Ñ::CategoríaNodo::NODO_PARA_BUCLE;
+}
+
+Ñ::ParaBucle::~ParaBucle() {}
+
+void Ñ::ParaBucle::muestra(TablaSímbolos* tablaSímbolos)
+{
+	imprimeAjuste();
+	std::cout << u8"(NODO_PARA_BUCLE) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);
@@ -962,6 +983,10 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 			return true;
 			break;
 		
+		case Ñ::CategoríaNodo::NODO_PARA_BUCLE:
+			return true;
+			break;
+		
 		case Ñ::CategoríaNodo::NODO_EXPRESIÓN:
 			return true;
 			break;
@@ -1216,6 +1241,11 @@ bool Ñ::sonÁrbolesDuplicados(Ñ::Nodo* nodo1, Ñ::Nodo* nodo2)
 	{
 		Ñ::Devuelve* d = new Ñ::Devuelve();
 		duplicado = (Ñ::Nodo*)d;
+	}
+	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_PARA_BUCLE)
+	{
+		Ñ::ParaBucle* p = new Ñ::ParaBucle();
+		duplicado = (Ñ::Nodo*)p;
 	}
 	else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
 	{

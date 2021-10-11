@@ -24,10 +24,7 @@ namespace Ñ
         std::vector<llvm::BasicBlock*>      pila;
 
     public:
-        Tabla(Ñ::Ámbito ámbito)
-        {
-            ámbito = ámbito;
-        }
+        Tabla() {}
 
         ~Tabla() {}
 
@@ -42,6 +39,16 @@ namespace Ñ
 
             valor = tabla[id];
             return valor;
+        }
+
+        Ñ::Ámbito leeÁmbito()
+        {
+            return ámbito;
+        }
+
+        void ponÁmbito(Ñ::Ámbito _ámbito)
+        {
+            ámbito = _ámbito;
         }
 
         void ponBloqueDestino(llvm::BasicBlock* bloqueDestino)
@@ -74,7 +81,7 @@ namespace Ñ
     class Símbolos
     {
     private:
-        std::vector<Ñ::Tabla> tablas;
+        std::vector<Ñ::Tabla*> tablas;
 
     public:
         Símbolos() {}
@@ -83,7 +90,8 @@ namespace Ñ
 
         void creaÁmbito(Ñ::Ámbito ámbito)
         {
-            Ñ::Tabla tabla(ámbito);
+            Ñ::Tabla* tabla = new Ñ::Tabla;
+            tabla->ponÁmbito(ámbito);
             tablas.push_back(tabla);
         }
 
@@ -91,6 +99,7 @@ namespace Ñ
         {
             if(!(tablas.empty()))
             {
+                delete tablas.back();
                 tablas.pop_back();
             }
         }
@@ -103,7 +112,7 @@ namespace Ñ
                 return;
             }
 
-            tablas.back().ponBloqueDestino(bloqueDestino);
+            tablas.back()->ponBloqueDestino(bloqueDestino);
         }
 
         llvm::BasicBlock* leeBloqueDestino()
@@ -113,8 +122,26 @@ namespace Ñ
                 std::cout << "Error, no puedo leer el bloque de destino, la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
                 return nullptr;
             }
+            else
+            {
+                for(int i = tablas.size() - 1; i >= 0; i--)
+                {
+                    llvm::BasicBlock* blq = tablas[i]->leeBloqueDestino();
 
-            return tablas.back().leeBloqueDestino();
+                    if(blq != nullptr)
+                    {
+                        return blq;
+                    }
+
+                    if(tablas[i]->leeÁmbito() == Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN)
+                    {
+                        // Ya he llegado al bloque raíz de la función
+                        break;
+                    }
+                }
+
+                return nullptr;
+            }
         }
 
         void borraBloqueDestino()
@@ -125,7 +152,7 @@ namespace Ñ
                 return;
             }
 
-            return tablas.back().borraBloqueDestino();
+            return tablas.back()->borraBloqueDestino();
         }
 
         void ponId(std::string id, llvm::Value* valor)
@@ -136,7 +163,7 @@ namespace Ñ
                 return;
             }
 
-            tablas[tablas.size() - 1].ponId(id, valor);
+            tablas[tablas.size() - 1]->ponId(id, valor);
         }
 
         llvm::Value* leeId(std::string id)
@@ -145,7 +172,7 @@ namespace Ñ
 
             for(int i = tablas.size() - 1; i >= 0; i--)
             {
-                valor = tablas.at(i).leeId(id);
+                valor = tablas.at(i)->leeId(id);
                 if(valor != nullptr)
                 {
                     return valor;

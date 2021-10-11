@@ -9,10 +9,34 @@
 
 namespace Ñ
 {
+    class Tabla
+    {
+        std::map<std::string, llvm::Value*> tabla;
+        std::vector<llvm::BasicBlock*>      pila;
+
+    public:
+        Tabla() {}
+        ~Tabla() {}
+
+        void ponId(std::string id, llvm::Value* valor)
+        {
+            tabla[id] = valor;
+        }
+
+        llvm::Value* leeId(std::string id)
+        {
+            llvm::Value* valor = nullptr;
+
+            valor = tabla[id];
+            return valor;
+        }
+    };
+
+
     class Símbolos
     {
     private:
-        std::vector<std::map<std::string, llvm::Value*>> tabla;
+        std::vector<Ñ::Tabla> tablas;
 
     public:
         Símbolos() {}
@@ -21,33 +45,33 @@ namespace Ñ
 
         void abreBloque()
         {
-            std::map<std::string, llvm::Value*> ámbito;
-            tabla.push_back(ámbito);
+            Ñ::Tabla ámbito;
+            tablas.push_back(ámbito);
         }
 
         void cierraBloque()
         {
-            tabla.pop_back();
+            tablas.pop_back();
         }
 
         void ponId(std::string id, llvm::Value* valor)
         {
-            if(tabla.size() < 1)
+            if(tablas.size() < 1)
             {
-                std::cout << "Error, no puedo guardar el identificador '" << id << "', la tabla de símbolos tiene " << std::to_string(tabla.size()) << " niveles" << std::endl;
+                std::cout << "Error, no puedo guardar el identificador '" << id << "', la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
                 return;
             }
 
-            tabla[tabla.size() - 1][id] = valor;
+            tablas[tablas.size() - 1].ponId(id, valor);
         }
 
         llvm::Value* leeId(std::string id)
         {
             llvm::Value* valor = nullptr;
 
-            for(int i = tabla.size() - 1; i >= 0; i--)
+            for(int i = tablas.size() - 1; i >= 0; i--)
             {
-                valor = tabla.at(i).at(id);
+                valor = tablas.at(i).leeId(id);
                 if(valor != nullptr)
                 {
                     return valor;

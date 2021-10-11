@@ -50,6 +50,8 @@ namespace Ñ
 
     class Constructor
     {
+        Ñ::Símbolos* tablaSímbolos = nullptr;
+
     public:
         llvm::Module* móduloLlvm;
 
@@ -60,9 +62,9 @@ namespace Ñ
 
         ~Constructor()
         {
-            if(entorno != nullptr && entorno->tablaSímbolos != nullptr)
+            if(entorno != nullptr && tablaSímbolos != nullptr)
             {
-                delete entorno->tablaSímbolos;
+                delete tablaSímbolos;
             }
         }
 
@@ -115,9 +117,9 @@ namespace Ñ
 
         void ponId(std::string id, llvm::Value* valor)
         {
-            if(entorno->tablaSímbolos != nullptr)
+            if(tablaSímbolos != nullptr)
             {
-                entorno->tablaSímbolos->ponId(id, valor);
+                tablaSímbolos->ponId(id, valor);
             }
             else
             {
@@ -129,9 +131,9 @@ namespace Ñ
         {
             llvm::Value* valor = nullptr;
 
-            if(entorno->tablaSímbolos != nullptr)
+            if(tablaSímbolos != nullptr)
             {
-                valor = entorno->tablaSímbolos->leeId(id);
+                valor = tablaSímbolos->leeId(id);
                 if(valor != nullptr)
                 {
                     return valor;
@@ -351,8 +353,8 @@ namespace Ñ
             }
 
             // Inicio construcción del bloque y definición de los argumentos
-            entorno->tablaSímbolos = new Símbolos;
-            entorno->tablaSímbolos->abreBloque();
+            tablaSímbolos = new Símbolos;
+            tablaSímbolos->abreBloque();
 
             std::string nombreBloque = "entrada";
             llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
@@ -396,9 +398,9 @@ namespace Ñ
             
             //funciónLlvm->print(llvm::errs(), nullptr);
 
-            entorno->tablaSímbolos->cierraBloque();
-            delete entorno->tablaSímbolos;
-            entorno->tablaSímbolos = nullptr;
+            tablaSímbolos->cierraBloque();
+            delete tablaSímbolos;
+            tablaSímbolos = nullptr;
 
             resultado.éxito();
             resultado.valor((llvm::Value*)funciónLlvm);
@@ -617,8 +619,8 @@ namespace Ñ
 
             // Inicio construcción del bloque, no hay argumentos que definir
             // PENDIENTE: No debo usar una tabla de símbolos local
-            entorno->tablaSímbolos = new Símbolos;
-            entorno->tablaSímbolos->abreBloque();
+            tablaSímbolos = new Símbolos;
+            tablaSímbolos->abreBloque();
 
             std::string nombreBloque = "entrada";
             llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
@@ -644,9 +646,9 @@ namespace Ñ
 
             //funciónLlvm->print(llvm::errs(), nullptr);
 
-            entorno->tablaSímbolos->cierraBloque();
-            delete entorno->tablaSímbolos;
-            entorno->tablaSímbolos = nullptr;
+            tablaSímbolos->cierraBloque();
+            delete tablaSímbolos;
+            tablaSímbolos = nullptr;
 
             resultado.éxito();
             resultado.valor((llvm::Value*)funciónLlvm);

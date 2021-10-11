@@ -9,8 +9,6 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Type.h"
 
-#include "simbolos.hpp"
-
 namespace Ñ
 {
     class EntornoConstrucción
@@ -23,7 +21,6 @@ namespace Ñ
         llvm::legacy::FunctionPassManager*  gestorPasesOptimización = nullptr;
         llvm::IRBuilder<>                   constructorLlvm;
         std::map<std::string, llvm::Type*>  globales;
-        Ñ::Símbolos*                        tablaSímbolos = nullptr;
 
         EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
         ~EntornoConstrucción() {}

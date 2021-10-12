@@ -11,7 +11,7 @@ externo ent idprocesoactual();
 público nada prueba_si_condicional()
 {
     nat8[] correcto = ".";
-    nat8[] error = "\nERROR\n";
+    nat8[] error = "\nERROR si condicional\n";
 
     nat8 testigo = 0;
 

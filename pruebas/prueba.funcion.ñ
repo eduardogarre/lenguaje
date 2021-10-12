@@ -75,7 +75,7 @@ real64 devuelve_real64(real64 x)
 público nada prueba_función()
 {
     nat8[] correcto = ".";
-    nat8[] error = "\nERROR\n";
+    nat8[] error = "\nERROR función\n";
 
     ////// NAT8 //////
     nat8 nat8x = 42;

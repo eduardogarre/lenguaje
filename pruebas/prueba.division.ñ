@@ -11,7 +11,7 @@ externo ent idprocesoactual();
 público nada prueba_división()
 {
     nat8[] correcto = ".";
-    nat8[] error = "\nERROR\n";
+    nat8[] error = "\nERROR división\n";
 
     ////// NAT8 //////
 

@@ -11,7 +11,7 @@ externo ent idprocesoactual();
 público nada prueba_bucle_mientras()
 {
     nat8[] correcto = ".";
-    nat8[] error = "\nERROR\n";
+    nat8[] error = "\nERROR bucle mientras\n";
 
     nat8 testigo = 0;
 
@@ -89,10 +89,6 @@ público nada prueba_bucle_mientras()
             //devuelve testigo;
             para;
         }
-
-        nat8[] par = "par\n";
-        nat8[] impar = "impar\n";
-
         
         ent subtestigo = 0;
 

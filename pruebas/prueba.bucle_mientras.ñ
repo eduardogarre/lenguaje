@@ -75,6 +75,63 @@ público nada prueba_bucle_mientras()
         escribe(error);
     }
 
+
+    // Prueba 4
+
+    testigo = 0;
+
+    mientras (testigo < 288)
+    {
+        testigo = testigo + 1;
+        
+        si (testigo == 42)
+        {
+            //devuelve testigo;
+            para;
+        }
+
+        nat8[] par = "par\n";
+        nat8[] impar = "impar\n";
+
+        
+        ent subtestigo = 0;
+
+        mientras (cierto)
+        {
+            subtestigo = subtestigo + 1;
+
+            si (subtestigo == 24)
+            {
+                para;
+            }
+
+            si (subtestigo > 24)
+            {
+                escribe(error);
+            }
+        }
+
+        si (subtestigo == 24)
+        {
+            escribe(correcto);
+            subtestigo = 0;
+        }
+        sino
+        {
+            escribe(error);
+            para;
+        }
+    }
+
+    si (testigo == 42)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
     // Termina prueba
     vuelve;
 }

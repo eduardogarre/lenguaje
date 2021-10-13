@@ -42,8 +42,17 @@ namespace Compilador
     void escribeError(std::string texto, std::string archivo, Ñ::Posición* posición)
     {
         uint64_t cursor = posición->cursor();
+        std::string código;
+        bool errorLeerArchivo = false;
 
-        std::string código = leeArchivo(archivo);
+        try
+        {
+            código = leeArchivo(archivo);
+        }
+        catch(...)
+        {
+            std::cout << texto << std::endl;
+        }
 
         if(cursor >= código.size())
         {

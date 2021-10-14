@@ -20,7 +20,7 @@
     
     if(padre == nullptr)
     {
-        resultado.error("Has pasados un nodo nulo");
+        resultado.error("Has pasados un nodo nulo.");
         return resultado;
     }
 
@@ -171,7 +171,7 @@
 
     if(argsDeclarados->ramas.size() != argsDefinidos->ramas.size())
     {
-        resultado.error("Has pasado " + std::to_string(argsDefinidos->ramas.size()) + " argumentos a " + fn->nombre + "(), que espera " + std::to_string(argsDeclarados->ramas.size()) + " argumentos");
+        resultado.error("Has pasado " + std::to_string(argsDefinidos->ramas.size()) + " argumentos a " + fn->nombre + "(), que espera " + std::to_string(argsDeclarados->ramas.size()) + " argumentos.");
         resultado.posición(nodo->posición());
         return resultado;
     }
@@ -210,7 +210,7 @@
         else
         {
             delete subTabla;
-            resultado.error("Esperaba un argumento de tipo '" + Ñ::obténNombreDeTipo(tipoLIA) + "', pero he recibido un '" + Ñ::obténNombreDeTipo(tipoLDA) + "'");
+            resultado.error("Esperaba un argumento de tipo '" + Ñ::obténNombreDeTipo(tipoLIA) + "', pero he recibido un '" + Ñ::obténNombreDeTipo(tipoLDA) + "'.");
             resultado.posición(tipoLDA->posición());
             return resultado;
         }     
@@ -250,7 +250,7 @@
     
     if(tablaSímbolos->nombreReservadoEnEsteÁmbito(fn->nombre))
     {
-        resultado.error("El identificador '" + fn->nombre + "' ya está en uso, no puedo definir una nueva función '" + fn->nombre + "()'");
+        resultado.error("El identificador '" + fn->nombre + "' ya está en uso, no puedo definir una nueva función '" + fn->nombre + "()'.");
         resultado.posición(nodo->posición());
         return resultado;
     }
@@ -320,7 +320,7 @@
     }
     else
     {
-        resultado.error("El identificador " + fn->nombre + " ya está en uso, no puedo declarar una nueva función '" + fn->nombre + "()'");
+        resultado.error("El identificador " + fn->nombre + " ya está en uso, no puedo declarar una nueva función '" + fn->nombre + "()'.");
         resultado.posición(nodo->posición());
         return resultado;
     }
@@ -335,7 +335,7 @@
 
     if(nodo == nullptr)
     {
-        resultado.error("ANÁLISIS DE TIPOS :: El nodo es nulo");
+        resultado.error("ANÁLISIS DE TIPOS :: El nodo es nulo.");
         resultado.posición(nodo->posición());
         return resultado;
     }
@@ -358,7 +358,7 @@
         // Compruebo que el árbol de nodos tenga una rama con el tipo
         if( nodo->ramas.size() != 1)
         {
-            resultado.error("Árbol de la declaración de variable mal construido");
+            resultado.error("Árbol de la declaración de variable mal construido.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -430,7 +430,7 @@
     }
     else
     {
-        resultado.error("El LIA tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría));
+        resultado.error("El LIA tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría) + ".");
         resultado.posición(nodo->posición());
         return resultado;
     }
@@ -580,7 +580,7 @@
         }
         else
         {
-            resultado.error("El nodo Ñ::OpUnaria tenía " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.error("El nodo Ñ::OpUnaria tenía " + std::to_string(nodo->ramas.size()) + " ramas.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -634,14 +634,14 @@
             {
                 if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Comparación no ha recibido una operación válida");
+                    resultado.error("Comparación no ha recibido una operación válida.");
                     resultado.posición(nodo->ramas[i]->posición());
                     return resultado;
                 }
                 Ñ::Nodo* op = nodo->ramas[i];
                 if(op->ramas.size() != 1)
                 {
-                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto.");
                     resultado.posición(op->posición());
                     return resultado;
                 }
@@ -704,7 +704,7 @@
         }
         else
         {
-            resultado.error("El nodo Ñ::Comparación tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.error("El nodo Ñ::Comparación tiene " + std::to_string(nodo->ramas.size()) + " ramas.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -740,14 +740,14 @@
             {
                 if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Término no ha recibido una operación válida");
+                    resultado.error("Término no ha recibido una operación válida.");
                     resultado.posición(nodo->ramas[i]->posición());
                     return resultado;
                 }
                 Ñ::Nodo* op = nodo->ramas[i];
                 if(op->ramas.size() != 1)
                 {
-                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto.");
                     resultado.posición(op->posición());
                     return resultado;
                 }
@@ -810,7 +810,7 @@
         }
         else
         {
-            resultado.error("El nodo Ñ::Término tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.error("El nodo Ñ::Término tiene " + std::to_string(nodo->ramas.size()) + " ramas.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -846,14 +846,14 @@
             {
                 if(nodo->ramas[i]->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Término no ha recibido una operación válida");
+                    resultado.error("Término no ha recibido una operación válida.");
                     resultado.posición(nodo->ramas[i]->posición());
                     return resultado;
                 }
                 Ñ::Nodo* op = nodo->ramas[i];
                 if(op->ramas.size() != 1)
                 {
-                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto");
+                    resultado.error("El árbol del 2º argumento de la operación binaria es incorrecto.");
                     resultado.posición(op->posición());
                     return resultado;
                 }
@@ -917,7 +917,7 @@
         }
         else
         {
-            resultado.error("El nodo Ñ::Factor tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.error("El nodo Ñ::Factor tiene " + std::to_string(nodo->ramas.size()) + " ramas.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -926,7 +926,7 @@
     {
         if(nodo->ramas.size() != 2)
         {
-            resultado.error("El nodo de acceso al elemento de un vector debe tener 2 hijos");
+            resultado.error("El nodo de acceso al elemento de un vector debe tener 2 hijos.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -947,20 +947,20 @@
         Ñ::Nodo* vector = rVector.nodo();
         if(vector == nullptr)
         {
-            resultado.error("Esperaba recibir un nodo");
+            resultado.error("Esperaba recibir un nodo.");
             return resultado;
         }
 
         if(vector->categoría != Ñ::CategoríaNodo::NODO_TIPO)
         {
-            resultado.error("Esperaba recibir un tipo");
+            resultado.error("Esperaba recibir un tipo.");
             resultado.posición(vector->posición());
             return resultado;
         }
 
         if(((Ñ::Tipo*)vector)->tipo != Ñ::CategoríaTipo::TIPO_VECTOR)
         {
-            resultado.error("Esperaba que el tipo fuera un vector");
+            resultado.error("Esperaba que el tipo fuera un vector.");
             resultado.posición(vector->posición());
             return resultado;
         }
@@ -971,7 +971,7 @@
         //Devolver el tipo del componente al que accedemos
         if(vector->ramas.size() < 1)
         {
-            resultado.error("El vector no contiene subtipo");
+            resultado.error("El vector no contiene subtipo.");
             resultado.posición(vector->posición());
             return resultado;
         }
@@ -985,7 +985,7 @@
         return _analizaLlamadaFunción(nodo, tablaSímbolos);
     }
 
-    resultado.error("El árbol de nodos es incorrecto, esperaba Lado Derecho de Asignación. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodo->categoría));
+    resultado.error("El árbol de nodos es incorrecto, esperaba Lado Derecho de Asignación. Categoría del nódulo actual: " + Ñ::obténNombreDeNodo(nodo->categoría) + ".");
     resultado.posición(nodo->posición());
     return resultado;
 }
@@ -997,7 +997,7 @@
 
     if(nodo == nullptr)
     {
-        resultado.error("El nodo es nulo");
+        resultado.error("El nodo es nulo.");
         return resultado;
     }
 
@@ -1009,7 +1009,7 @@
 
             if(n == nullptr)
             {
-                rAnálisis.error("He recibido un nodo nulo entre los hijos de NODO_MÓDULO");
+                rAnálisis.error("He recibido un nodo nulo entre los hijos de NODO_MÓDULO.");
                 return rAnálisis;
             }
 
@@ -1151,7 +1151,7 @@
         }
         else // más de 1 rama
         {
-            resultado.error("El nodo 'NODO_DEVUELVE' tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+            resultado.error("El nodo 'NODO_DEVUELVE' tiene " + std::to_string(nodo->ramas.size()) + " ramas.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -1187,7 +1187,7 @@
         {
             if(n == nullptr)
             {
-                resultado.error("He recibido un nodo nulo");
+                resultado.error("He recibido un nodo nulo.");
                 return resultado;
             }
 
@@ -1216,7 +1216,7 @@
     }
     else
     {
-        resultado.error("El nodo tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría));
+        resultado.error("El nodo tiene una categoría inesperada: " + Ñ::obténNombreDeNodo(nodo->categoría) + ".");
         resultado.posición(nodo->posición());
         return resultado;
     }
@@ -1228,7 +1228,7 @@
 
     if(nodo == nullptr)
     {
-        resultado.error("El nodo raíz es nulo");
+        resultado.error("El nodo raíz es nulo.");
         return resultado;
     }
 

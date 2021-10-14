@@ -182,7 +182,7 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     
     if(valor == nullptr)
     {
-        resultado.error("Definición errónea");
+        resultado.error("Definición errónea.");
         return resultado;
     }
 

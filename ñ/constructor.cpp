@@ -232,7 +232,7 @@ namespace Ñ
             Ñ::Módulo* módulo;
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo nulo, esperaba un módulo");
+                resultado.error("He recibido un nodo nulo, esperaba un módulo.");
                 return resultado;
             }
             else if(nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
@@ -242,7 +242,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("El nodo no es un módulo");
+                resultado.error("El nodo no es un módulo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -255,7 +255,7 @@ namespace Ñ
             {
                 if(n == nullptr)
                 {
-                    resultado.error("Uno de las ramas del módulo '" + módulo->módulo + "' es nula");
+                    resultado.error("Uno de las ramas del módulo '" + módulo->módulo + "' es nula.");
                     resultado.posición(módulo->posición());
                     return resultado;
                 }
@@ -294,7 +294,7 @@ namespace Ñ
             Ñ::DefineFunción* función;
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo nulo, esperaba una definición de función");
+                resultado.error("He recibido un nodo nulo, esperaba una definición de función.");
                 return resultado;
             }
             else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
@@ -304,7 +304,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("El nodo no es una definición de función");
+                resultado.error("El nodo no es una definición de función.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -329,7 +329,7 @@ namespace Ñ
 
             if(!funciónLlvm)
             {
-                resultado.error("Todavía no has registrado la función '" + función->nombre + "()'");
+                resultado.error("Todavía no has registrado la función '" + función->nombre + "()'.");
                 resultado.posición(función->posición());
                 return resultado;
             }
@@ -347,7 +347,7 @@ namespace Ñ
             llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
             if(bloqueLlvm == nullptr)
             {
-                resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo");
+                resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo.");
                 resultado.posición(función->posición());
                 return resultado;
             }
@@ -402,7 +402,7 @@ namespace Ñ
             Ñ::DeclaraFunción* función;
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo nulo, esperaba una declaración de función");
+                resultado.error("He recibido un nodo nulo, esperaba una declaración de función.");
                 return resultado;
             }
             else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
@@ -412,7 +412,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("El nodo no es una declaración de función");
+                resultado.error("El nodo no es una declaración de función.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -442,8 +442,6 @@ namespace Ñ
                 auto nada = new Ñ::Tipo;
                 tRetorno = creaTipoLlvm(nada);
                 delete nada;
-                //resultado.error("He recibido un nodo nulo, esperaba un tipo de devolución");
-                //return resultado;
             }
             else if(devuelto->categoría != Ñ::CategoríaNodo::NODO_TIPO)
             {
@@ -457,7 +455,7 @@ namespace Ñ
                 tRetorno = creaTipoLlvm(tDevuelto);
                 if(tRetorno == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tDevuelto) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tDevuelto) + "'.");
                     resultado.posición(tDevuelto->posición());
                     return resultado;
                 }
@@ -465,8 +463,7 @@ namespace Ñ
 
             if(argumentos == nullptr)
             {
-                //resultado.error("He recibido un nodo nulo, esperaba un nodo contenedor de argumentos");
-                //return resultado;
+                
             }
             else if(argumentos->categoría != Ñ::CategoríaNodo::NODO_ARGUMENTOS)
             {
@@ -480,7 +477,7 @@ namespace Ñ
                 {
                     if(a == nullptr)
                     {
-                        resultado.error("He recibido un argumento nulo");
+                        resultado.error("He recibido un argumento nulo.");
                         resultado.posición(argumentos->posición());
                         return resultado;
                     }
@@ -491,7 +488,7 @@ namespace Ñ
                         llvm::Type* tipoarg = creaTipoLlvm(arg);
                         if(tipoarg == nullptr)
                         {
-                            resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(arg) + "'");
+                            resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(arg) + "'.");
                             resultado.posición(arg->posición());
                             return resultado;
                         }
@@ -503,7 +500,7 @@ namespace Ñ
                         llvm::Type* tipoarg = creaTipoLlvm(arg);
                         if(tipoarg == nullptr)
                         {
-                            resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(arg) + "'");
+                            resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(arg) + "'.");
                             resultado.posición(arg->posición());
                             return resultado;
                         }
@@ -512,7 +509,7 @@ namespace Ñ
                     else
                     {
                         //muestraNodos(a);
-                        resultado.error("He recibido un argumento de un tipo que no reconozco");
+                        resultado.error("He recibido un argumento de un tipo que no reconozco.");
                         resultado.posición(a->posición());
                         return resultado;
                     }
@@ -561,7 +558,7 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo nulo, esperaba una expresión de primer nivel");
+                resultado.error("He recibido un nodo nulo, esperaba una expresión de primer nivel.");
                 return resultado;
             }
             else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
@@ -571,7 +568,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("El nodo no es una expresión de primer nivel");
+                resultado.error("El nodo no es una expresión de primer nivel.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -595,7 +592,7 @@ namespace Ñ
 
             if(!funciónLlvm)
             {
-                resultado.error("Todavía no has registrado la función '__función_anónima__()'");
+                resultado.error("Todavía no has registrado la función '__función_anónima__()'.");
                 return resultado;
             }
             else if(!funciónLlvm->empty())
@@ -612,7 +609,7 @@ namespace Ñ
             llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
             if(bloqueLlvm == nullptr)
             {
-                resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo");
+                resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo.");
                 return resultado;
             }
 
@@ -647,7 +644,7 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nullptr, esperaba una expresión");
+                resultado.error("He recibido un nullptr, esperaba una expresión.");
                 return resultado;
             }
 
@@ -712,7 +709,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("No reconozco la expresión");
+                resultado.error("No reconozco la expresión.");
                 resultado.posición(nodo->posición());
                 //muestraNodos(nodo);
                 break;
@@ -727,13 +724,13 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("El nodo vale nullptr, esperaba un si-condicional");
+                resultado.error("El nodo vale nullptr, esperaba un si-condicional.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
             {
-                resultado.error("El nodo no es un si-condicional");
+                resultado.error("El nodo no es un si-condicional.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -768,7 +765,7 @@ namespace Ñ
                 // tras el SiCondicional, éste debe tener un bloqueSino
                 if(!continúa)
                 {
-                    resultado.error("La condición debería incluir un bloque 'sino'");
+                    resultado.error("La condición debería incluir un bloque 'sino'.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
@@ -837,7 +834,7 @@ namespace Ñ
                     {
                         // Error: (Cuando la función debe devolver un valor)
                         // No se recogen todas las posibles vías de ejecución.
-                        resultado.error("No se definen todas las posibles vías de ejecución");
+                        resultado.error("No se definen todas las posibles vías de ejecución.");
                         resultado.posición(nodo->posición());
                         return resultado;
 
@@ -876,7 +873,7 @@ namespace Ñ
                 }
                 //else
                 //{
-                //    resultado.error("No se definen todas las posibles vías de ejecución");
+                //    resultado.error("No se definen todas las posibles vías de ejecución.");
                 //    resultado.posición(nodoBloque->posición());
                 //    return resultado;
                 //}
@@ -926,13 +923,13 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("El nodo vale nullptr, esperaba un bucle-mientras");
+                resultado.error("El nodo vale nullptr, esperaba un bucle-mientras.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS)
             {
-                resultado.error("El nodo no es un bucle-mientras");
+                resultado.error("El nodo no es un bucle-mientras.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -955,7 +952,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("No se definen todas las posibles vías de ejecución");
+                resultado.error("No se definen todas las posibles vías de ejecución.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1013,7 +1010,7 @@ namespace Ñ
             }
             //else
             //{
-            //    resultado.error("No se definen todas las posibles vías de ejecución");
+            //    resultado.error("No se definen todas las posibles vías de ejecución.");
             //    resultado.posición(nodoBloque->posición());
             //    return resultado;
             //}
@@ -1035,13 +1032,13 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la asignación");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la asignación.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_ASIGNA)
             {
-                resultado.error("He recibido un nodo que no es una asignación");
+                resultado.error("He recibido un nodo que no es una asignación.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1082,7 +1079,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("He recibido una asignación mal estructurada, tiene " + std::to_string(nodo->ramas.size()) + " ramas");
+                resultado.error("He recibido una asignación mal estructurada, tiene " + std::to_string(nodo->ramas.size()) + " ramas.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1094,7 +1091,7 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
@@ -1132,7 +1129,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("He recibido un nodo de devolución que tiene más de 1 hijo");
+                resultado.error("He recibido un nodo de devolución que tiene más de 1 hijo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1144,7 +1141,7 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
@@ -1153,7 +1150,7 @@ namespace Ñ
                 llvm::BasicBlock* bucleDestino = tablaSímbolos->leeBloqueDestino();
                 if(bucleDestino == nullptr)
                 {
-                    resultado.error("Instrucción 'para' fuera de un bucle");
+                    resultado.error("Instrucción 'para' fuera de un bucle.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
@@ -1170,7 +1167,7 @@ namespace Ñ
             }
             else
             {
-                resultado.error("He recibido un nodo de parada de bucle que tiene hijos ¿?");
+                resultado.error("He recibido un nodo de parada de bucle que tiene hijos ¿?.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1182,7 +1179,7 @@ namespace Ñ
             
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
@@ -1201,7 +1198,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("No sé construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA");
+                resultado.error("No sé construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA.");
                 resultado.posición(nodo->posición());
                 break;
             }
@@ -1215,7 +1212,7 @@ namespace Ñ
             
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
@@ -1230,7 +1227,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("No puedo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA");
+                resultado.error("No puedo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA.");
                 resultado.posición(nodo->posición());
                 break;
             }
@@ -1244,7 +1241,7 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
@@ -1289,7 +1286,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("No sé cómo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LDA");
+                resultado.error("No sé cómo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LDA.");
                 resultado.posición(nodo->posición());
                 break;
             }
@@ -1303,20 +1300,20 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la declaración de variable");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la declaración de variable.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
             {
-                resultado.error("El nodo no es una declaración de variable, no puedo construirlo");
+                resultado.error("El nodo no es una declaración de variable, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
             
             if(nodo->ramas.size() != 1)
             {
-                resultado.error("El nodo 'declaración de variable' no tiene las ramas esperadas, no puedo construirlo");
+                resultado.error("El nodo 'declaración de variable' no tiene las ramas esperadas, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1329,7 +1326,7 @@ namespace Ñ
             tipo = creaTipoLlvm(t);
             if(tipo == nullptr)
             {
-                resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(t) + "'");
+                resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(t) + "'.");
                 resultado.posición(t->posición());
                 return resultado;
             }
@@ -1351,20 +1348,20 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la declaración de variable");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la declaración de variable.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
             {
-                resultado.error("El nodo no es una declaración de variable, no puedo construirlo");
+                resultado.error("El nodo no es una declaración de variable, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
             
             if(nodo->ramas.size() != 1)
             {
-                resultado.error("El nodo 'declaración de variable' no tiene las ramas esperadas, no puedo construirlo");
+                resultado.error("El nodo 'declaración de variable' no tiene las ramas esperadas, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1377,7 +1374,7 @@ namespace Ñ
             tipo = creaTipoLlvm(t);
             if(tipo == nullptr)
             {
-                resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(t) + "'");
+                resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(t) + "'.");
                 resultado.posición(t->posición());
                 return resultado;
             }
@@ -1405,20 +1402,20 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_PUNTERO)
             {
-                resultado.error("El nodo no es un puntero, no puedo construir su lectura");
+                resultado.error("El nodo no es un puntero, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
             
             if(nodo->ramas.size() != 1)
             {
-                resultado.error("El nodo 'puntero' no tiene las ramas esperadas, no puedo construir su lectura");
+                resultado.error("El nodo 'puntero' no tiene las ramas esperadas, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1433,7 +1430,7 @@ namespace Ñ
             variable = leeId(nombre);
             if(variable == nullptr)
             {
-                resultado.error("No puedo leer la variable '" + nombre + "'");
+                resultado.error("No puedo leer la variable '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
@@ -1441,7 +1438,7 @@ namespace Ñ
             llvm::Value* variableFinal = entorno->constructorLlvm.CreateLoad(variable);
             if(variableFinal == nullptr)
             {
-                resultado.error("No puedo leer la referencia guardada en '" + nombre + "'");
+                resultado.error("No puedo leer la referencia guardada en '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
@@ -1457,20 +1454,20 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
             {
-                resultado.error("El nodo no es una variable, no puedo construir su lectura");
+                resultado.error("El nodo no es una variable, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
             
             if(nodo->ramas.size() != 0)
             {
-                resultado.error("El nodo 'identificador' no tiene las ramas esperadas, no puedo construir su lectura");
+                resultado.error("El nodo 'identificador' no tiene las ramas esperadas, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1485,7 +1482,7 @@ namespace Ñ
             variable = leeId(nombre);
             if(variable == nullptr)
             {
-                resultado.error("No puedo leer la variable '" + nombre + "'");
+                resultado.error("No puedo leer la variable '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
@@ -1501,20 +1498,20 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
             {
-                resultado.error("El nodo no es una variable, no puedo construir su lectura");
+                resultado.error("El nodo no es una variable, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
             
             if(nodo->ramas.size() != 0)
             {
-                resultado.error("El nodo 'identificador' no tiene las ramas esperadas, no puedo construir su lectura");
+                resultado.error("El nodo 'identificador' no tiene las ramas esperadas, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1535,7 +1532,7 @@ namespace Ñ
                 variable = leeId(nombre);
                 if(variable == nullptr)
                 {
-                    resultado.error("No puedo leer la variable '" + nombre + "'");
+                    resultado.error("No puedo leer la variable '" + nombre + "'.");
                     resultado.posición(id->posición());
                     return resultado;
                 }
@@ -1728,20 +1725,20 @@ namespace Ñ
 
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la conversión");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la conversión.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
             {
-                resultado.error("El nodo no es un conversor de tipos, no puedo construirlo");
+                resultado.error("El nodo no es un conversor de tipos, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
 
             if(nodo->ramas.size() != 1)
             {
-                resultado.error("El nodo conversor de tipos, está mal definido, tiene " + std::to_string(nodo->ramas.size()) + " hijos");
+                resultado.error("El nodo conversor de tipos, está mal definido, tiene " + std::to_string(nodo->ramas.size()) + " hijos.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1768,7 +1765,7 @@ namespace Ñ
             
             if(valorFinal == nullptr)
             {
-                resultado.error("No he conseguido convertir con éxito el valor");
+                resultado.error("No he conseguido convertir con éxito el valor.");
                 resultado.posición(tDestino->posición());
                 return resultado;
             }
@@ -1786,13 +1783,13 @@ namespace Ñ
             
             if(nodo == nullptr)
             {
-                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión");
+                resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_LITERAL)
             {
-                resultado.error("El nodo no es un literal, no puedo construirlo");
+                resultado.error("El nodo no es un literal, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -1810,7 +1807,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1838,7 +1835,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1851,7 +1848,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1864,7 +1861,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1877,7 +1874,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1890,7 +1887,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1903,7 +1900,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1916,7 +1913,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1929,7 +1926,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1942,7 +1939,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1955,7 +1952,7 @@ namespace Ñ
                 tipoLlvm = creaTipoLlvm(tipo);
                 if(tipoLlvm == nullptr)
                 {
-                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
@@ -1971,7 +1968,7 @@ namespace Ñ
                     tipoLlvm = creaTipoLlvm(tipo);
                     if(tipoLlvm == nullptr)
                     {
-                        resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'");
+                        resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                         resultado.posición(tipo->posición());
                         return resultado;
                     }
@@ -2014,7 +2011,7 @@ namespace Ñ
                 break;
             
             default:
-                resultado.error("No reconozco el tipo del literal");
+                resultado.error("No reconozco el tipo del literal.");
                 resultado.posición(nodo->posición());
                 break;
             }
@@ -2041,13 +2038,13 @@ namespace Ñ
 
                 if(nOp == nullptr)
                 {
-                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
                 else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo.");
                     resultado.posición(nodo->ramas[i]->posición());
                     return resultado;
                 }
@@ -2146,7 +2143,7 @@ namespace Ñ
                 }
                 else
                 {
-                    resultado.error("No sé comparar operandos de tipo '" + obténNombreDeTipo(tipo) + "'");
+                    resultado.error("No sé comparar operandos de tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(op->posición());
                     return resultado;
                 }
@@ -2176,13 +2173,13 @@ namespace Ñ
 
                 if(nOp == nullptr)
                 {
-                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
                 else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo.");
                     resultado.posición(nodo->ramas[i]->posición());
                     return resultado;
                 }
@@ -2210,7 +2207,7 @@ namespace Ñ
                     }
                     else
                     {
-                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles.");
                         resultado.posición(op->posición());
                         return resultado;
                     }
@@ -2227,14 +2224,14 @@ namespace Ñ
                     }
                     else
                     {
-                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles.");
                         resultado.posición(op->posición());
                         return resultado;
                     }
                 }
                 else
                 {
-                    resultado.error("No reconozco la operación '" + op->operación + "'");
+                    resultado.error("No reconozco la operación '" + op->operación + "'.");
                     resultado.posición(op->posición());
                     return resultado; 
                 }
@@ -2264,13 +2261,13 @@ namespace Ñ
 
                 if(nOp == nullptr)
                 {
-                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo nulo.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
                 else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
-                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo");
+                    resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo.");
                     resultado.posición(nOp->posición());
                     return resultado;
                 }
@@ -2298,7 +2295,7 @@ namespace Ñ
                     }
                     else
                     {
-                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles.");
                         resultado.posición(op->posición());
                         return resultado;
                     }
@@ -2319,7 +2316,7 @@ namespace Ñ
                     }
                     else
                     {
-                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles.");
                         resultado.posición(op->posición());
                         return resultado;
                     }
@@ -2340,14 +2337,14 @@ namespace Ñ
                     }
                     else
                     {
-                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles");
+                        resultado.error("No puedo realizar la operación '" + op->operación + "', tipos incompatibles.");
                         resultado.posición(op->posición());
                         return resultado;
                     }
                 }
                 else
                 {
-                    resultado.error("No reconozco la operación '" + op->operación + "'");
+                    resultado.error("No reconozco la operación '" + op->operación + "'.");
                     resultado.posición(op->posición());
                     return resultado; 
                 }
@@ -2370,14 +2367,14 @@ namespace Ñ
             {
                 if(hijo == nullptr)
                 {
-                    resultado.error("No puedo leer la dirección de memoria");
+                    resultado.error("No puedo leer la dirección de memoria.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
 
                 if(hijo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
                 {
-                    resultado.error("No puedes leer la dirección de memoria de un '" + obténNombreDeNodo(hijo->categoría) + "'");
+                    resultado.error("No puedes leer la dirección de memoria de un '" + obténNombreDeNodo(hijo->categoría) + "'.");
                     resultado.posición(hijo->posición());
                     return resultado;
                 }
@@ -2387,7 +2384,7 @@ namespace Ñ
 
                 if(valorFinal == nullptr)
                 {
-                    resultado.error("No puedo leer la dirección de memoria de la variable '" + id->id + "'");
+                    resultado.error("No puedo leer la dirección de memoria de la variable '" + id->id + "'.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
@@ -2400,7 +2397,7 @@ namespace Ñ
             {
                 if(hijo == nullptr)
                 {
-                    resultado.error("No puedo leer la dirección de memoria");
+                    resultado.error("No puedo leer la dirección de memoria.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
@@ -2426,7 +2423,7 @@ namespace Ñ
                 return resultado;
             }
 
-            resultado.error("No sé construir la operación '" + op->operación + "'");
+            resultado.error("No sé construir la operación '" + op->operación + "'.");
             resultado.posición(nodo->posición());
             return resultado;
         }
@@ -2464,13 +2461,13 @@ namespace Ñ
             
             if(nodo == nullptr)
             {
-                resultado.error("Esperaba una llamada a una función, pero el nodo es nulo");
+                resultado.error("Esperaba una llamada a una función, pero el nodo es nulo.");
                 return resultado;
             }
 
             if(nodo->categoría != Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
             {
-                resultado.error("Esperaba una llamada a una función, pero el nodo es de una categoría inesperada");
+                resultado.error("Esperaba una llamada a una función, pero el nodo es de una categoría inesperada.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
@@ -2579,7 +2576,7 @@ namespace Ñ
 
             if(auto error = funciónEvaluadaJAT.takeError())
             {
-                resultado.error("El constructor JAT no encuentra el símbolo '__función_anónima__()'");
+                resultado.error("El constructor JAT no encuentra el símbolo '__función_anónima__()'.");
                 return resultado;
             }
             
@@ -2597,13 +2594,13 @@ namespace Ñ
 
             if(auto error = variableEvaluadaJAT.takeError())
             {
-                resultado.error("El constructor JAT no encuentra el símbolo 'a()'");
+                resultado.error("El constructor JAT no encuentra el símbolo 'a()'.");
                 return resultado;
             }
             
             int64_t* entero = (int64_t*)(*variableEvaluadaJAT).getAddress();
 
-            std::cout << "La variable global 'a' vale " << std::to_string(*entero) << std::endl;
+            std::cout << "La variable global 'a' vale '" << std::to_string(*entero) << "'." << std::endl;
         }
 
         resultado.éxito();

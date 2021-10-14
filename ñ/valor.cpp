@@ -458,7 +458,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a bool");
+						+ " a bool.");
 		return resultado;
 	}
 }
@@ -496,7 +496,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a nat8");
+						+ " a nat8.");
 		return resultado;
 	}
 }
@@ -540,7 +540,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a nat16");
+						+ " a nat16.");
 		return resultado;
 	}
 }
@@ -591,7 +591,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a nat32");
+						+ " a nat32.");
 		return resultado;
 	}
 }
@@ -649,7 +649,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a nat64");
+						+ " a nat64.");
 		return resultado;
 	}
 }
@@ -687,7 +687,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a ent8");
+						+ " a ent8.");
 		return resultado;
 	}
 }
@@ -738,7 +738,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a ent16");
+						+ " a ent16.");
 		return resultado;
 	}
 }
@@ -803,7 +803,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a ent32");
+						+ " a ent32.");
 		return resultado;
 	}
 }
@@ -882,7 +882,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a ent64");
+						+ " a ent64.");
 		return resultado;
 	}
 }
@@ -895,7 +895,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 	{
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a puntero");
+						+ " a puntero.");
 		return resultado;
 	}
 
@@ -905,7 +905,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 	{
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a puntero");
+						+ " a puntero.");
 		return resultado;
 	}
 	else
@@ -1002,7 +1002,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a real32");
+						+ " a real32.");
 		return resultado;
 	}
 }
@@ -1102,7 +1102,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a real64");
+						+ " a real64.");
 		return resultado;
 	}
 }
@@ -1202,7 +1202,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		delete v;
 		resultado.error("CONVERSIÓN DE TIPOS - No está permitida la conversión de "
 						+ Ñ::obténNombreDeTipo(obténTipoDeValor(valor))
-						+ " a texto");
+						+ " a texto.");
 		return resultado;
 	}
 }
@@ -1265,7 +1265,7 @@ void Ñ::Valor::muestra(TablaSímbolos* tablaSímbolos)
 		break;
 	
 	default:
-		resultado.error("Tipo inválido: " + Ñ::obténNombreDeTipo(tipoDestino));
+		resultado.error("Tipo inválido: " + Ñ::obténNombreDeTipo(tipoDestino) + ".");
 		return resultado;
 		break;
 	}

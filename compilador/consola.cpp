@@ -43,7 +43,6 @@ namespace Compilador
     {
         uint64_t cursor = posición->cursor();
         std::string código;
-        bool errorLeerArchivo = false;
 
         try
         {
@@ -51,7 +50,16 @@ namespace Compilador
         }
         catch(...)
         {
-            std::cout << texto << std::endl;
+            std::cout << ColorConsola.rojoclaro;
+            std::cout << "Error: [";
+            std::cout << ColorConsola.cianclaro;
+            std::cout << archivo;
+            std::cout << ColorConsola.rojoclaro;
+            std::cout << "]: ";
+            std::cout << ColorConsola.predefinido;
+            std::cout << texto;
+            std::cout << std::endl;
+            return;
         }
 
         if(cursor >= código.size())

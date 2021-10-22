@@ -37,8 +37,10 @@ namespace Ñ
 
     public:
         ConstructorJAT( llvm::orc::JITTargetMachineBuilder constructorJATMáquinaDestino,
-                llvm::DataLayout disposiciónDatos
+                llvm::DataLayout disposiciónDatos,
+                std::unique_ptr<llvm::orc::SelfExecutorProcessControl> controlEjecutorDelProceso
             ) :
+                sesiónEjecución(std::move(controlEjecutorDelProceso)),
                 capaObjeto(sesiónEjecución, []() { return std::make_unique<llvm::SectionMemoryManager>(); }),
                 capaConstrucción(sesiónEjecución, capaObjeto, std::make_unique<llvm::orc::ConcurrentIRCompiler>(std::move(constructorJATMáquinaDestino))),
                 disposiciónDatos(std::move(disposiciónDatos)),
@@ -58,8 +60,14 @@ namespace Ñ
 
         static Ñ::ConstructorJAT* Crea()
         {
-            auto destinoConstrucciónJAT = llvm::orc::JITTargetMachineBuilder::detectHost();
+            auto controlEjecutorDelProceso = llvm::orc::SelfExecutorProcessControl::Create();
+            if(!controlEjecutorDelProceso)
+            {
+                controlEjecutorDelProceso.takeError();
+                return nullptr;
+            }
 
+            auto destinoConstrucciónJAT = llvm::orc::JITTargetMachineBuilder::detectHost();
             if(!destinoConstrucciónJAT)
             {
                 destinoConstrucciónJAT.takeError();
@@ -74,7 +82,7 @@ namespace Ñ
                 return nullptr;
             }
 
-            Ñ::ConstructorJAT* jat = new Ñ::ConstructorJAT(std::move(*destinoConstrucciónJAT), std::move(*disposiciónDatos));
+            Ñ::ConstructorJAT* jat = new Ñ::ConstructorJAT(std::move(*destinoConstrucciónJAT), std::move(*disposiciónDatos), std::move(*controlEjecutorDelProceso));
         
             return jat;
         }

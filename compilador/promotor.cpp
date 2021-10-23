@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include "lld/Common/Driver.h"
 #include "llvm/Support/Host.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/TargetRegistry.h"
@@ -286,5 +287,34 @@ int Compilador::compila(Compilador::Configuración cfg)
 		std::cout << "Ejecutando enlazador: " << comando << std::endl;
 	}
 
-    return ejecutaPrograma(carpeta + enlazador, comando);
+    //return ejecutaPrograma(carpeta + enlazador, comando);
+
+	std::vector<const char*> argumentos;
+	std::string opción_llvm = "";
+
+	opción_llvm = "enlazador";
+	argumentos.push_back(opción_llvm.c_str());
+
+	opción_llvm = carpeta + bibliotecaEstándar;
+	argumentos.push_back(opción_llvm.c_str());
+
+	opción_llvm = "/nodefaultlib";
+	argumentos.push_back(opción_llvm.c_str());
+
+	opción_llvm = "/entry";
+	argumentos.push_back(opción_llvm.c_str());
+
+	opción_llvm = "/subsystem:console";
+	argumentos.push_back(opción_llvm.c_str());
+
+	opción_llvm = "/out:" + archivoDestino;
+	argumentos.push_back(opción_llvm.c_str());
+
+	for(std::string archivo : cfg.archivos)
+	{
+		opción_llvm = creaNombreMódulo(archivo) + ".o ";
+		argumentos.push_back(opción_llvm.c_str());
+	}
+	
+	return lld::coff::link(argumentos, true, llvm::outs(), llvm::errs());
 }

@@ -321,5 +321,12 @@ int Compilador::compila(Compilador::Configuración cfg)
 		}
 	}
 
-	return lld::coff::link(argumentos, true, llvm::outs(), llvm::errs());
+	int resultado = lld::coff::link(argumentos, true, llvm::outs(), llvm::errs());
+
+	for(int i = 0; i < argumentos.size(); i++)
+	{
+		free((void*)(argumentos[i]));
+	}
+
+	return resultado;
 }

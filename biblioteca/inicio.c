@@ -1,5 +1,4 @@
 extern int inicia();
-extern void __security_init_cookie(void);
 
 #include "es.h"
 
@@ -9,7 +8,7 @@ extern int holamundo()
     return escribetxt(texto);
 }
 
-int __lugar_de_inicio()
+int __stdcall __lugar_de_inicio()
 {
     int devuelto = inicia();
     return devuelto;

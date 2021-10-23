@@ -2,9 +2,9 @@
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
 rm -ErrorAction SilentlyContinue *.o
 
-cp ./biblioteca/kernel32.lib ./proyecto/kernel32.lib
-cp ./biblioteca/libcmt.lib ./proyecto/libcmt.lib
-cp ./biblioteca/ntdll.lib ./proyecto/ntdll.lib
+#cp ./biblioteca/kernel32.lib ./proyecto/kernel32.lib
+#cp ./biblioteca/libcmt.lib ./proyecto/libcmt.lib
+#cp ./biblioteca/ntdll.lib ./proyecto/ntdll.lib
 
 cp ./biblioteca/base.lib ./proyecto/base.lib
 
@@ -17,7 +17,7 @@ cd ..
 
 rm -ErrorAction SilentlyContinue ./proyecto/biblioteca.lib
 mv ./proyecto/Debug/biblioteca.lib ./proyecto/biblioteca.lib
-cp ./biblioteca/lld-link.exe ./proyecto/lld-link.exe
+#cp ./biblioteca/lld-link.exe ./proyecto/lld-link.exe
 
 rm build -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue

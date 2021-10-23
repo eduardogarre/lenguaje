@@ -268,53 +268,69 @@ int Compilador::compila(Compilador::Configuración cfg)
 	std::string archivosObjeto = " ";
 	std::string bibliotecaEstándar = "biblioteca.lib ";
 	std::string bibliotecaBase = "base.lib ";
-	std::string lugar_de_inicio = "__lugar_de_inicio ";
-
-	for(std::string archivo : cfg.archivos)
-	{
-		archivosObjeto += creaNombreMódulo(archivo) + ".o ";
-	}
-
-	std::string comando = enlazador + archivosObjeto
-			+ carpeta + bibliotecaEstándar
-			+ carpeta + bibliotecaBase
-			+ " /nodefaultlib"
-			+ " /entry:" + lugar_de_inicio
-			+ " /subsystem:console /out:" + archivoDestino;
-
-	if(cfg.HABLADOR)
-	{
-		std::cout << "Ejecutando enlazador: " << comando << std::endl;
-	}
-
+	std::string lugar_de_inicio = "__lugar_de_inicio";
+	
     //return ejecutaPrograma(carpeta + enlazador, comando);
 
 	std::vector<const char*> argumentos;
 	std::string opción_llvm = "";
+	char* texto = nullptr;
 
 	opción_llvm = "enlazador";
-	argumentos.push_back(opción_llvm.c_str());
+	texto = (char*)malloc(opción_llvm.size() + 1);
+	strcpy(texto, opción_llvm.c_str());
+	argumentos.push_back(texto);
+
+	opción_llvm = carpeta + bibliotecaBase;
+	texto = (char*)malloc(opción_llvm.size() + 1);
+	strcpy(texto, opción_llvm.c_str());
+	argumentos.push_back(texto);
 
 	opción_llvm = carpeta + bibliotecaEstándar;
-	argumentos.push_back(opción_llvm.c_str());
-
-	opción_llvm = "/nodefaultlib";
-	argumentos.push_back(opción_llvm.c_str());
-
-	opción_llvm = "/entry";
-	argumentos.push_back(opción_llvm.c_str());
-
-	opción_llvm = "/subsystem:console";
-	argumentos.push_back(opción_llvm.c_str());
-
-	opción_llvm = "/out:" + archivoDestino;
-	argumentos.push_back(opción_llvm.c_str());
+	texto = (char*)malloc(opción_llvm.size() + 1);
+	strcpy(texto, opción_llvm.c_str());
+	argumentos.push_back(texto);
 
 	for(std::string archivo : cfg.archivos)
 	{
 		opción_llvm = creaNombreMódulo(archivo) + ".o ";
-		argumentos.push_back(opción_llvm.c_str());
+		texto = (char*)malloc(opción_llvm.size() + 1);
+		strcpy(texto, opción_llvm.c_str());
+		argumentos.push_back(texto);
 	}
-	
+
+	opción_llvm = "/entry:" + lugar_de_inicio;
+	texto = (char*)malloc(opción_llvm.size() + 1);
+	strcpy(texto, opción_llvm.c_str());
+	argumentos.push_back(texto);
+
+	opción_llvm = "/nodefaultlib";
+	texto = (char*)malloc(opción_llvm.size() + 1);
+	strcpy(texto, opción_llvm.c_str());
+	argumentos.push_back(texto);
+
+	opción_llvm = "/subsystem:console";
+	texto = (char*)malloc(opción_llvm.size() + 1);
+	strcpy(texto, opción_llvm.c_str());
+	argumentos.push_back(texto);
+
+	opción_llvm = "/out:" + archivoDestino;
+	texto = (char*)malloc(opción_llvm.size() + 1);
+	strcpy(texto, opción_llvm.c_str());
+	argumentos.push_back(texto);
+
+
+	if(true /*cfg.HABLADOR*/)
+	{
+		std::cout << std::to_string(argumentos.size()) << " argumentos para LLD" << std::endl;
+		
+		for(int i = 0; i < argumentos.size(); i++)
+		{
+			std::cout << "arg " << std::to_string(i) << ": ";
+			printf(argumentos[i]);
+			printf("\n");
+		}
+	}
+
 	return lld::coff::link(argumentos, true, llvm::outs(), llvm::errs());
 }

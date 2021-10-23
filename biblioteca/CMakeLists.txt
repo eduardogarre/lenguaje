@@ -23,9 +23,12 @@ if(MSVC)
             string(REGEX REPLACE "[/|-]RTC(su|[1su])" "" ${flag_var} "${${flag_var}}")
         endif()
     endforeach(flag_var)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /GS- /X /std:c17 /utf-8")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /GS- /std:c17 /utf-8")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /GS- /X /std:c17 /utf-8 /validate-charset")
     set_target_properties(biblioteca PROPERTIES
-        LINK_FLAGS "../proyecto/kernel32.lib ../proyecto/libcmt.lib ../proyecto/ntdll.lib /entry:__lugar_de_inicio /subsystem:console /nodefaultlib"
+        #LINK_FLAGS "../proyecto/kernel32.lib ../proyecto/libcmt.lib ../proyecto/ntdll.lib /entry:__lugar_de_inicio /subsystem:console /nodefaultlib"
+        LINK_FLAGS "../proyecto/base.lib /entry:__lugar_de_inicio /subsystem:console /nodefaultlib"
+        #LINK_FLAGS "/entry:__lugar_de_inicio /subsystem:console"
     )
 elseif(CMAKE_COMPILER_IS_GNUC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdinc -nostdinc++ -std=c17")

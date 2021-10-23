@@ -264,24 +264,14 @@ int Compilador::compila(Compilador::Configuración cfg)
 	std::string archivoDestino = cfg.nombreArchivoDestino + cfg.extensión;
 
 	std::string carpeta = ".\\proyecto\\";
-	std::string enlazador = "lld-link.exe";
-	std::string archivosObjeto = " ";
-	std::string bibliotecaEstándar = "biblioteca.lib ";
-	std::string bibliotecaBase = "base.lib ";
+	std::string bibliotecaEstándar = "ñ.lib";
 	std::string lugar_de_inicio = "__lugar_de_inicio";
-	
-    //return ejecutaPrograma(carpeta + enlazador, comando);
 
 	std::vector<const char*> argumentos;
 	std::string opción_llvm = "";
 	char* texto = nullptr;
 
 	opción_llvm = "enlazador";
-	texto = (char*)malloc(opción_llvm.size() + 1);
-	strcpy(texto, opción_llvm.c_str());
-	argumentos.push_back(texto);
-
-	opción_llvm = carpeta + bibliotecaBase;
 	texto = (char*)malloc(opción_llvm.size() + 1);
 	strcpy(texto, opción_llvm.c_str());
 	argumentos.push_back(texto);
@@ -319,8 +309,7 @@ int Compilador::compila(Compilador::Configuración cfg)
 	strcpy(texto, opción_llvm.c_str());
 	argumentos.push_back(texto);
 
-
-	if(true /*cfg.HABLADOR*/)
+	if(cfg.HABLADOR)
 	{
 		std::cout << std::to_string(argumentos.size()) << " argumentos para LLD" << std::endl;
 		

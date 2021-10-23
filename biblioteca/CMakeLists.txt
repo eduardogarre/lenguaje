@@ -23,18 +23,28 @@ if(MSVC)
             string(REGEX REPLACE "[/|-]RTC(su|[1su])" "" ${flag_var} "${${flag_var}}")
         endif()
     endforeach(flag_var)
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /GS- /std:c17 /utf-8")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /GS- /X /std:c17 /utf-8 /validate-charset")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /GS- /std:c17 /utf-8 /validate-charset")
     set_target_properties(biblioteca PROPERTIES
-        #LINK_FLAGS "../proyecto/kernel32.lib ../proyecto/libcmt.lib ../proyecto/ntdll.lib /entry:__lugar_de_inicio /subsystem:console /nodefaultlib"
-        LINK_FLAGS "../proyecto/base.lib /entry:__lugar_de_inicio /subsystem:console /nodefaultlib"
+        LINK_FLAGS "/entry:__lugar_de_inicio /subsystem:console /nodefaultlib"
         #LINK_FLAGS "/entry:__lugar_de_inicio /subsystem:console"
     )
+    #target_link_libraries(biblioteca kernel32 libcmt ntdll)
 elseif(CMAKE_COMPILER_IS_GNUC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdinc -nostdinc++ -std=c17")
 endif()
 
-set_target_properties(biblioteca PROPERTIES
+if(WIN32)
+    get_filename_component(ruta_enlazador "${CMAKE_LINKER}" DIRECTORY)
+    find_program(LIB_EXE NAMES lib.exe HINTS ${ruta_enlazador})
+    add_custom_target(biblioteca_estatica ALL COMMAND ${LIB_EXE} /out:ñ.lib $<TARGET_FILE:biblioteca> kernel32.lib libcmt.lib ntdll.lib)
+elseif(APPLE)
+    add_custom_target(biblioteca_estatica ALL COMMAND ${CMAKE_AR} rc libñ.a $<TARGET_FILE:biblioteca>)
+elseif(UNIX)
+    add_custom_target(biblioteca_estatica ALL COMMAND ${CMAKE_AR} rc libñ.a $<TARGET_FILE:biblioteca>)
+endif()
+
+set_target_properties(biblioteca_estatica PROPERTIES
                         ARCHIVE_OUTPUT_DIRECTORY  "../proyecto/"
                         LIBRARY_OUTPUT_DIRECTORY  "../proyecto/"
                         RUNTIME_OUTPUT_DIRECTORY  "../proyecto/"

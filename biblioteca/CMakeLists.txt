@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(CMAKE_BUILD_TYPE "Release")
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
 set(BUILD_SHARED_LIBS OFF)
 
 # set the project name

@@ -5,6 +5,28 @@
 
 #include "herramientas.hpp"
 
+#if defined(WIN32) || defined(WIN64)
+#include <Windows.h>
+std::string obténCarpetaInstalación()
+{
+	char espacio[MAX_PATH];
+	GetModuleFileNameA(NULL, espacio, MAX_PATH);
+	std::string::size_type posición = std::string(espacio).find_last_of("\\/");
+	
+	return std::string(espacio).substr(0, posición);
+}
+#elif defined(UNIX)
+#include <unistd.h> 
+std::string obténCarpetaInstalación()
+{
+	char espacio[MAX_PATH];
+    readlink("/proc/self/exe", espacio, MAX_PATH);
+	std::string::size_type posición = std::string(espacio).find_last_of("\\/");
+	
+	return std::string(espacio).substr(0, posición);
+}
+#endif
+
 std::string leeArchivo(std::filesystem::path archivo)
 {
     // Open the stream to 'lock' the file.

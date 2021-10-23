@@ -264,7 +264,6 @@ int Compilador::compila(Compilador::Configuración cfg)
 	std::string archivoDestino = cfg.nombreArchivoDestino + cfg.extensión;
 
 	std::string carpeta = obténCarpetaInstalación() + "/";
-	std::cout << carpeta << std::endl;
 	std::string bibliotecaEstándar = "ñ.lib";
 	std::string lugar_de_inicio = "__lugar_de_inicio";
 

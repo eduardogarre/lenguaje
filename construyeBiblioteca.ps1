@@ -1,4 +1,11 @@
-﻿rm build -Force -Recurse -ErrorAction SilentlyContinue
+﻿#This Source Code Form is subject to the terms of the Mozilla Public License, v.
+#2.0. If a copy of the MPL was not distributed with this file, You can obtain one
+#at http://mozilla.org/MPL/2.0/.
+#
+#This Source Code Form is "Incompatible With Secondary Licenses", as defined by
+#the Mozilla Public License, v. 2.0.
+
+rm build -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
 rm -ErrorAction SilentlyContinue *.o
 

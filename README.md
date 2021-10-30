@@ -10,7 +10,7 @@ El Lenguaje `Ñ` está escrito en `C++` y emplea el sistema de construcción `CM
 
 ### **Instala las dependencias**
 
-En primer lugar, instala un compilador moderno de `C++` y `CMake`. Además, necesitarás las bibliotecas `LLVM` y `docopt.cpp`:
+Para construir el lenguaje Ñ necesitarás las bibliotecas `LLVM` y `docopt.cpp`:
 
 - **LLVM**
 

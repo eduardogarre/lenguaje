@@ -2,19 +2,19 @@
 
 Éste es el repositorio del **Lenguaje Ñ**. Contiene el compilador, la biblioteca estándar y documentación.
 
-Puedes encontrar más información en la página del proyecto, http://lenguajeñ.com.
+Puedes encontrar más información en la página del proyecto: http://lenguajeñ.com.
 
 &nbsp;
 
 # Desarrolladores
 
-La gestión del proyecto y el seguimiento de incidencias se realizan usando `Redmine`. Visita la página aquí: http://redmine.lenguajeñ.com.
+Uso **Redmine** para gestionar el proyecto y seguir las incidencias. Visita la página aquí: http://redmine.lenguajeñ.com.
 
 &nbsp;
 
-# Construye el proyecto
+# Construye el Lenguaje Ñ
 
-El **Lenguaje Ñ** está escrito en `C++` y emplea el sistema de construcción `CMake`. Debes instalar `CMake` y un compilador de `C++` moderno para poder construir tanto las diferentes partes de **Ñ** como sus dependencias. Por último, para obtener el código de los repositorios lo mejor es que instales `git`.
+El **Lenguaje Ñ** está escrito en `C++` y emplea el sistema de construcción [`CMake`](https://cmake.org/). Debes instalar `CMake` y un compilador de `C++` moderno para poder construir tanto las diferentes partes de **Ñ** como sus dependencias. Por último, para obtener el código de los repositorios debes instalar [`git`](https://git-scm.com/).
 
 &nbsp;
 
@@ -22,11 +22,11 @@ El **Lenguaje Ñ** está escrito en `C++` y emplea el sistema de construcción `
 
 ### **Instala las dependencias**
 
-Para construir el **Lenguaje Ñ** necesitarás las bibliotecas `LLVM` y `docopt.cpp`:
+Para construir el **Lenguaje Ñ** necesitarás las bibliotecas [`LLVM`](https://llvm.org/) y [`docopt.cpp`](https://github.com/docopt/docopt.cpp):
 
 - **LLVM**
 
-    En el momento actual, los binarios disponibles de `LLVM` para Windows no incluyen algunos módulos y subproyectos necesarios en **Ñ**, como por ejemplo `lld`. Por tanto, para construir el proyecto necesitarás construir tú mismo `LLVM` a partir de su código fuente. En la página oficial de `LLVM` puedes encontrar las instrucciones necesarias, pero un ejemplo rápido de cómo construir esta biblioteca sería:
+    En el momento actual, los binarios disponibles de **LLVM** para Windows no incluyen algunos módulos y subproyectos necesarios en **Ñ**, como por ejemplo `lld`. Por tanto, para construir el proyecto necesitarás construir tú mismo **LLVM** a partir de su código fuente. En la página oficial de **LLVM** puedes encontrar las instrucciones necesarias, pero un ejemplo rápido de cómo construir esta biblioteca sería:
 
     ```powerhell
     git clone --depth 1 --config core.autocrlf=false https://github.com/llvm/llvm-project.git llvm
@@ -42,7 +42,7 @@ Para construir el **Lenguaje Ñ** necesitarás las bibliotecas `LLVM` y `docopt.
 
 - **docopt.cpp**
 
-    La biblioteca [`docopt.cpp`](https://github.com/docopt/docopt.cpp) está enteramente en inglés. Para disfrutar de una versión traducida al español empleo la bifurcación en [este repositorio](https://github.com/eduardogarre/docopt.cpp), que incluyo como un submódulo para facilitar su inclusión en el **Lenguaje Ñ**.
+    La biblioteca **docopt.cpp** está enteramente en inglés. Para disfrutar de una versión traducida al español empleo la bifurcación en [este repositorio](https://github.com/eduardogarre/docopt.cpp), que incluyo como un submódulo para facilitar su inclusión en el **Lenguaje Ñ**.
 
 &nbsp;
 
@@ -129,7 +129,7 @@ Si observas un resultado similar a éste, enhorabuena, has construido **Ñ** con
 
 # Integración con VS Code
 
-Puedes descargar la extensión para VS Code aquí: https://github.com/eduardogarre/lenguaje_sintaxis_vscode.
+Estamos desarrollando una extensión para VS Code que integra el **Lenguaje Ñ** en **VS Code**. Puedes descargar la extensión en [este repositorio](https://github.com/eduardogarre/lenguaje_sintaxis_vscode).
 
 &nbsp;
 

@@ -36,7 +36,7 @@ Para construir el **Lenguaje Ñ** necesitarás las bibliotecas [`LLVM`](https://
 
 - **docopt.cpp**
 
-    La biblioteca **docopt.cpp** está enteramente en inglés. Para disfrutar de una versión traducida al español empleo la bifurcación en [este repositorio](https://github.com/eduardogarre/docopt.cpp), que incluyo como un submódulo para facilitar su inclusión en el **Lenguaje Ñ**.
+    La biblioteca **docopt.cpp** está enteramente en inglés. Para disfrutar de una versión traducida al español empleo la bifurcación en [este repositorio](https://github.com/Hispanica/docopt.cpp), que incluyo como un submódulo para facilitar su inclusión en el **Lenguaje Ñ**.
 
 &nbsp;
 
@@ -47,7 +47,7 @@ Una vez tengas preparadas todas las dependiencias, clona este repositorio para o
 ```powerhell
 mkdir ñ
 cd ñ
-git clone --recurse-submodules https://github.com/eduardogarre/lenguaje .
+git clone --recurse-submodules https://github.com/Hispanica/lenguaje .
 ```
 
 &nbsp;
@@ -125,7 +125,7 @@ Si observas un resultado similar a éste, enhorabuena, has construido **Ñ** con
 
 # Integración con VS Code
 
-Estamos desarrollando una extensión para VS Code que integra el **Lenguaje Ñ** en **VS Code**. Puedes descargar la extensión en [este repositorio](https://github.com/eduardogarre/lenguaje_sintaxis_vscode).
+Estamos desarrollando una extensión para VS Code que integra el **Lenguaje Ñ** en **VS Code**. Puedes descargar la extensión en [este repositorio](https://github.com/Hispanica/lenguaje_sintaxis_vscode).
 
 &nbsp;
 

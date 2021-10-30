@@ -101,13 +101,15 @@ El repositorio contiene dos proyectos: el compilador y la biblioteca estándar.
 
 ### **Pasa las pruebas**
 
-Para comprobar que el proyecto se ha construido correctamente, usa el compilador `./proyecto/ñ.exe` para constuir el proyecto de prueba que se encuentra en la carpeta `./pruebas`. Para ello, construye el proyecto de pruebas con la siguiente orden:
+Para comprobar que el proyecto se ha construido correctamente, usa el compilador en `./proyecto/ñ.exe` para construir el proyecto de prueba que se encuentra en la carpeta `./pruebas/`. Para ello, construye el proyecto de pruebas con la siguiente orden:
 
 ```powershell
-.\proyecto\ñ.exe .\pruebas\*.ñ -s prueba -O1
+.\proyecto\ñ.exe .\pruebas\*.ñ -s prueba
 ```
 
-Tras ejecutar esa orden correctamente, el compilador `ñ.exe` debería crear un nuevo ejecutable `prueba.exe` en la carpeta actual. Para terminar, ejecuta `prueba.exe` para comprobar su ejecución. Cada prueba que se ejecuta satisfactoriamente debería imprimir un punto y seguido en la consola.
+Esta orden compila todos los archivos `.ñ` en la carpeta `pruebas/`, y como salida crea un archivo ejecutable llamado `prueba.exe`.
+
+Tras ejecutar esa orden correctamente, el compilador `ñ.exe` debería crear un nuevo ejecutable `prueba.exe` en la carpeta actual. Para terminar, ejecuta `prueba.exe` y comprueba su salida. Cada prueba que se ejecute satisfactoriamente debería imprimir un punto y seguido en la consola. Algo parecido a esto:
 
 ```powershell
 PS> .\prueba.exe
@@ -117,7 +119,7 @@ PS> .\prueba.exe
 PS> 
 ```
 
-Si observas un resultado similar a éste, enhorabuena, has construido **Ñ** con éxito.
+Si observas un resultado similar a éste, enhorabuena, has construido **Ñ** con éxito y funciona correctamente.
 
 &nbsp;
 

@@ -14,7 +14,7 @@ Uso **Redmine** para gestionar el proyecto y seguir las incidencias. Visita la p
 
 # Construye el Lenguaje Ñ
 
-El **Lenguaje Ñ** está escrito en `C++` y emplea el sistema de construcción [`CMake`](https://cmake.org/). Debes instalar `CMake` y un compilador de `C++` moderno para poder construir tanto las diferentes partes de **Ñ** como sus dependencias. Por último, para obtener el código de los repositorios debes instalar [`git`](https://git-scm.com/).
+El **Lenguaje Ñ** está escrito en `C++` usando el sistema de construcción [`CMake`](https://cmake.org/). Debes instalar `CMake` y un compilador de `C++` moderno para poder construir tanto las diferentes partes de **Ñ** como sus dependencias. Además, para obtener el código de los repositorios debes instalar [`git`](https://git-scm.com/).
 
 &nbsp;
 

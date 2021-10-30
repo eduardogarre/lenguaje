@@ -1,12 +1,20 @@
 # **Lenguaje Ñ**
 
-Éste es el repositorio del Lenguaje `Ñ`. Contiene el compilador, la biblioteca estándar y documentación.
+Éste es el repositorio del **Lenguaje Ñ**. Contiene el compilador, la biblioteca estándar y documentación.
+
+Puedes encontrar más información en la página del proyecto, http://lenguajeñ.com.
 
 &nbsp;
 
-# Construyendo el proyecto
+# Desarrolladores
 
-El Lenguaje `Ñ` está escrito en `C++` y emplea el sistema de construcción `CMake`. Debes instalar `CMake` y un compilador de `C++` moderno para poder construir tanto las diferentes partes de `Ñ` como sus dependencias. Por último, para obtener el código de los repositorios lo mejor es que instales `git`.
+La gestión del proyecto y el seguimiento de incidencias se realizan usando `Redmine`. Visita la página aquí: http://redmine.lenguajeñ.com.
+
+&nbsp;
+
+# Construye el proyecto
+
+El **Lenguaje Ñ** está escrito en `C++` y emplea el sistema de construcción `CMake`. Debes instalar `CMake` y un compilador de `C++` moderno para poder construir tanto las diferentes partes de **Ñ** como sus dependencias. Por último, para obtener el código de los repositorios lo mejor es que instales `git`.
 
 &nbsp;
 
@@ -14,11 +22,11 @@ El Lenguaje `Ñ` está escrito en `C++` y emplea el sistema de construcción `CM
 
 ### **Instala las dependencias**
 
-Para construir el lenguaje Ñ necesitarás las bibliotecas `LLVM` y `docopt.cpp`:
+Para construir el **Lenguaje Ñ** necesitarás las bibliotecas `LLVM` y `docopt.cpp`:
 
 - **LLVM**
 
-    En el momento actual, los binarios disponibles de `LLVM` para Windows no incluyen algunos módulos y subproyectos necesarios en `Ñ`, como por ejemplo `lld`. Por tanto, para construir el proyecto necesitarás construir tú mismo `LLVM` a partir de su código fuente. En la página oficial de `LLVM` puedes encontrar las instrucciones necesarias, pero un ejemplo rápido de cómo construir esta biblioteca sería:
+    En el momento actual, los binarios disponibles de `LLVM` para Windows no incluyen algunos módulos y subproyectos necesarios en **Ñ**, como por ejemplo `lld`. Por tanto, para construir el proyecto necesitarás construir tú mismo `LLVM` a partir de su código fuente. En la página oficial de `LLVM` puedes encontrar las instrucciones necesarias, pero un ejemplo rápido de cómo construir esta biblioteca sería:
 
     ```powerhell
     git clone --depth 1 --config core.autocrlf=false https://github.com/llvm/llvm-project.git llvm
@@ -34,21 +42,23 @@ Para construir el lenguaje Ñ necesitarás las bibliotecas `LLVM` y `docopt.cpp`
 
 - **docopt.cpp**
 
-    La biblioteca [`docopt.cpp`](https://github.com/docopt/docopt.cpp) está enteramente en inglés. Para disfrutar de una versión traducida al español empleo la bifurcación en [este repositorio](https://github.com/eduardogarre/docopt.cpp), que incluyo como un submódulo para facilitar su inclusión en el proyecto `Ñ`.
+    La biblioteca [`docopt.cpp`](https://github.com/docopt/docopt.cpp) está enteramente en inglés. Para disfrutar de una versión traducida al español empleo la bifurcación en [este repositorio](https://github.com/eduardogarre/docopt.cpp), que incluyo como un submódulo para facilitar su inclusión en el **Lenguaje Ñ**.
 
 &nbsp;
 
 ### **Consigue el código de Ñ**
 
-Una vez tengas preparadas todas las dependiencias, clona este repositorio para obtener el código de `Ñ`, en este caso dentro de la carpeta `./ñ`.
+Una vez tengas preparadas todas las dependiencias, clona este repositorio para obtener el código de **Ñ**, en este caso dentro de una nueva carpeta llamada `./ñ`.
 
 ```powerhell
-git clone --recurse-submodules https://github.com/eduardogarre/lenguaje ñ
+mkdir ñ
+cd ñ
+git clone --recurse-submodules https://github.com/eduardogarre/lenguaje .
 ```
 
 &nbsp;
 
-### **Construye el lenguaje Ñ**
+### **Construye el Lenguaje Ñ**
 
 El repositorio contiene dos proyectos: el compilador y la biblioteca estándar.
 
@@ -107,7 +117,7 @@ PS> .\prueba.exe
 PS> 
 ```
 
-Si observas un resultado similar a éste, enhorabuena, has construido `Ñ` con éxito.
+Si observas un resultado similar a éste, enhorabuena, has construido **Ñ** con éxito.
 
 &nbsp;
 
@@ -117,6 +127,12 @@ Si observas un resultado similar a éste, enhorabuena, has construido `Ñ` con �
 
 &nbsp;
 
+# Integración con VS Code
+
+Puedes descargar la extensión para VS Code aquí: https://github.com/eduardogarre/lenguaje_sintaxis_vscode.
+
+&nbsp;
+
 # Licencia
 
-El Lenguaje `Ñ` se distribuye bajo la licencia [Mozilla Public License 2.0 (no copyleft exception)](https://www.mozilla.org/en-US/MPL/2.0/), con el siguiente código SPDX: [MPL-2.0-no-copyleft-exception](https://spdx.org/licenses/MPL-2.0-no-copyleft-exception.html).
+El **Lenguaje Ñ** se distribuye bajo la licencia [Mozilla Public License 2.0 (no copyleft exception)](https://www.mozilla.org/en-US/MPL/2.0/), con el siguiente código SPDX: [MPL-2.0-no-copyleft-exception](https://spdx.org/licenses/MPL-2.0-no-copyleft-exception.html).

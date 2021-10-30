@@ -2,11 +2,15 @@
 
 Éste es el repositorio del Lenguaje `Ñ`. Contiene el compilador, la biblioteca estándar y documentación.
 
-## **Construyendo el proyecto**
+&nbsp;
+
+# Construyendo el proyecto
 
 El Lenguaje `Ñ` está escrito en `C++` y emplea el sistema de construcción `CMake`. Debes instalar `CMake` y un compilador de `C++` moderno para poder construir tanto las diferentes partes de `Ñ` como sus dependencias. Por último, para obtener el código de los repositorios lo mejor es que instales `git`.
 
-## Windows
+&nbsp;
+
+## **Construyendo en Windows**
 
 ### **Instala las dependencias**
 
@@ -32,13 +36,17 @@ Para construir el lenguaje Ñ necesitarás las bibliotecas `LLVM` y `docopt.cpp`
 
     La biblioteca [`docopt.cpp`](https://github.com/docopt/docopt.cpp) está enteramente en inglés. Para disfrutar de una versión traducida al español empleo la bifurcación en [este repositorio](https://github.com/eduardogarre/docopt.cpp), que incluyo como un submódulo para facilitar su inclusión en el proyecto `Ñ`.
 
-### **Consigue el código**
+&nbsp;
+
+### **Consigue el código de Ñ**
 
 Una vez tengas preparadas todas las dependiencias, clona este repositorio para obtener el código de `Ñ`, en este caso dentro de la carpeta `./ñ`.
 
 ```powerhell
 git clone --recurse-submodules https://github.com/eduardogarre/lenguaje ñ
 ```
+
+&nbsp;
 
 ### **Construye el lenguaje Ñ**
 
@@ -73,9 +81,13 @@ El repositorio contiene dos proyectos: el compilador y la biblioteca estándar.
 
     Estas órdenes generarán una biblioteca `bibñ.lib` dentro de la carpeta `./proyecto`.
 
+&nbsp;
+
 ### **Añade el Lenguaje Ñ a la ruta de archivos ejecutables**
 
-# **PENDIENTE**
+#### &nbsp;&nbsp;PENDIENTE
+
+&nbsp;
 
 ### **Pasa las pruebas**
 
@@ -97,10 +109,14 @@ PS>
 
 Si observas un resultado similar a éste, enhorabuena, has construido `Ñ` con éxito.
 
-## Linux
+&nbsp;
 
-# **PENDIENTE**
+## **Construyendo en Linux**
 
-## **Licencia**
+### &nbsp;&nbsp;PENDIENTE
+
+&nbsp;
+
+# Licencia
 
 El Lenguaje `Ñ` se distribuye bajo la licencia [Mozilla Public License 2.0 (no copyleft exception)](https://www.mozilla.org/en-US/MPL/2.0/), con el siguiente código SPDX: [MPL-2.0-no-copyleft-exception](https://spdx.org/licenses/MPL-2.0-no-copyleft-exception.html).

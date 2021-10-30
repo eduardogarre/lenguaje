@@ -97,6 +97,10 @@ PS>
 
 Si observas un resultado similar a éste, enhorabuena, has construido `Ñ` con éxito.
 
+## Linux
+
+# **PENDIENTE**
+
 ## **Licencia**
 
 El Lenguaje `Ñ` se distribuye bajo la licencia [Mozilla Public License 2.0 (no copyleft exception)](https://www.mozilla.org/en-US/MPL/2.0/), con el siguiente código SPDX: [MPL-2.0-no-copyleft-exception](https://spdx.org/licenses/MPL-2.0-no-copyleft-exception.html).

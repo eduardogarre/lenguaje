@@ -6,12 +6,6 @@ Puedes encontrar más información en la página del proyecto: http://lenguajeñ
 
 &nbsp;
 
-# Desarrolladores
-
-Uso **Redmine** para gestionar el proyecto y seguir las incidencias. Visita la página aquí: http://redmine.lenguajeñ.com.
-
-&nbsp;
-
 # Construye el Lenguaje Ñ
 
 El **Lenguaje Ñ** está escrito en `C++` usando el sistema de construcción [`CMake`](https://cmake.org/). Debes instalar `CMake` y un compilador de `C++` moderno para poder construir tanto las diferentes partes de **Ñ** como sus dependencias. Además, para obtener el código de los repositorios debes instalar [`git`](https://git-scm.com/).

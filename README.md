@@ -101,7 +101,7 @@ Para comprobar que el proyecto se ha construido correctamente, usa el compilador
 .\proyecto\ñ.exe .\pruebas\*.ñ -s prueba
 ```
 
-Esta orden compila todos los archivos `.ñ` en la carpeta `pruebas/`, y como salida crea un archivo ejecutable llamado `prueba.exe`.
+Esta orden compila todos los archivos `.ñ` presentes en la carpeta `pruebas/`, y como salida crea un archivo ejecutable llamado `prueba.exe`.
 
 Tras ejecutar esa orden correctamente, el compilador `ñ.exe` debería crear un nuevo ejecutable `prueba.exe` en la carpeta actual. Para terminar, ejecuta `prueba.exe` y comprueba su salida. Cada prueba que se ejecute satisfactoriamente debería imprimir un punto y seguido en la consola. Algo parecido a esto:
 

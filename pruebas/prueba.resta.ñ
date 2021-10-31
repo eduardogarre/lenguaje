@@ -183,6 +183,30 @@ público nada prueba_resta()
         escribe(correcto);
     }
 
+    ent16_a = 1;
+    ent16_b = -2;
+    ent16_c = 3;
+
+    // Cierto
+    si (ent16_c == ent16_a - ent16_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent16_a == ent16_a - ent16_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
     ////// ENT32 //////
 
     ent32 ent32_a = 3;
@@ -209,11 +233,59 @@ público nada prueba_resta()
         escribe(correcto);
     }
 
+    ent32_a = 1;
+    ent32_b = -2;
+    ent32_c = 3;
+
+    // Cierto
+    si (ent32_c == ent32_a - ent32_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent32_a == ent32_a - ent32_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
     ////// ENT64 //////
 
     ent64 ent64_a = 3;
     ent64 ent64_b = 2;
     ent64 ent64_c = 1;
+
+    // Cierto
+    si (ent64_c == ent64_a - ent64_b)
+    {
+        escribe(correcto);
+    }
+    sino
+    {
+        escribe(error);
+    }
+
+    // Falso
+    si (ent64_a == ent64_a - ent64_c)
+    {
+        escribe(error);
+    }
+    sino
+    {
+        escribe(correcto);
+    }
+
+    ent64_a = 1;
+    ent64_b = -2;
+    ent64_c = 3;
 
     // Cierto
     si (ent64_c == ent64_a - ent64_b)

@@ -510,26 +510,31 @@ Copyright © 2021 Eduardo Garre Muñoz
             }
             else if(op->operación == "-")
             {
+                Ñ::Tipo* tipoDestino;
+
                 switch (tipo->tipo)
                 {
                 case Ñ::CategoríaTipo::TIPO_NATURAL_8:
-                    tipo->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_16;
+                    tipoDestino = creaTipoBásico(Ñ::CategoríaTipo::TIPO_ENTERO_16);
+                    _insertaConversión(nodo, 0, tipo, tipoDestino);
                     resultado.éxito();
-                    resultado.nodo((Ñ::Nodo*)tipo);
+                    resultado.nodo((Ñ::Nodo*)tipoDestino);
                     return resultado;
                     break;
 
                 case Ñ::CategoríaTipo::TIPO_NATURAL_16:
-                    tipo->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_32;
+                    tipoDestino = creaTipoBásico(Ñ::CategoríaTipo::TIPO_ENTERO_32);
+                    _insertaConversión(nodo, 0, tipo, tipoDestino);
                     resultado.éxito();
-                    resultado.nodo((Ñ::Nodo*)tipo);
+                    resultado.nodo((Ñ::Nodo*)tipoDestino);
                     return resultado;
                     break;
 
                 case Ñ::CategoríaTipo::TIPO_NATURAL_32:
-                    tipo->tipo = Ñ::CategoríaTipo::TIPO_ENTERO_64;
+                    tipoDestino = creaTipoBásico(Ñ::CategoríaTipo::TIPO_ENTERO_64);
+                    _insertaConversión(nodo, 0, tipo, tipoDestino);
                     resultado.éxito();
-                    resultado.nodo((Ñ::Nodo*)tipo);
+                    resultado.nodo((Ñ::Nodo*)tipoDestino);
                     return resultado;
                     break;
 

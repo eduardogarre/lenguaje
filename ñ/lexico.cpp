@@ -139,6 +139,11 @@ namespace Ñ
                         carácter = siguienteCarácter(txt);
                     } while(!esnuevalínea(carácter));
                     
+                    if(esnuevalínea(carácter))
+                    {
+                        incrementaCursor(txt);
+                    }
+                    
                     return resultado;
                 }
             }

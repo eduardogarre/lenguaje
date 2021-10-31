@@ -2372,11 +2372,55 @@ namespace Ñ
         {
             Ñ::ResultadoLlvm resultado;
             Ñ::OperaciónUnaria* op = (Ñ::OperaciónUnaria*)nodo;
+            if(nodo->ramas.size() < 1)
+            {
+                resultado.error("Operación unaria mal construida.");
+                resultado.posición(nodo->posición());
+                return resultado;
+            }
             Ñ::Nodo* hijo = nodo->ramas[0];
             llvm::Value* valor;
             llvm::Value* valorFinal;
             
-            if(op->operación == "@")
+            if(op->operación == "-")
+            {
+                if(hijo == nullptr)
+                {
+                    resultado.error("No puedo negar el valor.");
+                    resultado.posición(nodo->posición());
+                    return resultado;
+                }
+
+                Ñ::ResultadoLlvm rValor = construyeLDA(hijo);
+                if(rValor.error())
+                {
+                    return rValor;
+                }
+
+                valor = rValor.valor();
+
+                if(valor == nullptr)
+                {
+                    resultado.error("No puedo negar el valor.");
+                    resultado.posición(nodo->posición());
+                    return resultado;
+                }
+
+                auto valorCero = llvm::ConstantInt::get(valor->getType(), 0, false);
+                valorFinal = entorno->constructorLlvm.CreateSub(valorCero, valor, "negativiza");
+
+                if(valorFinal == nullptr)
+                {
+                    resultado.error("Error al intentar negar el valor.");
+                    resultado.posición(nodo->posición());
+                    return resultado;
+                }
+                
+                resultado.éxito();
+                resultado.valor(valorFinal);
+                return resultado;
+            }
+            else if(op->operación == "@")
             {
                 if(hijo == nullptr)
                 {

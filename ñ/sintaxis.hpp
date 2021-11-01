@@ -17,6 +17,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include "lexema.hpp"
 #include "nodo.hpp"
+#include "posicion.hpp"
+#include "resultado.hpp"
 
 namespace Ñ
 {
@@ -28,9 +30,14 @@ namespace Ñ
 #else
     private:
 #endif
+        Ñ::Posición últimaPosición;
+        std::string mensajeError;
+        bool éxito = true;
+
         uint32_t cursor;
         std::vector<Ñ::Lexema*> lexemas;
 
+        void apuntaError(Ñ::Posición p, std::string error);
         bool notación(std::string carácter);
         bool reservada(std::string palabra);
         Ñ::Nodo* literal();
@@ -64,7 +71,7 @@ namespace Ñ
         Ñ::Nodo* módulo(std::string nombre);
 
     public:
-        Ñ::Nodo* analiza(std::vector<Ñ::Lexema*> _lexemas, std::string nombreArchivo);
-        Ñ::Nodo* analizaComando(std::vector<Ñ::Lexema*> _lexemas);
+        Ñ::Resultado analiza(std::vector<Ñ::Lexema*> _lexemas, std::string nombreArchivo);
+        Ñ::Resultado analizaComando(std::vector<Ñ::Lexema*> _lexemas);
     };
 }

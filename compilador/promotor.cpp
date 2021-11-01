@@ -41,7 +41,7 @@ std::string creaNombreMódulo(std::string archivo)
 
 Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
 {
-	Ñ::ResultadoLlvm resultado;
+	Ñ::ResultadoLlvm resultadoLlvm;
 
 	std::string código = "";
 
@@ -57,12 +57,13 @@ std::string creaNombreMódulo(std::string archivo)
 	}
 	catch (std::exception& e)
 	{
-		resultado.error("No puedo abrir el archivo.");
-		return resultado;
+		resultadoLlvm.error("No puedo abrir el archivo.");
+		return resultadoLlvm;
 	}
 
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
+	Ñ::Resultado resultado;
 
 	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
@@ -101,14 +102,9 @@ std::string creaNombreMódulo(std::string archivo)
 		std::cout << "ANALIZANDO SINTAXIS" << std::endl;
 	}
 
-	nodos = sintaxis.analiza(lexemas, nombreMódulo);
-	
-	if(entorno->HABLADOR)
-	{
-		muestraNodos(nodos);
-	}
+	resultado = sintaxis.analiza(lexemas, nombreMódulo);
 
-	if(nodos == nullptr)
+	if(resultado.error())
 	{
 		for(auto l : lexemas)
 		{
@@ -116,8 +112,15 @@ std::string creaNombreMódulo(std::string archivo)
 		}
 		lexemas.clear();
 
-		resultado.error("Error durante el análisis sintáctico, código incorrecto.");
-		return resultado;
+		resultadoLlvm.error(resultado.mensaje());
+		return resultadoLlvm;
+	}
+
+	nodos = resultado.nodo();
+	
+	if(entorno->HABLADOR)
+	{
+		muestraNodos(nodos);
 	}
 	
 	if(entorno->HABLADOR)
@@ -144,9 +147,9 @@ std::string creaNombreMódulo(std::string archivo)
 		lexemas.clear();
 		delete nodos;
 		
-		resultado.error(rSemántico.mensaje());
-		resultado.posición(rSemántico.posición());
-		return resultado;
+		resultadoLlvm.error(rSemántico.mensaje());
+		resultadoLlvm.posición(rSemántico.posición());
+		return resultadoLlvm;
 	}
 	
 	if(entorno->HABLADOR)
@@ -154,7 +157,7 @@ std::string creaNombreMódulo(std::string archivo)
 		std::cout << "CONSTRUYENDO MODULO" << std::endl;
 	}
 
-	resultado = Ñ::construye(nodos, entorno);
+	resultadoLlvm = Ñ::construye(nodos, entorno);
 
 	for(auto l : lexemas)
 	{
@@ -163,13 +166,13 @@ std::string creaNombreMódulo(std::string archivo)
 	lexemas.clear();
 	delete nodos;
 
-	if(resultado.error())
+	if(resultadoLlvm.error())
 	{
-		return resultado;
+		return resultadoLlvm;
 	}
 
-	resultado.éxito();
-	return resultado;
+	resultadoLlvm.éxito();
+	return resultadoLlvm;
 }
 
 int Compilador::compila(Compilador::Configuración cfg)

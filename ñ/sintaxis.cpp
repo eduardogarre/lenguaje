@@ -1660,16 +1660,50 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas, std::string nombreArchivo)
+Ñ::Resultado Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas, std::string nombreArchivo)
 {
+	Ñ::Resultado resultado;
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)módulo(nombreArchivo);
+	auto rNodo = (Ñ::Nodo*)módulo(nombreArchivo);
+	
+	if(éxito && rNodo)
+	{
+		resultado.éxito();
+		resultado.nodo(rNodo);
+		return resultado;
+	}
+	else
+	{
+		if(rNodo)
+		{
+			delete rNodo;
+		}
+		resultado.error(mensajeError);
+		return resultado;
+	}
 }
 
-Ñ::Nodo* Ñ::Sintaxis::analizaComando(std::vector<Ñ::Lexema*> _lexemas)
+Ñ::Resultado Ñ::Sintaxis::analizaComando(std::vector<Ñ::Lexema*> _lexemas)
 {
+	Ñ::Resultado resultado;
 	cursor = 0;
 	lexemas = _lexemas;
-	return (Ñ::Nodo*)expresión();
+	auto rNodo = (Ñ::Nodo*)expresión();
+	
+	if(éxito && rNodo)
+	{
+		resultado.éxito();
+		resultado.nodo(rNodo);
+		return resultado;
+	}
+	else
+	{
+		if(rNodo)
+		{
+			delete rNodo;
+		}
+		resultado.error(mensajeError);
+		return resultado;
+	}
 }

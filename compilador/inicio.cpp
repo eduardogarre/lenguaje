@@ -45,6 +45,7 @@ std::string _esperaComando()
 void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 {
 	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
+	Ñ::Resultado resultado;
 
 	std::vector<Ñ::Lexema*> lexemas;
 	Ñ::Nodo* nodos;
@@ -60,14 +61,15 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 		return;
 	}
 
-	nodos = sintaxis.analizaComando(lexemas);
+	resultado = sintaxis.analizaComando(lexemas);
 
-	if(nodos == nullptr)
+	if(resultado.error())
 	{
-		Ñ::errorConsola(u8"Error durante el análisis sintáctico, comando incorrecto.");
+		Ñ::errorConsola(resultado.mensaje());
 		muestraLexemas(lexemas);
 		return;
 	}
+	nodos = resultado.nodo();
 
 	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 

@@ -77,6 +77,18 @@ namespace Ñ
         return c;
     }
 
+    bool Léxico::esfindelarchivo(Ñ::Posición* p)
+    {
+        if(longitudarchivo > p->cursor() + 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     bool Léxico::comentario(std::string txt)
     {
         try {
@@ -137,7 +149,7 @@ namespace Ñ
                     do {
                         incrementaCursor(txt);
                         carácter = siguienteCarácter(txt);
-                    } while(!esnuevalínea(carácter));
+                    } while(!esnuevalínea(carácter) && !esfindelarchivo(posición));
                     
                     if(esnuevalínea(carácter))
                     {
@@ -1024,6 +1036,7 @@ namespace Ñ
             //std::cout << "_analizaLéxico(" << código << ")" << std::endl;
 
             std::string cmd = código + " ";
+            longitudarchivo = cmd.size();
 
             while(posición->cursor() <= cmd.length())
             {

@@ -1,0 +1,38 @@
+/*
+SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
+
+This Source Code Form is subject to the terms of the Mozilla Public License, v.
+2.0. If a copy of the MPL was not distributed with this file, You can obtain one
+at http://mozilla.org/MPL/2.0/.
+
+This Source Code Form is "Incompatible With Secondary Licenses", as defined by
+the Mozilla Public License, v. 2.0.
+
+Copyright © 2021 Eduardo Garre Muñoz
+*/
+
+// ES
+/*comentario*/externo /*comentario*/ ent /*comentario*/ escribeln/*comentario*/(/*comentario*/nat8 /*comentario*/* /*comentario*/ _texto/*comentario*/)/*comentario*/; /*comentario*/
+
+/*comentario*/público /*comentario*/ nada /*comentario*/ prueba_comentarios/*comentario*/(/*comentario*/)/*comentario*/
+/*comentario*/{/*comentario*/
+    /*comentario*/nat8 /*comentario*/[/*comentario*/] /*comentario*/correcto/*comentario*/ = /*comentario*/"."/*comentario*/;/*comentario*/
+    /*comentario*/nat8 /*comentario*/[/*comentario*/] /*comentario*/error /*comentario*/= /*comentario*/"\nERROR bucle mientras\n"/*comentario*/;/*comentario*/
+/*comentario*/
+    /*comentario*/ent /*comentario*/e /*comentario*/=/*comentario*/ 288/*comentario*/;/*comentario*/
+/*comentario*/
+    /*comentario*/si /*comentario*/(/*comentario*/e /*comentario*/==/*comentario*/ 288/*comentario*/)/*comentario*/
+    /*comentario*/{/*comentario*/
+        /*comentario*/escribeln/*comentario*/(/*comentario*/correcto/*comentario*/)/*comentario*/;/*comentario*/
+    /*comentario*/}/*comentario*/
+    /*comentario*/sino/*comentario*/
+    /*comentario*/{/*comentario*/
+        /*comentario*/escribeln/*comentario*/(/*comentario*/error/*comentario*/)/*comentario*/;/*comentario*/
+    /*comentario*/}/*comentario*/
+/*comentario*/
+    /*comentario*/vuelve/*comentario*/ /*comentario*/;/*comentario*/
+/*comentario*/} /*comentario*/
+
+// comentario /*comentario*/
+
+//Última línea es un comentario

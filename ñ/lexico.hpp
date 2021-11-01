@@ -34,10 +34,12 @@ namespace Ñ
 #else
     private:
 #endif
+        uint32_t longitudarchivo = 0;
         Posición* posición;
         
         std::vector<Ñ::Lexema*> lexemas;
 
+        bool esfindelarchivo(Posición* p);
         void incrementaCursor(std::string txt);
         std::string siguienteCarácter(std::string txt);
         bool comentario(std::string txt);

@@ -113,6 +113,7 @@ std::string creaNombreMódulo(std::string archivo)
 		lexemas.clear();
 
 		resultadoLlvm.error(resultado.mensaje());
+		resultadoLlvm.posición(resultado.posición());
 		return resultadoLlvm;
 	}
 

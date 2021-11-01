@@ -25,6 +25,17 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "tipo.hpp"
 #include "valor.hpp"
 
+void Ñ::Sintaxis::apuntaError(Ñ::Posición* p, std::string error)
+{
+	if((!últimaPosición) || (p->cursor() > últimaPosición->cursor()))
+	{
+		delete últimaPosición;
+		últimaPosición = new Ñ::Posición;
+		*últimaPosición = *p;
+		mensajeError = error;
+	}
+}
+
 bool Ñ::Sintaxis::notación(std::string carácter)
 {
 	uint32_t c = cursor;
@@ -157,6 +168,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				else
 				{
 					delete l;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba un valor que añadir al vector.");
 					cursor = c;
 					return nullptr;
 				}
@@ -172,6 +184,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(!notación("]"))
 			{
 				delete l;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ']' al final del vector.");
 				cursor = c;
 				return nullptr;
 			}
@@ -180,6 +193,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un valor literal.");
 	cursor = c;
 	return nullptr;
 }
@@ -204,6 +218,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un LIA (lado izquierdo de la asignación).");
 	cursor = c;
 	return nullptr;
 }
@@ -219,6 +234,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return cmp;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un LDA (lado derecho de la asignación).");
 	cursor = c;
 	return nullptr;
 }
@@ -331,6 +347,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				else
 				{
 					delete cmp;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba un 'término' a la derecha de la operación '" + operación + "'.");
 					cursor = cN;
 					return nullptr;
 				}
@@ -347,6 +364,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una 'comparación'.");
 	cursor = c;
 	return nullptr;
 }
@@ -399,6 +417,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				else
 				{
 					delete t;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba un 'factor' a la derecha de la operación '" + operación + "'.");
 					cursor = cN;
 					return nullptr;
 				}
@@ -415,6 +434,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un 'término'.");
 	cursor = c;
 	return nullptr;
 }
@@ -471,6 +491,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				else
 				{
 					delete f;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba una 'operación unaria' a la derecha de la operación '" + operación + "'.");
 					cursor = cN;
 					return nullptr;
 				}
@@ -487,6 +508,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un 'factor'.");
 	cursor = c;
 	return nullptr;
 }
@@ -512,6 +534,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				{
 					delete lda;
 					delete prim;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba ']'.");
 					cursor = c;
 					return nullptr;
 				}
@@ -523,7 +546,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nev;
 			}
 		}
-	}	
+	}
+
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un 'elemento vector'.");
 	cursor = c;
 	return nullptr;
 }
@@ -592,6 +617,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una 'operación unaria'.");
 	cursor = c;
 	return nullptr;
 }
@@ -621,11 +647,13 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				else
 				{
 					delete lda;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
 					cursor = c;
 					return nullptr;
 				}
 			}
 
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un LDA (lado derecho de la asignación).");
 			cursor = c;
 			return nullptr;
 		}
@@ -639,11 +667,13 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un 'primario'.");
 			cursor = c;
 			return nullptr;
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un 'primario'.");
 	cursor = c;
 	return nullptr;
 }
@@ -666,6 +696,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un 'identificador'.");
 	cursor = c;
 	return nullptr;
 }
@@ -691,6 +722,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un '*'.");
 	cursor = c;
 	return nullptr;
 }
@@ -741,12 +773,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			}
 			else
 			{
+				apuntaError(lexemas[cursor]->posición(), "Esperaba un tipo válido.");
 				cursor = c;
 				return nullptr;
 			}
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un tipo.");
 			cursor = c;
 			return nullptr;
 		}
@@ -800,6 +834,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return (Ñ::Nodo*)t;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un tipo.");
 	cursor = c;
 	return nullptr;
 }
@@ -819,6 +854,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un tipo.");
 			cursor = c;
 			return nullptr;
 		}
@@ -826,6 +862,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		if(cursor >= lexemas.size())
 		{
 			delete t;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un identificador, pero he llegado al final del archivo.");
 			cursor = c;
 			return nullptr;
 		}
@@ -837,6 +874,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		else
 		{
 			delete t;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un identificador.");
 			cursor = c;
 			return nullptr;
 		}
@@ -850,6 +888,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return ((Ñ::Nodo*)dvar);
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una declaración de variable.");
 	cursor = c;
 	return nullptr;
 }
@@ -869,6 +908,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				if(notación("=")) // "=="
 				{
 					delete lia;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba una asignación '=' pero has escrito una comparación '=='.");
 					cursor = c;
 					return nullptr;
 				}
@@ -887,6 +927,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una asignación.");
 	cursor = c;
 	return nullptr;
 }
@@ -900,6 +941,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return Ñ::Sintaxis::declaraVariable();
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una declaración de un argumento.");
 	cursor = c;
 	return nullptr;
 }
@@ -935,6 +977,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return (Ñ::Nodo*)args;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba declaraciones de argumentos.");
 	cursor = c;
 	return nullptr;
 }
@@ -948,6 +991,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return ladoDerechoAsignación();
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba que pusieras un argumento.");
 	cursor = c;
 	return nullptr;
 }
@@ -981,6 +1025,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return (Ñ::Nodo*)args;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba que pusieras argumentos.");
 	cursor = c;
 	return nullptr;
 }
@@ -1004,12 +1049,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba el identificador de la función a la que quieres llamar.");
 			cursor = c;
 			return nullptr;
 		}
 
 		if(!notación("("))
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1022,6 +1069,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			{
 				delete args;
 			}
+			apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1032,6 +1080,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return (Ñ::Nodo*)fn;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una llamada a una función.");
 	cursor = c;
 	return nullptr;
 }
@@ -1053,6 +1102,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba 'vuelve'.");
 	cursor = c;
 	return nullptr;
 }
@@ -1080,6 +1130,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba 'devuelve'.");
 	cursor = c;
 	return nullptr;
 }
@@ -1101,6 +1152,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba 'para'.");
 	cursor = c;
 	return nullptr;
 }
@@ -1117,12 +1169,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(!reservada("si"))
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba 'si'.");
 			cursor = c;
 			return nullptr;
 		}
 
 		if(!notación("("))
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1132,6 +1186,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(!notación(")"))
 			{
 				delete lda;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
 				cursor = c;
 				return nullptr;
 			}
@@ -1145,12 +1200,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete lda;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba un bloque de código condicional del 'si()'.");
 				cursor = c;
 				return nullptr;
 			}
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba una expresión de comparación válida para el 'si()'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1167,6 +1224,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				else
 				{
 					delete sc;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba un bloque de código condicional del 'sino si()'.");
 					cursor = c;
 					return nullptr;
 				}
@@ -1175,6 +1233,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(!notación("("))
 			{
 				delete sc;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
 				cursor = c;
 				return nullptr;
 			}
@@ -1185,6 +1244,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				{
 					delete lda;
 					delete sc;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
 					cursor = c;
 					return nullptr;
 				}
@@ -1198,6 +1258,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				{
 					delete lda;
 					delete sc;
+					apuntaError(lexemas[cursor]->posición(), "Esperaba un bloque de código.");
 					cursor = c;
 					return nullptr;
 				}
@@ -1205,6 +1266,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete sc;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba una expresión de comparación válida para el 'si()'.");
 				cursor = c;
 				return nullptr;
 			}
@@ -1213,6 +1275,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return (Ñ::Nodo*)sc;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un si() condicional.");
 	cursor = c;
 	return nullptr;
 }
@@ -1229,12 +1292,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(!reservada("mientras"))
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba 'mientras'.");
 			cursor = c;
 			return nullptr;
 		}
 
 		if(!notación("("))
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1244,6 +1309,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(!notación(")"))
 			{
 				delete lda;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
 				cursor = c;
 				return nullptr;
 			}
@@ -1257,12 +1323,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete lda;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba el bloque para el bucle 'mientras()'.");
 				cursor = c;
 				return nullptr;
 			}
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba una expresión de comparación válida.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1270,6 +1338,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return (Ñ::Nodo*)bm;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un bucle 'mientras()'.");
 	cursor = c;
 	return nullptr;
 }
@@ -1291,6 +1360,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete as;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
 			}
 		}
 		
@@ -1305,6 +1375,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete fn;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
 			}
 		}
 		
@@ -1319,6 +1390,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete dv;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
 			}
 		}
 		
@@ -1333,6 +1405,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete v;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
 			}
 		}
 		
@@ -1347,6 +1420,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete dv;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
 			}
 		}
 		
@@ -1361,6 +1435,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete pa;
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
 			}
 		}
 		
@@ -1379,6 +1454,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una expresión.");
 	cursor = c;
 	return nullptr;
 }
@@ -1392,6 +1468,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		Posición* pblq = lexemas[cursor]->posición();
 		if(!notación("{"))
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba '{'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1409,12 +1486,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba '}'.");
 			delete b;
 			cursor = c;
 			return nullptr;
 		}
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un bloque de código.");
 	cursor = c;
 	return nullptr;
 }
@@ -1450,6 +1529,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un tipo.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1463,12 +1543,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		else
 		{
 			delete t;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un identificador.");
 			cursor = c;
 			return nullptr;
 		}
 
 		if(!notación("("))
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1477,6 +1559,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(!notación(")"))
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1488,6 +1571,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		else
 		{
 			delete t;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un bloque de código.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1502,6 +1586,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return (Ñ::Nodo*)dfn;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una definición de función.");
 	cursor = c;
 	return nullptr;
 }
@@ -1529,6 +1614,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 		else
 		{
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un tipo.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1542,6 +1628,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		else
 		{
 			delete t;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un identificador.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1549,6 +1636,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		if(!notación("("))
 		{
 			delete t;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1558,6 +1646,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		if(!notación(")"))
 		{
 			delete t;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1565,6 +1654,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		if(!notación(";"))
 		{
 			delete t;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1572,6 +1662,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		if(Ñ::Nodo* bq = bloque())
 		{
 			delete t, bq;
+			apuntaError(lexemas[cursor]->posición(), "Esperaba un bloque.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1585,6 +1676,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return (Ñ::Nodo*)dcfn;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Esperaba una declaración de función.");
 	cursor = c;
 	return nullptr;
 }
@@ -1621,6 +1713,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			}
 			else
 			{
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ';' al final de la declaración del módulo.");
 				cursor = c;
 				return nullptr;
 			}
@@ -1656,6 +1749,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		return m;
 	}
 
+	apuntaError(lexemas[cursor]->posición(), "Error general en la sintaxis del módulo.");
 	cursor = c;
 	return nullptr;
 }
@@ -1666,6 +1760,12 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	cursor = 0;
 	lexemas = _lexemas;
 	auto rNodo = (Ñ::Nodo*)módulo(nombreArchivo);
+
+	// Compruebo que el cursor ha llegado al penúltimo lexema
+	if(cursor == _lexemas.size() - 1)
+	{
+		éxito = true;
+	}
 	
 	if(éxito && rNodo)
 	{
@@ -1680,6 +1780,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			delete rNodo;
 		}
 		resultado.error(mensajeError);
+		resultado.posición(últimaPosición);
 		return resultado;
 	}
 }
@@ -1704,6 +1805,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			delete rNodo;
 		}
 		resultado.error(mensajeError);
+		resultado.posición(últimaPosición);
 		return resultado;
 	}
 }

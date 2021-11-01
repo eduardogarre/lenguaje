@@ -30,14 +30,15 @@ namespace Ñ
 #else
     private:
 #endif
-        Ñ::Posición últimaPosición;
+        Ñ::Posición* últimaPosición = nullptr;
         std::string mensajeError;
-        bool éxito = true;
+        bool éxito = false;
 
         uint32_t cursor;
         std::vector<Ñ::Lexema*> lexemas;
 
-        void apuntaError(Ñ::Posición p, std::string error);
+        void apuntaError(Ñ::Posición* p, std::string error);
+
         bool notación(std::string carácter);
         bool reservada(std::string palabra);
         Ñ::Nodo* literal();

@@ -13,9 +13,4 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-#include "txt.h"
-
-int escribetxt(txt texto);
-int escribe(char* _texto);
-int escribeln(char* _texto);
-int escribenum(int _num);
+char* entatxt(long long int _num);

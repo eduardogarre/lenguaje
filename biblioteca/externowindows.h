@@ -21,6 +21,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 #define HEAP_GENERATE_EXCEPTIONS    4
 #define HEAP_ZERO_MEMORY            8
 
+extern __declspec(dllimport) unsigned long __stdcall GetCurrentProcessId();
+
 extern void* __stdcall GetProcessHeap();
 
 extern void* __stdcall GetStdHandle(

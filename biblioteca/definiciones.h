@@ -13,9 +13,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-#include "txt.h"
+#define ALEATORIO_MAX 0x7fff
 
-int escribetxt(txt texto);
-int escribe(char* _texto);
-int escribeln(char* _texto);
-int escribenum(int _num);
+#define NULO 0

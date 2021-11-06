@@ -11,6 +11,7 @@ the Mozilla Public License, v. 2.0.
 Copyright © 2021 Eduardo Garre Muñoz
 */
 
+#include "definiciones.h"
 #include "txt.h"
 
 txt creaTxt (const char* caracteres) {

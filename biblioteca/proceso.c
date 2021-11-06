@@ -11,7 +11,8 @@ the Mozilla Public License, v. 2.0.
 Copyright © 2021 Eduardo Garre Muñoz
 */
 
-extern __declspec(dllimport) unsigned long __stdcall GetCurrentProcessId();
+#include "definiciones.h"
+#include "externowindows.h"
 
 int idprocesoactual()
 {

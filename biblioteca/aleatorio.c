@@ -11,7 +11,8 @@ the Mozilla Public License, v. 2.0.
 Copyright © 2021 Eduardo Garre Muñoz
 */
 
-#define ALEATORIO_MAX 0x7fff
+#include "definiciones.h"
+#include "aleatorio.h"
 
 int estado_pseudoaleatorio = 0;
 

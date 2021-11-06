@@ -13,6 +13,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 extern int inicia();
 
+#include "definiciones.h"
 #include "es.h"
 
 extern int holamundo()

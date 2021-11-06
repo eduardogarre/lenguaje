@@ -11,9 +11,10 @@ the Mozilla Public License, v. 2.0.
 Copyright © 2021 Eduardo Garre Muñoz
 */
 
-#include "txt.h"
-
+#include "definiciones.h"
 #include "externowindows.h"
+#include "conv.h"
+#include "txt.h"
 
 extern int escribetxt(txt texto)
 {
@@ -56,4 +57,10 @@ extern int escribeln(char* texto)
     WriteConsoleA(GetStdHandle(ASA_COMUN_SALIDA), (const void*) nuevalinea, longitudln, &escritoln, 0);
 
     return escritotxt + escritoln;
+}
+
+extern int escribenum(int _num)
+{
+    char* texto = entatxt(_num);
+    return escribe(texto);
 }

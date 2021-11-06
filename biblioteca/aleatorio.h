@@ -13,8 +13,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-#define ALEATORIO_MAX 0x7fff
-
 // Siembra el generador de números aleatorios con un entero
 void saleatorio(unsigned int const semilla);
 

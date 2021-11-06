@@ -11,8 +11,8 @@ the Mozilla Public License, v. 2.0.
 Copyright © 2021 Eduardo Garre Muñoz
 */
 
+#include "definiciones.h"
 #include "mem.h"
-
 #include "externowindows.h"
 
 void* reserva(unsigned long long _num)

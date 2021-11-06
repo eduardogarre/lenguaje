@@ -13,35 +13,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include "txt.h"
 
-#define ASA_COMUN_ENTRADA    ((unsigned long)-10)
-#define ASA_COMUN_SALIDA     ((unsigned long)-11)
-#define ASA_COMUN_ERROR      ((unsigned long)-12)
-
-extern __declspec(dllimport) int __stdcall WriteConsoleW(
-    void* asaDeSalida,
-    const void* almacen,
-    unsigned long posicionesPorEscribir,
-    unsigned long* posicionesEscritas,
-    void* reservado
-    );
-
-extern __declspec(dllimport) int __stdcall WriteConsoleA(
-    void* asaDeSalida,
-    const void* almacen,
-    unsigned long posicionesPorEscribir,
-    unsigned long* posicionesEscritas,
-    void* reservado
-    );
-
-extern __declspec(dllimport) int __stdcall WriteConsoleA(
-    void* asaDeSalida,
-    const void* almacen,
-    unsigned long posicionesPorEscribir,
-    unsigned long* posicionesEscritas,
-    void* reservado
-    );
-
-extern void* __stdcall GetStdHandle( unsigned long asaComún );
+#include "externowindows.h"
 
 extern int escribetxt(txt texto)
 {

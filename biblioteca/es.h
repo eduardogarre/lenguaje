@@ -18,4 +18,9 @@ Copyright © 2021 Eduardo Garre Muñoz
 int escribetxt(txt texto);
 int escribe(char* _texto);
 int escribeln(char* _texto);
-int escribenum(int _num);
+int escribeletra(char _letra);
+int escribeletraln(char _letra);
+int escribenat(unsigned int _num);
+int escribenatln(unsigned int _num);
+int escribeent(int _num);
+int escribeentln(int _num);

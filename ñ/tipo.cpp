@@ -257,6 +257,7 @@ void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
 			break;
 		}
 	
+	case TIPO_PUNTERO:
 	case TIPO_NATURAL_64:
 		switch (t2->tipo)
 		{
@@ -265,6 +266,7 @@ void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
 		case TIPO_NATURAL_16:
 		case TIPO_NATURAL_32:
 		case TIPO_NATURAL_64:
+		case TIPO_PUNTERO:
 			tmc->tipo = TIPO_NATURAL_64;
 			return tmc;
 			break;
@@ -354,7 +356,6 @@ void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
 			break;
 		}
 	
-	case TIPO_PUNTERO:
 	case TIPO_ENTERO_64:
 		switch (t2->tipo)
 		{
@@ -366,7 +367,6 @@ void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
 		case TIPO_ENTERO_16:
 		case TIPO_ENTERO_32:
 		case TIPO_ENTERO_64:
-		case TIPO_PUNTERO:
 			tmc->tipo = TIPO_ENTERO_64;
 			return tmc;
 			break;
@@ -419,12 +419,37 @@ void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
 		}
 
 	case TIPO_VECTOR:
+		switch (t2->tipo)
 		{
-			tmc->tamaño(t2->tamaño());
-			Ñ::Tipo* subtipo = obténTipoMínimoComún(t1->subtipo(), t2->subtipo());
-			tmc->ramas.push_back((Ñ::Nodo*)subtipo);
+		case TIPO_VECTOR:
+			{
+				tmc->tamaño(t2->tamaño());
+				Ñ::Tipo* subtipo = obténTipoMínimoComún(t1->subtipo(), t2->subtipo());
+				tmc->ramas.push_back((Ñ::Nodo*)subtipo);
+			}
+			break;
+
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
+		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
+		case TIPO_PUNTERO:
+			{
+				tmc->tipo = TIPO_PUNTERO;
+				Ñ::Tipo* subtipo = (Ñ::Tipo*) duplicaÁrbol(t1->subtipo());
+				tmc->ramas.push_back((Ñ::Nodo*)subtipo);
+				return tmc;
+			}
+			break;
+
+		default:
+			break;
 		}
-		break;
 	
 	default:
 		break;
@@ -881,6 +906,7 @@ bool Ñ::tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda)
 		case TIPO_NATURAL_16:
 		case TIPO_NATURAL_32:
 		case TIPO_NATURAL_64:
+		case TIPO_PUNTERO:
 			return true;
 			break;
 		
@@ -962,9 +988,17 @@ bool Ñ::tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda)
 	case TIPO_PUNTERO:
 		switch (lda->tipo)
 		{
-		case TIPO_VECTOR:
+		case TIPO_BOOLEANO:
+		case TIPO_ENTERO_8:
+		case TIPO_ENTERO_16:
+		case TIPO_ENTERO_32:
 		case TIPO_ENTERO_64:
+		case TIPO_NATURAL_8:
+		case TIPO_NATURAL_16:
+		case TIPO_NATURAL_32:
+		case TIPO_NATURAL_64:
 		case TIPO_PUNTERO:
+		case TIPO_VECTOR:
 			return true;
 			break;
 		

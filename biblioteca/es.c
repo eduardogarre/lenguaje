@@ -59,8 +59,42 @@ extern int escribeln(char* texto)
     return escritotxt + escritoln;
 }
 
-extern int escribenum(int _num)
+extern int escribeletra(char _letra)
+{
+    char texto[2];
+    texto[0] = _letra;
+    texto[1] = '\0';
+    return escribe(texto);
+}
+
+extern int escribeletraln(char _letra)
+{
+    char texto[2];
+    texto[0] = _letra;
+    texto[1] = '\0';
+    return escribeln(texto);
+}
+
+extern int escribenat(unsigned int _num)
 {
     char* texto = entatxt(_num);
     return escribe(texto);
+}
+
+extern int escribenatln(unsigned int _num)
+{
+    char* texto = entatxt(_num);
+    return escribeln(texto);
+}
+
+extern int escribeent(int _num)
+{
+    char* texto = entatxt(_num);
+    return escribe(texto);
+}
+
+extern int escribeentln(int _num)
+{
+    char* texto = entatxt(_num);
+    return escribeln(texto);
 }

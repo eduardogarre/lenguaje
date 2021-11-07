@@ -584,6 +584,12 @@ Copyright © 2021 Eduardo Garre Muñoz
                     resultado.nodo(tipo->subtipo());
                     return resultado;
                 }
+                else if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                {
+                    resultado.éxito();
+                    resultado.nodo(tipo->subtipo());
+                    return resultado;
+                }
                 else
                 {
                     resultado.error("No sé leer el contenido en esta dirección.");

@@ -1600,7 +1600,14 @@ namespace Ñ
             case TIPO_NATURAL_16:
             case TIPO_NATURAL_32:
             case TIPO_NATURAL_64:
-                valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, false);
+                if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
+                {
+                    valorFinal = entorno->constructorLlvm.CreatePointerCast(valor, tDestinoLlvm);
+                }
+                else
+                {
+                    valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, false);
+                }
                 break;
             
             case TIPO_ENTERO_8:
@@ -1758,14 +1765,17 @@ namespace Ñ
 
             Ñ::ConvierteTipos* conv = (Ñ::ConvierteTipos*)nodo;
 
-            if(esPuntero(conv->destino))
-            {
-                resultado = construyeLIA(nodo->ramas[0]);
-            }
-            else
-            {
-                resultado = construyeLDA(nodo->ramas[0]);
-            }
+            resultado = construyeLDA(nodo->ramas[0]);
+
+            //if(esPuntero(conv->destino))
+            //{
+            //    resultado = construyeLIA(nodo->ramas[0]);
+            //}
+            //else
+            //{
+            //    resultado = construyeLDA(nodo->ramas[0]);
+            //}
+
             if(resultado.error())
             {
                 return resultado;

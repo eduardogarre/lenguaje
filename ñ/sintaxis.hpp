@@ -47,7 +47,7 @@ namespace Ñ
         Ñ::Nodo* puntero();
         Ñ::Nodo* primario();
         Ñ::Nodo* operaciónUnaria();
-        Ñ::Nodo* elementoVector();
+        Ñ::Nodo* elementoSerie();
         Ñ::Nodo* factor();
         Ñ::Nodo* término();
         Ñ::Nodo* comparación();

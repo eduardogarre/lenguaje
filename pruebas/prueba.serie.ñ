@@ -21,10 +21,10 @@ externo ent escribeln(nat8* _texto);
 // Proceso
 externo ent idprocesoactual();
 
-público nada prueba_vector()
+público nada prueba_serie()
 {
     nat8[] correcto = ".";
-    nat8[] error = "\nERROR vector\n";
+    nat8[] error = "\nERROR serie\n";
 
     ////// NAT8 //////
     nat8[]      nat8v0 = [0, 1];

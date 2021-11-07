@@ -584,7 +584,7 @@ Copyright © 2021 Eduardo Garre Muñoz
                     resultado.nodo(tipo->subtipo());
                     return resultado;
                 }
-                else if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                else if(tipo->tipo == Ñ::CategoríaTipo::TIPO_SERIE)
                 {
                     resultado.éxito();
                     resultado.nodo(tipo->subtipo());
@@ -946,19 +946,19 @@ Copyright © 2021 Eduardo Garre Muñoz
             return resultado;
         }
     }
-    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR)
+    else if(nodo->categoría == Ñ::CategoríaNodo::NODO_ELEMENTO_SERIE)
     {
         if(nodo->ramas.size() != 2)
         {
-            resultado.error("El nodo de acceso al elemento de un vector debe tener 2 hijos.");
+            resultado.error("El nodo de acceso al elemento de una serie debe tener 2 hijos.");
             resultado.posición(nodo->posición());
             return resultado;
         }
         
-        Ñ::Resultado rVector = _analizaLDA(nodo->ramas[0], tablaSímbolos);
-        if(rVector.error())
+        Ñ::Resultado rSerie = _analizaLDA(nodo->ramas[0], tablaSímbolos);
+        if(rSerie.error())
         {
-            return rVector;
+            return rSerie;
         }
 
         Ñ::Resultado rPosición = _analizaLDA(nodo->ramas[1], tablaSímbolos);
@@ -967,41 +967,41 @@ Copyright © 2021 Eduardo Garre Muñoz
             return rPosición;
         }
         
-        //Comprobar que el tipo leído es un vector
-        Ñ::Nodo* vector = rVector.nodo();
-        if(vector == nullptr)
+        //Comprobar que el tipo leído es una serie
+        Ñ::Nodo* serie = rSerie.nodo();
+        if(serie == nullptr)
         {
             resultado.error("Esperaba recibir un nodo.");
             return resultado;
         }
 
-        if(vector->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+        if(serie->categoría != Ñ::CategoríaNodo::NODO_TIPO)
         {
             resultado.error("Esperaba recibir un tipo.");
-            resultado.posición(vector->posición());
+            resultado.posición(serie->posición());
             return resultado;
         }
 
-        if(((Ñ::Tipo*)vector)->tipo != Ñ::CategoríaTipo::TIPO_VECTOR)
+        if(((Ñ::Tipo*)serie)->tipo != Ñ::CategoríaTipo::TIPO_SERIE)
         {
-            resultado.error("Esperaba que el tipo fuera un vector.");
-            resultado.posición(vector->posición());
+            resultado.error("Esperaba que el tipo fuera una serie.");
+            resultado.posición(serie->posición());
             return resultado;
         }
         
-        //Comprobar que la posición no excede el límite del vector
+        //Comprobar que la posición no excede el límite de la serie
         // PENDIENTE
 
         //Devolver el tipo del componente al que accedemos
-        if(vector->ramas.size() < 1)
+        if(serie->ramas.size() < 1)
         {
-            resultado.error("El vector no contiene subtipo.");
-            resultado.posición(vector->posición());
+            resultado.error("La serie no contiene subtipo.");
+            resultado.posición(serie->posición());
             return resultado;
         }
 
         resultado.éxito();
-        resultado.nodo(vector->ramas[0]);
+        resultado.nodo(serie->ramas[0]);
         return resultado;
     }
     else if(nodo->categoría == Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
@@ -1073,14 +1073,14 @@ Copyright © 2021 Eduardo Garre Muñoz
         Ñ::Tipo* lda = (Ñ::Tipo*)(rTipoLDA.nodo());
 
         if(    nodo->ramas[0]->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE
-                &&  esVector((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))
+                &&  esSerie((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))
                 &&  ((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))->tamaño() == 0
                 //&&  sonÁrbolesDuplicados(nodo->ramas[0]->ramas[0]->ramas[0], lda->ramas[0])
                 &&  tiposAsignables((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]->ramas[0]), (Ñ::Tipo*)(lda->ramas[0]))
                 )
         {
             //std::cout << "Defino tamaño aprovechando la definición" << std::endl;
-            // nat[] mi_vector = [1, 2, 3];
+            // nat[] mi_serie = [1, 2, 3];
             ((Ñ::Tipo*)(nodo->ramas[0]->ramas[0]))->tamaño(lda->tamaño());
         }
 

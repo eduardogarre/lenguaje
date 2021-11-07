@@ -360,15 +360,15 @@ bool Ñ::Valor::esPuntero()
 	return tipo == Ñ::CategoríaTipo::TIPO_PUNTERO;
 }
 
-void Ñ::Valor::vector(uint64_t tamaño)
+void Ñ::Valor::serie(uint64_t tamaño)
 {
-	tipo = Ñ::CategoríaTipo::TIPO_VECTOR;
-	dato.vector = tamaño;
+	tipo = Ñ::CategoríaTipo::TIPO_SERIE;
+	dato.serie = tamaño;
 }
 
-bool Ñ::Valor::esVector()
+bool Ñ::Valor::esSerie()
 {
-	return tipo == Ñ::CategoríaTipo::TIPO_VECTOR;
+	return tipo == Ñ::CategoríaTipo::TIPO_SERIE;
 }
 
 
@@ -1606,7 +1606,7 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 		return valor;
 		break;
 
-	case Ñ::CategoríaTipo::TIPO_VECTOR:
+	case Ñ::CategoríaTipo::TIPO_SERIE:
 		{
 			Ñ::Tipo* subtmc = nullptr;
 
@@ -1629,7 +1629,7 @@ bool Ñ::comparaValores(Ñ::Valor* valor1, Ñ::Valor* valor2)
 				valor->ramas.push_back((Ñ::Nodo*)subvalor);
 			}
 
-			valor->vector(valor->ramas.size());
+			valor->serie(valor->ramas.size());
 			return valor;
 		}
 		break;

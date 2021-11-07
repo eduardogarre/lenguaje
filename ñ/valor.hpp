@@ -41,7 +41,7 @@ namespace Ñ
             float       real32;
             double      real64;
             int64_t     puntero;
-            uint64_t    vector;
+            uint64_t    serie;
         } dato;
 
         std::string _texto;
@@ -88,8 +88,8 @@ namespace Ñ
         void        real64(double real64);
         bool        esReal64();
         
-        void        vector(uint64_t tamaño);
-        bool        esVector();
+        void        serie(uint64_t tamaño);
+        bool        esSerie();
 
         bool booleano();
         void booleano(bool booleano);

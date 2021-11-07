@@ -422,17 +422,17 @@ void Ñ::OperaciónUnaria::muestra(TablaSímbolos* tablaSímbolos)
 	}
 }
 
-Ñ::ElementoVector::ElementoVector(Posición* posición) : Ñ::Nodo(posición)
+Ñ::ElementoSerie::ElementoSerie(Posición* posición) : Ñ::Nodo(posición)
 {
-	categoría = Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR;
+	categoría = Ñ::CategoríaNodo::NODO_ELEMENTO_SERIE;
 }
 
-Ñ::ElementoVector::~ElementoVector() {}
+Ñ::ElementoSerie::~ElementoSerie() {}
 
-void Ñ::ElementoVector::muestra(TablaSímbolos* tablaSímbolos)
+void Ñ::ElementoSerie::muestra(TablaSímbolos* tablaSímbolos)
 {
 	imprimeAjuste();
-	std::cout << u8"(NODO_ELEMENTO_VECTOR) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
+	std::cout << u8"(NODO_ELEMENTO_SERIE) - [hijos:" + std::to_string(ramas.size()) + "]" << posición()->muestra() << std::endl;
 	for(auto rama : ramas)
 	{
 		muestraNodos(rama, tablaSímbolos);

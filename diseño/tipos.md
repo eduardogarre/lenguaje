@@ -27,7 +27,7 @@
 `TIPO_COMPUESTO`
 
 - Puntero
-- Vector
+- Serie
 - Estructura
 - Clase
 - Unión
@@ -61,9 +61,9 @@ Puntero a Booleano
 - `(Tipo) tipo=TIPO_PUNTERO`
   - `(Tipo)0 tipo=TIPO_BOOLEANO`
 
-Vector de 4 enteros de 32 bits
+Serie de 4 enteros de 32 bits
 
-- `(Tipo) tipo=TIPO_VECTOR`
+- `(Tipo) tipo=TIPO_SERIE`
   - `(Tipo)0 tipo=TIPO_ENTERO_32`
   - `(Tipo)1 tipo=TIPO_ENTERO_32`
   - `(Tipo)2 tipo=TIPO_ENTERO_32`
@@ -89,10 +89,10 @@ Unión de booleano, natural de 16 y real de 64
   - `(Tipo)1 tipo=TIPO_NATURAL_16`
   - `(Tipo)2 tipo=TIPO_REAL_64`
 
-Puntero a vector de 3 naturales de 16 bits
+Puntero a serie de 3 naturales de 16 bits
 
 - `(Tipo) tipo=TIPO_PUNTERO`
-  - `(Tipo)0 tipo=TIPO_VECTOR`
+  - `(Tipo)0 tipo=TIPO_SERIE`
     - `(Tipo)00 tipo=TIPO_NATURAL_16`
     - `(Tipo)01 tipo=TIPO_NATURAL_16`
     - `(Tipo)02 tipo=TIPO_NATURAL_16`

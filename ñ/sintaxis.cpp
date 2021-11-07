@@ -128,7 +128,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_TEXTO)
 	{
 		l = new Ñ::Literal(lexemas[cursor]->posición());
-		l->tipo = Ñ::CategoríaTipo::TIPO_VECTOR;
+		l->tipo = Ñ::CategoríaTipo::TIPO_SERIE;
 		l->dato = lexemas[cursor]->contenido;
 
 		const char* texto = l->dato.c_str();
@@ -168,7 +168,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				else
 				{
 					delete l;
-					apuntaError(lexemas[cursor]->posición(), "Esperaba un valor que añadir al vector.");
+					apuntaError(lexemas[cursor]->posición(), "Esperaba un valor que añadir a la serie.");
 					cursor = c;
 					return nullptr;
 				}
@@ -179,12 +179,12 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				}
 			}
 			
-			l->tipo = Ñ::CategoríaTipo::TIPO_VECTOR;
+			l->tipo = Ñ::CategoríaTipo::TIPO_SERIE;
 
 			if(!notación("]"))
 			{
 				delete l;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ']' al final del vector.");
+				apuntaError(lexemas[cursor]->posición(), "Esperaba ']' al final de la serie.");
 				cursor = c;
 				return nullptr;
 			}
@@ -513,7 +513,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::elementoVector()
+Ñ::Nodo* Ñ::Sintaxis::elementoSerie()
 {
 	uint32_t c = cursor;
 
@@ -539,7 +539,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					return nullptr;
 				}
 
-				Ñ::ElementoVector* ev = new Ñ::ElementoVector(prim->posición());
+				Ñ::ElementoSerie* ev = new Ñ::ElementoSerie(prim->posición());
 				Ñ::Nodo* nev = (Ñ::Nodo*)ev;
 				nev->ramas.push_back(prim);
 				nev->ramas.push_back(lda);
@@ -548,7 +548,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 	}
 
-	apuntaError(lexemas[cursor]->posición(), "Esperaba un 'elemento vector'.");
+	apuntaError(lexemas[cursor]->posición(), "Esperaba un 'elemento serie'.");
 	cursor = c;
 	return nullptr;
 }
@@ -611,7 +611,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return (Ñ::Nodo*)op;
 			}
 		}
-		else if(Ñ::Nodo* ev = elementoVector())
+		else if(Ñ::Nodo* ev = elementoSerie())
 		{
 			return ev;
 		}
@@ -817,7 +817,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			{
 				Ñ::Tipo* subT = t;
 				t = new Ñ::Tipo(ptp);
-				t->tipo = CategoríaTipo::TIPO_VECTOR;
+				t->tipo = CategoríaTipo::TIPO_SERIE;
 				t->tamaño(tamaño);
 				t->ramas.push_back((Ñ::Nodo*)subT);
 			}

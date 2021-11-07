@@ -28,7 +28,7 @@ externo nada prueba_resta();
 externo nada prueba_multiplicación();
 externo nada prueba_división();
 externo nada prueba_resto();
-externo nada prueba_vector();
+externo nada prueba_serie();
 externo nada prueba_función();
 externo nada prueba_si_condicional();
 externo nada prueba_bucle_mientras();
@@ -41,7 +41,7 @@ público ent inicia()
     prueba_multiplicación();
     prueba_división();
     prueba_resto();
-    prueba_vector();
+    prueba_serie();
     prueba_función();
     prueba_si_condicional();
     prueba_bucle_mientras();

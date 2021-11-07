@@ -202,7 +202,7 @@ namespace Ñ
                 return llvm::Type::getDoubleTy(entorno->contextoLlvm);
                 break;
             
-            case TIPO_VECTOR:
+            case TIPO_SERIE:
                 {
                     Ñ::Nodo* nodo = (Ñ::Nodo*)tipo;
                     uint32_t tamaño = tipo->tamaño();
@@ -1286,8 +1286,8 @@ namespace Ñ
                 resultado = construyeOperaciónFactor(nodo);
                 break;
 
-            case Ñ::CategoríaNodo::NODO_ELEMENTO_VECTOR:
-                resultado = construyeLeeElementoVector(nodo);
+            case Ñ::CategoríaNodo::NODO_ELEMENTO_SERIE:
+                resultado = construyeLeeElementoSerie(nodo);
                 break;
 
             case Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN:
@@ -1657,20 +1657,20 @@ namespace Ñ
                 }
                 break;
 
-            case TIPO_VECTOR:
+            case TIPO_SERIE:
                 if(valor->getType()->isVectorTy())
                 {
-                    llvm::Type* tipVectorInicial = valor->getType();
-                    llvm::Type* tipElementoInicial = tipVectorInicial->getScalarType();
-                    llvm::Type* tipVectorDestino = creaTipoLlvm(tipoDestino);
-                    llvm::Type* tipElementoDestino = tipVectorDestino->getScalarType();
-                    uint64_t tamañoVector = tipoInicial->tamaño();
+                    llvm::Type* tipSerieInicial = valor->getType();
+                    llvm::Type* tipElementoInicial = tipSerieInicial->getScalarType();
+                    llvm::Type* tipSerieDestino = creaTipoLlvm(tipoDestino);
+                    llvm::Type* tipElementoDestino = tipSerieDestino->getScalarType();
+                    uint64_t tamañoSerie = tipoInicial->tamaño();
 
-                    llvm::Value *vectorVacío = llvm::UndefValue::get(tipVectorDestino);
-                    valorFinal = vectorVacío;
+                    llvm::Value *serieVacía = llvm::UndefValue::get(tipSerieDestino);
+                    valorFinal = serieVacía;
                     entorno->constructorLlvm.Insert(valorFinal);
 
-                    for(int i = 0; i < tamañoVector; i++)
+                    for(int i = 0; i < tamañoSerie; i++)
                     {
                         llvm::Constant* índice = llvm::Constant::getIntegerValue(tipElementoInicial, llvm::APInt(64, i));
                         llvm::Value* valElemento = llvm::ExtractElementInst::Create(valor, índice);
@@ -1691,7 +1691,7 @@ namespace Ñ
                 break;
 
             case TIPO_PUNTERO:
-                if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+                if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_SERIE)
                 {
                     //if(!(valor->getType()->isVectorTy()))
                     //{
@@ -1984,9 +1984,9 @@ namespace Ñ
                 resultado.valor(llvm::ConstantFP::get(tipoLlvm, real64));
                 break;
             
-            case Ñ::CategoríaTipo::TIPO_VECTOR:
+            case Ñ::CategoríaTipo::TIPO_SERIE:
                 {
-                    //std::cout << "construyeLiteral(TIPO_VECTOR)" << std::endl;
+                    //std::cout << "construyeLiteral(TIPO_SERIE)" << std::endl;
 
                     tipoLlvm = creaTipoLlvm(tipo);
                     if(tipoLlvm == nullptr)
@@ -1995,14 +1995,14 @@ namespace Ñ
                         resultado.posición(tipo->posición());
                         return resultado;
                     }
-                    llvm::Value *vectorVacío = llvm::UndefValue::get(tipoLlvm);
-                    llvm::Value* vectorFinal = vectorVacío;
+                    llvm::Value *serieVacía = llvm::UndefValue::get(tipoLlvm);
+                    llvm::Value* serieFinal = serieVacía;
                     int64_t índice = 0;
                     for(Ñ::Nodo* subnodo : literal->ramas)
                     {
-                        //std::cout << "construyeLiteral(TIPO_VECTOR) subtipo" << índice << std::endl;
+                        //std::cout << "construyeLiteral(TIPO_SERIE) subtipo" << índice << std::endl;
 
-                        //std::cout << "construyeLiteral(TIPO_VECTOR) extraigo subvalor de subnodo" << índice << std::endl;
+                        //std::cout << "construyeLiteral(TIPO_SERIE) extraigo subvalor de subnodo" << índice << std::endl;
 
                         //llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getScalarType(), llvm::APInt(64, índice));
                         ResultadoLlvm rSubvalor = construyeLiteral(subnodo);
@@ -2012,24 +2012,24 @@ namespace Ñ
                         }
                         llvm::Value* subvalor = rSubvalor.valor();
 
-                        //std::cout << "construyeLiteral(TIPO_VECTOR) inserto subvalor en vector" << índice << std::endl;
+                        //std::cout << "construyeLiteral(TIPO_SERIE) inserto subvalor en serie" << índice << std::endl;
 
-                        llvm::Value* nuevoVectorFinal = entorno->constructorLlvm.CreateInsertElement(vectorFinal, subvalor, índice);
+                        llvm::Value* nuevaSerieFinal = entorno->constructorLlvm.CreateInsertElement(serieFinal, subvalor, índice);
 
-                        //llvm::Value* nuevoVectorFinal = llvm::InsertElementInst::Create(vectorFinal, subvalor, índiceLlvm);
-                        vectorFinal = nuevoVectorFinal;
+                        //llvm::Value* nuevaSerieFinal = llvm::InsertElementInst::Create(serieFinal, subvalor, índiceLlvm);
+                        serieFinal = nuevaSerieFinal;
                         
-                        //std::cout << "construyeLiteral(TIPO_VECTOR) añado la instrucción al constructor" << índice << std::endl;
+                        //std::cout << "construyeLiteral(TIPO_SERIE) añado la instrucción al constructor" << índice << std::endl;
 
-                        //entorno->constructorLlvm.Insert(vectorFinal);
+                        //entorno->constructorLlvm.Insert(serieFinal);
                         
                         índice++;
                     }
                     
-                    //std::cout << "construyeLiteral(TIPO_VECTOR) éxito"<< std::endl;
+                    //std::cout << "construyeLiteral(TIPO_SERIE) éxito"<< std::endl;
 
                     resultado.éxito();
-                    resultado.valor(vectorFinal);
+                    resultado.valor(serieFinal);
                 }
                 break;
             
@@ -2495,7 +2495,7 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeLeeElementoVector(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeLeeElementoSerie(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
             llvm::Value* vec;

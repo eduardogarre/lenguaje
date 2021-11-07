@@ -41,9 +41,9 @@ Puntero a Booleano
 - `(Literal) cadena:"" tipo=TIPO_PUNTERO`
   - `(Literal)0 cadena:"" tipo=TIPO_BOOLEANO`
 
-Vector de 4 enteros de 32 bits
+Serie de 4 enteros de 32 bits
 
-- `(Literal) cadena:"" tipo=TIPO_VECTOR`
+- `(Literal) cadena:"" tipo=TIPO_SERIE`
   - `(Literal)0 cadena:"DATO" tipo=TIPO_ENTERO_32`
   - `(Literal)1 cadena:"DATO" tipo=TIPO_ENTERO_32`
   - `(Literal)2 cadena:"DATO" tipo=TIPO_ENTERO_32`
@@ -69,10 +69,10 @@ Unión de booleano, natural de 16 y real de 64
   - `(Literal)1 cadena:"" tipo=TIPO_NATURAL_16`
   - `(Literal)2 cadena:"" tipo=TIPO_REAL_64`
 
-Puntero a vector de 3 naturales de 16 bits
+Puntero a serie de 3 naturales de 16 bits
 
 - `(Literal) cadena:"" tipo=TIPO_PUNTERO`
-  - `(Literal)0 cadena:"" tipo=TIPO_VECTOR`
+  - `(Literal)0 cadena:"" tipo=TIPO_SERIE`
     - `(Literal)00 cadena:"DATO" tipo=TIPO_NATURAL_16`
     - `(Literal)01 cadena:"DATO" tipo=TIPO_NATURAL_16`
     - `(Literal)02 cadena:"DATO" tipo=TIPO_NATURAL_16`

@@ -61,9 +61,9 @@ bool Ñ::esReal(Ñ::Tipo* tipo)
 	}
 }
 
-bool Ñ::esVector(Ñ::Tipo* tipo)
+bool Ñ::esSerie(Ñ::Tipo* tipo)
 {
-	return tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR;
+	return tipo->tipo == Ñ::CategoríaTipo::TIPO_SERIE;
 }
 
 bool Ñ::esPuntero(Ñ::Tipo* tipo)
@@ -418,10 +418,10 @@ void Ñ::Tipo::tamaño(uint64_t nuevotamaño)
 			break;
 		}
 
-	case TIPO_VECTOR:
+	case TIPO_SERIE:
 		switch (t2->tipo)
 		{
-		case TIPO_VECTOR:
+		case TIPO_SERIE:
 			{
 				tmc->tamaño(t2->tamaño());
 				Ñ::Tipo* subtipo = obténTipoMínimoComún(t1->subtipo(), t2->subtipo());
@@ -588,7 +588,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 	{
 		nombre = "txt";
 	}
-	else if(t->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+	else if(t->tipo == Ñ::CategoríaTipo::TIPO_SERIE)
 	{
 		Ñ::Nodo* n = (Ñ::Nodo*)t;
 		uint64_t tamaño = n->ramas.size();
@@ -622,7 +622,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 	Ñ::Tipo* tipo = new Ñ::Tipo(literal->posición());
 	tipo->tipo = literal->tipo;
 
-	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_SERIE)
 	{
 		uint64_t tamaño = literal->ramas.size();
 
@@ -669,7 +669,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 	Ñ::Tipo* tipo = new Ñ::Tipo(valor->posición());
 	tipo->tipo = valor->tipo;
 
-	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_VECTOR)
+	if(tipo->tipo == Ñ::CategoríaTipo::TIPO_SERIE)
 	{
 		uint64_t tamaño = valor->ramas.size();
 		
@@ -774,7 +774,7 @@ std::string Ñ::obténNombreDeTipo(Ñ::Tipo* t)
 	}
 	else if(nombre == "[]")
 	{
-		return Ñ::CategoríaTipo::TIPO_VECTOR;
+		return Ñ::CategoríaTipo::TIPO_SERIE;
 	}
 	else // nombre == "nada" y resto de combinaciones
 	{
@@ -998,7 +998,7 @@ bool Ñ::tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda)
 		case TIPO_NATURAL_32:
 		case TIPO_NATURAL_64:
 		case TIPO_PUNTERO:
-		case TIPO_VECTOR:
+		case TIPO_SERIE:
 			return true;
 			break;
 		
@@ -1053,10 +1053,10 @@ bool Ñ::tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda)
 		}
 		break;
 
-	case TIPO_VECTOR:
+	case TIPO_SERIE:
 		switch (lda->tipo)
 		{
-		case TIPO_VECTOR:
+		case TIPO_SERIE:
 			if(lia->ramas.size() == lda->ramas.size())
 			{
 				for(int i = 0; i < lia->ramas.size(); i++)

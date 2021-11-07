@@ -41,9 +41,9 @@ Puntero a Booleano
 - `(Valor) unión:DATO tipo=TIPO_PUNTERO`
   - `(Valor)0 unión:0 tipo=TIPO_BOOLEANO`
 
-Vector de 4 enteros de 32 bits
+Serie de 4 enteros de 32 bits
 
-- `(Valor) unión:0 tipo=TIPO_VECTOR`
+- `(Valor) unión:0 tipo=TIPO_SERIE`
   - `(Valor)0 unión:DATO tipo=TIPO_ENTERO_32`
   - `(Valor)1 unión:DATO tipo=TIPO_ENTERO_32`
   - `(Valor)2 unión:DATO tipo=TIPO_ENTERO_32`
@@ -69,10 +69,10 @@ Unión de booleano, natural de 16 y real de 64
   - `(Valor)1 unión:0 tipo=TIPO_NATURAL_16`
   - `(Valor)2 unión:0 tipo=TIPO_REAL_64`
 
-Puntero a vector de 3 naturales de 16 bits
+Puntero a serie de 3 naturales de 16 bits
 
 - `(Valor) unión:DATO tipo=TIPO_PUNTERO`
-  - `(Valor)0 unión:0 tipo=TIPO_VECTOR`
+  - `(Valor)0 unión:0 tipo=TIPO_SERIE`
     - `(Valor)00 unión:DATO tipo=TIPO_NATURAL_16`
     - `(Valor)01 unión:DATO tipo=TIPO_NATURAL_16`
     - `(Valor)02 unión:DATO tipo=TIPO_NATURAL_16`

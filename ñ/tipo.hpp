@@ -45,7 +45,7 @@ namespace Ñ
 
         TIPO_FUNCIÓN,
 
-        TIPO_VECTOR
+        TIPO_SERIE
     };
     
     class Tipo : public Nodo
@@ -81,5 +81,5 @@ namespace Ñ
     bool esNatural(Ñ::Tipo* tipo);
     bool esPuntero(Ñ::Tipo* tipo);
     bool esReal(Ñ::Tipo* tipo);
-    bool esVector(Ñ::Tipo* tipo);
+    bool esSerie(Ñ::Tipo* tipo);
 }

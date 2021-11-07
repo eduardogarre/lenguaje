@@ -45,7 +45,7 @@ namespace Ñ
         NODO_FACTOR,
         NODO_OP_BINARIA,
         NODO_OP_UNARIA,
-        NODO_ELEMENTO_VECTOR,
+        NODO_ELEMENTO_SERIE,
         NODO_PRIMARIO,
 
         NODO_DECLARA_VARIABLE,
@@ -203,11 +203,11 @@ namespace Ñ
         void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };
 
-    class ElementoVector : public Nodo
+    class ElementoSerie : public Nodo
     {
     public:
-        ElementoVector(Posición* posición = nullptr);
-        ~ElementoVector();
+        ElementoSerie(Posición* posición = nullptr);
+        ~ElementoSerie();
 
         void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
     };

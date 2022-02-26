@@ -33,7 +33,7 @@ rm obra -Force -Recurse -ErrorAction SilentlyContinue
 $crono.Stop()
 
 echo [33m
-echo "Milisegundos empleados:" $crono.Elapsed.TotalMilliseconds
+echo "Segundos empleados:" $crono.Elapsed.TotalSeconds
 echo [0m
 
 ./prueba.ps1

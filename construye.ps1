@@ -32,11 +32,13 @@ rm obra -Force -Recurse -ErrorAction SilentlyContinue
 
 $crono.Stop()
 
-echo [33m
-echo "Segundos empleados:" $crono.Elapsed.TotalSeconds
-echo [0m
-
 ./prueba.ps1
+
+$tConstrucción = $crono.Elapsed.TotalSeconds
+
+echo [33m
+echo "Duración de la construcción: $tConstrucción segundos"
+echo [0m
 
 #echo ""
 #echo ""

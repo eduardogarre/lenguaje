@@ -212,7 +212,7 @@ namespace Ñ
                     {
                         return nullptr;
                     }
-                    return llvm::VectorType::get(subtipollvm, tamaño, false);
+                    return llvm::ArrayType::get(subtipollvm, tamaño);
                 }
                 break;
             
@@ -1658,7 +1658,7 @@ namespace Ñ
                 break;
 
             case TIPO_SERIE:
-                if(valor->getType()->isVectorTy())
+                if(valor->getType()->isArrayTy())
                 {
                     llvm::Type* tipSerieInicial = valor->getType();
                     llvm::Type* tipElementoInicial = tipSerieInicial->getScalarType();
@@ -1693,23 +1693,23 @@ namespace Ñ
             case TIPO_PUNTERO:
                 if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_SERIE)
                 {
-                    //if(!(valor->getType()->isVectorTy()))
+                    //if(!(valor->getType()->isArrayTy()))
                     //{
                     //    return nullptr;
                     //}
 
                     llvm::Type* tipoEnt64 = llvm::IntegerType::getInt64Ty(entorno->contextoLlvm);
                     auto cero = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0, false));
-                    llvm::Constant* índicePrimerElemento = llvm::ConstantInt::get(tipoEnt64, 0, false);
+                    llvm::Constant* idc0 = llvm::ConstantInt::get(tipoEnt64, 0, false);
                     llvm::Type* tipoInicialLlvm = creaTipoLlvm(tipoInicial);
                     llvm::Type* tipoDestinoLlvm = creaTipoLlvm(tipoDestino);
                     llvm::Type* subtipoInicialLlvm = creaTipoLlvm(tipoInicial->subtipo());
                     llvm::Type* subtipoDestinoLlvm = creaTipoLlvm(tipoDestino->subtipo());
                     if( tipoEnt64 == nullptr ||
-                        índicePrimerElemento == nullptr ||
+                        idc0 == nullptr ||
                         tipoInicialLlvm == nullptr ||
                         subtipoInicialLlvm == nullptr ||
-                        !(tipoInicialLlvm->isVectorTy()) ||
+                        !(tipoInicialLlvm->isArrayTy()) ||
                         tipoDestinoLlvm == nullptr ||
                         subtipoDestinoLlvm == nullptr ||
                         subtipoDestinoLlvm != subtipoInicialLlvm ||
@@ -1718,11 +1718,11 @@ namespace Ñ
                     {
                         return nullptr;
                     }
-                    //valorFinal = entorno->constructorLlvm.CreateGEP(tipoInicialLlvm, valor, índicePrimerElemento);
-                    //valorFinal = entorno->constructorLlvm.CreateGEP(valor, {cero, índicePrimerElemento});
-                    valorFinal = entorno->constructorLlvm.CreateBitCast(valor, tipoDestinoLlvm);
-                    //valorFinal = llvm::GetElementPtrInst::Create(tipoDestinoLlvm, valor, { cero, índicePrimerElemento });
-                    //valorFinal = llvm::GetElementPtrInst::Create(subtipoInicialLlvm, valor, { cero, índicePrimerElemento }, "", entorno->constructorLlvm.GetInsertBlock());
+                    valorFinal = entorno->constructorLlvm.CreateGEP(tipoInicialLlvm->getScalarType(), valor, {idc0, idc0});
+                    //valorFinal = entorno->constructorLlvm.CreateGEP(valor, {cero, idc0});
+                    //valorFinal = entorno->constructorLlvm.CreateBitCast(valor, tipoDestinoLlvm);
+                    //valorFinal = llvm::GetElementPtrInst::Create(tipoDestinoLlvm, valor, { cero, idc0 });
+                    //valorFinal = llvm::GetElementPtrInst::Create(subtipoInicialLlvm, valor, { cero, idc0 }, "", entorno->constructorLlvm.GetInsertBlock());
                     //entorno->constructorLlvm.Insert(valorFinal);
                 }
                 else
@@ -1765,16 +1765,14 @@ namespace Ñ
 
             Ñ::ConvierteTipos* conv = (Ñ::ConvierteTipos*)nodo;
 
-            resultado = construyeLDA(nodo->ramas[0]);
-
-            //if(esPuntero(conv->destino))
-            //{
-            //    resultado = construyeLIA(nodo->ramas[0]);
-            //}
-            //else
-            //{
-            //    resultado = construyeLDA(nodo->ramas[0]);
-            //}
+            if(esPuntero(conv->destino))
+            {
+                resultado = construyeLIA(nodo->ramas[0]);
+            }
+            else
+            {
+                resultado = construyeLDA(nodo->ramas[0]);
+            }
 
             if(resultado.error())
             {
@@ -1782,14 +1780,12 @@ namespace Ñ
             }
 
             llvm::Value* valorPrevio = resultado.valor();
-            Ñ::Tipo* tOrigen = conv->origen;
-            Ñ::Tipo* tDestino = conv->destino;
-            llvm::Value* valorFinal = convierteValorLlvmATipoLlvm(valorPrevio, tOrigen, tDestino);
+            llvm::Value* valorFinal = convierteValorLlvmATipoLlvm(valorPrevio, conv->origen, conv->destino);
             
             if(valorFinal == nullptr)
             {
                 resultado.error("No he conseguido convertir con éxito el valor.");
-                resultado.posición(tDestino->posición());
+                resultado.posición(conv->destino->posición());
                 return resultado;
             }
             else
@@ -1997,6 +1993,7 @@ namespace Ñ
                     }
                     llvm::Value *serieVacía = llvm::UndefValue::get(tipoLlvm);
                     llvm::Value* serieFinal = serieVacía;
+
                     int64_t índice = 0;
                     for(Ñ::Nodo* subnodo : literal->ramas)
                     {
@@ -2014,7 +2011,7 @@ namespace Ñ
 
                         //std::cout << "construyeLiteral(TIPO_SERIE) inserto subvalor en serie" << índice << std::endl;
 
-                        llvm::Value* nuevaSerieFinal = entorno->constructorLlvm.CreateInsertElement(serieFinal, subvalor, índice);
+                        llvm::Value* nuevaSerieFinal = entorno->constructorLlvm.CreateInsertValue(serieFinal, subvalor, índice);
 
                         //llvm::Value* nuevaSerieFinal = llvm::InsertElementInst::Create(serieFinal, subvalor, índiceLlvm);
                         serieFinal = nuevaSerieFinal;

@@ -32,7 +32,7 @@ rm obra -Force -Recurse -ErrorAction SilentlyContinue
 
 $crono.Stop()
 
-./prueba.ps1
+./pruebas.ps1
 
 $tConstrucción = $crono.Elapsed.TotalSeconds
 

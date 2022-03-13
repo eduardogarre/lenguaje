@@ -1317,6 +1317,10 @@ namespace Ñ
             else
             {
                 llvm::Value* valor = resultado.valor();
+                if(valor == nullptr) // resultado de llamar a una función que devuelve "nada"
+                {
+                    return resultado;
+                }
                 llvm::Value* variable = entorno->constructorLlvm.CreateAlloca(valor->getType(), nullptr);
                 entorno->constructorLlvm.CreateStore(valor, variable, false);
                 resultado.valor(variable);

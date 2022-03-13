@@ -32,7 +32,7 @@ externo nada prueba_serie();
 externo nada prueba_función();
 externo nada prueba_si_condicional();
 externo nada prueba_bucle_mientras();
-externo nada prueba_comentarios();
+//externo nada prueba_comentarios();
 
 público ent inicia()
 {
@@ -45,7 +45,7 @@ público ent inicia()
     prueba_función();
     prueba_si_condicional();
     prueba_bucle_mientras();
-    prueba_comentarios();
+    //prueba_comentarios();
 
     devuelve 0;
 }

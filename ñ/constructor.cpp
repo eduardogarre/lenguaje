@@ -1677,28 +1677,22 @@ namespace Ñ
             case TIPO_SERIE:
                 if(valor->getType()->isArrayTy())
                 {
-                    llvm::Type* tipSerieInicial = valor->getType();
-                    llvm::Type* tipElementoInicial = tipSerieInicial->getScalarType();
                     llvm::Type* tipSerieDestino = creaTipoLlvm(tipoDestino);
-                    llvm::Type* tipElementoDestino = tipSerieDestino->getScalarType();
                     uint64_t tamañoSerie = tipoInicial->tamaño();
 
                     llvm::Value *serieVacía = llvm::UndefValue::get(tipSerieDestino);
                     valorFinal = serieVacía;
                     entorno->constructorLlvm.Insert(valorFinal);
 
-                    for(int i = 0; i < tamañoSerie; i++)
+                    for(uint32_t i = 0; i < tamañoSerie; i++)
                     {
-                        llvm::Constant* índice = llvm::Constant::getIntegerValue(tipElementoInicial, llvm::APInt(64, i));
-                        llvm::Value* valElemento = llvm::ExtractElementInst::Create(valor, índice);
-                        entorno->constructorLlvm.Insert(valElemento);
+                        llvm::Value* valElemento = entorno->constructorLlvm.CreateExtractValue(valor, {i});
 
                         Ñ::Tipo* subtipoInicial = tipoInicial->subtipo();
                         Ñ::Tipo* subtipoDestino = tipoDestino->subtipo();
                         valElemento = convierteValorLlvmATipoLlvm(valElemento, subtipoInicial, subtipoDestino);
-                        
-                        valorFinal = llvm::InsertElementInst::Create(valorFinal, valElemento, índice);
-                        entorno->constructorLlvm.Insert(valorFinal);
+
+                        valorFinal = entorno->constructorLlvm.CreateInsertValue(valorFinal, valElemento, {i});
                     }
                 }
                 else
@@ -1735,7 +1729,7 @@ namespace Ñ
                     {
                         return nullptr;
                     }
-                    valorFinal = entorno->constructorLlvm.CreateGEP(tipoInicialLlvm->getScalarType(), valor, {idc0, idc0});
+                    valorFinal = entorno->constructorLlvm.CreateGEP(((llvm::ArrayType*)tipoInicialLlvm)->getElementType(), valor, {idc0, idc0});
                     //valorFinal = entorno->constructorLlvm.CreateGEP(valor, {cero, idc0});
                     //valorFinal = entorno->constructorLlvm.CreateBitCast(valor, tipoDestinoLlvm);
                     //valorFinal = llvm::GetElementPtrInst::Create(tipoDestinoLlvm, valor, { cero, idc0 });
@@ -2022,7 +2016,7 @@ namespace Ñ
 
                         //std::cout << "construyeLiteral(TIPO_SERIE) extraigo subvalor de subnodo" << índice << std::endl;
 
-                        //llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getScalarType(), llvm::APInt(64, índice));
+                        //llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getElementType(), llvm::APInt(64, índice));
                         ResultadoLlvm rSubvalor = construyeLiteral(subnodo);
                         if(rSubvalor.error())
                         {
@@ -2517,6 +2511,7 @@ namespace Ñ
         {
             Ñ::ResultadoLlvm resultado;
             llvm::Value* serie;
+            llvm::Value* pSerie;
             llvm::Value* pos;
 
             Ñ::ResultadoLlvm rSerie = construyeLDA(nodo->ramas[0]);
@@ -2524,16 +2519,30 @@ namespace Ñ
             {
                 return rSerie;
             }
-            serie = entorno->constructorLlvm.CreateLoad(rSerie.valor());
+            pSerie = rSerie.valor();
+            serie = entorno->constructorLlvm.CreateLoad(pSerie);
 
             Ñ::ResultadoLlvm rPos = construyeLDA(nodo->ramas[1]);
             if(rPos.error())
             {
                 return rPos;
             }
+
+            llvm::Type* tipoEnt64 = llvm::IntegerType::getInt64Ty(entorno->contextoLlvm);
+            auto cero = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0, false));
             pos = entorno->constructorLlvm.CreateLoad(rPos.valor());
 
-            llvm::Value* vElemento = entorno->constructorLlvm.CreateExtractElement(serie, pos);
+            //llvm::Value* vElemento = entorno->constructorLlvm.CreateExtractValue(serie, {pos});
+            llvm::Type* tipo = serie->getType();
+            if(!tipo->isArrayTy())
+            {
+                resultado.error("No he recibido una serie correcta");
+                return resultado;
+            }
+            llvm::ArrayType* tSerie = (llvm::ArrayType*)tipo;
+            llvm::Type* tElemento = tSerie->getElementType();
+            llvm::Value* dirElemento = entorno->constructorLlvm.CreateGEP(tSerie, pSerie, {cero, pos});
+            llvm::Value* vElemento = entorno->constructorLlvm.CreateLoad(dirElemento);
 
             resultado.éxito();
             resultado.valor(vElemento);

@@ -810,7 +810,8 @@ namespace Ñ
                     return resultadoCondición;
                 }
 
-                llvm::Value* valorCondición = resultadoCondición.valor();
+                llvm::Value* valorIntermedio = resultadoCondición.valor();
+                llvm::Value* valorCondición = entorno->constructorLlvm.CreateLoad(valorIntermedio);
 
                 // SiCond# CndBr ->  [SiBlq#]   [SiCond#+1 || (SinoBlq || Continúa)]
                 // Debemos determinar si, en caso de incumplir la condición,
@@ -987,7 +988,8 @@ namespace Ñ
                 return resultadoCondición;
             }
 
-            llvm::Value* valorCondición = resultadoCondición.valor();
+            llvm::Value* valorIntermedio = resultadoCondición.valor();
+            llvm::Value* valorCondición = entorno->constructorLlvm.CreateLoad(valorIntermedio);
 
             // MientrasCond CndBr ->  [MientrasBlq]   [Continúa]
             // Debemos determinar si saltaremos al MientrasBlq o ContinúaBlq
@@ -1084,8 +1086,9 @@ namespace Ñ
                 }
 
                 llvm::Value* vLda = rLda.valor();
+                llvm::Value* valorIntermedio = entorno->constructorLlvm.CreateLoad(vLda);
 
-                entorno->constructorLlvm.CreateStore(vLda, vLia);
+                entorno->constructorLlvm.CreateStore(valorIntermedio, vLia);
 
                 resultado.éxito();
                 return resultado;
@@ -1117,7 +1120,10 @@ namespace Ñ
                     return resultado;
                 }
 
-                entorno->constructorLlvm.CreateRet(resultado.valor());
+                llvm::Value* valorIntermedio = resultado.valor();
+                llvm::Value* valorDevolución = entorno->constructorLlvm.CreateLoad(valorIntermedio);
+
+                entorno->constructorLlvm.CreateRet(valorDevolución);
                 
                 llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
                 llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
@@ -1304,7 +1310,18 @@ namespace Ñ
                 break;
             }
 
-            return resultado;
+            if(resultado.error())
+            {
+                return resultado;
+            }
+            else
+            {
+                llvm::Value* valor = resultado.valor();
+                llvm::Value* variable = entorno->constructorLlvm.CreateAlloca(valor->getType(), nullptr);
+                entorno->constructorLlvm.CreateStore(valor, variable, false);
+                resultado.valor(variable);
+                return resultado;
+            }
         }
 
         Ñ::ResultadoLlvm construyeDeclaraciónVariable(Ñ::Nodo* nodo)
@@ -1765,23 +1782,27 @@ namespace Ñ
 
             Ñ::ConvierteTipos* conv = (Ñ::ConvierteTipos*)nodo;
 
-            if(esPuntero(conv->destino))
-            {
-                resultado = construyeLIA(nodo->ramas[0]);
-            }
-            else
-            {
-                resultado = construyeLDA(nodo->ramas[0]);
-            }
-
+            resultado = construyeLDA(nodo->ramas[0]);
+            
             if(resultado.error())
             {
                 return resultado;
             }
-
-            llvm::Value* valorPrevio = resultado.valor();
-            llvm::Value* valorFinal = convierteValorLlvmATipoLlvm(valorPrevio, conv->origen, conv->destino);
             
+            llvm::Value* valorFinal;
+
+            if(esSerie(conv->origen) && esPuntero(conv->destino) && (conv->origen->subtipo()->tipo == conv->destino->subtipo()->tipo))
+            {
+                llvm::Value* valorIntermedio = entorno->constructorLlvm.CreateLoad(resultado.valor());
+                llvm::Value* idc0 = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0));
+                valorFinal = entorno->constructorLlvm.CreateGEP(valorIntermedio->getType(), resultado.valor(), {idc0, idc0});
+            }
+            else
+            {
+                llvm::Value* valorIntermedio = entorno->constructorLlvm.CreateLoad(resultado.valor());
+                valorFinal = convierteValorLlvmATipoLlvm(valorIntermedio, conv->origen, conv->destino);
+            }
+
             if(valorFinal == nullptr)
             {
                 resultado.error("No he conseguido convertir con éxito el valor.");
@@ -2050,7 +2071,7 @@ namespace Ñ
             {
                 return rV1;
             }
-            v1 = rV1.valor();
+            v1 = entorno->constructorLlvm.CreateLoad(rV1.valor());
             
             for(int i = 1; i < nodo->ramas.size(); i++)
             {
@@ -2074,7 +2095,7 @@ namespace Ñ
                 {
                     return rV2;
                 }
-                v2 = rV2.valor();
+                v2 = entorno->constructorLlvm.CreateLoad(rV2.valor());
 
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
@@ -2185,7 +2206,7 @@ namespace Ñ
             {
                 return rV1;
             }
-            v1 = rV1.valor();
+            v1 = entorno->constructorLlvm.CreateLoad(rV1.valor());
             
             for(int i = 1; i < nodo->ramas.size(); i++)
             {
@@ -2209,7 +2230,7 @@ namespace Ñ
                 {
                     return rV2;
                 }
-                v2 = rV2.valor();
+                v2 = entorno->constructorLlvm.CreateLoad(rV2.valor());
 
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
@@ -2273,7 +2294,7 @@ namespace Ñ
             {
                 return rV1;
             }
-            v1 = rV1.valor();
+            v1 = entorno->constructorLlvm.CreateLoad(rV1.valor());
             
             for(int i = 1; i < nodo->ramas.size(); i++)
             {
@@ -2297,7 +2318,7 @@ namespace Ñ
                 {
                     return rV2;
                 }
-                v2 = rV2.valor();
+                v2 = entorno->constructorLlvm.CreateLoad(rV2.valor());
 
                 Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
 
@@ -2404,7 +2425,7 @@ namespace Ñ
                     return rValor;
                 }
 
-                valor = rValor.valor();
+                valor = entorno->constructorLlvm.CreateLoad(rValor.valor());
 
                 if(valor == nullptr)
                 {
@@ -2495,24 +2516,24 @@ namespace Ñ
         Ñ::ResultadoLlvm construyeLeeElementoSerie(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            llvm::Value* vec;
+            llvm::Value* serie;
             llvm::Value* pos;
 
-            Ñ::ResultadoLlvm rVec = construyeLDA(nodo->ramas[0]);
-            if(rVec.error())
+            Ñ::ResultadoLlvm rSerie = construyeLDA(nodo->ramas[0]);
+            if(rSerie.error())
             {
-                return rVec;
+                return rSerie;
             }
-            vec = rVec.valor();
+            serie = entorno->constructorLlvm.CreateLoad(rSerie.valor());
 
             Ñ::ResultadoLlvm rPos = construyeLDA(nodo->ramas[1]);
             if(rPos.error())
             {
                 return rPos;
             }
-            pos = rPos.valor();
+            pos = entorno->constructorLlvm.CreateLoad(rPos.valor());
 
-            llvm::Value* vElemento = entorno->constructorLlvm.CreateExtractElement(vec, pos);
+            llvm::Value* vElemento = entorno->constructorLlvm.CreateExtractElement(serie, pos);
 
             resultado.éxito();
             resultado.valor(vElemento);
@@ -2561,7 +2582,9 @@ namespace Ñ
                     return resultado;
                 }
 
-                valoresArgumentos.push_back(resultado.valor());
+                llvm::Value* vArgumento = entorno->constructorLlvm.CreateLoad(resultado.valor());
+
+                valoresArgumentos.push_back(vArgumento);
 
             }
 

@@ -184,7 +184,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(!notación("]"))
 			{
 				delete l;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ']' al final de la serie.");
+				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba ']' al final de la serie.");
 				cursor = c;
 				return nullptr;
 			}
@@ -534,7 +534,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				{
 					delete lda;
 					delete prim;
-					apuntaError(lexemas[cursor]->posición(), "Esperaba ']'.");
+					apuntaError(lexemas[cursor - 1]->posición(), "Esperaba ']'.");
 					cursor = c;
 					return nullptr;
 				}
@@ -1056,7 +1056,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(!notación("("))
 		{
-			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
+			apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar '(' para pasar los argumentos a la llamada a la función.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1069,7 +1069,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			{
 				delete args;
 			}
-			apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
+			apuntaError(lexemas[cursor - 1]->posición(), "Esperaba encontrar ')' al final de la llamada a la función.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1176,7 +1176,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(!notación("("))
 		{
-			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
+			apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar '(' para colocar la expresión condicional del 'si()'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1186,7 +1186,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(!notación(")"))
 			{
 				delete lda;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
+				apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar ')' al final de la expresión condicional del 'si()'.");
 				cursor = c;
 				return nullptr;
 			}
@@ -1233,7 +1233,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(!notación("("))
 			{
 				delete sc;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
+				apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar '(' para colocar la expresión condicional del 'sino si()'.");
 				cursor = c;
 				return nullptr;
 			}
@@ -1244,7 +1244,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				{
 					delete lda;
 					delete sc;
-					apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
+					apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar ')' al final de la expresión condicional del 'sino si()'.");
 					cursor = c;
 					return nullptr;
 				}
@@ -1292,14 +1292,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		if(!reservada("mientras"))
 		{
-			apuntaError(lexemas[cursor]->posición(), "Esperaba 'mientras'.");
+			apuntaError(lexemas[cursor]->posición(), "Esperaba 'mientras()'.");
 			cursor = c;
 			return nullptr;
 		}
 
 		if(!notación("("))
 		{
-			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
+			apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar '(' para colocar la expresión condicional del 'mientras()'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1309,7 +1309,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			if(!notación(")"))
 			{
 				delete lda;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
+				apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar ')' al final de la expresión condicional del 'mientras()'.");
 				cursor = c;
 				return nullptr;
 			}
@@ -1480,7 +1480,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		Posición* pblq = lexemas[cursor]->posición();
 		if(!notación("{"))
 		{
-			apuntaError(lexemas[cursor]->posición(), "Esperaba '{'.");
+			apuntaError(lexemas[cursor]->posición(), "Esperaba que empezara un bloque de código con '{'.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1498,7 +1498,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		}
 		else
 		{
-			apuntaError(lexemas[cursor]->posición(), "Esperaba '}'.");
+			apuntaError(lexemas[cursor]->posición(), "Esperaba que se cerrara un bloque de código con '}'.");
 			delete b;
 			cursor = c;
 			return nullptr;
@@ -1725,7 +1725,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			}
 			else
 			{
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ';' al final de la declaración del módulo.");
+				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba ';' al final de la declaración del módulo.");
 				cursor = c;
 				return nullptr;
 			}

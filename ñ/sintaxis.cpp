@@ -1360,7 +1360,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete as;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
+				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba que la expresión terminara con ';'.");
+				cursor = c;
+				return nullptr;
 			}
 		}
 		
@@ -1375,7 +1377,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete fn;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
+				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba que la expresión terminara con ';'.");
+				cursor = c;
+				return nullptr;
 			}
 		}
 		
@@ -1390,7 +1394,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete dv;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
+				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba que la expresión terminara con ';'.");
+				cursor = c;
+				return nullptr;
 			}
 		}
 		
@@ -1405,7 +1411,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete v;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
+				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba que la expresión terminara con ';'.");
+				cursor = c;
+				return nullptr;
 			}
 		}
 		
@@ -1420,7 +1428,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete dv;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
+				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba que la expresión terminara con ';'.");
+				cursor = c;
+				return nullptr;
 			}
 		}
 		
@@ -1435,7 +1445,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			else
 			{
 				delete pa;
-				apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
+				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba que la expresión terminara con ';'.");
+				cursor = c;
+				return nullptr;
 			}
 		}
 		
@@ -1654,7 +1666,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		if(!notación(";"))
 		{
 			delete t;
-			apuntaError(lexemas[cursor]->posición(), "Esperaba ';'.");
+			apuntaError(lexemas[cursor - 1]->posición(), "Esperaba que la expresión terminara con ';'.");
 			cursor = c;
 			return nullptr;
 		}

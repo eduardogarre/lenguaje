@@ -64,13 +64,9 @@ namespace Ñ
             c = txt.substr(posición->cursor(), paso);
         }
 
-        if(c == "\n")
-        {
-            posición->incLínea();
-        }
-
         if(esnuevalínea(c))
         {
+            posición->incLínea();
             posición->empiezaColumna();
         }
 
@@ -309,8 +305,16 @@ namespace Ñ
                     return false;
                 }
 
-                nuevaLínea(txt);
-                incrementaCursor(txt);
+                if(esnuevalínea(carácter))
+                {
+                    incrementaCursor(txt);
+                    return resultado;
+                }
+                else
+                {
+                    incrementaCursor(txt);
+                }
+                
                 carácter = siguienteCarácter(txt);
             }
 
@@ -1288,7 +1292,9 @@ namespace Ñ
             c == u8"\u000D" || // Carriage return
             c == u8"\u000A" || // Line feed
             c == u8"\u000D\u000A" || // Carriage return + Line feed
-            c == u8"\u0085" // Next line
+            c == u8"\u0085" || // Next line
+            
+            c == "\t" // Tabulador
         )
         {
             resultado = true;

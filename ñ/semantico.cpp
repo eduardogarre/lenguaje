@@ -194,7 +194,10 @@ Copyright © 2021 Eduardo Garre Muñoz
 
     for(uint8_t i = 0; i < argsDeclarados->ramas.size(); i++)
     {
-        Ñ::Resultado rTipoLIA = _analizaLIA(argsDeclarados->ramas[i], subTabla);
+        Ñ::TablaSímbolos* nuevaTabla = new Ñ::TablaSímbolos(tablaSímbolos);
+        nuevaTabla->ponFunciónPropietaria(fn->nombre);
+        Ñ::Resultado rTipoLIA = _analizaLIA(argsDeclarados->ramas[i], nuevaTabla);
+        delete nuevaTabla;
         Ñ::Resultado rTipoLDA = _analizaLDA(argsDefinidos->ramas[i], subTabla);
 
         if(rTipoLIA.error())

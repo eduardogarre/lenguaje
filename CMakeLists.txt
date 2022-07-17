@@ -19,7 +19,7 @@ endif()
 project(lenguaje VERSION 0.1)
 
 add_subdirectory(ñ)
-add_subdirectory(compilador)
+add_subdirectory(director)
 
 message("MENSAJE :: Configuro algunas flags del compilador")
 if(MSVC)

@@ -16,7 +16,21 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <string>
 #include <vector>
 
-namespace Compilador
+namespace Director
 {
-    int compila(Compilador::Configuración cfg);
+    struct Configuración
+    {
+        bool HABLADOR = false;
+        uint8_t optimización = 1;
+        
+        std::vector<std::string> archivos;
+        
+        std::string nombreArchivoDestino = "programa";
+
+        #ifdef _WIN32 //// WINDOWS ////
+        std::string extensión = ".exe";
+        #else
+        std::string extensión = "";
+        #endif
+    };
 }

@@ -14,15 +14,9 @@ Copyright © 2021 Eduardo Garre Muñoz
 #pragma once
 
 #include <string>
+#include <vector>
 
-namespace Ñ
+namespace Director
 {
-    extern class Posición;
-}
-
-namespace Compilador
-{
-    void escribe(std::string texto);
-    void escribeAviso(std::string texto, std::string archivo, Ñ::Posición* posición);
-    void escribeError(std::string texto, std::string archivo, Ñ::Posición* posición);
+    int compila(Director::Configuración cfg);
 }

@@ -14,23 +14,15 @@ Copyright © 2021 Eduardo Garre Muñoz
 #pragma once
 
 #include <string>
-#include <vector>
 
-namespace Compilador
+namespace Ñ
 {
-    struct Configuración
-    {
-        bool HABLADOR = false;
-        uint8_t optimización = 1;
-        
-        std::vector<std::string> archivos;
-        
-        std::string nombreArchivoDestino = "programa";
+    extern class Posición;
+}
 
-        #ifdef _WIN32 //// WINDOWS ////
-        std::string extensión = ".exe";
-        #else
-        std::string extensión = "";
-        #endif
-    };
+namespace Director
+{
+    void escribe(std::string texto);
+    void escribeAviso(std::string texto, std::string archivo, Ñ::Posición* posición);
+    void escribeError(std::string texto, std::string archivo, Ñ::Posición* posición);
 }

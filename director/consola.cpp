@@ -19,7 +19,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "consola.hpp"
 #include "herramientas.hpp"
 
-namespace Compilador
+namespace Director
 {
     struct {
         std::string predefinido = "\033[0m";

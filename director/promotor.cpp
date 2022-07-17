@@ -176,7 +176,7 @@ std::string creaNombreMódulo(std::string archivo)
 	return resultadoLlvm;
 }
 
-int Compilador::compila(Compilador::Configuración cfg)
+int Director::compila(Director::Configuración cfg)
 {
 	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
 	entorno->optimización = cfg.optimización;
@@ -236,7 +236,7 @@ int Compilador::compila(Compilador::Configuración cfg)
 		Ñ::ResultadoLlvm resultado = construyeArchivo(archivo, entorno);
 		if (resultado.error())
 		{
-			Compilador::escribeError(resultado.mensaje(), archivo, resultado.posición());
+			Director::escribeError(resultado.mensaje(), archivo, resultado.posición());
 
 			return -1;
 		}

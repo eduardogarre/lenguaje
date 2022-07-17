@@ -182,7 +182,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	Compilador::Configuración cfg;
+	Director::Configuración cfg;
 
 	std::string nombreArchivoDestino = "programa";
 	if(args["--salida"].isString())
@@ -215,7 +215,7 @@ int main(int argc, char** argv)
 	{
 		cfg.archivos = args["<archivo>"].asStringList();
 
-		return Compilador::compila(cfg);
+		return Director::compila(cfg);
 	}
 
 	return interpretaEnLínea();

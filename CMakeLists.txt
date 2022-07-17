@@ -18,7 +18,7 @@ endif()
 # set the project name
 project(lenguaje VERSION 0.1)
 
-add_subdirectory(compilador)
+add_subdirectory(ñ)
 add_subdirectory(director)
 
 message("MENSAJE :: Configuro algunas flags del compilador")

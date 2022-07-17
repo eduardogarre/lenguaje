@@ -23,7 +23,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include "configuracion.hpp"
 #include "docopt.h"
-#include "ñ/ñ.hpp"
+#include "compilador/ñ.hpp"
 #include "promotor.hpp"
 
 bool EJECUTA_INTÉRPRETE = false;

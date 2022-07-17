@@ -25,7 +25,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "configuracion.hpp"
 #include "consola.hpp"
 #include "herramientas.hpp"
-#include "ñ/ñ.hpp"
+#include "compilador/ñ.hpp"
 #include "promotor.hpp"
 
 std::string creaNombreMódulo(std::string archivo)

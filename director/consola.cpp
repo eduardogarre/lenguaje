@@ -14,7 +14,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <iostream>
 #include <string>
 
-#include "ñ/ñ.hpp"
+#include "compilador/ñ.hpp"
 
 #include "consola.hpp"
 #include "herramientas.hpp"

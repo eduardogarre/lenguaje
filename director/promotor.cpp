@@ -155,10 +155,10 @@ std::string creaNombreMódulo(std::string archivo)
 
 	if (entorno->HABLADOR)
 	{
-		std::cout << "CONSTRUYENDO MODULO" << std::endl;
+		std::cout << "CREANDO MODULO" << std::endl;
 	}
 
-	resultadoLlvm = Ñ::construye(nodos, entorno);
+	resultadoLlvm = Ñ::creaMódulo(nodos, entorno);
 
 	for (auto l : lexemas)
 	{

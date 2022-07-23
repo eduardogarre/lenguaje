@@ -19,5 +19,5 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 namespace Ñ
 {
-    Ñ::ResultadoLlvm construye(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo = Ñ::CategoríaNodo::NODO_MÓDULO);
+    Ñ::ResultadoLlvm creaMódulo(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo = Ñ::CategoríaNodo::NODO_MÓDULO);
 }

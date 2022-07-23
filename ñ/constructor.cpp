@@ -237,7 +237,7 @@ namespace Ñ
             return nullptr;
         }
 
-        Ñ::ResultadoLlvm construyeMódulo(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm creaMódulo(Ñ::Nodo* nodo)
         {
             Ñ::ResultadoLlvm resultado;
             
@@ -2618,7 +2618,7 @@ namespace Ñ
         }
     };
 
-    Ñ::ResultadoLlvm construye(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo)
+    Ñ::ResultadoLlvm creaMódulo(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo)
     {
         //std::cout << "construye(nodo)" << std::endl;
 
@@ -2637,7 +2637,7 @@ namespace Ñ
 
         if(categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
-            Ñ::ResultadoLlvm rMódulo = constructor->construyeMódulo(árbol);
+            Ñ::ResultadoLlvm rMódulo = constructor->creaMódulo(árbol);
             if(rMódulo.error())
             {
                 return rMódulo;

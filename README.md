@@ -73,7 +73,7 @@ Componiendo los subproyectos descritos arriba, el repositorio construye **2 obje
 
 - **Compilador**
 
-    Sus archivos principañes se encuentran en las carpetas `./director` y `./ñ`. Para construirlo da las siguientes órdenes:
+    Sus archivos principales se encuentran en las carpetas `./director` y `./ñ`. Para construirlo da las siguientes órdenes:
 
     ```powershell
     mkdir obra

@@ -52,13 +52,28 @@ git clone --recurse-submodules https://github.com/eduardogarre/lenguaje .
 
 &nbsp;
 
-### **Construye el Lenguaje Ñ**
+### **Estructura del repositorio**
 
-El repositorio contiene dos proyectos: el compilador y la biblioteca estándar.
+El repositorio contiene **3 subproyectos**:
+1) `director`, en la carpeta `director/`
+1) `ñ`, en la carpeta `ñ/`
+1) `biblioteca`, en la carpeta `biblioteca/`
+
+El proyecto `ñ` es una biblioteca que contiene el código que analiza y compila o interpreta el lenguaje Ñ. Esta biblioteca puede ser incluida por otros proyectos para añadir soporte del lenguaje Ñ en ellos.
+
+El proyecto `director` es un ejecutable que incluye la biblioteca `ñ` para, juntos, construir el compilador. Este proyecto es un ejemplo de cómo emplear la biblioteca `ñ` para incorporar soporte del lenguaje `ñ` en un proyecto.
+
+El proyecto `biblioteca` contiene el código de la biblioteca estándar del lenguaje Ñ.
+
+### **Construye el Lenguaje Ñ**
+   
+Componiendo los subproyectos descritos arriba, el repositorio construye **2 objetivos**
+1) El `compilador de Ñ`, el ejecutable construido a partir de los proyectos `director` y `ñ`
+1) La `biblioteca estándar de Ñ`, la biblioteca construida a partir del proyecto `biblioteca`
 
 - **Compilador**
 
-    Sus archivos principañes se encuentran en las carpetas `./compilador` y `./ñ`. Para construirlo da las siguientes órdenes:
+    Sus archivos principañes se encuentran en las carpetas `./director` y `./ñ`. Para construirlo da las siguientes órdenes:
 
     ```powershell
     mkdir obra

@@ -89,7 +89,7 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	//	}
 	//}
 
-	Ñ::ResultadoLlvm rConstrucción = Ñ::creaMódulo(nodos, entorno, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
+	Ñ::ResultadoLlvm rConstrucción = Ñ::creaRepresentaciónIntermedia(nodos, entorno, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
 	if(rConstrucción.error())
 	{
 		std::cout << rConstrucción.mensaje() << std::endl;

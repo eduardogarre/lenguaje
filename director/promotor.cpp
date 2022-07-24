@@ -158,7 +158,7 @@ std::string creaNombreMódulo(std::string archivo)
 		std::cout << "CREANDO MODULO" << std::endl;
 	}
 
-	resultadoLlvm = Ñ::creaMódulo(nodos, entorno);
+	resultadoLlvm = Ñ::creaRepresentaciónIntermedia(nodos, entorno);
 
 	for (auto l : lexemas)
 	{

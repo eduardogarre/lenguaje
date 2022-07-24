@@ -2617,7 +2617,7 @@ namespace Ñ
         }
     };
 
-    Ñ::ResultadoLlvm creaMódulo(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo)
+    Ñ::ResultadoLlvm creaRepresentaciónIntermedia(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo)
     {
         //std::cout << "construye(nodo)" << std::endl;
 

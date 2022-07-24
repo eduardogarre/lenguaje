@@ -21,14 +21,14 @@ mkdir proyecto
 $crono = [system.diagnostics.stopwatch]::startNew()
 
 cd obra
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --parallel 4
 cd ..
 
+./construyeBiblioteca.ps1
+
 rm build -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
-
-./construyeBiblioteca.ps1
 
 $crono.Stop()
 

@@ -176,7 +176,7 @@ std::string creaNombreMódulo(std::string archivo)
 	return resultadoLlvm;
 }
 
-Ñ::EntornoConstrucción* preparaEntornoConstrucción(Director::Configuración cfg)
+Ñ::EntornoConstrucción *preparaEntornoConstrucción(Director::Configuración cfg)
 {
 	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
 	entorno->optimización = cfg.optimización;
@@ -225,15 +225,16 @@ std::string creaNombreMódulo(std::string archivo)
 
 int Director::compila(Director::Configuración cfg)
 {
-	Ñ::EntornoConstrucción *entorno = preparaEntornoConstrucción(cfg);
-
-	if (!entorno->destino)
-	{
-		return -1;
-	}
 
 	for (std::string archivo : cfg.archivos)
 	{
+		Ñ::EntornoConstrucción *entorno = preparaEntornoConstrucción(cfg);
+
+		if (!entorno->destino)
+		{
+			return -1;
+		}
+
 		if (cfg.HABLADOR)
 		{
 			std::cout << "Construyendo '" << archivo << "'" << std::endl;

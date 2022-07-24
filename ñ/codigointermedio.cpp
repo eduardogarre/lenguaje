@@ -46,11 +46,10 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/Transforms/Scalar/GVN.h"
 
-//#include "constructor.hpp"
 #include "entorno.hpp"
 #include "justoatiempo.hpp"
 #include "nodo.hpp"
-#include "constructor.hpp"
+#include "codigointermedio.hpp"
 #include "resultadollvm.hpp"
 #include "simbolos.hpp"
 #include "tipo.hpp"

@@ -49,7 +49,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "entorno.hpp"
 #include "justoatiempo.hpp"
 #include "nodo.hpp"
-#include "codigointermedio.hpp"
+#include "representacionintermedia.hpp"
 #include "resultadollvm.hpp"
 #include "simbolos.hpp"
 #include "tipo.hpp"

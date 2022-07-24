@@ -13,7 +13,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-#include "codigointermedio.hpp"
+#include "representacionintermedia.hpp"
 #include "entorno.hpp"
 #include "lexema.hpp"
 #include "lexico.hpp"

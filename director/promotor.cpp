@@ -39,6 +39,51 @@ std::string creaNombreMódulo(std::string archivo)
 	return después;
 }
 
+int emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno)
+{
+	móduloLlvm->setDataLayout(entorno->máquinaDestino->createDataLayout());
+	móduloLlvm->setTargetTriple(entorno->tripleteDestino);
+
+	if (entorno->HABLADOR)
+	{
+		std::cout << std::endl
+				  << "Archivo de representación intermedia:" << std::endl
+				  << std::endl;
+		móduloLlvm->print(llvm::outs(), nullptr);
+	}
+
+	std::string nombreMódulo = creaNombreMódulo(entorno->archivoActual);
+
+	std::string nombreArchivoDestino = nombreMódulo + ".o";
+	std::error_code códigoError;
+	llvm::raw_fd_ostream archivoDestino(nombreArchivoDestino, códigoError, llvm::sys::fs::OF_None);
+
+	if (códigoError)
+	{
+		std::cout << ("No he podido abrir el archivo: " + códigoError.message()) << std::endl;
+		return -1;
+	}
+
+	llvm::legacy::PassManager paseDeCódigoObjeto;
+	auto tipoArchivo = llvm::CGFT_ObjectFile;
+
+	if (entorno->máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
+	{
+		std::cout << ("No he podido emitir un archivo de este tipo") << std::endl;
+		return -1;
+	}
+
+	paseDeCódigoObjeto.run(*(móduloLlvm));
+	archivoDestino.flush();
+
+	if (entorno->HABLADOR)
+	{
+		std::cout << "He construido el archivo '" + nombreArchivoDestino + "'." << std::endl;
+	}
+
+	return 0;
+}
+
 Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
 {
 	Ñ::ResultadoLlvm resultadoLlvm;
@@ -160,6 +205,23 @@ std::string creaNombreMódulo(std::string archivo)
 
 	resultadoLlvm = Ñ::creaRepresentaciónIntermedia(nodos, entorno);
 
+	if (resultadoLlvm.error())
+	{
+		return resultadoLlvm;
+	}
+
+	int r = emiteArchivoObjeto(resultadoLlvm.módulo(), entorno);
+
+	if (r != 0)
+	{
+		resultadoLlvm.error("Error al intentar construir el archivo " + entorno->archivoActual);
+		return resultadoLlvm;
+	}
+	else
+	{
+		resultadoLlvm.éxito();
+	}
+
 	for (auto l : lexemas)
 	{
 		delete l;
@@ -167,12 +229,6 @@ std::string creaNombreMódulo(std::string archivo)
 	lexemas.clear();
 	delete nodos;
 
-	if (resultadoLlvm.error())
-	{
-		return resultadoLlvm;
-	}
-
-	resultadoLlvm.éxito();
 	return resultadoLlvm;
 }
 
@@ -228,51 +284,6 @@ std::string creaNombreMódulo(std::string archivo)
 	return entorno;
 }
 
-int construyeArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno)
-{
-	móduloLlvm->setDataLayout(entorno->máquinaDestino->createDataLayout());
-	móduloLlvm->setTargetTriple(entorno->tripleteDestino);
-
-	if (entorno->HABLADOR)
-	{
-		std::cout << std::endl
-				  << "Archivo de representación intermedia:" << std::endl
-				  << std::endl;
-		móduloLlvm->print(llvm::outs(), nullptr);
-	}
-
-	std::string nombreMódulo = creaNombreMódulo(entorno->archivoActual);
-
-	std::string nombreArchivoDestino = nombreMódulo + ".o";
-	std::error_code códigoError;
-	llvm::raw_fd_ostream archivoDestino(nombreArchivoDestino, códigoError, llvm::sys::fs::OF_None);
-
-	if (códigoError)
-	{
-		std::cout << ("No he podido abrir el archivo: " + códigoError.message()) << std::endl;
-		return -1;
-	}
-
-	llvm::legacy::PassManager paseDeCódigoObjeto;
-	auto tipoArchivo = llvm::CGFT_ObjectFile;
-
-	if (entorno->máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
-	{
-		std::cout << ("No he podido emitir un archivo de este tipo") << std::endl;
-		return -1;
-	}
-
-	paseDeCódigoObjeto.run(*(móduloLlvm));
-	archivoDestino.flush();
-
-	if (entorno->HABLADOR)
-	{
-		std::cout << "He construido el archivo '" + nombreArchivoDestino + "'." << std::endl;
-	}
-
-	return 0;
-}
-
 int Director::compila(Director::Configuración cfg)
 {
 	Ñ::EntornoConstrucción *entorno = preparaEntornoConstrucción(cfg);
@@ -296,13 +307,6 @@ int Director::compila(Director::Configuración cfg)
 			Director::escribeError(resultado.mensaje(), archivo, resultado.posición());
 
 			return -1;
-		}
-
-		int r = construyeArchivoObjeto(resultado.módulo(), entorno);
-
-		if(r != 0)
-		{
-			return r;
 		}
 	}
 

@@ -21,6 +21,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Type.h"
+#include "llvm/Target/TargetMachine.h"
 
 namespace Ñ
 {
@@ -34,6 +35,9 @@ namespace Ñ
         llvm::legacy::FunctionPassManager*  gestorPasesOptimización = nullptr;
         llvm::IRBuilder<>                   constructorLlvm;
         std::map<std::string, llvm::Type*>  globales;
+        std::string                         tripleteDestino;
+        const llvm::Target*                 destino;
+        llvm::TargetMachine*                máquinaDestino;
 
         EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
         ~EntornoConstrucción() {}

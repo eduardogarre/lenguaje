@@ -176,7 +176,7 @@ std::string creaNombreMódulo(std::string archivo)
 	return resultadoLlvm;
 }
 
-int Director::compila(Director::Configuración cfg)
+Ñ::EntornoConstrucción* preparaEntornoConstrucción(Director::Configuración cfg)
 {
 	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
 	entorno->optimización = cfg.optimización;
@@ -185,7 +185,10 @@ int Director::compila(Director::Configuración cfg)
 	llvm::InitializeNativeTargetAsmParser();
 	llvm::InitializeNativeTargetAsmPrinter();
 
-	std::string tripleteDestino = llvm::sys::getDefaultTargetTriple();
+	entorno->tripleteDestino = llvm::sys::getDefaultTargetTriple();
+
+	std::string error;
+	entorno->destino = llvm::TargetRegistry::lookupTarget(entorno->tripleteDestino, error);
 
 	if (cfg.HABLADOR)
 	{
@@ -204,16 +207,8 @@ int Director::compila(Director::Configuración cfg)
 		std::cout << std::endl
 				  << std::endl;
 
-		std::cout << "Tripleta de Destino: " << tripleteDestino << std::endl
+		std::cout << "Tripleta de Destino: " << entorno->tripleteDestino << std::endl
 				  << std::endl;
-	}
-
-	std::string error;
-	auto destino = llvm::TargetRegistry::lookupTarget(tripleteDestino, error);
-
-	if (!destino)
-	{
-		return -1;
 	}
 
 	std::string procesador = "x86-64";
@@ -221,9 +216,21 @@ int Director::compila(Director::Configuración cfg)
 
 	llvm::TargetOptions opciones;
 	auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
-	auto máquinaDestino = destino->createTargetMachine(tripleteDestino, procesador, características, opciones, modeloReordenamiento);
+	entorno->máquinaDestino = entorno->destino->createTargetMachine(entorno->tripleteDestino, procesador, características, opciones, modeloReordenamiento);
 
 	// std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
+
+	return entorno;
+}
+
+int Director::compila(Director::Configuración cfg)
+{
+	Ñ::EntornoConstrucción *entorno = preparaEntornoConstrucción(cfg);
+
+	if (!entorno->destino)
+	{
+		return -1;
+	}
 
 	for (std::string archivo : cfg.archivos)
 	{
@@ -243,8 +250,8 @@ int Director::compila(Director::Configuración cfg)
 
 		llvm::Module *móduloLlvm = resultado.módulo();
 
-		móduloLlvm->setDataLayout(máquinaDestino->createDataLayout());
-		móduloLlvm->setTargetTriple(tripleteDestino);
+		móduloLlvm->setDataLayout(entorno->máquinaDestino->createDataLayout());
+		móduloLlvm->setTargetTriple(entorno->tripleteDestino);
 
 		if (cfg.HABLADOR)
 		{
@@ -269,7 +276,7 @@ int Director::compila(Director::Configuración cfg)
 		llvm::legacy::PassManager paseDeCódigoObjeto;
 		auto tipoArchivo = llvm::CGFT_ObjectFile;
 
-		if (máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
+		if (entorno->máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
 		{
 			std::cout << ("No he podido emitir un archivo de este tipo") << std::endl;
 			return -1;

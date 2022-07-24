@@ -190,6 +190,11 @@ std::string creaNombreMódulo(std::string archivo)
 	std::string error;
 	entorno->destino = llvm::TargetRegistry::lookupTarget(entorno->tripleteDestino, error);
 
+	if (!entorno->destino)
+	{
+		return nullptr;
+	}
+
 	if (cfg.HABLADOR)
 	{
 		entorno->HABLADOR = true;
@@ -230,7 +235,7 @@ int Director::compila(Director::Configuración cfg)
 	{
 		Ñ::EntornoConstrucción *entorno = preparaEntornoConstrucción(cfg);
 
-		if (!entorno->destino)
+		if (!entorno)
 		{
 			return -1;
 		}

@@ -228,12 +228,12 @@ std::string creaNombreMódulo(std::string archivo)
 	return entorno;
 }
 
-int construyeArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno, Director::Configuración cfg)
+int construyeArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno)
 {
 	móduloLlvm->setDataLayout(entorno->máquinaDestino->createDataLayout());
 	móduloLlvm->setTargetTriple(entorno->tripleteDestino);
 
-	if (cfg.HABLADOR)
+	if (entorno->HABLADOR)
 	{
 		std::cout << std::endl
 				  << "Archivo de representación intermedia:" << std::endl
@@ -265,7 +265,7 @@ int construyeArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *
 	paseDeCódigoObjeto.run(*(móduloLlvm));
 	archivoDestino.flush();
 
-	if (cfg.HABLADOR)
+	if (entorno->HABLADOR)
 	{
 		std::cout << "He construido el archivo '" + nombreArchivoDestino + "'." << std::endl;
 	}
@@ -298,7 +298,7 @@ int Director::compila(Director::Configuración cfg)
 			return -1;
 		}
 
-		int r = construyeArchivoObjeto(resultado.módulo(), entorno, cfg);
+		int r = construyeArchivoObjeto(resultado.módulo(), entorno);
 
 		if(r != 0)
 		{

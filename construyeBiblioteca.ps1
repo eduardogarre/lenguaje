@@ -9,7 +9,6 @@
 # 
 # Copyright © 2021 Eduardo Garre Muñoz
 
-rm build -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
 rm -ErrorAction SilentlyContinue *.o
 

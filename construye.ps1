@@ -15,19 +15,28 @@ rm obra -Force -Recurse -ErrorAction SilentlyContinue
 rm -ErrorAction SilentlyContinue *.o
 rm -ErrorAction SilentlyContinue *.exe
 
+mkdir build
 mkdir obra
 mkdir proyecto
 
 $crono = [system.diagnostics.stopwatch]::startNew()
 
+# Genero comandos de compilación para SonarLint
+$rutaProyecto = (Get-Item .).FullName
+& 'C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1' -Arch amd64
+cd $rutaProyecto
+cd build
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release .. -G 'NMake Makefiles'
+cd ..
+
 cd obra
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --parallel 4
 cd ..
 
 ./construyeBiblioteca.ps1
 
-rm build -Force -Recurse -ErrorAction SilentlyContinue
+#rm build -Force -Recurse -ErrorAction SilentlyContinue
 rm obra -Force -Recurse -ErrorAction SilentlyContinue
 
 $crono.Stop()

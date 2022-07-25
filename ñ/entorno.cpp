@@ -28,80 +28,82 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "entorno.hpp"
 namespace Ñ
 {
-    class EntornoConstrucción
-    {
-    public:
-        bool HABLADOR = false;
-        uint8_t optimización = 0;
-        std::string archivoActual = "";
-        llvm::LLVMContext contextoLlvm;
-        llvm::legacy::FunctionPassManager *gestorPasesOptimización = nullptr;
-        llvm::IRBuilder<> constructorLlvm;
-        std::map<std::string, llvm::Type *> globales;
-        std::string tripleteDestino;
-        const llvm::Target *destino;
-        llvm::TargetMachine *máquinaDestino;
-
-        EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
-        ~EntornoConstrucción() {}
-    };
-
-    void Entorno::ponArchivoActual(Ñ::EntornoConstrucción* entorno, std::string archivo) {
-        entorno->archivoActual = archivo;
-    }
-
-    std::string Entorno::leeArchivoActual(Ñ::EntornoConstrucción* entorno, std::string archivo) {
-        return entorno->archivoActual;
-    }
-
-Ñ::EntornoConstrucción *preparaEntornoConstrucción(Entorno::Configuración cfg)
-{
-	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
-	entorno->optimización = cfg.optimización;
-
-	llvm::InitializeNativeTarget();
-	llvm::InitializeNativeTargetAsmParser();
-	llvm::InitializeNativeTargetAsmPrinter();
-
-	entorno->tripleteDestino = llvm::sys::getDefaultTargetTriple();
-
-	std::string error;
-	entorno->destino = llvm::TargetRegistry::lookupTarget(entorno->tripleteDestino, error);
-
-	if (!entorno->destino)
+	class EntornoConstrucción
 	{
-		return nullptr;
+	public:
+		bool HABLADOR = false;
+		uint8_t optimización = 0;
+		std::string archivoActual = "";
+		llvm::LLVMContext contextoLlvm;
+		llvm::legacy::FunctionPassManager *gestorPasesOptimización = nullptr;
+		llvm::IRBuilder<> constructorLlvm;
+		std::map<std::string, llvm::Type *> globales;
+		std::string tripleteDestino;
+		const llvm::Target *destino;
+		llvm::TargetMachine *máquinaDestino;
+
+		EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
+		~EntornoConstrucción() {}
+	};
+
+	void Entorno::ponArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo)
+	{
+		entorno->archivoActual = archivo;
 	}
 
-	if (cfg.HABLADOR)
+	std::string Entorno::leeArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo)
 	{
-		entorno->HABLADOR = true;
+		return entorno->archivoActual;
+	}
 
-		std::cout << "Construiré ";
-		std::cout << "'" << cfg.nombreArchivoDestino << cfg.extensión << "'";
+	Ñ::EntornoConstrucción *preparaEntornoConstrucción(Entorno::Configuración cfg)
+	{
+		Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
+		entorno->optimización = cfg.optimización;
 
-		std::cout << ", empleando";
+		llvm::InitializeNativeTarget();
+		llvm::InitializeNativeTargetAsmParser();
+		llvm::InitializeNativeTargetAsmPrinter();
 
-		for (std::string archivo : cfg.archivos)
+		entorno->tripleteDestino = llvm::sys::getDefaultTargetTriple();
+
+		std::string error;
+		entorno->destino = llvm::TargetRegistry::lookupTarget(entorno->tripleteDestino, error);
+
+		if (!entorno->destino)
 		{
-			std::cout << " " << archivo;
+			return nullptr;
 		}
 
-		std::cout << std::endl
-				  << std::endl;
+		if (cfg.HABLADOR)
+		{
+			entorno->HABLADOR = true;
 
-		std::cout << "Tripleta de Destino: " << entorno->tripleteDestino << std::endl
-				  << std::endl;
+			std::cout << "Construiré ";
+			std::cout << "'" << cfg.nombreArchivoDestino << cfg.extensión << "'";
+
+			std::cout << ", empleando";
+
+			for (std::string archivo : cfg.archivos)
+			{
+				std::cout << " " << archivo;
+			}
+
+			std::cout << std::endl
+					  << std::endl;
+
+			std::cout << "Tripleta de Destino: " << entorno->tripleteDestino << std::endl
+					  << std::endl;
+		}
+
+		std::string procesador = "x86-64";
+		std::string características = "";
+
+		llvm::TargetOptions opciones;
+		auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
+		entorno->máquinaDestino = entorno->destino->createTargetMachine(entorno->tripleteDestino, procesador, características, opciones, modeloReordenamiento);
+
+		return entorno;
 	}
-
-	std::string procesador = "x86-64";
-	std::string características = "";
-
-	llvm::TargetOptions opciones;
-	auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
-	entorno->máquinaDestino = entorno->destino->createTargetMachine(entorno->tripleteDestino, procesador, características, opciones, modeloReordenamiento);
-
-	return entorno;
-}
 
 }

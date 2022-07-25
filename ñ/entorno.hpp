@@ -20,7 +20,8 @@ namespace Ñ
 {
     extern class EntornoConstrucción;
 
-    namespace Entorno {
+    namespace Entorno
+    {
         struct Configuración
         {
             bool HABLADOR = false;
@@ -38,7 +39,7 @@ namespace Ñ
         };
 
         Ñ::EntornoConstrucción *preparaEntornoConstrucción(Entorno::Configuración cfg);
-        void        ponArchivoActual(Ñ::EntornoConstrucción* entorno, std::string archivo);
-        std::string leeArchivoActual(Ñ::EntornoConstrucción* entorno, std::string archivo);
+        void ponArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo);
+        std::string leeArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo);
     }
 }

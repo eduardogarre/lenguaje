@@ -45,11 +45,12 @@ namespace Ñ
         ~EntornoConstrucción() {}
     };
 
-    namespace Entorno {
+    namespace Entorno
+    {
         extern struct Configuración;
 
         Ñ::EntornoConstrucción *preparaEntornoConstrucción(Entorno::Configuración cfg);
-        void        ponArchivoActual(Ñ::EntornoConstrucción* entorno, std::string archivo);
-        std::string leeArchivoActual(Ñ::EntornoConstrucción* entorno, std::string archivo);
+        void ponArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo);
+        std::string leeArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo);
     }
 }

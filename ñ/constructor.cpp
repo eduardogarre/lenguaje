@@ -25,7 +25,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "entorno_int.hpp"
 #include "resultado.hpp"
 
-
 std::string Ñ::creaNombreMódulo(std::string archivo)
 {
 	std::filesystem::path p = archivo;

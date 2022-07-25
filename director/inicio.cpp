@@ -21,7 +21,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <thread>
 #include <vector>
 
-#include "configuracion.hpp"
 #include "docopt.h"
 #include "ñ/ñ.hpp"
 #include "promotor.hpp"

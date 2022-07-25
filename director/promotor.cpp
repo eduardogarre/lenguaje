@@ -17,7 +17,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include "lld/Common/Driver.h"
 
-#include "configuracion.hpp"
 #include "consola.hpp"
 #include "herramientas.hpp"
 #include "ñ/ñ.hpp"

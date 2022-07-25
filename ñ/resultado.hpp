@@ -15,6 +15,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include <string>
 
+#include "nodo.hpp"
+
 namespace Ñ
 {
     extern class Posición;

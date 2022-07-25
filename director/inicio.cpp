@@ -42,9 +42,10 @@ std::string _esperaComando()
 	return comando;
 }
 
-void _interpretaComando(std::string comando, Ñ::TablaSímbolos *tablaSímbolos)
+void _interpretaComando(std::string comando, Ñ::TablaSímbolos *tablaSímbolos, Ñ::Entorno::Configuración cfg)
 {
-	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
+
+	Ñ::EntornoConstrucción *entorno = Ñ::preparaEntornoConstrucción(cfg);
 	Ñ::Resultado resultado;
 
 	std::vector<Ñ::Lexema *> lexemas;
@@ -104,7 +105,7 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos *tablaSímbolos)
 	delete nodos;
 }
 
-int interpretaEnLínea()
+int interpretaEnLínea(Ñ::Entorno::Configuración cfg)
 {
 	Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
 
@@ -117,7 +118,7 @@ int interpretaEnLínea()
 		{
 			continue;
 		}
-		_interpretaComando(comando, tablaSímbolos);
+		_interpretaComando(comando, tablaSímbolos, cfg);
 	}
 
 	delete tablaSímbolos;
@@ -182,7 +183,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	Director::Configuración cfg;
+	Ñ::Entorno::Configuración cfg;
 
 	std::string nombreArchivoDestino = "programa";
 	if (args["--salida"].isString())
@@ -218,5 +219,5 @@ int main(int argc, char **argv)
 		return Director::compila(cfg);
 	}
 
-	return interpretaEnLínea();
+	return interpretaEnLínea(cfg);
 }

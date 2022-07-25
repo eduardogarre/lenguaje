@@ -13,12 +13,13 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-#include "representacionintermedia.hpp"
+#include "constructor.hpp"
 #include "entorno.hpp"
 #include "lexema.hpp"
 #include "lexico.hpp"
 #include "nodo.hpp"
 #include "posicion.hpp"
+#include "representacionintermedia.hpp"
 #include "resultado.hpp"
 #include "salida.hpp"
 #include "semantico.hpp"

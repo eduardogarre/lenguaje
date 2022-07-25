@@ -46,7 +46,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/Transforms/Scalar/GVN.h"
 
-#include "entorno.hpp"
+#include "entorno_int.hpp"
 #include "justoatiempo.hpp"
 #include "nodo.hpp"
 #include "representacionintermedia.hpp"

@@ -13,33 +13,32 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-#include <map>
 #include <string>
-
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Target/TargetMachine.h"
+#include <vector>
 
 namespace Ñ
 {
-    class EntornoConstrucción
-    {
-    public:
-        bool HABLADOR = false;
-        uint8_t optimización = 0;
-        std::string archivoActual = "";
-        llvm::LLVMContext contextoLlvm;
-        llvm::legacy::FunctionPassManager *gestorPasesOptimización = nullptr;
-        llvm::IRBuilder<> constructorLlvm;
-        std::map<std::string, llvm::Type *> globales;
-        std::string tripleteDestino;
-        const llvm::Target *destino;
-        llvm::TargetMachine *máquinaDestino;
+    extern class EntornoConstrucción;
 
-        EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
-        ~EntornoConstrucción() {}
-    };
+    namespace Entorno {
+        struct Configuración
+        {
+            bool HABLADOR = false;
+            uint8_t optimización = 1;
+
+            std::vector<std::string> archivos;
+
+            std::string nombreArchivoDestino = "programa";
+
+#ifdef _WIN32 //// WINDOWS ////
+            std::string extensión = ".exe";
+#else
+            std::string extensión = "";
+#endif
+        };
+
+        Ñ::EntornoConstrucción *preparaEntornoConstrucción(Entorno::Configuración cfg);
+        void        ponArchivoActual(Ñ::EntornoConstrucción* entorno, std::string archivo);
+        std::string leeArchivoActual(Ñ::EntornoConstrucción* entorno, std::string archivo);
+    }
 }

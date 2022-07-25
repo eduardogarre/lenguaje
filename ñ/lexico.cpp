@@ -18,7 +18,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <string>
 #include <vector>
 
-#include "entorno.hpp"
+#include "entorno_int.hpp"
 #include "lexema.hpp"
 #include "lexico.hpp"
 #include "posicion.hpp"

@@ -28,72 +28,16 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "ñ/ñ.hpp"
 #include "promotor.hpp"
 
-std::string creaNombreMódulo(std::string archivo)
-{
-	std::filesystem::path p = archivo;
-	std::string antes = p.string();
-	std::string después = p.stem().string();
 
-	return después;
-}
-
-Ñ::Resultado emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno)
-{
-	Ñ::Resultado resultado;
-
-	móduloLlvm->setDataLayout(entorno->máquinaDestino->createDataLayout());
-	móduloLlvm->setTargetTriple(entorno->tripleteDestino);
-
-	if (entorno->HABLADOR)
-	{
-		std::cout << std::endl
-				  << "Archivo de representación intermedia:" << std::endl
-				  << std::endl;
-		móduloLlvm->print(llvm::outs(), nullptr);
-	}
-
-	std::string nombreMódulo = creaNombreMódulo(entorno->archivoActual);
-
-	std::string nombreArchivoDestino = nombreMódulo + ".o";
-	std::error_code códigoError;
-	llvm::raw_fd_ostream archivoDestino(nombreArchivoDestino, códigoError, llvm::sys::fs::OF_None);
-
-	if (códigoError)
-	{
-		resultado.error("No he podido abrir el archivo: " + códigoError.message());
-		return resultado;
-	}
-
-	llvm::legacy::PassManager paseDeCódigoObjeto;
-	auto tipoArchivo = llvm::CGFT_ObjectFile;
-
-	if (entorno->máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
-	{
-		resultado.error("No he podido emitir un archivo de este tipo");
-		return resultado;
-	}
-
-	paseDeCódigoObjeto.run(*móduloLlvm);
-	archivoDestino.flush();
-
-	if (entorno->HABLADOR)
-	{
-		std::cout << "He construido el archivo '" + nombreArchivoDestino + "'." << std::endl;
-	}
-
-	resultado.éxito();
-	return resultado;
-}
-
-Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
+Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno, Ñ::Entorno::Configuración cfg)
 {
 	Ñ::ResultadoLlvm resultadoLlvm;
 
 	std::string código = "";
 
-	std::string nombreMódulo = creaNombreMódulo(archivo);
+	std::string nombreMódulo = Ñ::creaNombreMódulo(archivo);
 
-	if (entorno->HABLADOR)
+	if (cfg.HABLADOR)
 	{
 		std::cout << "LEYENDO EL CODIGO DEL ARCHIVO" << std::endl;
 	}
@@ -115,19 +59,19 @@ std::string creaNombreMódulo(std::string archivo)
 	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
 
-	if (entorno->HABLADOR)
+	if (cfg.HABLADOR)
 	{
 		std::cout << "ANALIZANDO LEXICO" << std::endl;
 	}
 
 	lexemas = léxico.analiza(código, entorno);
 
-	if (entorno->HABLADOR)
+	if (cfg.HABLADOR)
 	{
 		Ñ::muestraLexemas(lexemas);
 	}
 
-	if (entorno->HABLADOR)
+	if (cfg.HABLADOR)
 	{
 		std::cout << "ANALIZANDO SINTAXIS" << std::endl;
 	}
@@ -149,12 +93,12 @@ std::string creaNombreMódulo(std::string archivo)
 
 	nodos = resultado.nodo();
 
-	if (entorno->HABLADOR)
+	if (cfg.HABLADOR)
 	{
 		muestraNodos(nodos);
 	}
 
-	if (entorno->HABLADOR)
+	if (cfg.HABLADOR)
 	{
 		std::cout << "ANALIZANDO SEMANTICA" << std::endl;
 	}
@@ -162,7 +106,7 @@ std::string creaNombreMódulo(std::string archivo)
 	Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
 	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 
-	if (entorno->HABLADOR)
+	if (cfg.HABLADOR)
 	{
 		muestraNodos(nodos, tablaSímbolos);
 	}
@@ -183,7 +127,7 @@ std::string creaNombreMódulo(std::string archivo)
 		return resultadoLlvm;
 	}
 
-	if (entorno->HABLADOR)
+	if (cfg.HABLADOR)
 	{
 		std::cout << "CREANDO MODULO" << std::endl;
 	}
@@ -199,7 +143,7 @@ std::string creaNombreMódulo(std::string archivo)
 
 	if (resultado.error())
 	{
-		resultadoLlvm.error("[" + entorno->archivoActual + "] " + resultado.mensaje());
+		resultadoLlvm.error("[" + archivo + "] " + resultado.mensaje());
 		return resultadoLlvm;
 	}
 	else
@@ -217,59 +161,9 @@ std::string creaNombreMódulo(std::string archivo)
 	return resultadoLlvm;
 }
 
-Ñ::EntornoConstrucción *preparaEntornoConstrucción(Director::Configuración cfg)
+int Director::compila(Ñ::Entorno::Configuración cfg)
 {
-	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
-	entorno->optimización = cfg.optimización;
-
-	llvm::InitializeNativeTarget();
-	llvm::InitializeNativeTargetAsmParser();
-	llvm::InitializeNativeTargetAsmPrinter();
-
-	entorno->tripleteDestino = llvm::sys::getDefaultTargetTriple();
-
-	std::string error;
-	entorno->destino = llvm::TargetRegistry::lookupTarget(entorno->tripleteDestino, error);
-
-	if (!entorno->destino)
-	{
-		return nullptr;
-	}
-
-	if (cfg.HABLADOR)
-	{
-		entorno->HABLADOR = true;
-
-		std::cout << "Construiré ";
-		std::cout << "'" << cfg.nombreArchivoDestino << cfg.extensión << "'";
-
-		std::cout << ", empleando";
-
-		for (std::string archivo : cfg.archivos)
-		{
-			std::cout << " " << archivo;
-		}
-
-		std::cout << std::endl
-				  << std::endl;
-
-		std::cout << "Tripleta de Destino: " << entorno->tripleteDestino << std::endl
-				  << std::endl;
-	}
-
-	std::string procesador = "x86-64";
-	std::string características = "";
-
-	llvm::TargetOptions opciones;
-	auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
-	entorno->máquinaDestino = entorno->destino->createTargetMachine(entorno->tripleteDestino, procesador, características, opciones, modeloReordenamiento);
-
-	return entorno;
-}
-
-int Director::compila(Director::Configuración cfg)
-{
-	Ñ::EntornoConstrucción *entorno = preparaEntornoConstrucción(cfg);
+	Ñ::EntornoConstrucción *entorno = Ñ::preparaEntornoConstrucción(cfg);
 
 	if (!entorno)
 	{
@@ -283,8 +177,8 @@ int Director::compila(Director::Configuración cfg)
 			std::cout << "Construyendo '" << archivo << "'" << std::endl;
 		}
 
-		entorno->archivoActual = archivo;
-		Ñ::ResultadoLlvm resultado = construyeArchivo(archivo, entorno);
+		Ñ::Entorno::ponArchivoActual(entorno, archivo);
+		Ñ::ResultadoLlvm resultado = construyeArchivo(archivo, entorno, cfg);
 		if (resultado.error())
 		{
 			Director::escribeError(resultado.mensaje(), archivo, resultado.posición());
@@ -315,7 +209,7 @@ int Director::compila(Director::Configuración cfg)
 
 	for (std::string archivo : cfg.archivos)
 	{
-		opción_llvm = creaNombreMódulo(archivo) + ".o ";
+		opción_llvm = Ñ::creaNombreMódulo(archivo) + ".o ";
 		texto = (char *)malloc(opción_llvm.size() + 1);
 		strcpy(texto, opción_llvm.c_str());
 		argumentos.push_back(texto);

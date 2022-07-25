@@ -14,9 +14,14 @@ Copyright © 2021 Eduardo Garre Muñoz
 #pragma once
 
 #include <string>
-#include <vector>
 
-namespace Director
+#include "llvm/IR/Module.h"
+
+#include "entorno_int.hpp"
+#include "resultado.hpp"
+
+namespace Ñ
 {
-    int compila(Ñ::Entorno::Configuración cfg);
+    std::string creaNombreMódulo(std::string archivo);
+    Ñ::Resultado emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno);
 }

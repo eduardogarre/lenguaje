@@ -16,11 +16,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <vector>
 
 #include "lld/Common/Driver.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Target/TargetMachine.h"
 
 #include "configuracion.hpp"
 #include "consola.hpp"

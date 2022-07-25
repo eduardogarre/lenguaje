@@ -126,22 +126,6 @@ int emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *ento
 		Ñ::muestraLexemas(lexemas);
 	}
 
-	/*
-	if(lexemas.size() <= 1)
-	{
-		Ñ::errorConsola(u8"El análisis léxico no encontró código.");
-
-		for(auto l : lexemas)
-		{
-			delete l;
-		}
-		lexemas.clear();
-
-		resultado.éxito();
-		return resultado;
-	}
-	*/
-
 	if (entorno->HABLADOR)
 	{
 		std::cout << "ANALIZANDO SINTAXIS" << std::endl;

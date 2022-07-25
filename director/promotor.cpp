@@ -33,8 +33,6 @@ std::string creaNombreMódulo(std::string archivo)
 	std::filesystem::path p = archivo;
 	std::string antes = p.string();
 	std::string después = p.stem().string();
-	// std::cout << "Antes: " << antes << std::endl;
-	// std::cout << "Después: " << después << std::endl;
 
 	return después;
 }
@@ -262,8 +260,6 @@ int emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *ento
 	llvm::TargetOptions opciones;
 	auto modeloReordenamiento = llvm::Optional<llvm::Reloc::Model>();
 	entorno->máquinaDestino = entorno->destino->createTargetMachine(entorno->tripleteDestino, procesador, características, opciones, modeloReordenamiento);
-
-	// std::cout << "Preparando construcción con LLVM" << std::endl << std::endl;
 
 	return entorno;
 }

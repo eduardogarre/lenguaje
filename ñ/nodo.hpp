@@ -24,11 +24,12 @@ namespace Ñ
     extern class Tipo;
 
     // Análisis sintáctico
-    enum CategoríaNodo {
+    enum CategoríaNodo
+    {
         NODO_VACÍO,
 
         NODO_EXPANDIDO,
-        
+
         NODO_TIPO,
         NODO_VALOR,
 
@@ -56,16 +57,16 @@ namespace Ñ
         NODO_DECLARA_FUNCIÓN,
         NODO_DEFINE_FUNCIÓN,
         NODO_LLAMA_FUNCIÓN,
-        
+
         NODO_DEVUELVE,
         NODO_PARA_BUCLE,
 
         NODO_EXPRESIÓN,
-        
+
         NODO_BLOQUE,
         NODO_SI_CONDICIONAL,
         NODO_BUCLE_MIENTRAS,
-        
+
         NODO_FUNCIÓN,
         NODO_FUNCIÓN_EJECUTABLE,
 
@@ -75,18 +76,18 @@ namespace Ñ
     class Nodo
     {
     private:
-        Posición* _posición;
+        Posición *_posición;
 
     public:
         CategoríaNodo categoría;
-        std::vector<Ñ::Nodo*> ramas;
+        std::vector<Ñ::Nodo *> ramas;
 
-        Nodo(Posición* posición = nullptr);
+        Nodo(Posición *posición = nullptr);
         ~Nodo();
 
         void imprimeAjuste();
-        Posición* posición();
-        virtual void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        Posición *posición();
+        virtual void muestra(TablaSímbolos *tablaSímbolos = nullptr);
     };
 
     class Literal : public Nodo
@@ -95,10 +96,10 @@ namespace Ñ
         Ñ::CategoríaTipo tipo;
         std::string dato;
 
-        Literal(Posición* posición = nullptr);
+        Literal(Posición *posición = nullptr);
         ~Literal();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Identificador : public Nodo
@@ -106,10 +107,10 @@ namespace Ñ
     public:
         std::string id;
 
-        Identificador(Posición* posición = nullptr);
+        Identificador(Posición *posición = nullptr);
         ~Identificador();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Puntero : public Nodo
@@ -117,79 +118,79 @@ namespace Ñ
     public:
         std::string id;
 
-        Puntero(Posición* posición = nullptr);
+        Puntero(Posición *posición = nullptr);
         ~Puntero();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class ConvierteTipos : public Nodo
     {
     public:
-        Ñ::Tipo* origen;
-        Ñ::Tipo* destino;
+        Ñ::Tipo *origen;
+        Ñ::Tipo *destino;
 
-        ConvierteTipos(Posición* posición = nullptr);
+        ConvierteTipos(Posición *posición = nullptr);
         ~ConvierteTipos();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class LadoIzquierdoAsignación : public Nodo
     {
     public:
-        LadoIzquierdoAsignación(Posición* posición = nullptr);
+        LadoIzquierdoAsignación(Posición *posición = nullptr);
         ~LadoIzquierdoAsignación();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class LadoDerechoAsignación : public Nodo
     {
     public:
-        LadoDerechoAsignación(Posición* posición = nullptr);
+        LadoDerechoAsignación(Posición *posición = nullptr);
         ~LadoDerechoAsignación();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Comparación : public Nodo
     {
     public:
-        Comparación(Posición* posición = nullptr);
+        Comparación(Posición *posición = nullptr);
         ~Comparación();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Término : public Nodo
     {
     public:
-        Término(Posición* posición = nullptr);
+        Término(Posición *posición = nullptr);
         ~Término();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Factor : public Nodo
     {
     public:
-        Factor(Posición* posición = nullptr);
+        Factor(Posición *posición = nullptr);
         ~Factor();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class OperaciónBinaria : public Nodo
     {
     public:
         std::string operación;
-        Ñ::Tipo* tipo = nullptr;        
+        Ñ::Tipo *tipo = nullptr;
 
-        OperaciónBinaria(Posición* posición = nullptr);
+        OperaciónBinaria(Posición *posición = nullptr);
         ~OperaciónBinaria();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class OperaciónUnaria : public Nodo
@@ -197,19 +198,19 @@ namespace Ñ
     public:
         std::string operación;
 
-        OperaciónUnaria(Posición* posición = nullptr);
+        OperaciónUnaria(Posición *posición = nullptr);
         ~OperaciónUnaria();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class ElementoSerie : public Nodo
     {
     public:
-        ElementoSerie(Posición* posición = nullptr);
+        ElementoSerie(Posición *posición = nullptr);
         ~ElementoSerie();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Primario : public Nodo
@@ -217,10 +218,10 @@ namespace Ñ
     public:
         std::string primario;
 
-        Primario(Posición* posición = nullptr);
+        Primario(Posición *posición = nullptr);
         ~Primario();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class DeclaraVariable : public Nodo
@@ -228,37 +229,37 @@ namespace Ñ
     public:
         std::string variable;
 
-        DeclaraVariable(Posición* posición = nullptr);
+        DeclaraVariable(Posición *posición = nullptr);
         ~DeclaraVariable();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Asigna : public Nodo
     {
     public:
-        Asigna(Posición* posición = nullptr);
+        Asigna(Posición *posición = nullptr);
         ~Asigna();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Argumento : public Nodo
     {
     public:
-        Argumento(Posición* posición = nullptr);
+        Argumento(Posición *posición = nullptr);
         ~Argumento();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Argumentos : public Nodo
     {
     public:
-        Argumentos(Posición* posición = nullptr);
+        Argumentos(Posición *posición = nullptr);
         ~Argumentos();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class LlamaFunción : public Nodo
@@ -266,64 +267,64 @@ namespace Ñ
     public:
         std::string nombre;
 
-        LlamaFunción(Posición* posición = nullptr);
+        LlamaFunción(Posición *posición = nullptr);
         ~LlamaFunción();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Devuelve : public Nodo
     {
     public:
-        Devuelve(Posición* posición = nullptr);
+        Devuelve(Posición *posición = nullptr);
         ~Devuelve();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class ParaBucle : public Nodo
     {
     public:
-        ParaBucle(Posición* posición = nullptr);
+        ParaBucle(Posición *posición = nullptr);
         ~ParaBucle();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Expresión : public Nodo
     {
     public:
-        Expresión(Posición* posición = nullptr);
+        Expresión(Posición *posición = nullptr);
         ~Expresión();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Bloque : public Nodo
     {
     public:
-        Bloque(Posición* posición = nullptr);
+        Bloque(Posición *posición = nullptr);
         ~Bloque();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class SiCondicional : public Nodo
     {
     public:
-        SiCondicional(Posición* posición = nullptr);
+        SiCondicional(Posición *posición = nullptr);
         ~SiCondicional();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class BucleMientras : public Nodo
     {
     public:
-        BucleMientras(Posición* posición = nullptr);
+        BucleMientras(Posición *posición = nullptr);
         ~BucleMientras();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class DefineFunción : public Nodo
@@ -332,10 +333,10 @@ namespace Ñ
         std::string nombre;
         bool público;
 
-        DefineFunción(Posición* posición = nullptr);
+        DefineFunción(Posición *posición = nullptr);
         ~DefineFunción();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class DeclaraFunción : public Nodo
@@ -344,10 +345,10 @@ namespace Ñ
         std::string nombre;
         bool externo;
 
-        DeclaraFunción(Posición* posición = nullptr);
+        DeclaraFunción(Posición *posición = nullptr);
         ~DeclaraFunción();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Función : public Nodo
@@ -355,22 +356,22 @@ namespace Ñ
     public:
         std::string nombre;
 
-        Función(Posición* posición = nullptr);
+        Función(Posición *posición = nullptr);
         ~Función();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class FunciónEjecutable : public Nodo
     {
     public:
         std::string nombre;
-        Ñ::Nodo* (*función)(Ñ::Nodo* yo, Ñ::Nodo* argumentos);
+        Ñ::Nodo *(*función)(Ñ::Nodo *yo, Ñ::Nodo *argumentos);
 
-        FunciónEjecutable(Posición* posición = nullptr);
+        FunciónEjecutable(Posición *posición = nullptr);
         ~FunciónEjecutable();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
     class Módulo : public Nodo
@@ -378,16 +379,15 @@ namespace Ñ
     public:
         std::string módulo;
 
-        Módulo(Posición* posición = nullptr);
+        Módulo(Posición *posición = nullptr);
         ~Módulo();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr) override;
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr) override;
     };
 
-
     std::string obténNombreDeNodo(Ñ::CategoríaNodo n);
-    void borraNodos(Ñ::Nodo* nodos);
-    void muestraNodos(Nodo* nodo, TablaSímbolos* tablaSímbolos = nullptr);
-    bool sonÁrbolesDuplicados(Nodo* nodo1, Nodo* nodo2);
-    Nodo* duplicaÁrbol(Nodo* nodo);
+    void borraNodos(Ñ::Nodo *nodos);
+    void muestraNodos(Nodo *nodo, TablaSímbolos *tablaSímbolos = nullptr);
+    bool sonÁrbolesDuplicados(Nodo *nodo1, Nodo *nodo2);
+    Nodo *duplicaÁrbol(Nodo *nodo);
 }

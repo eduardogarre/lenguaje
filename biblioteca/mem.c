@@ -15,16 +15,16 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "mem.h"
 #include "externowindows.h"
 
-void* reserva(unsigned long long _num)
+void *reserva(unsigned long long _num)
 {
-    void* almacen = GetProcessHeap();
+    void *almacen = GetProcessHeap();
 
     return HeapAlloc(almacen, HEAP_ZERO_MEMORY, _num);
 }
 
-int suelta(void* _mem)
+int suelta(void *_mem)
 {
-    void* almacen = GetProcessHeap();
+    void *almacen = GetProcessHeap();
 
     return HeapFree(almacen, HEAP_ZERO_MEMORY, _mem);
 }

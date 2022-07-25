@@ -18,29 +18,31 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "lexema.hpp"
 #include "posicion.hpp"
 
-Ñ::Lexema::Lexema(Posición* posición) {
+Ñ::Lexema::Lexema(Posición *posición)
+{
     _posición = new Ñ::Posición;
-    if(posición != nullptr)
+    if (posición != nullptr)
     {
         *_posición = *posición;
     }
 }
 
-Ñ::Lexema::~Lexema() {
-    if(_posición != nullptr)
+Ñ::Lexema::~Lexema()
+{
+    if (_posición != nullptr)
     {
         delete _posición;
     }
 }
 
-Ñ::Posición* Ñ::Lexema::posición()
+Ñ::Posición *Ñ::Lexema::posición()
 {
     return _posición;
 }
 
-void Ñ::muestraLexemas(std::vector<Ñ::Lexema*> _lexemas)
+void Ñ::muestraLexemas(std::vector<Ñ::Lexema *> _lexemas)
 {
-    while(!(_lexemas.empty()))
+    while (!(_lexemas.empty()))
     {
         std::cout << "LIN:" << _lexemas.front()->posición()->línea();
         std::cout << ", COL:" << _lexemas.front()->posición()->columna();
@@ -64,7 +66,7 @@ void Ñ::muestraLexemas(std::vector<Ñ::Lexema*> _lexemas)
         case Ñ::CategoríaLexema::LEXEMA_NÚMERO:
             std::cout << u8"] [LEX_NÚMERO] [";
             break;
-        
+
         default:
             std::cout << u8"] [LEXEMA_DESCONOCIDO] [";
             break;

@@ -30,49 +30,49 @@ namespace Ñ
 #else
     private:
 #endif
-        Ñ::Posición* últimaPosición = nullptr;
+        Ñ::Posición *últimaPosición = nullptr;
         std::string mensajeError;
         bool éxito = false;
 
         uint32_t cursor;
-        std::vector<Ñ::Lexema*> lexemas;
+        std::vector<Ñ::Lexema *> lexemas;
 
-        void apuntaError(Ñ::Posición* p, std::string error);
+        void apuntaError(Ñ::Posición *p, std::string error);
 
         bool notación(std::string carácter);
         bool reservada(std::string palabra);
-        Ñ::Nodo* literal();
-        Ñ::Nodo* tipo();
-        Ñ::Nodo* identificador();
-        Ñ::Nodo* puntero();
-        Ñ::Nodo* primario();
-        Ñ::Nodo* operaciónUnaria();
-        Ñ::Nodo* elementoSerie();
-        Ñ::Nodo* factor();
-        Ñ::Nodo* término();
-        Ñ::Nodo* comparación();
-        Ñ::Nodo* ladoIzquierdoAsignación();
-        Ñ::Nodo* ladoDerechoAsignación();
-        Ñ::Nodo* declaraVariable();
-        Ñ::Nodo* asigna();
-        Ñ::Nodo* declaraArgumento();
-        Ñ::Nodo* declaraArgumentos();
-        Ñ::Nodo* ponArgumento();
-        Ñ::Nodo* ponArgumentos();
-        Ñ::Nodo* llamaFunción();
-        Ñ::Nodo* vuelve();
-        Ñ::Nodo* devuelve();
-        Ñ::Nodo* para();
-        Ñ::Nodo* siCondicional();
-        Ñ::Nodo* bucleMientras();
-        Ñ::Nodo* expresión();
-        Ñ::Nodo* bloque();
-        Ñ::Nodo* defineFunción();
-        Ñ::Nodo* declaraFunción();
-        Ñ::Nodo* módulo(std::string nombre);
+        Ñ::Nodo *literal();
+        Ñ::Nodo *tipo();
+        Ñ::Nodo *identificador();
+        Ñ::Nodo *puntero();
+        Ñ::Nodo *primario();
+        Ñ::Nodo *operaciónUnaria();
+        Ñ::Nodo *elementoSerie();
+        Ñ::Nodo *factor();
+        Ñ::Nodo *término();
+        Ñ::Nodo *comparación();
+        Ñ::Nodo *ladoIzquierdoAsignación();
+        Ñ::Nodo *ladoDerechoAsignación();
+        Ñ::Nodo *declaraVariable();
+        Ñ::Nodo *asigna();
+        Ñ::Nodo *declaraArgumento();
+        Ñ::Nodo *declaraArgumentos();
+        Ñ::Nodo *ponArgumento();
+        Ñ::Nodo *ponArgumentos();
+        Ñ::Nodo *llamaFunción();
+        Ñ::Nodo *vuelve();
+        Ñ::Nodo *devuelve();
+        Ñ::Nodo *para();
+        Ñ::Nodo *siCondicional();
+        Ñ::Nodo *bucleMientras();
+        Ñ::Nodo *expresión();
+        Ñ::Nodo *bloque();
+        Ñ::Nodo *defineFunción();
+        Ñ::Nodo *declaraFunción();
+        Ñ::Nodo *módulo(std::string nombre);
 
     public:
-        Ñ::Resultado analiza(std::vector<Ñ::Lexema*> _lexemas, std::string nombreArchivo);
-        Ñ::Resultado analizaComando(std::vector<Ñ::Lexema*> _lexemas);
+        Ñ::Resultado analiza(std::vector<Ñ::Lexema *> _lexemas, std::string nombreArchivo);
+        Ñ::Resultado analizaComando(std::vector<Ñ::Lexema *> _lexemas);
     };
 }

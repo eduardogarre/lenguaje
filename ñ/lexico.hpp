@@ -22,11 +22,11 @@ namespace Ñ
 {
     extern class EntornoConstrucción;
     extern class Posición;
-    
+
     class Léxico // Análisis léxico
     {
     public:
-        std::vector<Lexema*> analiza(std::string código, Ñ::EntornoConstrucción* entorno);
+        std::vector<Lexema *> analiza(std::string código, Ñ::EntornoConstrucción *entorno);
 
 // Compilación condicional: si estamos en pruebas, expongo las funciones privadas de la clase Léxico
 #ifdef EVALUANDO_PRUEBAS
@@ -35,11 +35,11 @@ namespace Ñ
     private:
 #endif
         uint32_t longitudarchivo = 0;
-        Posición* posición;
-        
-        std::vector<Ñ::Lexema*> lexemas;
+        Posición *posición;
 
-        bool esfindelarchivo(Posición* p);
+        std::vector<Ñ::Lexema *> lexemas;
+
+        bool esfindelarchivo(Posición *p);
         void incrementaCursor(std::string txt);
         std::string siguienteCarácter(std::string txt);
         bool comentario(std::string txt);

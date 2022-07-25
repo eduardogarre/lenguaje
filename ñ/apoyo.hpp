@@ -18,8 +18,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 namespace Ñ
 {
-    template<typename T>
-    void pop_front(std::vector<T>& vec)
+    template <typename T>
+    void pop_front(std::vector<T> &vec)
     {
         assert(!vec.empty());
         vec.erase(vec.begin());
@@ -36,9 +36,9 @@ namespace Ñ
             return x;
         }
 
-        int64_t tmp = potencia(x, p/2);
+        int64_t tmp = potencia(x, p / 2);
 
-        if (p%2 == 0)
+        if (p % 2 == 0)
         {
             return tmp * tmp;
         }

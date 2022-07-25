@@ -49,39 +49,38 @@ namespace Ñ
         llvm::orc::JITDylib &tablaSímbolosPrincipal;
 
     public:
-        ConstructorJAT( llvm::orc::JITTargetMachineBuilder constructorJATMáquinaDestino,
-                llvm::DataLayout disposiciónDatos,
-                std::unique_ptr<llvm::orc::SelfExecutorProcessControl> controlEjecutorDelProceso
-            ) :
-                sesiónEjecución(std::move(controlEjecutorDelProceso)),
-                capaObjeto(sesiónEjecución, []() { return std::make_unique<llvm::SectionMemoryManager>(); }),
-                capaConstrucción(sesiónEjecución, capaObjeto, std::make_unique<llvm::orc::ConcurrentIRCompiler>(std::move(constructorJATMáquinaDestino))),
-                disposiciónDatos(std::move(disposiciónDatos)),
-                traduceSímbolos(sesiónEjecución, this->disposiciónDatos),
-                contexto(std::make_unique<llvm::LLVMContext>()),
-                tablaSímbolosPrincipal(this->sesiónEjecución.createBareJITDylib("<main>"))
+        ConstructorJAT(llvm::orc::JITTargetMachineBuilder constructorJATMáquinaDestino,
+                       llvm::DataLayout disposiciónDatos,
+                       std::unique_ptr<llvm::orc::SelfExecutorProcessControl> controlEjecutorDelProceso) : sesiónEjecución(std::move(controlEjecutorDelProceso)),
+                                                                                                           capaObjeto(sesiónEjecución, []()
+                                                                                                                      { return std::make_unique<llvm::SectionMemoryManager>(); }),
+                                                                                                           capaConstrucción(sesiónEjecución, capaObjeto, std::make_unique<llvm::orc::ConcurrentIRCompiler>(std::move(constructorJATMáquinaDestino))),
+                                                                                                           disposiciónDatos(std::move(disposiciónDatos)),
+                                                                                                           traduceSímbolos(sesiónEjecución, this->disposiciónDatos),
+                                                                                                           contexto(std::make_unique<llvm::LLVMContext>()),
+                                                                                                           tablaSímbolosPrincipal(this->sesiónEjecución.createBareJITDylib("<main>"))
         {
             // Por el momento, en Windows el gestor de COFF, RuntimeDyldCOFF, no informa correctamente del estado de los símbolos
             capaObjeto.setOverrideObjectFlagsWithResponsibilityFlags(true);
-            llvm::orc::JITDylib* jitdylib = sesiónEjecución.getJITDylibByName("<main>");
+            llvm::orc::JITDylib *jitdylib = sesiónEjecución.getJITDylibByName("<main>");
 
-            if(jitdylib)
+            if (jitdylib)
             {
                 jitdylib->addGenerator(llvm::cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(disposiciónDatos.getGlobalPrefix())));
             }
         }
 
-        static Ñ::ConstructorJAT* Crea()
+        static Ñ::ConstructorJAT *Crea()
         {
             auto controlEjecutorDelProceso = llvm::orc::SelfExecutorProcessControl::Create();
-            if(!controlEjecutorDelProceso)
+            if (!controlEjecutorDelProceso)
             {
                 controlEjecutorDelProceso.takeError();
                 return nullptr;
             }
 
             auto destinoConstrucciónJAT = llvm::orc::JITTargetMachineBuilder::detectHost();
-            if(!destinoConstrucciónJAT)
+            if (!destinoConstrucciónJAT)
             {
                 destinoConstrucciónJAT.takeError();
                 return nullptr;
@@ -89,14 +88,14 @@ namespace Ñ
 
             auto disposiciónDatos = destinoConstrucciónJAT->getDefaultDataLayoutForTarget();
 
-            if(!disposiciónDatos)
+            if (!disposiciónDatos)
             {
                 disposiciónDatos.takeError();
                 return nullptr;
             }
 
-            Ñ::ConstructorJAT* jat = new Ñ::ConstructorJAT(std::move(*destinoConstrucciónJAT), std::move(*disposiciónDatos), std::move(*controlEjecutorDelProceso));
-        
+            Ñ::ConstructorJAT *jat = new Ñ::ConstructorJAT(std::move(*destinoConstrucciónJAT), std::move(*disposiciónDatos), std::move(*controlEjecutorDelProceso));
+
             return jat;
         }
 
@@ -112,7 +111,7 @@ namespace Ñ
 
         void añadeMódulo(std::unique_ptr<llvm::Module> módulo)
         {
-            llvm::orc::JITDylib* jitdylib = sesiónEjecución.getJITDylibByName("<main>");
+            llvm::orc::JITDylib *jitdylib = sesiónEjecución.getJITDylibByName("<main>");
             llvm::cantFail(capaConstrucción.add(*jitdylib, llvm::orc::ThreadSafeModule(std::move(módulo), contexto)));
         }
 

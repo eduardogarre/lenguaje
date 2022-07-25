@@ -20,7 +20,8 @@ namespace Ñ
     extern class Posición;
 
     // Análisis léxico
-    enum CategoríaLexema {
+    enum CategoríaLexema
+    {
         LEXEMA_RESERVADO,
         LEXEMA_IDENTIFICADOR,
         LEXEMA_NOTACIÓN,
@@ -34,16 +35,17 @@ namespace Ñ
     class Lexema
     {
     private:
-        Posición* _posición = nullptr;
+        Posición *_posición = nullptr;
+
     public:
-        Lexema(Posición* posición = nullptr);
+        Lexema(Posición *posición = nullptr);
         ~Lexema();
 
         CategoríaLexema categoría;
         std::string contenido;
 
-        Posición* posición();
+        Posición *posición();
     };
-    
-    void muestraLexemas(std::vector<Ñ::Lexema*> _lexemas);
+
+    void muestraLexemas(std::vector<Ñ::Lexema *> _lexemas);
 }

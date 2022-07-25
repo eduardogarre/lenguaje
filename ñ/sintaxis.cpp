@@ -25,9 +25,9 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "tipo.hpp"
 #include "valor.hpp"
 
-void Ñ::Sintaxis::apuntaError(Ñ::Posición* p, std::string error)
+void Ñ::Sintaxis::apuntaError(Ñ::Posición *p, std::string error)
 {
-	if((!últimaPosición) || (p->cursor() > últimaPosición->cursor()))
+	if ((!últimaPosición) || (p->cursor() > últimaPosición->cursor()))
 	{
 		delete últimaPosición;
 		últimaPosición = new Ñ::Posición;
@@ -40,11 +40,11 @@ bool Ñ::Sintaxis::notación(std::string carácter)
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN)
 		{
-			if(lexemas[cursor]->contenido == carácter)
+			if (lexemas[cursor]->contenido == carácter)
 			{
 				cursor++;
 				return true;
@@ -60,11 +60,11 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
 		{
-			if(lexemas[cursor]->contenido == palabra)
+			if (lexemas[cursor]->contenido == palabra)
 			{
 				cursor++;
 				return true;
@@ -76,92 +76,92 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return false;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::literal()
+Ñ::Nodo *Ñ::Sintaxis::literal()
 {
 	uint32_t c = cursor;
 
-	Ñ::Literal* l;
+	Ñ::Literal *l;
 
-	if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NÚMERO)
+	if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NÚMERO)
 	{
 		l = new Ñ::Literal(lexemas[cursor]->posición());
 		l->dato = lexemas[cursor]->contenido;
 		l->tipo = obténMínimoNaturalVálido(std::stoull(l->dato));
 		cursor++;
-		return (Ñ::Nodo*)l;
+		return (Ñ::Nodo *)l;
 	}
-	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL)
+	else if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL)
 	{
 		l = new Ñ::Literal(lexemas[cursor]->posición());
 		l->tipo = Ñ::CategoríaTipo::TIPO_REAL_64;
 		l->dato = lexemas[cursor]->contenido;
 		cursor++;
-		return (Ñ::Nodo*)l;
+		return (Ñ::Nodo *)l;
 	}
-	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+	else if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
 	{
-		if(lexemas[cursor]->contenido == "cierto")
+		if (lexemas[cursor]->contenido == "cierto")
 		{
 			l = new Ñ::Literal(lexemas[cursor]->posición());
 			l->tipo = Ñ::CategoríaTipo::TIPO_BOOLEANO;
 			l->dato = lexemas[cursor]->contenido;
 			cursor++;
-			return (Ñ::Nodo*)l;
+			return (Ñ::Nodo *)l;
 		}
-		else if(lexemas[cursor]->contenido == "falso")
+		else if (lexemas[cursor]->contenido == "falso")
 		{
 			l = new Ñ::Literal(lexemas[cursor]->posición());
 			l->tipo = Ñ::CategoríaTipo::TIPO_BOOLEANO;
 			l->dato = lexemas[cursor]->contenido;
 			cursor++;
-			return (Ñ::Nodo*)l;
+			return (Ñ::Nodo *)l;
 		}
-		else if(lexemas[cursor]->contenido == "nulo")
+		else if (lexemas[cursor]->contenido == "nulo")
 		{
 			l = new Ñ::Literal(lexemas[cursor]->posición());
 			l->tipo = Ñ::CategoríaTipo::TIPO_NADA;
 			l->dato = lexemas[cursor]->contenido;
 			cursor++;
-			return (Ñ::Nodo*)l;
+			return (Ñ::Nodo *)l;
 		}
 	}
-	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_TEXTO)
+	else if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_TEXTO)
 	{
 		l = new Ñ::Literal(lexemas[cursor]->posición());
 		l->tipo = Ñ::CategoríaTipo::TIPO_SERIE;
 		l->dato = lexemas[cursor]->contenido;
 
-		const char* texto = l->dato.c_str();
-		for(int i = 0; i < strlen(texto); i++)
+		const char *texto = l->dato.c_str();
+		for (int i = 0; i < strlen(texto); i++)
 		{
-			Ñ::Literal* sublit = new Ñ::Literal(l->posición());
+			Ñ::Literal *sublit = new Ñ::Literal(l->posición());
 			sublit->tipo = Ñ::CategoríaTipo::TIPO_NATURAL_8;
 			sublit->dato = std::to_string((int)texto[i]);
 			l->ramas.push_back(sublit);
 		}
-		
+
 		// Añado el carácter de fin de cadena
-		Ñ::Literal* sublit = new Ñ::Literal(l->posición());
+		Ñ::Literal *sublit = new Ñ::Literal(l->posición());
 		sublit->tipo = Ñ::CategoríaTipo::TIPO_NATURAL_8;
 		sublit->dato = std::to_string(0);
 		l->ramas.push_back(sublit);
 
 		cursor++;
-		return (Ñ::Nodo*)l;
+		return (Ñ::Nodo *)l;
 	}
-	else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN)
+	else if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN)
 	{
-		Posición* p = lexemas[cursor]->posición();
+		Posición *p = lexemas[cursor]->posición();
 
-		if(lexemas[cursor]->contenido == "[")
+		if (lexemas[cursor]->contenido == "[")
 		{
 			cursor++;
 
 			l = new Ñ::Literal(p);
 
-			while(lexemas[cursor]->contenido != "]")
+			while (lexemas[cursor]->contenido != "]")
 			{
-				if(Ñ::Nodo* n = literal())
+				if (Ñ::Nodo *n = literal())
 				{
 					l->ramas.push_back(n);
 				}
@@ -173,15 +173,15 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					return nullptr;
 				}
 
-				if(!notación(","))
+				if (!notación(","))
 				{
 					break;
 				}
 			}
-			
+
 			l->tipo = Ñ::CategoríaTipo::TIPO_SERIE;
 
-			if(!notación("]"))
+			if (!notación("]"))
 			{
 				delete l;
 				apuntaError(lexemas[cursor - 1]->posición(), "Esperaba ']' al final de la serie.");
@@ -189,7 +189,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 
-			return (Ñ::Nodo*)l;
+			return (Ñ::Nodo *)l;
 		}
 	}
 
@@ -198,21 +198,21 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::ladoIzquierdoAsignación()
+Ñ::Nodo *Ñ::Sintaxis::ladoIzquierdoAsignación()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(Ñ::Nodo* dv = declaraVariable())
+		if (Ñ::Nodo *dv = declaraVariable())
 		{
 			return dv;
 		}
-		else if(Ñ::Nodo* id = identificador())
+		else if (Ñ::Nodo *id = identificador())
 		{
 			return id;
 		}
-		else if(Ñ::Nodo* ptr = puntero())
+		else if (Ñ::Nodo *ptr = puntero())
 		{
 			return ptr;
 		}
@@ -223,14 +223,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::ladoDerechoAsignación()
+Ñ::Nodo *Ñ::Sintaxis::ladoDerechoAsignación()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Nodo* cmp = comparación();
-		
+		Ñ::Nodo *cmp = comparación();
+
 		return cmp;
 	}
 
@@ -239,28 +239,28 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::comparación()
+Ñ::Nodo *Ñ::Sintaxis::comparación()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Nodo* t1;
+		Ñ::Nodo *t1;
 
-		if(t1 = término())
+		if (t1 = término())
 		{
-			Ñ::Nodo* cmp = nullptr;
+			Ñ::Nodo *cmp = nullptr;
 
-			while(true)
+			while (true)
 			{
 				std::string operación;
 				uint32_t cN = cursor;
 
-				Posición* pop = lexemas[cursor]->posición();
+				Posición *pop = lexemas[cursor]->posición();
 
-				if(notación(">"))
+				if (notación(">"))
 				{
-					if(notación("="))
+					if (notación("="))
 					{
 						operación = ">=";
 						goto operacionEncontrada;
@@ -271,9 +271,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 						goto operacionEncontrada;
 					}
 				}
-				else if(notación("<"))
+				else if (notación("<"))
 				{
-					if(notación("="))
+					if (notación("="))
 					{
 						operación = "<=";
 						goto operacionEncontrada;
@@ -289,9 +289,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					cursor = cN;
 				}
 
-				if(notación("!"))
+				if (notación("!"))
 				{
-					if(notación("="))
+					if (notación("="))
 					{
 						operación = "!=";
 						goto operacionEncontrada;
@@ -305,10 +305,10 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				{
 					cursor = cN;
 				}
-				
-				if(notación("="))
+
+				if (notación("="))
 				{
-					if(notación("="))
+					if (notación("="))
 					{
 						operación = "==";
 						goto operacionEncontrada;
@@ -324,22 +324,22 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				}
 
 				cursor = cN;
-				
-				if(cursor == cN) // Si no hemos avanzado
+
+				if (cursor == cN) // Si no hemos avanzado
 				{
 					break;
 				}
 
-				operacionEncontrada:
+			operacionEncontrada:
 
-				if(Ñ::Nodo* tN = término())
+				if (Ñ::Nodo *tN = término())
 				{
-					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria(pop));
-					((Ñ::OperaciónBinaria*)op)->operación = operación;
+					Ñ::Nodo *op = (Ñ::Nodo *)(new Ñ::OperaciónBinaria(pop));
+					((Ñ::OperaciónBinaria *)op)->operación = operación;
 					op->ramas.push_back(tN);
-					if(cmp == nullptr)
+					if (cmp == nullptr)
 					{
-						cmp = (Ñ::Nodo*)(new Ñ::Comparación(pop));
+						cmp = (Ñ::Nodo *)(new Ñ::Comparación(pop));
 						cmp->ramas.push_back(t1);
 					}
 					cmp->ramas.push_back(op);
@@ -353,7 +353,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				}
 			}
 
-			if(cmp == nullptr)
+			if (cmp == nullptr)
 			{
 				return t1;
 			}
@@ -369,30 +369,30 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::término()
+Ñ::Nodo *Ñ::Sintaxis::término()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Nodo* f1;
+		Ñ::Nodo *f1;
 
-		if(f1 = factor())
+		if (f1 = factor())
 		{
-			Ñ::Nodo* t = nullptr;
+			Ñ::Nodo *t = nullptr;
 
-			while(true)
+			while (true)
 			{
 				std::string operación;
 				uint32_t cN = cursor;
 
-				Posición* pop = lexemas[cursor]->posición();
+				Posición *pop = lexemas[cursor]->posición();
 
-				if(notación("+"))
+				if (notación("+"))
 				{
 					operación = "+";
 				}
-				else if(notación("-"))
+				else if (notación("-"))
 				{
 					operación = "-";
 				}
@@ -401,15 +401,15 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					cursor = cN;
 					break;
 				}
-				
-				if(Ñ::Nodo* fN = factor())
+
+				if (Ñ::Nodo *fN = factor())
 				{
-					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria(pop));
-					((Ñ::OperaciónBinaria*)op)->operación = operación;
+					Ñ::Nodo *op = (Ñ::Nodo *)(new Ñ::OperaciónBinaria(pop));
+					((Ñ::OperaciónBinaria *)op)->operación = operación;
 					op->ramas.push_back(fN);
-					if(t == nullptr)
+					if (t == nullptr)
 					{
-						t = (Ñ::Nodo*)(new Ñ::Término(pop));
+						t = (Ñ::Nodo *)(new Ñ::Término(pop));
 						t->ramas.push_back(f1);
 					}
 					t->ramas.push_back(op);
@@ -423,7 +423,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				}
 			}
 
-			if(t == nullptr)
+			if (t == nullptr)
 			{
 				return f1;
 			}
@@ -439,34 +439,34 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::factor()
+Ñ::Nodo *Ñ::Sintaxis::factor()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Nodo* u1;
+		Ñ::Nodo *u1;
 
-		if(u1 = operaciónUnaria())
+		if (u1 = operaciónUnaria())
 		{
-			Ñ::Nodo* f = nullptr;
+			Ñ::Nodo *f = nullptr;
 
-			while(true)
+			while (true)
 			{
 				std::string operación;
 				uint32_t cN = cursor;
 
-				Posición* pop = lexemas[cursor]->posición();
+				Posición *pop = lexemas[cursor]->posición();
 
-				if(notación("*"))
+				if (notación("*"))
 				{
 					operación = "*";
 				}
-				else if(notación("/"))
+				else if (notación("/"))
 				{
 					operación = "/";
 				}
-				else if(notación("%"))
+				else if (notación("%"))
 				{
 					operación = "%";
 				}
@@ -476,14 +476,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					break;
 				}
 
-				if(Ñ::Nodo* uN = operaciónUnaria())
+				if (Ñ::Nodo *uN = operaciónUnaria())
 				{
-					Ñ::Nodo* op = (Ñ::Nodo*)(new Ñ::OperaciónBinaria(pop));
-					((Ñ::OperaciónBinaria*)op)->operación = operación;
+					Ñ::Nodo *op = (Ñ::Nodo *)(new Ñ::OperaciónBinaria(pop));
+					((Ñ::OperaciónBinaria *)op)->operación = operación;
 					op->ramas.push_back(uN);
-					if(f == nullptr)
+					if (f == nullptr)
 					{
-						f = (Ñ::Nodo*)(new Ñ::Factor(pop));
+						f = (Ñ::Nodo *)(new Ñ::Factor(pop));
 						f->ramas.push_back(u1);
 					}
 					f->ramas.push_back(op);
@@ -497,7 +497,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				}
 			}
 
-			if(f == nullptr)
+			if (f == nullptr)
 			{
 				return u1;
 			}
@@ -513,24 +513,24 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::elementoSerie()
+Ñ::Nodo *Ñ::Sintaxis::elementoSerie()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Nodo* u1;
+		Ñ::Nodo *u1;
 
-		if(Ñ::Nodo* prim = primario())
+		if (Ñ::Nodo *prim = primario())
 		{
-			if(!notación("["))
+			if (!notación("["))
 			{
 				return prim;
 			}
 
-			if(Ñ::Nodo* lda = ladoDerechoAsignación())
+			if (Ñ::Nodo *lda = ladoDerechoAsignación())
 			{
-				if(!notación("]"))
+				if (!notación("]"))
 				{
 					delete lda;
 					delete prim;
@@ -539,8 +539,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					return nullptr;
 				}
 
-				Ñ::ElementoSerie* ev = new Ñ::ElementoSerie(prim->posición());
-				Ñ::Nodo* nev = (Ñ::Nodo*)ev;
+				Ñ::ElementoSerie *ev = new Ñ::ElementoSerie(prim->posición());
+				Ñ::Nodo *nev = (Ñ::Nodo *)ev;
 				nev->ramas.push_back(prim);
 				nev->ramas.push_back(lda);
 				return nev;
@@ -553,65 +553,65 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::operaciónUnaria()
+Ñ::Nodo *Ñ::Sintaxis::operaciónUnaria()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Posición* pop = lexemas[cursor]->posición();
+		Posición *pop = lexemas[cursor]->posición();
 
-		if(notación("!"))
+		if (notación("!"))
 		{
-			if(Ñ::Nodo* u = operaciónUnaria())
+			if (Ñ::Nodo *u = operaciónUnaria())
 			{
-				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria(pop);
+				Ñ::OperaciónUnaria *op = new Ñ::OperaciónUnaria(pop);
 				op->operación = "!";
 				op->ramas.push_back(u);
-				return (Ñ::Nodo*)op;
+				return (Ñ::Nodo *)op;
 			}
 		}
-		else if(notación("-"))
+		else if (notación("-"))
 		{
-			if(Ñ::Nodo* u = operaciónUnaria())
+			if (Ñ::Nodo *u = operaciónUnaria())
 			{
-				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria(pop);
+				Ñ::OperaciónUnaria *op = new Ñ::OperaciónUnaria(pop);
 				op->operación = "-";
 				op->ramas.push_back(u);
-				return (Ñ::Nodo*)op;
+				return (Ñ::Nodo *)op;
 			}
 		}
-		else if(notación("*"))
+		else if (notación("*"))
 		{
-			if(Ñ::Nodo* u = operaciónUnaria())
+			if (Ñ::Nodo *u = operaciónUnaria())
 			{
-				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria(pop);
+				Ñ::OperaciónUnaria *op = new Ñ::OperaciónUnaria(pop);
 				op->operación = "*";
 				op->ramas.push_back(u);
-				return (Ñ::Nodo*)op;
+				return (Ñ::Nodo *)op;
 			}
 		}
-		else if(notación("@"))
+		else if (notación("@"))
 		{
-			if(Ñ::Nodo* u = operaciónUnaria())
+			if (Ñ::Nodo *u = operaciónUnaria())
 			{
-				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria(pop);
+				Ñ::OperaciónUnaria *op = new Ñ::OperaciónUnaria(pop);
 				op->operación = "@";
 				op->ramas.push_back(u);
-				return (Ñ::Nodo*)op;
+				return (Ñ::Nodo *)op;
 			}
 		}
-		else if(notación("&"))
+		else if (notación("&"))
 		{
-			if(Ñ::Nodo* u = operaciónUnaria())
+			if (Ñ::Nodo *u = operaciónUnaria())
 			{
-				Ñ::OperaciónUnaria* op = new Ñ::OperaciónUnaria(pop);
+				Ñ::OperaciónUnaria *op = new Ñ::OperaciónUnaria(pop);
 				op->operación = "@";
 				op->ramas.push_back(u);
-				return (Ñ::Nodo*)op;
+				return (Ñ::Nodo *)op;
 			}
 		}
-		else if(Ñ::Nodo* ev = elementoSerie())
+		else if (Ñ::Nodo *ev = elementoSerie())
 		{
 			return ev;
 		}
@@ -622,25 +622,25 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::primario()
+Ñ::Nodo *Ñ::Sintaxis::primario()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
 		std::string primario;
 
-		if(Ñ::Nodo* lit = literal())
+		if (Ñ::Nodo *lit = literal())
 		{
 			return lit;
 		}
-		else if(notación("("))
+		else if (notación("("))
 		{
-			Ñ::Nodo* lda;
+			Ñ::Nodo *lda;
 
-			if(lda = ladoDerechoAsignación())
+			if (lda = ladoDerechoAsignación())
 			{
-				if(notación(")"))
+				if (notación(")"))
 				{
 					return lda;
 				}
@@ -657,11 +657,11 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			cursor = c;
 			return nullptr;
 		}
-		else if(Ñ::Nodo* fn = llamaFunción())
+		else if (Ñ::Nodo *fn = llamaFunción())
 		{
 			return fn;
 		}
-		else if(Ñ::Nodo* id = identificador())
+		else if (Ñ::Nodo *id = identificador())
 		{
 			return id;
 		}
@@ -678,21 +678,21 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::identificador()
+Ñ::Nodo *Ñ::Sintaxis::identificador()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
 			auto lex = lexemas;
-			Ñ::Lexema* lexema = lexemas[cursor];
-			Ñ::Posición* pid = lexema->posición();
-			Ñ::Identificador* id = new Ñ::Identificador(pid);
+			Ñ::Lexema *lexema = lexemas[cursor];
+			Ñ::Posición *pid = lexema->posición();
+			Ñ::Identificador *id = new Ñ::Identificador(pid);
 			id->id = lexemas[cursor]->contenido;
 			cursor++;
-			return (Ñ::Nodo*)id;
+			return (Ñ::Nodo *)id;
 		}
 	}
 
@@ -701,19 +701,19 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::puntero()
+Ñ::Nodo *Ñ::Sintaxis::puntero()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Posición* p = lexemas[cursor]->posición();
+		Ñ::Posición *p = lexemas[cursor]->posición();
 
-		if(notación("*"))
+		if (notación("*"))
 		{
-			Ñ::Puntero* ptr;
+			Ñ::Puntero *ptr;
 
-			if(Ñ::Nodo* id = identificador())
+			if (Ñ::Nodo *id = identificador())
 			{
 				ptr = new Ñ::Puntero(p);
 				ptr->ramas.push_back(id);
@@ -727,45 +727,25 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::tipo()
+Ñ::Nodo *Ñ::Sintaxis::tipo()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
 		CategoríaTipo tipo;
 
-		Posición* ptp = lexemas[cursor]->posición();
+		Posición *ptp = lexemas[cursor]->posición();
 
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
 			tipo = obténTipoDeNombre(lexemas[cursor]->contenido);
 
 			cursor++;
 		}
-		else if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		else if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
 		{
-			if( (lexemas[cursor]->contenido == "bool")
-			 || (lexemas[cursor]->contenido == "booleano")
-			 || (lexemas[cursor]->contenido == "ent")
-			 || (lexemas[cursor]->contenido == "entero")
-			 || (lexemas[cursor]->contenido == "ent8")
-			 || (lexemas[cursor]->contenido == "ent16")
-			 || (lexemas[cursor]->contenido == "ent32")
-			 || (lexemas[cursor]->contenido == "ent64")
-			 || (lexemas[cursor]->contenido == "nat")
-			 || (lexemas[cursor]->contenido == "natural")
-			 || (lexemas[cursor]->contenido == "nat8")
-			 || (lexemas[cursor]->contenido == "nat16")
-			 || (lexemas[cursor]->contenido == "nat32")
-			 || (lexemas[cursor]->contenido == "nat64")
-			 || (lexemas[cursor]->contenido == "real")
-			 || (lexemas[cursor]->contenido == "rea16")
-			 || (lexemas[cursor]->contenido == "rea32")
-			 || (lexemas[cursor]->contenido == "rea64")
-			 || (lexemas[cursor]->contenido == "txt")
-			 || (lexemas[cursor]->contenido == "nada")
-			)
+			if ((lexemas[cursor]->contenido == "bool") || (lexemas[cursor]->contenido == "booleano") || (lexemas[cursor]->contenido == "ent") || (lexemas[cursor]->contenido == "entero") || (lexemas[cursor]->contenido == "ent8") || (lexemas[cursor]->contenido == "ent16") || (lexemas[cursor]->contenido == "ent32") || (lexemas[cursor]->contenido == "ent64") || (lexemas[cursor]->contenido == "nat") || (lexemas[cursor]->contenido == "natural") || (lexemas[cursor]->contenido == "nat8") || (lexemas[cursor]->contenido == "nat16") || (lexemas[cursor]->contenido == "nat32") || (lexemas[cursor]->contenido == "nat64") || (lexemas[cursor]->contenido == "real") || (lexemas[cursor]->contenido == "rea16") || (lexemas[cursor]->contenido == "rea32") || (lexemas[cursor]->contenido == "rea64") || (lexemas[cursor]->contenido == "txt") || (lexemas[cursor]->contenido == "nada"))
 			{
 				tipo = obténTipoDeNombre(lexemas[cursor]->contenido);
 
@@ -787,15 +767,15 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		uint32_t c2 = cursor;
 
-		Ñ::Tipo* t = new Ñ::Tipo(ptp);
+		Ñ::Tipo *t = new Ñ::Tipo(ptp);
 		t->tipo = tipo;
 
-		if(notación("*"))
+		if (notación("*"))
 		{
-			Ñ::Tipo* subT = t;
+			Ñ::Tipo *subT = t;
 			t = new Ñ::Tipo(ptp);
 			t->tipo = CategoríaTipo::TIPO_PUNTERO;
-			t->ramas.push_back((Ñ::Nodo*)subT);
+			t->ramas.push_back((Ñ::Nodo *)subT);
 		}
 		else
 		{
@@ -804,22 +784,22 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		c2 = cursor;
 
-		if(notación("["))
+		if (notación("["))
 		{
 			uint64_t tamaño = 0;
-			if(Ñ::Nodo* lit = literal())
+			if (Ñ::Nodo *lit = literal())
 			{
-				Ñ::Literal* l = (Ñ::Literal*)lit;
+				Ñ::Literal *l = (Ñ::Literal *)lit;
 				tamaño = std::stoull(l->dato);
 			}
 
-			if(notación("]"))
+			if (notación("]"))
 			{
-				Ñ::Tipo* subT = t;
+				Ñ::Tipo *subT = t;
 				t = new Ñ::Tipo(ptp);
 				t->tipo = CategoríaTipo::TIPO_SERIE;
 				t->tamaño(tamaño);
-				t->ramas.push_back((Ñ::Nodo*)subT);
+				t->ramas.push_back((Ñ::Nodo *)subT);
 			}
 			else
 			{
@@ -830,8 +810,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		{
 			cursor = c2;
 		}
-		
-		return (Ñ::Nodo*)t;
+
+		return (Ñ::Nodo *)t;
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba un tipo.");
@@ -839,18 +819,17 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::declaraVariable()
+Ñ::Nodo *Ñ::Sintaxis::declaraVariable()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Nodo* t;
+		Ñ::Nodo *t;
 		std::string v;
 
-		if(t = tipo())
+		if (t = tipo())
 		{
-			
 		}
 		else
 		{
@@ -858,8 +837,8 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			cursor = c;
 			return nullptr;
 		}
-		
-		if(cursor >= lexemas.size())
+
+		if (cursor >= lexemas.size())
 		{
 			delete t;
 			apuntaError(lexemas[cursor]->posición(), "Esperaba un identificador, pero he llegado al final del archivo.");
@@ -867,7 +846,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
 			v = lexemas[cursor]->contenido;
 		}
@@ -879,13 +858,13 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		Ñ::DeclaraVariable* dvar = new Ñ::DeclaraVariable(lexemas[cursor]->posición());
+		Ñ::DeclaraVariable *dvar = new Ñ::DeclaraVariable(lexemas[cursor]->posición());
 
 		cursor++;
-		
+
 		dvar->ramas.push_back(t);
 		dvar->variable = v;
-		return ((Ñ::Nodo*)dvar);
+		return ((Ñ::Nodo *)dvar);
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba una declaración de variable.");
@@ -893,36 +872,36 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::asigna()
+Ñ::Nodo *Ñ::Sintaxis::asigna()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(Ñ::Nodo* lia = ladoIzquierdoAsignación())
+		if (Ñ::Nodo *lia = ladoIzquierdoAsignación())
 		{
-			Posición* pos = lexemas[cursor]->posición();
-				
-			if(notación("="))
+			Posición *pos = lexemas[cursor]->posición();
+
+			if (notación("="))
 			{
-				if(notación("=")) // "=="
+				if (notación("=")) // "=="
 				{
 					delete lia;
 					apuntaError(lexemas[cursor]->posición(), "Esperaba una asignación '=' pero has escrito una comparación '=='.");
 					cursor = c;
 					return nullptr;
 				}
-				
-				if(Ñ::Nodo* lda = ladoDerechoAsignación())
+
+				if (Ñ::Nodo *lda = ladoDerechoAsignación())
 				{
-					Ñ::Asigna* a = new Ñ::Asigna(pos);
+					Ñ::Asigna *a = new Ñ::Asigna(pos);
 					a->ramas.push_back(lia);
 					a->ramas.push_back(lda);
 
-					return ((Ñ::Nodo*)a);
+					return ((Ñ::Nodo *)a);
 				}
 			}
-			
+
 			delete lia;
 		}
 	}
@@ -932,11 +911,11 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::declaraArgumento()
+Ñ::Nodo *Ñ::Sintaxis::declaraArgumento()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
 		return Ñ::Sintaxis::declaraVariable();
 	}
@@ -946,35 +925,35 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::declaraArgumentos()
+Ñ::Nodo *Ñ::Sintaxis::declaraArgumentos()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Argumentos* args;
+		Ñ::Argumentos *args;
 
-		Posición* pargs = lexemas[cursor]->posición();
+		Posición *pargs = lexemas[cursor]->posición();
 
-		if(Ñ::Nodo* arg1 = declaraArgumento())
+		if (Ñ::Nodo *arg1 = declaraArgumento())
 		{
 			args = new Ñ::Argumentos(arg1->posición());
 			args->ramas.push_back(arg1);
 
-			while(notación(","))
+			while (notación(","))
 			{
-				Ñ::Nodo* arg2 = declaraArgumento();
+				Ñ::Nodo *arg2 = declaraArgumento();
 				args->ramas.push_back(arg2);
 			}
 
-			return (Ñ::Nodo*)args;
+			return (Ñ::Nodo *)args;
 		}
 		else
 		{
 			args = new Ñ::Argumentos(pargs);
 		}
 
-		return (Ñ::Nodo*)args;
+		return (Ñ::Nodo *)args;
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba declaraciones de argumentos.");
@@ -982,11 +961,11 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::ponArgumento()
+Ñ::Nodo *Ñ::Sintaxis::ponArgumento()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
 		return ladoDerechoAsignación();
 	}
@@ -996,33 +975,33 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::ponArgumentos()
+Ñ::Nodo *Ñ::Sintaxis::ponArgumentos()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Argumentos* args;
+		Ñ::Argumentos *args;
 
-		if(Ñ::Nodo* arg1 = ponArgumento())
+		if (Ñ::Nodo *arg1 = ponArgumento())
 		{
 			args = new Ñ::Argumentos(arg1->posición());
 			args->ramas.push_back(arg1);
 
-			while(notación(","))
+			while (notación(","))
 			{
-				Ñ::Nodo* arg2 = ponArgumento();
+				Ñ::Nodo *arg2 = ponArgumento();
 				args->ramas.push_back(arg2);
 			}
 
-			return (Ñ::Nodo*)args;
+			return (Ñ::Nodo *)args;
 		}
 		else
 		{
 			args = new Ñ::Argumentos();
 		}
 
-		return (Ñ::Nodo*)args;
+		return (Ñ::Nodo *)args;
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba que pusieras argumentos.");
@@ -1030,18 +1009,18 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::llamaFunción()
+Ñ::Nodo *Ñ::Sintaxis::llamaFunción()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
 		std::string nombre;
-		Ñ::Nodo* args = nullptr;
+		Ñ::Nodo *args = nullptr;
 
-		Posición* p = nullptr;
+		Posición *p = nullptr;
 
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 		{
 			nombre = lexemas[cursor]->contenido;
 			p = lexemas[cursor]->posición();
@@ -1054,7 +1033,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		if(!notación("("))
+		if (!notación("("))
 		{
 			apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar '(' para pasar los argumentos a la llamada a la función.");
 			cursor = c;
@@ -1063,9 +1042,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		args = ponArgumentos();
 
-		if(!notación(")"))
+		if (!notación(")"))
 		{
-			if(args != nullptr)
+			if (args != nullptr)
 			{
 				delete args;
 			}
@@ -1074,10 +1053,10 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		Ñ::LlamaFunción* fn = new Ñ::LlamaFunción(p);
+		Ñ::LlamaFunción *fn = new Ñ::LlamaFunción(p);
 		fn->nombre = nombre;
 		fn->ramas.push_back(args);
-		return (Ñ::Nodo*)fn;
+		return (Ñ::Nodo *)fn;
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba una llamada a una función.");
@@ -1085,17 +1064,17 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::vuelve()
+Ñ::Nodo *Ñ::Sintaxis::vuelve()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
 		{
-			if(lexemas[cursor]->contenido == "vuelve")
+			if (lexemas[cursor]->contenido == "vuelve")
 			{
-				Ñ::Nodo* dv = (Ñ::Nodo*)(new Ñ::Devuelve(lexemas[cursor]->posición()));
+				Ñ::Nodo *dv = (Ñ::Nodo *)(new Ñ::Devuelve(lexemas[cursor]->posición()));
 				cursor++;
 				return dv;
 			}
@@ -1107,22 +1086,22 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::devuelve()
+Ñ::Nodo *Ñ::Sintaxis::devuelve()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
 		{
-			if(lexemas[cursor]->contenido == "devuelve")
+			if (lexemas[cursor]->contenido == "devuelve")
 			{
-				Posición* p = lexemas[cursor]->posición();
+				Posición *p = lexemas[cursor]->posición();
 				cursor++;
-				
-				if(Ñ::Nodo* lda = ladoDerechoAsignación())
+
+				if (Ñ::Nodo *lda = ladoDerechoAsignación())
 				{
-					Ñ::Nodo* dv = (Ñ::Nodo*)(new Ñ::Devuelve(p));
+					Ñ::Nodo *dv = (Ñ::Nodo *)(new Ñ::Devuelve(p));
 					dv->ramas.push_back(lda);
 					return dv;
 				}
@@ -1135,17 +1114,17 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::para()
+Ñ::Nodo *Ñ::Sintaxis::para()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_RESERVADO)
 		{
-			if(lexemas[cursor]->contenido == "para")
+			if (lexemas[cursor]->contenido == "para")
 			{
-				Ñ::Nodo* para = (Ñ::Nodo*)(new Ñ::ParaBucle(lexemas[cursor]->posición()));
+				Ñ::Nodo *para = (Ñ::Nodo *)(new Ñ::ParaBucle(lexemas[cursor]->posición()));
 				cursor++;
 				return para;
 			}
@@ -1157,33 +1136,33 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::siCondicional()
+Ñ::Nodo *Ñ::Sintaxis::siCondicional()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::SiCondicional* sc = nullptr;
+		Ñ::SiCondicional *sc = nullptr;
 
-		Posición* psi = lexemas[cursor]->posición();
+		Posición *psi = lexemas[cursor]->posición();
 
-		if(!reservada("si"))
+		if (!reservada("si"))
 		{
 			apuntaError(lexemas[cursor]->posición(), "Esperaba 'si'.");
 			cursor = c;
 			return nullptr;
 		}
 
-		if(!notación("("))
+		if (!notación("("))
 		{
 			apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar '(' para colocar la expresión condicional del 'si()'.");
 			cursor = c;
 			return nullptr;
 		}
 
-		if(Ñ::Nodo* lda = ladoDerechoAsignación())
+		if (Ñ::Nodo *lda = ladoDerechoAsignación())
 		{
-			if(!notación(")"))
+			if (!notación(")"))
 			{
 				delete lda;
 				apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar ')' al final de la expresión condicional del 'si()'.");
@@ -1191,7 +1170,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 
-			if(Ñ::Nodo* blq = bloque())
+			if (Ñ::Nodo *blq = bloque())
 			{
 				sc = new Ñ::SiCondicional(psi);
 				sc->ramas.push_back(lda);
@@ -1212,11 +1191,11 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		while(reservada("sino"))
+		while (reservada("sino"))
 		{
-			if(!reservada("si"))
+			if (!reservada("si"))
 			{
-				if(Ñ::Nodo* blq = bloque())
+				if (Ñ::Nodo *blq = bloque())
 				{
 					sc->ramas.push_back(blq);
 					break;
@@ -1230,7 +1209,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				}
 			}
 
-			if(!notación("("))
+			if (!notación("("))
 			{
 				delete sc;
 				apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar '(' para colocar la expresión condicional del 'sino si()'.");
@@ -1238,9 +1217,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 
-			if(Ñ::Nodo* lda = ladoDerechoAsignación())
+			if (Ñ::Nodo *lda = ladoDerechoAsignación())
 			{
-				if(!notación(")"))
+				if (!notación(")"))
 				{
 					delete lda;
 					delete sc;
@@ -1249,7 +1228,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 					return nullptr;
 				}
 
-				if(Ñ::Nodo* blq = bloque())
+				if (Ñ::Nodo *blq = bloque())
 				{
 					sc->ramas.push_back(lda);
 					sc->ramas.push_back(blq);
@@ -1272,7 +1251,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			}
 		}
 
-		return (Ñ::Nodo*)sc;
+		return (Ñ::Nodo *)sc;
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba un si() condicional.");
@@ -1280,33 +1259,33 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::bucleMientras()
+Ñ::Nodo *Ñ::Sintaxis::bucleMientras()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::BucleMientras* bm = nullptr;
+		Ñ::BucleMientras *bm = nullptr;
 
-		Posición* pmi = lexemas[cursor]->posición();
+		Posición *pmi = lexemas[cursor]->posición();
 
-		if(!reservada("mientras"))
+		if (!reservada("mientras"))
 		{
 			apuntaError(lexemas[cursor]->posición(), "Esperaba 'mientras()'.");
 			cursor = c;
 			return nullptr;
 		}
 
-		if(!notación("("))
+		if (!notación("("))
 		{
 			apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar '(' para colocar la expresión condicional del 'mientras()'.");
 			cursor = c;
 			return nullptr;
 		}
 
-		if(Ñ::Nodo* lda = ladoDerechoAsignación())
+		if (Ñ::Nodo *lda = ladoDerechoAsignación())
 		{
-			if(!notación(")"))
+			if (!notación(")"))
 			{
 				delete lda;
 				apuntaError(lexemas[cursor]->posición(), "Esperaba encontrar ')' al final de la expresión condicional del 'mientras()'.");
@@ -1314,7 +1293,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 
-			if(Ñ::Nodo* blq = bloque())
+			if (Ñ::Nodo *blq = bloque())
 			{
 				bm = new Ñ::BucleMientras(pmi);
 				bm->ramas.push_back(lda);
@@ -1335,7 +1314,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		return (Ñ::Nodo*)bm;
+		return (Ñ::Nodo *)bm;
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba un bucle 'mientras()'.");
@@ -1343,19 +1322,19 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::expresión()
+Ñ::Nodo *Ñ::Sintaxis::expresión()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		if(Ñ::Nodo* as = asigna())
+		if (Ñ::Nodo *as = asigna())
 		{
-			if(notación(";"))
+			if (notación(";"))
 			{
-				Ñ::Expresión* ex = new Ñ::Expresión(as->posición());
+				Ñ::Expresión *ex = new Ñ::Expresión(as->posición());
 				ex->ramas.push_back(as);
-				return ((Ñ::Nodo*)ex);
+				return ((Ñ::Nodo *)ex);
 			}
 			else
 			{
@@ -1365,14 +1344,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 		}
-		
-		if(Ñ::Nodo* fn = llamaFunción())
+
+		if (Ñ::Nodo *fn = llamaFunción())
 		{
-			if(notación(";"))
+			if (notación(";"))
 			{
-				Ñ::Expresión* ex = new Ñ::Expresión(fn->posición());
+				Ñ::Expresión *ex = new Ñ::Expresión(fn->posición());
 				ex->ramas.push_back(fn);
-				return ((Ñ::Nodo*)ex);
+				return ((Ñ::Nodo *)ex);
 			}
 			else
 			{
@@ -1382,14 +1361,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 		}
-		
-		if(Ñ::Nodo* dv = declaraVariable())
+
+		if (Ñ::Nodo *dv = declaraVariable())
 		{
-			if(notación(";"))
+			if (notación(";"))
 			{
-				Ñ::Expresión* ex = new Ñ::Expresión(dv->posición());
+				Ñ::Expresión *ex = new Ñ::Expresión(dv->posición());
 				ex->ramas.push_back(dv);
-				return ((Ñ::Nodo*)ex);
+				return ((Ñ::Nodo *)ex);
 			}
 			else
 			{
@@ -1399,14 +1378,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 		}
-		
-		if(Ñ::Nodo* v = vuelve())
+
+		if (Ñ::Nodo *v = vuelve())
 		{
-			if(notación(";"))
+			if (notación(";"))
 			{
-				Ñ::Expresión* ex = new Ñ::Expresión(v->posición());
+				Ñ::Expresión *ex = new Ñ::Expresión(v->posición());
 				ex->ramas.push_back(v);
-				return ((Ñ::Nodo*)ex);
+				return ((Ñ::Nodo *)ex);
 			}
 			else
 			{
@@ -1416,14 +1395,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 		}
-		
-		if(Ñ::Nodo* dv = devuelve())
+
+		if (Ñ::Nodo *dv = devuelve())
 		{
-			if(notación(";"))
+			if (notación(";"))
 			{
-				Ñ::Expresión* ex = new Ñ::Expresión(dv->posición());
+				Ñ::Expresión *ex = new Ñ::Expresión(dv->posición());
 				ex->ramas.push_back(dv);
-				return ((Ñ::Nodo*)ex);
+				return ((Ñ::Nodo *)ex);
 			}
 			else
 			{
@@ -1433,14 +1412,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 		}
-		
-		if(Ñ::Nodo* pa = para())
+
+		if (Ñ::Nodo *pa = para())
 		{
-			if(notación(";"))
+			if (notación(";"))
 			{
-				Ñ::Expresión* ex = new Ñ::Expresión(pa->posición());
+				Ñ::Expresión *ex = new Ñ::Expresión(pa->posición());
 				ex->ramas.push_back(pa);
-				return ((Ñ::Nodo*)ex);
+				return ((Ñ::Nodo *)ex);
 			}
 			else
 			{
@@ -1450,19 +1429,19 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 				return nullptr;
 			}
 		}
-		
-		if(Ñ::Nodo* sc = siCondicional())
+
+		if (Ñ::Nodo *sc = siCondicional())
 		{
-			Ñ::Expresión* ex = new Ñ::Expresión(sc->posición());
+			Ñ::Expresión *ex = new Ñ::Expresión(sc->posición());
 			ex->ramas.push_back(sc);
-			return ((Ñ::Nodo*)ex);
+			return ((Ñ::Nodo *)ex);
 		}
-		
-		if(Ñ::Nodo* bm = bucleMientras())
+
+		if (Ñ::Nodo *bm = bucleMientras())
 		{
-			Ñ::Expresión* ex = new Ñ::Expresión(bm->posición());
+			Ñ::Expresión *ex = new Ñ::Expresión(bm->posición());
 			ex->ramas.push_back(bm);
-			return ((Ñ::Nodo*)ex);
+			return ((Ñ::Nodo *)ex);
 		}
 	}
 
@@ -1471,28 +1450,28 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::bloque()
+Ñ::Nodo *Ñ::Sintaxis::bloque()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Posición* pblq = lexemas[cursor]->posición();
-		if(!notación("{"))
+		Posición *pblq = lexemas[cursor]->posición();
+		if (!notación("{"))
 		{
 			apuntaError(lexemas[cursor]->posición(), "Esperaba que empezara un bloque de código con '{'.");
 			cursor = c;
 			return nullptr;
 		}
 
-		Ñ::Nodo* b = (Ñ::Nodo*)(new Ñ::Bloque(pblq));
+		Ñ::Nodo *b = (Ñ::Nodo *)(new Ñ::Bloque(pblq));
 
-		while(Ñ::Nodo* n = expresión())
+		while (Ñ::Nodo *n = expresión())
 		{
 			b->ramas.push_back(n);
 		}
 
-		if(notación("}"))
+		if (notación("}"))
 		{
 			return b;
 		}
@@ -1510,34 +1489,33 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::defineFunción()
+Ñ::Nodo *Ñ::Sintaxis::defineFunción()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Nodo* t;
-		Ñ::Nodo* id;
-		Ñ::Nodo* args;
-		Ñ::Nodo* bq;
-		Ñ::DefineFunción* dfn;
+		Ñ::Nodo *t;
+		Ñ::Nodo *id;
+		Ñ::Nodo *args;
+		Ñ::Nodo *bq;
+		Ñ::DefineFunción *dfn;
 		std::string nombreFunción;
 		bool público = false;
 
-		Posición* pfn = nullptr;
+		Posición *pfn = nullptr;
 
-		if(reservada("público"))
+		if (reservada("público"))
 		{
 			público = true;
 		}
-		else if(reservada("privado"))
+		else if (reservada("privado"))
 		{
 			público = false;
 		}
 
-		if(t = tipo())
+		if (t = tipo())
 		{
-			
 		}
 		else
 		{
@@ -1546,9 +1524,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		if(id = identificador())
+		if (id = identificador())
 		{
-			nombreFunción = ((Ñ::Identificador*)id)->id;
+			nombreFunción = ((Ñ::Identificador *)id)->id;
 			pfn = id->posición();
 			delete id;
 		}
@@ -1560,7 +1538,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		if(!notación("("))
+		if (!notación("("))
 		{
 			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
 			cursor = c;
@@ -1569,16 +1547,15 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		args = declaraArgumentos();
 
-		if(!notación(")"))
+		if (!notación(")"))
 		{
 			apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
 			cursor = c;
 			return nullptr;
 		}
 
-		if(bq = bloque())
+		if (bq = bloque())
 		{
-
 		}
 		else
 		{
@@ -1595,7 +1572,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		dfn->ramas.push_back(args);
 		dfn->ramas.push_back(bq);
 
-		return (Ñ::Nodo*)dfn;
+		return (Ñ::Nodo *)dfn;
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba una definición de función.");
@@ -1603,26 +1580,25 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::declaraFunción()
+Ñ::Nodo *Ñ::Sintaxis::declaraFunción()
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Nodo* t;
-		Ñ::Nodo* id;
-		Ñ::Nodo* args;
-		Ñ::DeclaraFunción* dcfn;
+		Ñ::Nodo *t;
+		Ñ::Nodo *id;
+		Ñ::Nodo *args;
+		Ñ::DeclaraFunción *dcfn;
 		std::string nombreFunción;
 		bool externo = false;
 
-		Posición* pfn = nullptr;
+		Posición *pfn = nullptr;
 
 		externo = reservada("externo");
 
-		if(t = tipo())
+		if (t = tipo())
 		{
-			
 		}
 		else
 		{
@@ -1631,9 +1607,9 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		if(id = identificador())
+		if (id = identificador())
 		{
-			nombreFunción = ((Ñ::Identificador*)id)->id;
+			nombreFunción = ((Ñ::Identificador *)id)->id;
 			pfn = id->posición();
 			delete id;
 		}
@@ -1645,7 +1621,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		if(!notación("("))
+		if (!notación("("))
 		{
 			delete t;
 			apuntaError(lexemas[cursor]->posición(), "Esperaba '('.");
@@ -1655,7 +1631,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 
 		args = declaraArgumentos();
 
-		if(!notación(")"))
+		if (!notación(")"))
 		{
 			delete t;
 			apuntaError(lexemas[cursor]->posición(), "Esperaba ')'.");
@@ -1663,7 +1639,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		if(!notación(";"))
+		if (!notación(";"))
 		{
 			delete t;
 			apuntaError(lexemas[cursor - 1]->posición(), "Esperaba que la expresión terminara con ';'.");
@@ -1671,7 +1647,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 			return nullptr;
 		}
 
-		if(Ñ::Nodo* bq = bloque())
+		if (Ñ::Nodo *bq = bloque())
 		{
 			delete t, bq;
 			apuntaError(lexemas[cursor]->posición(), "Esperaba un bloque.");
@@ -1685,7 +1661,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		dcfn->ramas.push_back(t);
 		dcfn->ramas.push_back(args);
 
-		return (Ñ::Nodo*)dcfn;
+		return (Ñ::Nodo *)dcfn;
 	}
 
 	apuntaError(lexemas[cursor]->posición(), "Esperaba una declaración de función.");
@@ -1693,33 +1669,33 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Nodo* Ñ::Sintaxis::módulo(std::string nombreMódulo)
+Ñ::Nodo *Ñ::Sintaxis::módulo(std::string nombreMódulo)
 {
 	uint32_t c = cursor;
 
-	if(cursor < lexemas.size())
+	if (cursor < lexemas.size())
 	{
-		Ñ::Posición* p;
-		Ñ::Nodo* m;
+		Ñ::Posición *p;
+		Ñ::Nodo *m;
 
-		if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR && lexemas[cursor]->contenido == "módulo")
+		if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR && lexemas[cursor]->contenido == "módulo")
 		{
 			p = lexemas[cursor]->posición();
-			m =  (Ñ::Nodo*)new Ñ::Módulo(p);
+			m = (Ñ::Nodo *)new Ñ::Módulo(p);
 			cursor++;
 
-			if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
+			if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR)
 			{
-				((Ñ::Módulo*)m)->módulo = lexemas[cursor]->contenido;
+				((Ñ::Módulo *)m)->módulo = lexemas[cursor]->contenido;
 
 				cursor++;
 			}
 			else
 			{
-				((Ñ::Módulo*)m)->módulo = nombreMódulo;
+				((Ñ::Módulo *)m)->módulo = nombreMódulo;
 			}
 
-			if(lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN && lexemas[cursor]->contenido == ";")
+			if (lexemas[cursor]->categoría == Ñ::CategoríaLexema::LEXEMA_NOTACIÓN && lexemas[cursor]->contenido == ";")
 			{
 				cursor++;
 			}
@@ -1733,22 +1709,22 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		else
 		{
 			p = new Ñ::Posición;
-			m =  (Ñ::Nodo*)new Ñ::Módulo(p);
-			((Ñ::Módulo*)m)->módulo = nombreMódulo;
+			m = (Ñ::Nodo *)new Ñ::Módulo(p);
+			((Ñ::Módulo *)m)->módulo = nombreMódulo;
 		}
 
-		while(true)
+		while (true)
 		{
-			Ñ::Nodo* n;
-			if(n = defineFunción())
+			Ñ::Nodo *n;
+			if (n = defineFunción())
 			{
 				m->ramas.push_back(n);
 			}
-			else if(n = declaraFunción())
+			else if (n = declaraFunción())
 			{
 				m->ramas.push_back(n);
 			}
-			else if(n = expresión())
+			else if (n = expresión())
 			{
 				m->ramas.push_back(n);
 			}
@@ -1766,20 +1742,20 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	return nullptr;
 }
 
-Ñ::Resultado Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema*> _lexemas, std::string nombreArchivo)
+Ñ::Resultado Ñ::Sintaxis::analiza(std::vector<Ñ::Lexema *> _lexemas, std::string nombreArchivo)
 {
 	Ñ::Resultado resultado;
 	cursor = 0;
 	lexemas = _lexemas;
-	auto rNodo = (Ñ::Nodo*)módulo(nombreArchivo);
+	auto rNodo = (Ñ::Nodo *)módulo(nombreArchivo);
 
 	// Compruebo que el cursor ha llegado al penúltimo lexema
-	if(cursor == _lexemas.size() - 1)
+	if (cursor == _lexemas.size() - 1)
 	{
 		éxito = true;
 	}
-	
-	if(éxito && rNodo)
+
+	if (éxito && rNodo)
 	{
 		resultado.éxito();
 		resultado.nodo(rNodo);
@@ -1787,7 +1763,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	}
 	else
 	{
-		if(rNodo)
+		if (rNodo)
 		{
 			delete rNodo;
 		}
@@ -1797,14 +1773,14 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	}
 }
 
-Ñ::Resultado Ñ::Sintaxis::analizaComando(std::vector<Ñ::Lexema*> _lexemas)
+Ñ::Resultado Ñ::Sintaxis::analizaComando(std::vector<Ñ::Lexema *> _lexemas)
 {
 	Ñ::Resultado resultado;
 	cursor = 0;
 	lexemas = _lexemas;
-	auto rNodo = (Ñ::Nodo*)expresión();
-	
-	if(éxito && rNodo)
+	auto rNodo = (Ñ::Nodo *)expresión();
+
+	if (éxito && rNodo)
 	{
 		resultado.éxito();
 		resultado.nodo(rNodo);
@@ -1812,7 +1788,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	}
 	else
 	{
-		if(rNodo)
+		if (rNodo)
 		{
 			delete rNodo;
 		}

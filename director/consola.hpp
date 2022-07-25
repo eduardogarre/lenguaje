@@ -23,6 +23,6 @@ namespace Ñ
 namespace Director
 {
     void escribe(std::string texto);
-    void escribeAviso(std::string texto, std::string archivo, Ñ::Posición* posición);
-    void escribeError(std::string texto, std::string archivo, Ñ::Posición* posición);
+    void escribeAviso(std::string texto, std::string archivo, Ñ::Posición *posición);
+    void escribeError(std::string texto, std::string archivo, Ñ::Posición *posición);
 }

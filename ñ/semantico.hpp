@@ -22,5 +22,5 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 namespace Ñ
 {
-    Ñ::Resultado analizaSemántica(Ñ::Nodo* nodos, Ñ::TablaSímbolos* tablaSímbolos);
+    Ñ::Resultado analizaSemántica(Ñ::Nodo *nodos, Ñ::TablaSímbolos *tablaSímbolos);
 }

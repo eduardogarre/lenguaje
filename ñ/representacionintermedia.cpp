@@ -56,16 +56,16 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 namespace Ñ
 {
-    static Ñ::ConstructorJAT* jat = nullptr;
+    static Ñ::ConstructorJAT *jat = nullptr;
 
     EntornoConstrucción *entorno = nullptr;
 
     class Constructor
     {
-        Ñ::Símbolos* tablaSímbolos = nullptr;
+        Ñ::Símbolos *tablaSímbolos = nullptr;
 
     public:
-        llvm::Module* móduloLlvm;
+        llvm::Module *móduloLlvm;
 
         Constructor()
         {
@@ -74,7 +74,7 @@ namespace Ñ
 
         ~Constructor()
         {
-            if(entorno != nullptr && tablaSímbolos != nullptr)
+            if (entorno != nullptr && tablaSímbolos != nullptr)
             {
                 delete tablaSímbolos;
             }
@@ -86,9 +86,9 @@ namespace Ñ
             // Creo el módulo LLVM y le asigno el nombre de mi módulo
             móduloLlvm = new llvm::Module(nombre, entorno->contextoLlvm);
 
-            //std::cout << "Nombre del módulo: " << móduloLlvm->getModuleIdentifier() << std::endl;
+            // std::cout << "Nombre del módulo: " << móduloLlvm->getModuleIdentifier() << std::endl;
 
-            //preparaPasesDeOptimización();
+            // preparaPasesDeOptimización();
         }
 
         void preparaMóduloJAT(std::string nombre)
@@ -107,7 +107,7 @@ namespace Ñ
             // Intenta convertir variables en RAM a registros
             entorno->gestorPasesOptimización->add(llvm::createPromoteMemoryToRegisterPass());
 
-            if(entorno->optimización > 0)
+            if (entorno->optimización > 0)
             {
                 // Optimizaciones se secuencias cortas y pequeños reordenamientos.
                 entorno->gestorPasesOptimización->add(llvm::createInstructionCombiningPass());
@@ -127,107 +127,107 @@ namespace Ñ
             entorno->gestorPasesOptimización->doInitialization();
         }
 
-        void ponId(std::string id, llvm::Value* valor)
+        void ponId(std::string id, llvm::Value *valor)
         {
-            if(tablaSímbolos != nullptr)
+            if (tablaSímbolos != nullptr)
             {
                 tablaSímbolos->ponId(id, valor);
             }
             else
             {
-                //std::cout << "Error, no puedo guardar el símbolo '" << id << "' en la tabla" << std::endl;
+                // std::cout << "Error, no puedo guardar el símbolo '" << id << "' en la tabla" << std::endl;
             }
         }
 
-        llvm::Value* leeId(std::string id)
+        llvm::Value *leeId(std::string id)
         {
-            if(tablaSímbolos != nullptr)
+            if (tablaSímbolos != nullptr)
             {
                 return tablaSímbolos->leeId(id);
             }
-            
+
             return nullptr;
         }
 
-        llvm::Type* creaTipoLlvm(Ñ::Tipo* tipo)
+        llvm::Type *creaTipoLlvm(Ñ::Tipo *tipo)
         {
             switch (tipo->tipo)
             {
             case TIPO_NADA:
                 return llvm::Type::getVoidTy(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_BOOLEANO:
                 return llvm::Type::getInt1Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_NATURAL_8:
                 return llvm::Type::getInt8Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_NATURAL_16:
                 return llvm::Type::getInt16Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_NATURAL_32:
                 return llvm::Type::getInt32Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_NATURAL_64:
                 return llvm::Type::getInt64Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_ENTERO_8:
                 return llvm::Type::getInt8Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_ENTERO_16:
                 return llvm::Type::getInt16Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_ENTERO_32:
                 return llvm::Type::getInt32Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_ENTERO_64:
                 return llvm::Type::getInt64Ty(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_REAL_32:
                 return llvm::Type::getFloatTy(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_REAL_64:
                 return llvm::Type::getDoubleTy(entorno->contextoLlvm);
                 break;
-            
+
             case TIPO_SERIE:
+            {
+                Ñ::Nodo *nodo = (Ñ::Nodo *)tipo;
+                uint32_t tamaño = tipo->tamaño();
+                Ñ::Tipo *subtipo = tipo->subtipo();
+                llvm::Type *subtipollvm = creaTipoLlvm(subtipo);
+                if (subtipollvm == nullptr)
                 {
-                    Ñ::Nodo* nodo = (Ñ::Nodo*)tipo;
-                    uint32_t tamaño = tipo->tamaño();
-                    Ñ::Tipo* subtipo = tipo->subtipo();
-                    llvm::Type* subtipollvm = creaTipoLlvm(subtipo);
-                    if(subtipollvm == nullptr)
-                    {
-                        return nullptr;
-                    }
-                    return llvm::ArrayType::get(subtipollvm, tamaño);
+                    return nullptr;
                 }
-                break;
-            
+                return llvm::ArrayType::get(subtipollvm, tamaño);
+            }
+            break;
+
             case TIPO_PUNTERO:
+            {
+                Ñ::Nodo *nodo = (Ñ::Nodo *)tipo;
+                Ñ::Tipo *subtipo = tipo->subtipo();
+                llvm::Type *subtipollvm = creaTipoLlvm(subtipo);
+                if (subtipollvm == nullptr)
                 {
-                    Ñ::Nodo* nodo = (Ñ::Nodo*)tipo;
-                    Ñ::Tipo* subtipo = tipo->subtipo();
-                    llvm::Type* subtipollvm = creaTipoLlvm(subtipo);
-                    if(subtipollvm == nullptr)
-                    {
-                        return nullptr;
-                    }
-                    return llvm::PointerType::get(subtipollvm, 0);
+                    return nullptr;
                 }
-                break;
-            
+                return llvm::PointerType::get(subtipollvm, 0);
+            }
+            break;
+
             default:
                 return nullptr;
                 break;
@@ -236,21 +236,21 @@ namespace Ñ
             return nullptr;
         }
 
-        Ñ::ResultadoLlvm creaMódulo(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm creaMódulo(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            
+
             // Comprobaciones de error
-            Ñ::Módulo* módulo;
-            if(nodo == nullptr)
+            Ñ::Módulo *módulo;
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo nulo, esperaba un módulo.");
                 return resultado;
             }
-            else if(nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+            else if (nodo->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
             {
                 // Convierto Ñ::Nodo* a Ñ::Módulo*
-                módulo = (Ñ::Módulo*)nodo;
+                módulo = (Ñ::Módulo *)nodo;
             }
             else
             {
@@ -263,56 +263,56 @@ namespace Ñ
 
             preparaPasesDeOptimización();
 
-            for(auto n : nodo->ramas)
+            for (auto n : nodo->ramas)
             {
-                if(n == nullptr)
+                if (n == nullptr)
                 {
                     resultado.error("Uno de las ramas del módulo '" + módulo->módulo + "' es nula.");
                     resultado.posición(módulo->posición());
                     return resultado;
                 }
-                else if(n->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
+                else if (n->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
                 {
                     resultado = construyeDefiniciónFunción(n);
-                    if(resultado.error())
+                    if (resultado.error())
                     {
                         return resultado;
                     }
                 }
-                else if(n->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+                else if (n->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
                 {
                     resultado = construyeDeclaraciónFunción(n);
-                    if(resultado.error())
+                    if (resultado.error())
                     {
                         return resultado;
                     }
                 }
 
-                if(resultado.error())
+                if (resultado.error())
                 {
                     return resultado;
                 }
             }
-            
+
             resultado.éxito();
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeDefiniciónFunción(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeDefiniciónFunción(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            
+
             // Comprobaciones de error
-            Ñ::DefineFunción* función;
-            if(nodo == nullptr)
+            Ñ::DefineFunción *función;
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo nulo, esperaba una definición de función.");
                 return resultado;
             }
-            else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
+            else if (nodo->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
             {
                 // Convierto Ñ::Nodo* a Ñ::DefineFunción*
-                función = (Ñ::DefineFunción*)nodo;
+                función = (Ñ::DefineFunción *)nodo;
             }
             else
             {
@@ -321,7 +321,7 @@ namespace Ñ
                 return resultado;
             }
 
-            if(función->público)
+            if (función->público)
             {
                 resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1], true);
             }
@@ -330,22 +330,22 @@ namespace Ñ
                 resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1], false);
             }
 
-            if(resultado.error())
+            if (resultado.error())
             {
                 return resultado;
             }
-            
-            llvm::Function * funciónLlvm;
-            
+
+            llvm::Function *funciónLlvm;
+
             funciónLlvm = móduloLlvm->getFunction(función->nombre);
 
-            if(!funciónLlvm)
+            if (!funciónLlvm)
             {
                 resultado.error("Todavía no has registrado la función '" + función->nombre + "()'.");
                 resultado.posición(función->posición());
                 return resultado;
             }
-            else if(!funciónLlvm->empty())
+            else if (!funciónLlvm->empty())
             {
                 resultado.error("Ya habías definido la función '" + función->nombre + "()', no puedo redefinirla.");
                 resultado.posición(función->posición());
@@ -356,8 +356,8 @@ namespace Ñ
             tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN);
 
             std::string nombreBloque = "entrada";
-            llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
-            if(bloqueLlvm == nullptr)
+            llvm::BasicBlock *bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
+            if (bloqueLlvm == nullptr)
             {
                 resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo.");
                 resultado.posición(función->posición());
@@ -366,61 +366,59 @@ namespace Ñ
 
             entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
 
-            Ñ::Nodo* args = nodo->ramas[1];
-            
-            int i = 0;
-            for(auto &argumento : funciónLlvm->args())
-            {
-                Ñ::Nodo* a = args->ramas[i];
+            Ñ::Nodo *args = nodo->ramas[1];
 
-                std::string nombre = ((Ñ::DeclaraVariable*)a)->variable;
+            int i = 0;
+            for (auto &argumento : funciónLlvm->args())
+            {
+                Ñ::Nodo *a = args->ramas[i];
+
+                std::string nombre = ((Ñ::DeclaraVariable *)a)->variable;
                 argumento.setName(nombre);
-                llvm::Value* variable = entorno->constructorLlvm.CreateAlloca(argumento.getType(), nullptr, nombre);
+                llvm::Value *variable = entorno->constructorLlvm.CreateAlloca(argumento.getType(), nullptr, nombre);
                 entorno->constructorLlvm.CreateStore(&argumento, variable, false);
                 ponId(nombre, variable);
                 i++;
             }
 
-            Ñ::Nodo* bloque = nodo->ramas[2];
+            Ñ::Nodo *bloque = nodo->ramas[2];
 
             resultado = construyeInteriorDeBloque(bloque);
-            if(resultado.error())
+            if (resultado.error())
             {
                 return resultado;
             }
 
-            
-
             llvm::verifyFunction(*funciónLlvm);
 
-            //std::cout << "Ejecuto optimizaciones" << std::endl;
-            
+            // std::cout << "Ejecuto optimizaciones" << std::endl;
+
             entorno->gestorPasesOptimización->run(*funciónLlvm);
-            
-            //funciónLlvm->print(llvm::errs(), nullptr);
+
+            // funciónLlvm->print(llvm::errs(), nullptr);
 
             tablaSímbolos->borraÁmbito();
 
             resultado.éxito();
-            resultado.valor((llvm::Value*)funciónLlvm);
+            resultado.valor((llvm::Value *)funciónLlvm);
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeDeclaraciónFunción(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeDeclaraciónFunción(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            
+
             // Comprobaciones de error
-            Ñ::DeclaraFunción* función;
-            if(nodo == nullptr)
+            Ñ::DeclaraFunción *función;
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo nulo, esperaba una declaración de función.");
                 return resultado;
             }
-            else if(nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+            else if (nodo->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
             {
                 // Convierto Ñ::Nodo* a Ñ::DefineFunción*
-                función = (Ñ::DeclaraFunción*)nodo;
+                función = (Ñ::DeclaraFunción *)nodo;
             }
             else
             {
@@ -430,32 +428,32 @@ namespace Ñ
             }
 
             resultado = _construyeDeclaraciónFunción(función->nombre, nodo->ramas[0], nodo->ramas[1], función->externo);
-            if(resultado.error())
+            if (resultado.error())
             {
                 return resultado;
             }
-            
-            llvm::Function* funciónLlvm = (llvm::Function*)resultado.valor();
-            
-            //funciónLlvm->print(llvm::errs(), nullptr);
-            
+
+            llvm::Function *funciónLlvm = (llvm::Function *)resultado.valor();
+
+            // funciónLlvm->print(llvm::errs(), nullptr);
+
             return resultado;
         }
 
-        Ñ::ResultadoLlvm _construyeDeclaraciónFunción(std::string nombre, Ñ::Nodo* devuelto, Ñ::Nodo* argumentos, bool externo)
+        Ñ::ResultadoLlvm _construyeDeclaraciónFunción(std::string nombre, Ñ::Nodo *devuelto, Ñ::Nodo *argumentos, bool externo)
         {
             Ñ::ResultadoLlvm resultado;
-            llvm::Type* tRetorno = nullptr;
-            std::vector<llvm::Type*> vArgumentos = {};
-            
+            llvm::Type *tRetorno = nullptr;
+            std::vector<llvm::Type *> vArgumentos = {};
+
             // Comprobaciones de error
-            if(devuelto == nullptr)
+            if (devuelto == nullptr)
             {
                 auto nada = new Ñ::Tipo;
                 tRetorno = creaTipoLlvm(nada);
                 delete nada;
             }
-            else if(devuelto->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+            else if (devuelto->categoría != Ñ::CategoríaNodo::NODO_TIPO)
             {
                 resultado.error("El tipo de retorno no es un NODO_TIPO válido.");
                 resultado.posición(devuelto->posición());
@@ -463,9 +461,9 @@ namespace Ñ
             }
             else
             {
-                Ñ::Tipo* tDevuelto = (Ñ::Tipo*)devuelto;
+                Ñ::Tipo *tDevuelto = (Ñ::Tipo *)devuelto;
                 tRetorno = creaTipoLlvm(tDevuelto);
-                if(tRetorno == nullptr)
+                if (tRetorno == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tDevuelto) + "'.");
                     resultado.posición(tDevuelto->posición());
@@ -473,11 +471,10 @@ namespace Ñ
                 }
             }
 
-            if(argumentos == nullptr)
+            if (argumentos == nullptr)
             {
-                
             }
-            else if(argumentos->categoría != Ñ::CategoríaNodo::NODO_ARGUMENTOS)
+            else if (argumentos->categoría != Ñ::CategoríaNodo::NODO_ARGUMENTOS)
             {
                 resultado.error("El tipo de retorno no es un NODO_ARGUMENTOS válido.");
                 resultado.posición(argumentos->posición());
@@ -485,20 +482,20 @@ namespace Ñ
             }
             else
             {
-                for(auto a : argumentos->ramas)
+                for (auto a : argumentos->ramas)
                 {
-                    if(a == nullptr)
+                    if (a == nullptr)
                     {
                         resultado.error("He recibido un argumento nulo.");
                         resultado.posición(argumentos->posición());
                         return resultado;
                     }
 
-                    if(a->categoría == Ñ::CategoríaNodo::NODO_TIPO)
+                    if (a->categoría == Ñ::CategoríaNodo::NODO_TIPO)
                     {
-                        Ñ::Tipo* arg = (Ñ::Tipo*)a;
-                        llvm::Type* tipoarg = creaTipoLlvm(arg);
-                        if(tipoarg == nullptr)
+                        Ñ::Tipo *arg = (Ñ::Tipo *)a;
+                        llvm::Type *tipoarg = creaTipoLlvm(arg);
+                        if (tipoarg == nullptr)
                         {
                             resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(arg) + "'.");
                             resultado.posición(arg->posición());
@@ -506,11 +503,11 @@ namespace Ñ
                         }
                         vArgumentos.push_back(tipoarg);
                     }
-                    else if(a->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+                    else if (a->categoría == Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
                     {
-                        Ñ::Tipo* arg = (Ñ::Tipo*)(a->ramas[0]);
-                        llvm::Type* tipoarg = creaTipoLlvm(arg);
-                        if(tipoarg == nullptr)
+                        Ñ::Tipo *arg = (Ñ::Tipo *)(a->ramas[0]);
+                        llvm::Type *tipoarg = creaTipoLlvm(arg);
+                        if (tipoarg == nullptr)
                         {
                             resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(arg) + "'.");
                             resultado.posición(arg->posición());
@@ -520,7 +517,7 @@ namespace Ñ
                     }
                     else
                     {
-                        //muestraNodos(a);
+                        // muestraNodos(a);
                         resultado.error("He recibido un argumento de un tipo que no reconozco.");
                         resultado.posición(a->posición());
                         return resultado;
@@ -528,11 +525,11 @@ namespace Ñ
                 }
             }
 
-            llvm::FunctionType* firmaFunción = llvm::FunctionType::get(tRetorno, vArgumentos, false);
+            llvm::FunctionType *firmaFunción = llvm::FunctionType::get(tRetorno, vArgumentos, false);
 
-            llvm::Function* función;
+            llvm::Function *función;
 
-            if(externo)
+            if (externo)
             {
                 función = llvm::Function::Create(firmaFunción, llvm::Function::ExternalLinkage, nombre.c_str(), móduloLlvm);
             }
@@ -546,14 +543,14 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeInteriorDeBloque(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeInteriorDeBloque(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            for(auto n : nodo->ramas)
+            for (auto n : nodo->ramas)
             {
                 Ñ::ResultadoLlvm resultadoIntermedio = construyeExpresión(n);
-                if(resultadoIntermedio.error())
+                if (resultadoIntermedio.error())
                 {
                     return resultadoIntermedio;
                 }
@@ -563,20 +560,20 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeExpresiónPrimerNivel(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeExpresiónPrimerNivel(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            Ñ::Expresión* expresión;
+            Ñ::Expresión *expresión;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo nulo, esperaba una expresión de primer nivel.");
                 return resultado;
             }
-            else if(nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+            else if (nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
             {
                 // Convierto Ñ::Nodo* a Ñ::DefineFunción*
-                expresión = (Ñ::Expresión*)nodo;
+                expresión = (Ñ::Expresión *)nodo;
             }
             else
             {
@@ -587,27 +584,27 @@ namespace Ñ
 
             preparaMóduloJAT("");
 
-            for(auto const&[nombre, tipo] : entorno->globales)
+            for (auto const &[nombre, tipo] : entorno->globales)
             {
-                llvm::GlobalVariable* varGlobal = new llvm::GlobalVariable(*(móduloLlvm), tipo, false, llvm::GlobalValue::ExternalLinkage, 0, nombre);
+                llvm::GlobalVariable *varGlobal = new llvm::GlobalVariable(*(móduloLlvm), tipo, false, llvm::GlobalValue::ExternalLinkage, 0, nombre);
             }
 
             resultado = _construyeDeclaraciónFunción("__función_anónima__", nullptr, nullptr, true);
-            if(resultado.error())
+            if (resultado.error())
             {
                 return resultado;
             }
-            
-            llvm::Function * funciónLlvm;
-            
+
+            llvm::Function *funciónLlvm;
+
             funciónLlvm = móduloLlvm->getFunction("__función_anónima__");
 
-            if(!funciónLlvm)
+            if (!funciónLlvm)
             {
                 resultado.error("Todavía no has registrado la función '__función_anónima__()'.");
                 return resultado;
             }
-            else if(!funciónLlvm->empty())
+            else if (!funciónLlvm->empty())
             {
                 resultado.error("Ya habías definido la función '__función_anónima__()', no puedo redefinirla.");
                 return resultado;
@@ -618,8 +615,8 @@ namespace Ñ
             tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN);
 
             std::string nombreBloque = "entrada";
-            llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
-            if(bloqueLlvm == nullptr)
+            llvm::BasicBlock *bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
+            if (bloqueLlvm == nullptr)
             {
                 resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo.");
                 return resultado;
@@ -628,7 +625,7 @@ namespace Ñ
             entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
 
             auto rExpresión = construyeExpresión(nodo);
-            if(rExpresión.error())
+            if (rExpresión.error())
             {
                 return rExpresión;
             }
@@ -637,30 +634,30 @@ namespace Ñ
 
             llvm::verifyFunction(*funciónLlvm);
 
-            //gestorPasesOptimización->run(*funciónLlvm);
+            // gestorPasesOptimización->run(*funciónLlvm);
 
-            //funciónLlvm->print(llvm::errs(), nullptr);
+            // funciónLlvm->print(llvm::errs(), nullptr);
 
             tablaSímbolos->borraÁmbito();
             delete tablaSímbolos;
             tablaSímbolos = nullptr;
 
             resultado.éxito();
-            resultado.valor((llvm::Value*)funciónLlvm);
+            resultado.valor((llvm::Value *)funciónLlvm);
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeExpresión(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeExpresión(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nullptr, esperaba una expresión.");
                 return resultado;
             }
 
-            if(nodo->ramas.size() != 1)
+            if (nodo->ramas.size() != 1)
             {
                 resultado.error("He recibido una expresión que no contiene ningún hijo.");
                 resultado.posición(nodo->posición());
@@ -669,7 +666,7 @@ namespace Ñ
 
             auto n = nodo->ramas[0];
 
-            if(n == nullptr)
+            if (n == nullptr)
             {
                 resultado.error("No puedo leer el hijo de la expresión, está vacío.");
                 resultado.posición(n->posición());
@@ -681,13 +678,13 @@ namespace Ñ
             case Ñ::CategoríaNodo::NODO_DEVUELVE:
                 resultado = construyeDevolución(n);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_PARA_BUCLE:
                 resultado = construyeParaBucle(n);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
-                if(jat)
+                if (jat)
                 {
                     resultado = construyeDeclaraciónVariableGlobal(n);
                 }
@@ -697,11 +694,11 @@ namespace Ñ
                 }
                 resultado = construyeDeclaraciónVariable(n);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_ASIGNA:
                 resultado = construyeAsignación(n);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_LITERAL:
             case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
             case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
@@ -711,36 +708,36 @@ namespace Ñ
             case Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN:
                 resultado = construyeLDA(n);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_SI_CONDICIONAL:
                 resultado = construyeSiCondicional(n);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS:
                 resultado = construyeBucleMientras(n);
                 break;
-            
+
             default:
                 resultado.error("No reconozco la expresión.");
                 resultado.posición(nodo->posición());
-                //muestraNodos(nodo);
+                // muestraNodos(nodo);
                 break;
             }
 
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeSiCondicional(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeSiCondicional(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("El nodo vale nullptr, esperaba un si-condicional.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_SI_CONDICIONAL)
             {
                 resultado.error("El nodo no es un si-condicional.");
                 resultado.posición(nodo->posición());
@@ -753,7 +750,7 @@ namespace Ñ
             llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
 
             int64_t índice = 0;
-            
+
             // Declaro y preparo punteros de los diferentes bloques
             llvm::BasicBlock *bloquePrevio = entorno->constructorLlvm.GetInsertBlock();
             llvm::BasicBlock *bloqueSiCnd = nullptr;
@@ -761,12 +758,12 @@ namespace Ñ
             llvm::BasicBlock *bloqueSino = nullptr;
             llvm::BasicBlock *bloqueContinúa = nullptr;
 
-            if(continúa) // La función contiene más expresiones después del SiCondicional
+            if (continúa) // La función contiene más expresiones después del SiCondicional
             {
                 bloqueContinúa = llvm::BasicBlock::Create(entorno->contextoLlvm, "continúa");
             }
 
-            if(nodo->ramas.size() % 2 == 1) // Hay un bloqueSino
+            if (nodo->ramas.size() % 2 == 1) // Hay un bloqueSino
             {
                 sino = true;
                 bloqueSino = llvm::BasicBlock::Create(entorno->contextoLlvm, "sino");
@@ -775,7 +772,7 @@ namespace Ñ
             {
                 // Para cubrir todas las rutas de ejecución, si no hay expresiones
                 // tras el SiCondicional, éste debe tener un bloqueSino
-                if(!continúa)
+                if (!continúa)
                 {
                     resultado.error("La condición debería incluir un bloque 'sino'.");
                     resultado.posición(nodo->posición());
@@ -793,7 +790,7 @@ namespace Ñ
             // Inserto salto en el bloque de donde venimos
             entorno->constructorLlvm.CreateBr(bloqueSiCnd);
 
-            for(índice = 0; índice < (nodo->ramas.size() - 1); índice+=2) // SI / SINO SI
+            for (índice = 0; índice < (nodo->ramas.size() - 1); índice += 2) // SI / SINO SI
             {
                 // CONDICIÓN
                 // Desde ahora inserto nuevas instrucciones en el bloqueSiCnd
@@ -801,16 +798,16 @@ namespace Ñ
                 entorno->constructorLlvm.SetInsertPoint(bloqueSiCnd);
 
                 // Construye condición dentro del bloqueSiCnd
-                Ñ::Nodo* condición = nodo->ramas[índice];
+                Ñ::Nodo *condición = nodo->ramas[índice];
                 Ñ::ResultadoLlvm resultadoCondición = construyeLDA(condición);
 
-                if(resultadoCondición.error())
+                if (resultadoCondición.error())
                 {
                     return resultadoCondición;
                 }
 
-                llvm::Value* valorIntermedio = resultadoCondición.valor();
-                llvm::Value* valorCondición = entorno->constructorLlvm.CreateLoad(valorIntermedio);
+                llvm::Value *valorIntermedio = resultadoCondición.valor();
+                llvm::Value *valorCondición = entorno->constructorLlvm.CreateLoad(valorIntermedio);
 
                 // SiCond# CndBr ->  [SiBlq#]   [SiCond#+1 || (SinoBlq || Continúa)]
                 // Debemos determinar si, en caso de incumplir la condición,
@@ -818,9 +815,9 @@ namespace Ñ
 
                 bloqueSiBlq = llvm::BasicBlock::Create(entorno->contextoLlvm, "si_bloque");
 
-                llvm::BasicBlock* bloqueSiCndNuevo = nullptr;
+                llvm::BasicBlock *bloqueSiCndNuevo = nullptr;
                 // ¿Existe un nuevo par de bloques Si Condicional?
-                if(índice < (((int64_t)(nodo->ramas.size())) - 3))
+                if (índice < (((int64_t)(nodo->ramas.size())) - 3))
                 {
                     // Creo un nuevo SiCond
                     bloqueSiCndNuevo = llvm::BasicBlock::Create(entorno->contextoLlvm, "si_condic");
@@ -829,16 +826,16 @@ namespace Ñ
                     bloqueSiCnd = bloqueSiCndNuevo;
                 }
                 // ¿No, pero existe un SinoBlq al final del SiCondicional?
-                else if(índice == (((int64_t)(nodo->ramas.size())) - 3))
+                else if (índice == (((int64_t)(nodo->ramas.size())) - 3))
                 {
                     // Creo salto condicional entre SiBlq y SinoBlq existente
                     entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueSiBlq, bloqueSino);
                 }
                 // ¿No, y este par SiCnd-SiBlq es el último par del SiCondicional?
-                else if(índice == (((int64_t)(nodo->ramas.size())) - 2))
+                else if (índice == (((int64_t)(nodo->ramas.size())) - 2))
                 {
                     // ¿Existe el bloqueContinúa
-                    if(continúa)
+                    if (continúa)
                     {
                         // Creo salto condicional entre SiBlq y bloqueContinúa existente
                         entorno->constructorLlvm.CreateCondBr(valorCondición, bloqueSiBlq, bloqueContinúa);
@@ -864,63 +861,61 @@ namespace Ñ
                 entorno->constructorLlvm.SetInsertPoint(bloqueSiBlq);
                 // Relleno el bloqueSiBlq
 
-                Ñ::Nodo* nodoBloque = nodo->ramas[índice + 1];
+                Ñ::Nodo *nodoBloque = nodo->ramas[índice + 1];
 
                 tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_SUBBLOQUE_FUNCIÓN);
                 resultado = construyeInteriorDeBloque(nodoBloque);
                 tablaSímbolos->borraÁmbito();
-                if(resultado.error())
+                if (resultado.error())
                 {
                     return resultado;
                 }
-            
-                //Después de construir el interior del bloque, puedo haber creado
-                //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
-                //puede haber cambiado. Por eso, releemos el bloque actual.
+
+                // Después de construir el interior del bloque, puedo haber creado
+                // otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
+                // puede haber cambiado. Por eso, releemos el bloque actual.
                 bloqueSiBlq = entorno->constructorLlvm.GetInsertBlock();
 
-                //Introduzco, al final del bloque actual, un salto hasta el bloque tras el condicional
-                if(continúa)
+                // Introduzco, al final del bloque actual, un salto hasta el bloque tras el condicional
+                if (continúa)
                 {
                     entorno->constructorLlvm.CreateBr(bloqueContinúa);
                 }
-                //else
+                // else
                 //{
-                //    resultado.error("No se definen todas las posibles vías de ejecución.");
-                //    resultado.posición(nodoBloque->posición());
-                //    return resultado;
-                //}
+                //     resultado.error("No se definen todas las posibles vías de ejecución.");
+                //     resultado.posición(nodoBloque->posición());
+                //     return resultado;
+                // }
             }
-            
+
             // BLOQUE SINO
-            if( nodo->ramas.size() == (índice + 1)
-                && nodo->ramas[índice] != nullptr
-                && nodo->ramas[índice]->categoría == Ñ::NODO_BLOQUE)
+            if (nodo->ramas.size() == (índice + 1) && nodo->ramas[índice] != nullptr && nodo->ramas[índice]->categoría == Ñ::NODO_BLOQUE)
             {
-                //Inserto el bloque Sino al final de la función
+                // Inserto el bloque Sino al final de la función
                 funciónActual->getBasicBlockList().push_back(bloqueSino);
                 entorno->constructorLlvm.SetInsertPoint(bloqueSino);
 
-                //Relleno el bloque Sino
-                Ñ::Nodo* nodoBloque = nodo->ramas[índice];
+                // Relleno el bloque Sino
+                Ñ::Nodo *nodoBloque = nodo->ramas[índice];
                 resultado = construyeInteriorDeBloque(nodoBloque);
-                if(resultado.error())
+                if (resultado.error())
                 {
                     return resultado;
                 }
 
                 bloqueSino = entorno->constructorLlvm.GetInsertBlock();
 
-                if(continúa)
+                if (continúa)
                 {
                     entorno->constructorLlvm.CreateBr(bloqueContinúa);
                 }
 
                 ++índice;
             }
-            
+
             // BLOQUE CONTINÚA
-            if(continúa)
+            if (continúa)
             {
                 funciónActual->getBasicBlockList().push_back(bloqueContinúa);
                 entorno->constructorLlvm.SetInsertPoint(bloqueContinúa);
@@ -930,17 +925,17 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeBucleMientras(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeBucleMientras(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("El nodo vale nullptr, esperaba un bucle-mientras.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_BUCLE_MIENTRAS)
             {
                 resultado.error("El nodo no es un bucle-mientras.");
                 resultado.posición(nodo->posición());
@@ -952,14 +947,14 @@ namespace Ñ
             llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
 
             int64_t índice = 0;
-            
+
             // Declaro y preparo punteros de los diferentes bloques
             llvm::BasicBlock *bloquePrevio = entorno->constructorLlvm.GetInsertBlock();
             llvm::BasicBlock *bloqueMientrasCnd = llvm::BasicBlock::Create(entorno->contextoLlvm, "mientras_condic");
             llvm::BasicBlock *bloqueMientrasBlq = llvm::BasicBlock::Create(entorno->contextoLlvm, "mientras_blq");
             llvm::BasicBlock *bloqueContinúa = nullptr;
 
-            if(continúa) // La función contiene más expresiones después del SiCondicional
+            if (continúa) // La función contiene más expresiones después del SiCondicional
             {
                 bloqueContinúa = llvm::BasicBlock::Create(entorno->contextoLlvm, "continúa");
             }
@@ -979,16 +974,16 @@ namespace Ñ
             entorno->constructorLlvm.SetInsertPoint(bloqueMientrasCnd);
 
             // Construye condición dentro del bloqueMientrasCnd
-            Ñ::Nodo* condición = nodo->ramas[0];
+            Ñ::Nodo *condición = nodo->ramas[0];
             Ñ::ResultadoLlvm resultadoCondición = construyeLDA(condición);
 
-            if(resultadoCondición.error())
+            if (resultadoCondición.error())
             {
                 return resultadoCondición;
             }
 
-            llvm::Value* valorIntermedio = resultadoCondición.valor();
-            llvm::Value* valorCondición = entorno->constructorLlvm.CreateLoad(valorIntermedio);
+            llvm::Value *valorIntermedio = resultadoCondición.valor();
+            llvm::Value *valorCondición = entorno->constructorLlvm.CreateLoad(valorIntermedio);
 
             // MientrasCond CndBr ->  [MientrasBlq]   [Continúa]
             // Debemos determinar si saltaremos al MientrasBlq o ContinúaBlq
@@ -999,7 +994,7 @@ namespace Ñ
             entorno->constructorLlvm.SetInsertPoint(bloqueMientrasBlq);
             // Relleno el bloqueMientrasBlq
 
-            Ñ::Nodo* nodoBloque = nodo->ramas[1];
+            Ñ::Nodo *nodoBloque = nodo->ramas[1];
 
             tablaSímbolos->ponBloqueDestino(bloqueContinúa);
             tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_SUBBLOQUE_FUNCIÓN);
@@ -1007,30 +1002,30 @@ namespace Ñ
             tablaSímbolos->borraÁmbito();
             tablaSímbolos->borraBloqueDestino();
 
-            if(resultado.error())
+            if (resultado.error())
             {
                 return resultado;
             }
-            
-            //Después de construir el interior del bloque, puedo haber creado
-            //otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
-            //puede haber cambiado. Por eso, releemos el bloque actual.
+
+            // Después de construir el interior del bloque, puedo haber creado
+            // otros bloques (por ejemplo, con sies anidados). Por tanto el bloque actual
+            // puede haber cambiado. Por eso, releemos el bloque actual.
             bloqueMientrasBlq = entorno->constructorLlvm.GetInsertBlock();
 
-            //Introduzco al final del bloque un salto atrás, hasta el bloque MientrasCnd
-            if(continúa)
+            // Introduzco al final del bloque un salto atrás, hasta el bloque MientrasCnd
+            if (continúa)
             {
                 entorno->constructorLlvm.CreateBr(bloqueMientrasCnd);
             }
-            //else
+            // else
             //{
-            //    resultado.error("No se definen todas las posibles vías de ejecución.");
-            //    resultado.posición(nodoBloque->posición());
-            //    return resultado;
-            //}
-            
+            //     resultado.error("No se definen todas las posibles vías de ejecución.");
+            //     resultado.posición(nodoBloque->posición());
+            //     return resultado;
+            // }
+
             // BLOQUE CONTINÚA
-            if(continúa)
+            if (continúa)
             {
                 funciónActual->getBasicBlockList().push_back(bloqueContinúa);
                 entorno->constructorLlvm.SetInsertPoint(bloqueContinúa);
@@ -1040,27 +1035,27 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeAsignación(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeAsignación(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la asignación.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_ASIGNA)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_ASIGNA)
             {
                 resultado.error("He recibido un nodo que no es una asignación.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
 
-            if(nodo->ramas.size() == 2)
+            if (nodo->ramas.size() == 2)
             {
                 Ñ::ResultadoLlvm rLia;
-                if(jat)
+                if (jat)
                 {
                     rLia = construyeLIAJAT(nodo->ramas[0]);
                 }
@@ -1069,23 +1064,23 @@ namespace Ñ
                     rLia = construyeLIA(nodo->ramas[0]);
                 }
 
-                if(rLia.error())
+                if (rLia.error())
                 {
                     return rLia;
                 }
 
-                llvm::Value* vLia = rLia.valor();
-            
-                //std::cout << "construyeAsignación() LDA" << std::endl;
+                llvm::Value *vLia = rLia.valor();
+
+                // std::cout << "construyeAsignación() LDA" << std::endl;
                 Ñ::ResultadoLlvm rLda = construyeLDA(nodo->ramas[1]);
-                //std::cout << "construyeAsignación() LDA Hecho" << std::endl;
-                if(rLda.error())
+                // std::cout << "construyeAsignación() LDA Hecho" << std::endl;
+                if (rLda.error())
                 {
                     return rLda;
                 }
 
-                llvm::Value* vLda = rLda.valor();
-                llvm::Value* valorIntermedio = entorno->constructorLlvm.CreateLoad(vLda);
+                llvm::Value *vLda = rLda.valor();
+                llvm::Value *valorIntermedio = entorno->constructorLlvm.CreateLoad(vLda);
 
                 entorno->constructorLlvm.CreateStore(valorIntermedio, vLia);
 
@@ -1100,32 +1095,32 @@ namespace Ñ
             }
         }
 
-        Ñ::ResultadoLlvm construyeDevolución(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeDevolución(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
-            if(nodo->ramas.size() == 1)
+            if (nodo->ramas.size() == 1)
             {
                 resultado = construyeLDA(nodo->ramas[0]);
 
-                if(resultado.error())
+                if (resultado.error())
                 {
                     return resultado;
                 }
 
-                llvm::Value* valorIntermedio = resultado.valor();
-                llvm::Value* valorDevolución = entorno->constructorLlvm.CreateLoad(valorIntermedio);
+                llvm::Value *valorIntermedio = resultado.valor();
+                llvm::Value *valorDevolución = entorno->constructorLlvm.CreateLoad(valorIntermedio);
 
                 entorno->constructorLlvm.CreateRet(valorDevolución);
-                
+
                 llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
-                llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
+                llvm::BasicBlock *bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
                 entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
 
                 entorno->constructorLlvm.CreateUnreachable();
@@ -1133,12 +1128,12 @@ namespace Ñ
                 resultado.éxito();
                 return resultado;
             }
-            else if(nodo->ramas.size() == 0)
+            else if (nodo->ramas.size() == 0)
             {
                 entorno->constructorLlvm.CreateRetVoid();
 
                 llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
-                llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
+                llvm::BasicBlock *bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
                 entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
 
                 entorno->constructorLlvm.CreateUnreachable();
@@ -1153,20 +1148,20 @@ namespace Ñ
             }
         }
 
-        Ñ::ResultadoLlvm construyeParaBucle(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeParaBucle(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
-            if(nodo->ramas.size() == 0)
+            if (nodo->ramas.size() == 0)
             {
-                llvm::BasicBlock* bucleDestino = tablaSímbolos->leeBloqueDestino();
-                if(bucleDestino == nullptr)
+                llvm::BasicBlock *bucleDestino = tablaSímbolos->leeBloqueDestino();
+                if (bucleDestino == nullptr)
                 {
                     resultado.error("Instrucción 'para' fuera de un bucle.");
                     resultado.posición(nodo->posición());
@@ -1175,7 +1170,7 @@ namespace Ñ
                 entorno->constructorLlvm.CreateBr(bucleDestino);
 
                 llvm::Function *funciónActual = entorno->constructorLlvm.GetInsertBlock()->getParent();
-                llvm::BasicBlock* bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
+                llvm::BasicBlock *bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, "inalcanzable", funciónActual);
                 entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
 
                 entorno->constructorLlvm.CreateUnreachable();
@@ -1191,11 +1186,11 @@ namespace Ñ
             }
         }
 
-        Ñ::ResultadoLlvm construyeLIA(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeLIA(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            
-            if(nodo == nullptr)
+
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
@@ -1206,15 +1201,15 @@ namespace Ñ
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
                 resultado = construyeDeclaraciónVariable(nodo);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
                 resultado = construyeVariableLIA(nodo);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_PUNTERO:
                 resultado = construyePunteroLIA(nodo);
                 break;
-            
+
             default:
                 resultado.error("No sé construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA.");
                 resultado.posición(nodo->posición());
@@ -1224,11 +1219,11 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeLIAJAT(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeLIAJAT(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            
-            if(nodo == nullptr)
+
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
@@ -1239,11 +1234,11 @@ namespace Ñ
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
                 resultado = construyeDeclaraciónVariableGlobal(nodo);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
                 resultado = construyeVariableLIA(nodo);
                 break;
-            
+
             default:
                 resultado.error("No puedo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LIA.");
                 resultado.posición(nodo->posición());
@@ -1253,11 +1248,11 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeLDA(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeLDA(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
@@ -1266,19 +1261,19 @@ namespace Ñ
             switch (nodo->categoría)
             {
             case Ñ::CategoríaNodo::NODO_LITERAL:
-                //std::cout << "construyeLDA(NODO_LITERAL)" << std::endl;
+                // std::cout << "construyeLDA(NODO_LITERAL)" << std::endl;
                 resultado = construyeLiteral(nodo);
-                //std::cout << "construyeLDA(NODO_LITERAL) Hecho" << std::endl;
+                // std::cout << "construyeLDA(NODO_LITERAL) Hecho" << std::endl;
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS:
                 resultado = construyeConversorTipos(nodo);
                 break;
-            
+
             case Ñ::CategoríaNodo::NODO_IDENTIFICADOR:
                 resultado = construyeVariableLDA(nodo);
                 break;
-                
+
             case Ñ::CategoríaNodo::NODO_COMPARACIÓN:
                 resultado = construyeOperaciónComparación(nodo);
                 break;
@@ -1302,49 +1297,49 @@ namespace Ñ
             case Ñ::CategoríaNodo::NODO_OP_UNARIA:
                 resultado = construyeOperaciónUnaria(nodo);
                 break;
-            
+
             default:
                 resultado.error("No sé cómo construir el nodo '" + obténNombreDeNodo(nodo->categoría) + "' como LDA.");
                 resultado.posición(nodo->posición());
                 break;
             }
 
-            if(resultado.error())
+            if (resultado.error())
             {
                 return resultado;
             }
             else
             {
-                llvm::Value* valor = resultado.valor();
-                if(valor == nullptr) // resultado de llamar a una función que devuelve "nada"
+                llvm::Value *valor = resultado.valor();
+                if (valor == nullptr) // resultado de llamar a una función que devuelve "nada"
                 {
                     return resultado;
                 }
-                llvm::Value* variable = entorno->constructorLlvm.CreateAlloca(valor->getType(), nullptr);
+                llvm::Value *variable = entorno->constructorLlvm.CreateAlloca(valor->getType(), nullptr);
                 entorno->constructorLlvm.CreateStore(valor, variable, false);
                 resultado.valor(variable);
                 return resultado;
             }
         }
 
-        Ñ::ResultadoLlvm construyeDeclaraciónVariable(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeDeclaraciónVariable(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la declaración de variable.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
             {
                 resultado.error("El nodo no es una declaración de variable, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-            
-            if(nodo->ramas.size() != 1)
+
+            if (nodo->ramas.size() != 1)
             {
                 resultado.error("El nodo 'declaración de variable' no tiene las ramas esperadas, no puedo construirlo.");
                 resultado.posición(nodo->posición());
@@ -1352,12 +1347,12 @@ namespace Ñ
             }
 
             std::string nombre;
-            llvm::Type* tipo;
+            llvm::Type *tipo;
 
-            Ñ::DeclaraVariable* dv = (Ñ::DeclaraVariable*)nodo;
-            Ñ::Tipo* t = (Ñ::Tipo*)(nodo->ramas[0]);
+            Ñ::DeclaraVariable *dv = (Ñ::DeclaraVariable *)nodo;
+            Ñ::Tipo *t = (Ñ::Tipo *)(nodo->ramas[0]);
             tipo = creaTipoLlvm(t);
-            if(tipo == nullptr)
+            if (tipo == nullptr)
             {
                 resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(t) + "'.");
                 resultado.posición(t->posición());
@@ -1366,7 +1361,7 @@ namespace Ñ
 
             nombre = dv->variable;
 
-            llvm::Value* variable = entorno->constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
+            llvm::Value *variable = entorno->constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
 
             ponId(nombre, variable);
 
@@ -1375,24 +1370,24 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeDeclaraciónVariableGlobal(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeDeclaraciónVariableGlobal(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la declaración de variable.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE)
             {
                 resultado.error("El nodo no es una declaración de variable, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-            
-            if(nodo->ramas.size() != 1)
+
+            if (nodo->ramas.size() != 1)
             {
                 resultado.error("El nodo 'declaración de variable' no tiene las ramas esperadas, no puedo construirlo.");
                 resultado.posición(nodo->posición());
@@ -1400,12 +1395,12 @@ namespace Ñ
             }
 
             std::string nombre;
-            llvm::Type* tipo;
+            llvm::Type *tipo;
 
-            Ñ::DeclaraVariable* dv = (Ñ::DeclaraVariable*)nodo;
-            Ñ::Tipo* t = (Ñ::Tipo*)(nodo->ramas[0]);
+            Ñ::DeclaraVariable *dv = (Ñ::DeclaraVariable *)nodo;
+            Ñ::Tipo *t = (Ñ::Tipo *)(nodo->ramas[0]);
             tipo = creaTipoLlvm(t);
-            if(tipo == nullptr)
+            if (tipo == nullptr)
             {
                 resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(t) + "'.");
                 resultado.posición(t->posición());
@@ -1416,11 +1411,11 @@ namespace Ñ
 
             entorno->globales[nombre] = tipo;
 
-            llvm::Constant* CERO = llvm::ConstantInt::get(tipo, 0);
+            llvm::Constant *CERO = llvm::ConstantInt::get(tipo, 0);
 
-            //llvm::Value* variable = constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
-            llvm::GlobalVariable* varGlobal = new llvm::GlobalVariable(*(móduloLlvm), tipo, false, llvm::GlobalValue::CommonLinkage, CERO, nombre);
-            //varGlobal->setAlignment(llvm::MaybeAlign(8));
+            // llvm::Value* variable = constructorLlvm.CreateAlloca(tipo, nullptr, nombre);
+            llvm::GlobalVariable *varGlobal = new llvm::GlobalVariable(*(móduloLlvm), tipo, false, llvm::GlobalValue::CommonLinkage, CERO, nombre);
+            // varGlobal->setAlignment(llvm::MaybeAlign(8));
 
             ponId(nombre, varGlobal);
 
@@ -1429,24 +1424,24 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyePunteroLIA(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyePunteroLIA(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_PUNTERO)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_PUNTERO)
             {
                 resultado.error("El nodo no es un puntero, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-            
-            if(nodo->ramas.size() != 1)
+
+            if (nodo->ramas.size() != 1)
             {
                 resultado.error("El nodo 'puntero' no tiene las ramas esperadas, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
@@ -1454,22 +1449,22 @@ namespace Ñ
             }
 
             std::string nombre;
-            Ñ::Identificador* id;
-            llvm::Value* variable;
+            Ñ::Identificador *id;
+            llvm::Value *variable;
 
-            id = (Ñ::Identificador*)nodo->ramas[0];
+            id = (Ñ::Identificador *)nodo->ramas[0];
             nombre = id->id;
 
             variable = leeId(nombre);
-            if(variable == nullptr)
+            if (variable == nullptr)
             {
                 resultado.error("No puedo leer la variable '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
 
-            llvm::Value* variableFinal = entorno->constructorLlvm.CreateLoad(variable);
-            if(variableFinal == nullptr)
+            llvm::Value *variableFinal = entorno->constructorLlvm.CreateLoad(variable);
+            if (variableFinal == nullptr)
             {
                 resultado.error("No puedo leer la referencia guardada en '" + nombre + "'.");
                 resultado.posición(id->posición());
@@ -1481,24 +1476,24 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeVariableLIA(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeVariableLIA(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
             {
                 resultado.error("El nodo no es una variable, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-            
-            if(nodo->ramas.size() != 0)
+
+            if (nodo->ramas.size() != 0)
             {
                 resultado.error("El nodo 'identificador' no tiene las ramas esperadas, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
@@ -1506,14 +1501,14 @@ namespace Ñ
             }
 
             std::string nombre;
-            Ñ::Identificador* id;
-            llvm::Value* variable;
+            Ñ::Identificador *id;
+            llvm::Value *variable;
 
-            id = (Ñ::Identificador*)nodo;
+            id = (Ñ::Identificador *)nodo;
             nombre = id->id;
 
             variable = leeId(nombre);
-            if(variable == nullptr)
+            if (variable == nullptr)
             {
                 resultado.error("No puedo leer la variable '" + nombre + "'.");
                 resultado.posición(id->posición());
@@ -1525,24 +1520,24 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeVariableLDA(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeVariableLDA(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la variable.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
             {
                 resultado.error("El nodo no es una variable, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-            
-            if(nodo->ramas.size() != 0)
+
+            if (nodo->ramas.size() != 0)
             {
                 resultado.error("El nodo 'identificador' no tiene las ramas esperadas, no puedo construir su lectura.");
                 resultado.posición(nodo->posición());
@@ -1550,20 +1545,20 @@ namespace Ñ
             }
 
             std::string nombre;
-            Ñ::Identificador* id;
-            llvm::Value* variable;
+            Ñ::Identificador *id;
+            llvm::Value *variable;
 
-            id = (Ñ::Identificador*)nodo;
+            id = (Ñ::Identificador *)nodo;
             nombre = id->id;
 
-            if(jat)
+            if (jat)
             {
                 variable = móduloLlvm->getGlobalVariable(nombre, true);
             }
             else
             {
                 variable = leeId(nombre);
-                if(variable == nullptr)
+                if (variable == nullptr)
                 {
                     resultado.error("No puedo leer la variable '" + nombre + "'.");
                     resultado.posición(id->posición());
@@ -1571,48 +1566,48 @@ namespace Ñ
                 }
             }
 
-            llvm::Value* valor = entorno->constructorLlvm.CreateLoad(variable, nombre);
+            llvm::Value *valor = entorno->constructorLlvm.CreateLoad(variable, nombre);
 
             resultado.éxito();
             resultado.valor(valor);
             return resultado;
         }
 
-        llvm::Value* convierteValorLlvmATipoLlvm(llvm::Value* valor, Ñ::Tipo* tipoInicial, Ñ::Tipo* tipoDestino)
+        llvm::Value *convierteValorLlvmATipoLlvm(llvm::Value *valor, Ñ::Tipo *tipoInicial, Ñ::Tipo *tipoDestino)
         {
-            llvm::Value* valorFinal;
+            llvm::Value *valorFinal;
 
-            if(valor == nullptr)
-            {
-                return nullptr;
-            }
-
-            if(tipoInicial == nullptr)
+            if (valor == nullptr)
             {
                 return nullptr;
             }
 
-            if(tipoInicial->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+            if (tipoInicial == nullptr)
             {
                 return nullptr;
             }
 
-            if(tipoDestino == nullptr)
+            if (tipoInicial->categoría != Ñ::CategoríaNodo::NODO_TIPO)
             {
                 return nullptr;
             }
 
-            if(tipoDestino->categoría != Ñ::CategoríaNodo::NODO_TIPO)
+            if (tipoDestino == nullptr)
             {
                 return nullptr;
             }
-            
-            llvm::Type* tDestinoLlvm = creaTipoLlvm(tipoDestino);
-            if(tDestinoLlvm == nullptr)
+
+            if (tipoDestino->categoría != Ñ::CategoríaNodo::NODO_TIPO)
             {
                 return nullptr;
             }
-            
+
+            llvm::Type *tDestinoLlvm = creaTipoLlvm(tipoDestino);
+            if (tDestinoLlvm == nullptr)
+            {
+                return nullptr;
+            }
+
             switch (tipoDestino->tipo)
             {
             case TIPO_BOOLEANO:
@@ -1620,7 +1615,7 @@ namespace Ñ
             case TIPO_NATURAL_16:
             case TIPO_NATURAL_32:
             case TIPO_NATURAL_64:
-                if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
+                if (tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
                 {
                     valorFinal = entorno->constructorLlvm.CreatePointerCast(valor, tDestinoLlvm);
                 }
@@ -1629,7 +1624,7 @@ namespace Ñ
                     valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, false);
                 }
                 break;
-            
+
             case TIPO_ENTERO_8:
             case TIPO_ENTERO_16:
             case TIPO_ENTERO_32:
@@ -1637,7 +1632,7 @@ namespace Ñ
                 break;
 
             case TIPO_ENTERO_64:
-                if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
+                if (tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_PUNTERO)
                 {
                     valorFinal = entorno->constructorLlvm.CreatePointerCast(valor, tDestinoLlvm);
                 }
@@ -1646,7 +1641,7 @@ namespace Ñ
                     valorFinal = entorno->constructorLlvm.CreateIntCast(valor, tDestinoLlvm, true);
                 }
                 break;
-            
+
             case TIPO_REAL_32:
             case TIPO_REAL_64:
                 switch (tipoInicial->tipo)
@@ -1658,19 +1653,19 @@ namespace Ñ
                 case TIPO_NATURAL_64:
                     valorFinal = entorno->constructorLlvm.CreateUIToFP(valor, tDestinoLlvm);
                     break;
-                
+
                 case TIPO_ENTERO_8:
                 case TIPO_ENTERO_16:
                 case TIPO_ENTERO_32:
                 case TIPO_ENTERO_64:
                     valorFinal = entorno->constructorLlvm.CreateSIToFP(valor, tDestinoLlvm);
                     break;
-            
+
                 case TIPO_REAL_32:
                 case TIPO_REAL_64:
                     valorFinal = entorno->constructorLlvm.CreateFPCast(valor, tDestinoLlvm);
                     break;
-                
+
                 default:
                     valorFinal = nullptr;
                     break;
@@ -1678,21 +1673,21 @@ namespace Ñ
                 break;
 
             case TIPO_SERIE:
-                if(valor->getType()->isArrayTy())
+                if (valor->getType()->isArrayTy())
                 {
-                    llvm::Type* tipSerieDestino = creaTipoLlvm(tipoDestino);
+                    llvm::Type *tipSerieDestino = creaTipoLlvm(tipoDestino);
                     uint64_t tamañoSerie = tipoInicial->tamaño();
 
                     llvm::Value *serieVacía = llvm::UndefValue::get(tipSerieDestino);
                     valorFinal = serieVacía;
                     entorno->constructorLlvm.Insert(valorFinal);
 
-                    for(uint32_t i = 0; i < tamañoSerie; i++)
+                    for (uint32_t i = 0; i < tamañoSerie; i++)
                     {
-                        llvm::Value* valElemento = entorno->constructorLlvm.CreateExtractValue(valor, {i});
+                        llvm::Value *valElemento = entorno->constructorLlvm.CreateExtractValue(valor, {i});
 
-                        Ñ::Tipo* subtipoInicial = tipoInicial->subtipo();
-                        Ñ::Tipo* subtipoDestino = tipoDestino->subtipo();
+                        Ñ::Tipo *subtipoInicial = tipoInicial->subtipo();
+                        Ñ::Tipo *subtipoDestino = tipoDestino->subtipo();
                         valElemento = convierteValorLlvmATipoLlvm(valElemento, subtipoInicial, subtipoDestino);
 
                         valorFinal = entorno->constructorLlvm.CreateInsertValue(valorFinal, valElemento, {i});
@@ -1705,21 +1700,21 @@ namespace Ñ
                 break;
 
             case TIPO_PUNTERO:
-                if(tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_SERIE)
+                if (tipoInicial->tipo == Ñ::CategoríaTipo::TIPO_SERIE)
                 {
-                    //if(!(valor->getType()->isArrayTy()))
+                    // if(!(valor->getType()->isArrayTy()))
                     //{
-                    //    return nullptr;
-                    //}
+                    //     return nullptr;
+                    // }
 
-                    llvm::Type* tipoEnt64 = llvm::IntegerType::getInt64Ty(entorno->contextoLlvm);
+                    llvm::Type *tipoEnt64 = llvm::IntegerType::getInt64Ty(entorno->contextoLlvm);
                     auto cero = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0, false));
-                    llvm::Constant* idc0 = llvm::ConstantInt::get(tipoEnt64, 0, false);
-                    llvm::Type* tipoInicialLlvm = creaTipoLlvm(tipoInicial);
-                    llvm::Type* tipoDestinoLlvm = creaTipoLlvm(tipoDestino);
-                    llvm::Type* subtipoInicialLlvm = creaTipoLlvm(tipoInicial->subtipo());
-                    llvm::Type* subtipoDestinoLlvm = creaTipoLlvm(tipoDestino->subtipo());
-                    if( tipoEnt64 == nullptr ||
+                    llvm::Constant *idc0 = llvm::ConstantInt::get(tipoEnt64, 0, false);
+                    llvm::Type *tipoInicialLlvm = creaTipoLlvm(tipoInicial);
+                    llvm::Type *tipoDestinoLlvm = creaTipoLlvm(tipoDestino);
+                    llvm::Type *subtipoInicialLlvm = creaTipoLlvm(tipoInicial->subtipo());
+                    llvm::Type *subtipoDestinoLlvm = creaTipoLlvm(tipoDestino->subtipo());
+                    if (tipoEnt64 == nullptr ||
                         idc0 == nullptr ||
                         tipoInicialLlvm == nullptr ||
                         subtipoInicialLlvm == nullptr ||
@@ -1727,17 +1722,16 @@ namespace Ñ
                         tipoDestinoLlvm == nullptr ||
                         subtipoDestinoLlvm == nullptr ||
                         subtipoDestinoLlvm != subtipoInicialLlvm ||
-                        !(tipoDestinoLlvm->isPointerTy())
-                      )
+                        !(tipoDestinoLlvm->isPointerTy()))
                     {
                         return nullptr;
                     }
-                    valorFinal = entorno->constructorLlvm.CreateGEP(((llvm::ArrayType*)tipoInicialLlvm)->getElementType(), valor, {idc0, idc0});
-                    //valorFinal = entorno->constructorLlvm.CreateGEP(valor, {cero, idc0});
-                    //valorFinal = entorno->constructorLlvm.CreateBitCast(valor, tipoDestinoLlvm);
-                    //valorFinal = llvm::GetElementPtrInst::Create(tipoDestinoLlvm, valor, { cero, idc0 });
-                    //valorFinal = llvm::GetElementPtrInst::Create(subtipoInicialLlvm, valor, { cero, idc0 }, "", entorno->constructorLlvm.GetInsertBlock());
-                    //entorno->constructorLlvm.Insert(valorFinal);
+                    valorFinal = entorno->constructorLlvm.CreateGEP(((llvm::ArrayType *)tipoInicialLlvm)->getElementType(), valor, {idc0, idc0});
+                    // valorFinal = entorno->constructorLlvm.CreateGEP(valor, {cero, idc0});
+                    // valorFinal = entorno->constructorLlvm.CreateBitCast(valor, tipoDestinoLlvm);
+                    // valorFinal = llvm::GetElementPtrInst::Create(tipoDestinoLlvm, valor, { cero, idc0 });
+                    // valorFinal = llvm::GetElementPtrInst::Create(subtipoInicialLlvm, valor, { cero, idc0 }, "", entorno->constructorLlvm.GetInsertBlock());
+                    // entorno->constructorLlvm.Insert(valorFinal);
                 }
                 else
                 {
@@ -1753,54 +1747,54 @@ namespace Ñ
             return valorFinal;
         }
 
-        Ñ::ResultadoLlvm construyeConversorTipos(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeConversorTipos(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
-            if(nodo == nullptr)
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la conversión.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_CONVIERTE_TIPOS)
             {
                 resultado.error("El nodo no es un conversor de tipos, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
 
-            if(nodo->ramas.size() != 1)
+            if (nodo->ramas.size() != 1)
             {
                 resultado.error("El nodo conversor de tipos, está mal definido, tiene " + std::to_string(nodo->ramas.size()) + " hijos.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
 
-            Ñ::ConvierteTipos* conv = (Ñ::ConvierteTipos*)nodo;
+            Ñ::ConvierteTipos *conv = (Ñ::ConvierteTipos *)nodo;
 
             resultado = construyeLDA(nodo->ramas[0]);
-            
-            if(resultado.error())
+
+            if (resultado.error())
             {
                 return resultado;
             }
-            
-            llvm::Value* valorFinal;
 
-            if(esSerie(conv->origen) && esPuntero(conv->destino) && (conv->origen->subtipo()->tipo == conv->destino->subtipo()->tipo))
+            llvm::Value *valorFinal;
+
+            if (esSerie(conv->origen) && esPuntero(conv->destino) && (conv->origen->subtipo()->tipo == conv->destino->subtipo()->tipo))
             {
-                llvm::Value* valorIntermedio = entorno->constructorLlvm.CreateLoad(resultado.valor());
-                llvm::Value* idc0 = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0));
+                llvm::Value *valorIntermedio = entorno->constructorLlvm.CreateLoad(resultado.valor());
+                llvm::Value *idc0 = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0));
                 valorFinal = entorno->constructorLlvm.CreateGEP(valorIntermedio->getType(), resultado.valor(), {idc0, idc0});
             }
             else
             {
-                llvm::Value* valorIntermedio = entorno->constructorLlvm.CreateLoad(resultado.valor());
+                llvm::Value *valorIntermedio = entorno->constructorLlvm.CreateLoad(resultado.valor());
                 valorFinal = convierteValorLlvmATipoLlvm(valorIntermedio, conv->origen, conv->destino);
             }
 
-            if(valorFinal == nullptr)
+            if (valorFinal == nullptr)
             {
                 resultado.error("No he conseguido convertir con éxito el valor.");
                 resultado.posición(conv->destino->posición());
@@ -1814,26 +1808,26 @@ namespace Ñ
             }
         }
 
-        Ñ::ResultadoLlvm construyeLiteral(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeLiteral(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            
-            if(nodo == nullptr)
+
+            if (nodo == nullptr)
             {
                 resultado.error("He recibido un nodo de valor nullptr, no puedo leer la expresión.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_LITERAL)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_LITERAL)
             {
                 resultado.error("El nodo no es un literal, no puedo construirlo.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
 
-            Ñ::Literal* literal = (Ñ::Literal*)nodo;
-            Ñ::Tipo* tipo = obténTipoDeLiteral(literal);
-            llvm::Type* tipoLlvm;
+            Ñ::Literal *literal = (Ñ::Literal *)nodo;
+            Ñ::Tipo *tipo = obténTipoDeLiteral(literal);
+            llvm::Type *tipoLlvm;
             uint64_t número;
             float real32;
             double real64;
@@ -1842,24 +1836,24 @@ namespace Ñ
             {
             case Ñ::CategoríaTipo::TIPO_BOOLEANO:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
                     return resultado;
                 }
-                if(literal->dato == "cierto")
+                if (literal->dato == "cierto")
                 {
                     número = 1;
                 }
-                else if(literal->dato == "falso")
+                else if (literal->dato == "falso")
                 {
                     número = 0;
                 }
                 else
                 {
                     número = std::stoull(literal->dato);
-                    if(número != 0)
+                    if (número != 0)
                     {
                         número = 1;
                     }
@@ -1867,10 +1861,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
                 break;
-                
+
             case Ñ::CategoríaTipo::TIPO_NATURAL_8:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1880,10 +1874,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
                 break;
-                
+
             case Ñ::CategoríaTipo::TIPO_NATURAL_16:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1893,10 +1887,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
                 break;
-                
+
             case Ñ::CategoríaTipo::TIPO_NATURAL_32:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1909,7 +1903,7 @@ namespace Ñ
 
             case Ñ::CategoríaTipo::TIPO_NATURAL_64:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1919,10 +1913,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número));
                 break;
-            
+
             case Ñ::CategoríaTipo::TIPO_ENTERO_8:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1932,10 +1926,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número, true));
                 break;
-            
+
             case Ñ::CategoríaTipo::TIPO_ENTERO_16:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1945,10 +1939,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número, true));
                 break;
-            
+
             case Ñ::CategoríaTipo::TIPO_ENTERO_32:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1958,10 +1952,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número, true));
                 break;
-            
+
             case Ñ::CategoríaTipo::TIPO_ENTERO_64:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1971,10 +1965,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantInt::get(tipoLlvm, número, true));
                 break;
-            
+
             case Ñ::CategoríaTipo::TIPO_REAL_32:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1984,10 +1978,10 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipoLlvm, real32));
                 break;
-            
+
             case Ñ::CategoríaTipo::TIPO_REAL_64:
                 tipoLlvm = creaTipoLlvm(tipo);
-                if(tipoLlvm == nullptr)
+                if (tipoLlvm == nullptr)
                 {
                     resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
                     resultado.posición(tipo->posición());
@@ -1997,57 +1991,57 @@ namespace Ñ
                 resultado.éxito();
                 resultado.valor(llvm::ConstantFP::get(tipoLlvm, real64));
                 break;
-            
+
             case Ñ::CategoríaTipo::TIPO_SERIE:
+            {
+                // std::cout << "construyeLiteral(TIPO_SERIE)" << std::endl;
+
+                tipoLlvm = creaTipoLlvm(tipo);
+                if (tipoLlvm == nullptr)
                 {
-                    //std::cout << "construyeLiteral(TIPO_SERIE)" << std::endl;
-
-                    tipoLlvm = creaTipoLlvm(tipo);
-                    if(tipoLlvm == nullptr)
-                    {
-                        resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
-                        resultado.posición(tipo->posición());
-                        return resultado;
-                    }
-                    llvm::Value *serieVacía = llvm::UndefValue::get(tipoLlvm);
-                    llvm::Value* serieFinal = serieVacía;
-
-                    int64_t índice = 0;
-                    for(Ñ::Nodo* subnodo : literal->ramas)
-                    {
-                        //std::cout << "construyeLiteral(TIPO_SERIE) subtipo" << índice << std::endl;
-
-                        //std::cout << "construyeLiteral(TIPO_SERIE) extraigo subvalor de subnodo" << índice << std::endl;
-
-                        //llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getElementType(), llvm::APInt(64, índice));
-                        ResultadoLlvm rSubvalor = construyeLiteral(subnodo);
-                        if(rSubvalor.error())
-                        {
-                            return rSubvalor;
-                        }
-                        llvm::Value* subvalor = rSubvalor.valor();
-
-                        //std::cout << "construyeLiteral(TIPO_SERIE) inserto subvalor en serie" << índice << std::endl;
-
-                        llvm::Value* nuevaSerieFinal = entorno->constructorLlvm.CreateInsertValue(serieFinal, subvalor, índice);
-
-                        //llvm::Value* nuevaSerieFinal = llvm::InsertElementInst::Create(serieFinal, subvalor, índiceLlvm);
-                        serieFinal = nuevaSerieFinal;
-                        
-                        //std::cout << "construyeLiteral(TIPO_SERIE) añado la instrucción al constructor" << índice << std::endl;
-
-                        //entorno->constructorLlvm.Insert(serieFinal);
-                        
-                        índice++;
-                    }
-                    
-                    //std::cout << "construyeLiteral(TIPO_SERIE) éxito"<< std::endl;
-
-                    resultado.éxito();
-                    resultado.valor(serieFinal);
+                    resultado.error("No puedo construir el tipo '" + obténNombreDeTipo(tipo) + "'.");
+                    resultado.posición(tipo->posición());
+                    return resultado;
                 }
-                break;
-            
+                llvm::Value *serieVacía = llvm::UndefValue::get(tipoLlvm);
+                llvm::Value *serieFinal = serieVacía;
+
+                int64_t índice = 0;
+                for (Ñ::Nodo *subnodo : literal->ramas)
+                {
+                    // std::cout << "construyeLiteral(TIPO_SERIE) subtipo" << índice << std::endl;
+
+                    // std::cout << "construyeLiteral(TIPO_SERIE) extraigo subvalor de subnodo" << índice << std::endl;
+
+                    // llvm::Constant* índiceLlvm = llvm::Constant::getIntegerValue(tipoLlvm->getElementType(), llvm::APInt(64, índice));
+                    ResultadoLlvm rSubvalor = construyeLiteral(subnodo);
+                    if (rSubvalor.error())
+                    {
+                        return rSubvalor;
+                    }
+                    llvm::Value *subvalor = rSubvalor.valor();
+
+                    // std::cout << "construyeLiteral(TIPO_SERIE) inserto subvalor en serie" << índice << std::endl;
+
+                    llvm::Value *nuevaSerieFinal = entorno->constructorLlvm.CreateInsertValue(serieFinal, subvalor, índice);
+
+                    // llvm::Value* nuevaSerieFinal = llvm::InsertElementInst::Create(serieFinal, subvalor, índiceLlvm);
+                    serieFinal = nuevaSerieFinal;
+
+                    // std::cout << "construyeLiteral(TIPO_SERIE) añado la instrucción al constructor" << índice << std::endl;
+
+                    // entorno->constructorLlvm.Insert(serieFinal);
+
+                    índice++;
+                }
+
+                // std::cout << "construyeLiteral(TIPO_SERIE) éxito"<< std::endl;
+
+                resultado.éxito();
+                resultado.valor(serieFinal);
+            }
+            break;
+
             default:
                 resultado.error("No reconozco el tipo del literal.");
                 resultado.posición(nodo->posición());
@@ -2057,30 +2051,30 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeOperaciónComparación(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeOperaciónComparación(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            llvm::Value* v1;
-            llvm::Value* v2;
+            llvm::Value *v1;
+            llvm::Value *v2;
 
             Ñ::ResultadoLlvm rV1 = construyeLDA(nodo->ramas[0]);
-            if(rV1.error())
+            if (rV1.error())
             {
                 return rV1;
             }
             v1 = entorno->constructorLlvm.CreateLoad(rV1.valor());
-            
-            for(int i = 1; i < nodo->ramas.size(); i++)
-            {
-                Ñ::Nodo* nOp = nodo->ramas[i];
 
-                if(nOp == nullptr)
+            for (int i = 1; i < nodo->ramas.size(); i++)
+            {
+                Ñ::Nodo *nOp = nodo->ramas[i];
+
+                if (nOp == nullptr)
                 {
                     resultado.error("Esperaba una operación binaria y he recibido un nodo nulo.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
-                else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                else if (nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
                     resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo.");
                     resultado.posición(nodo->ramas[i]->posición());
@@ -2088,93 +2082,93 @@ namespace Ñ
                 }
 
                 Ñ::ResultadoLlvm rV2 = construyeLDA(nOp->ramas[0]);
-                if(rV2.error())
+                if (rV2.error())
                 {
                     return rV2;
                 }
                 v2 = entorno->constructorLlvm.CreateLoad(rV2.valor());
 
-                Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
+                Ñ::OperaciónBinaria *op = (Ñ::OperaciónBinaria *)nOp;
 
-                Ñ::Tipo* tipo = op->tipo;
+                Ñ::Tipo *tipo = op->tipo;
 
-                if(esBooleano(tipo) || esNatural(tipo))
+                if (esBooleano(tipo) || esNatural(tipo))
                 {
-                    if(op->operación == "<")
+                    if (op->operación == "<")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpULT(v1, v2, "cmp_menorque_tmp");
                     }
-                    else if(op->operación == ">")
+                    else if (op->operación == ">")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpUGT(v1, v2, "cmp_mayorque_tmp");
                     }
-                    else if(op->operación == "==")
+                    else if (op->operación == "==")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpEQ(v1, v2, "cmp_igualque_tmp");
                     }
-                    else if(op->operación == "!=")
+                    else if (op->operación == "!=")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpNE(v1, v2, "cmp_distintoa_tmp");
                     }
-                    else if(op->operación == "<=")
+                    else if (op->operación == "<=")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpULE(v1, v2, "cmp_menorigual_tmp");
                     }
-                    else if(op->operación == ">=")
+                    else if (op->operación == ">=")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpUGE(v1, v2, "cmp_mayorigual_tmp");
                     }
                 }
-                else if(esPuntero(tipo) || esEntero(tipo))
+                else if (esPuntero(tipo) || esEntero(tipo))
                 {
-                    if(op->operación == "<")
+                    if (op->operación == "<")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpSLT(v1, v2, "cmp_menorque_tmp");
                     }
-                    else if(op->operación == ">")
+                    else if (op->operación == ">")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpSGT(v1, v2, "cmp_mayorque_tmp");
                     }
-                    else if(op->operación == "==")
+                    else if (op->operación == "==")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpEQ(v1, v2, "cmp_igualque_tmp");
                     }
-                    else if(op->operación == "!=")
+                    else if (op->operación == "!=")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpNE(v1, v2, "cmp_distintoa_tmp");
                     }
-                    else if(op->operación == "<=")
+                    else if (op->operación == "<=")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpSLE(v1, v2, "cmp_menorigual_tmp");
                     }
-                    else if(op->operación == ">=")
+                    else if (op->operación == ">=")
                     {
                         v1 = entorno->constructorLlvm.CreateICmpSGE(v1, v2, "cmp_mayorigual_tmp");
                     }
                 }
-                else if(esReal(tipo))
+                else if (esReal(tipo))
                 {
-                    if(op->operación == "<")
+                    if (op->operación == "<")
                     {
                         v1 = entorno->constructorLlvm.CreateFCmpULT(v1, v2, "cmp_menorque_tmp");
                     }
-                    else if(op->operación == ">")
+                    else if (op->operación == ">")
                     {
                         v1 = entorno->constructorLlvm.CreateFCmpUGT(v1, v2, "cmp_mayorque_tmp");
                     }
-                    else if(op->operación == "==")
+                    else if (op->operación == "==")
                     {
                         v1 = entorno->constructorLlvm.CreateFCmpUEQ(v1, v2, "cmp_igualque_tmp");
                     }
-                    else if(op->operación == "==")
+                    else if (op->operación == "==")
                     {
                         v1 = entorno->constructorLlvm.CreateFCmpUNE(v1, v2, "cmp_distintoa_tmp");
                     }
-                    else if(op->operación == "<=")
+                    else if (op->operación == "<=")
                     {
                         v1 = entorno->constructorLlvm.CreateFCmpULE(v1, v2, "cmp_menorigual_tmp");
                     }
-                    else if(op->operación == ">=")
+                    else if (op->operación == ">=")
                     {
                         v1 = entorno->constructorLlvm.CreateFCmpUGE(v1, v2, "cmp_mayorigual_tmp");
                     }
@@ -2192,30 +2186,30 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeOperaciónTérmino(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeOperaciónTérmino(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            llvm::Value* v1;
-            llvm::Value* v2;
+            llvm::Value *v1;
+            llvm::Value *v2;
 
             Ñ::ResultadoLlvm rV1 = construyeLDA(nodo->ramas[0]);
-            if(rV1.error())
+            if (rV1.error())
             {
                 return rV1;
             }
             v1 = entorno->constructorLlvm.CreateLoad(rV1.valor());
-            
-            for(int i = 1; i < nodo->ramas.size(); i++)
-            {
-                Ñ::Nodo* nOp = nodo->ramas[i];
 
-                if(nOp == nullptr)
+            for (int i = 1; i < nodo->ramas.size(); i++)
+            {
+                Ñ::Nodo *nOp = nodo->ramas[i];
+
+                if (nOp == nullptr)
                 {
                     resultado.error("Esperaba una operación binaria y he recibido un nodo nulo.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
-                else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                else if (nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
                     resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo.");
                     resultado.posición(nodo->ramas[i]->posición());
@@ -2223,23 +2217,23 @@ namespace Ñ
                 }
 
                 Ñ::ResultadoLlvm rV2 = construyeLDA(nOp->ramas[0]);
-                if(rV2.error())
+                if (rV2.error())
                 {
                     return rV2;
                 }
                 v2 = entorno->constructorLlvm.CreateLoad(rV2.valor());
 
-                Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
+                Ñ::OperaciónBinaria *op = (Ñ::OperaciónBinaria *)nOp;
 
-                Ñ::Tipo* tipo = op->tipo;
+                Ñ::Tipo *tipo = op->tipo;
 
-                if(op->operación == "+")
+                if (op->operación == "+")
                 {
-                    if(esReal(tipo))
+                    if (esReal(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateFAdd(v1, v2, "suma");
                     }
-                    else if(esEntero(tipo) || esNatural(tipo))
+                    else if (esEntero(tipo) || esNatural(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateAdd(v1, v2, "suma");
                     }
@@ -2250,13 +2244,13 @@ namespace Ñ
                         return resultado;
                     }
                 }
-                else if(op->operación == "-")
+                else if (op->operación == "-")
                 {
-                    if(esReal(tipo))
+                    if (esReal(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateFSub(v1, v2, "resta");
                     }
-                    else if(esEntero(tipo) || esNatural(tipo))
+                    else if (esEntero(tipo) || esNatural(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateSub(v1, v2, "resta");
                     }
@@ -2271,7 +2265,7 @@ namespace Ñ
                 {
                     resultado.error("No reconozco la operación '" + op->operación + "'.");
                     resultado.posición(op->posición());
-                    return resultado; 
+                    return resultado;
                 }
             }
 
@@ -2280,30 +2274,30 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeOperaciónFactor(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeOperaciónFactor(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            llvm::Value* v1;
-            llvm::Value* v2;
+            llvm::Value *v1;
+            llvm::Value *v2;
 
             Ñ::ResultadoLlvm rV1 = construyeLDA(nodo->ramas[0]);
-            if(rV1.error())
+            if (rV1.error())
             {
                 return rV1;
             }
             v1 = entorno->constructorLlvm.CreateLoad(rV1.valor());
-            
-            for(int i = 1; i < nodo->ramas.size(); i++)
-            {
-                Ñ::Nodo* nOp = nodo->ramas[i];
 
-                if(nOp == nullptr)
+            for (int i = 1; i < nodo->ramas.size(); i++)
+            {
+                Ñ::Nodo *nOp = nodo->ramas[i];
+
+                if (nOp == nullptr)
                 {
                     resultado.error("Esperaba una operación binaria y he recibido un nodo nulo.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
-                else if(nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
+                else if (nOp->categoría != Ñ::CategoríaNodo::NODO_OP_BINARIA)
                 {
                     resultado.error("Esperaba una operación binaria y he recibido un nodo de otro tipo.");
                     resultado.posición(nOp->posición());
@@ -2311,23 +2305,23 @@ namespace Ñ
                 }
 
                 Ñ::ResultadoLlvm rV2 = construyeLDA(nOp->ramas[0]);
-                if(rV2.error())
+                if (rV2.error())
                 {
                     return rV2;
                 }
                 v2 = entorno->constructorLlvm.CreateLoad(rV2.valor());
 
-                Ñ::OperaciónBinaria* op = (Ñ::OperaciónBinaria*)nOp;
+                Ñ::OperaciónBinaria *op = (Ñ::OperaciónBinaria *)nOp;
 
-                Ñ::Tipo* tipo = op->tipo;
+                Ñ::Tipo *tipo = op->tipo;
 
-                if(op->operación == "*")
+                if (op->operación == "*")
                 {
-                    if(esReal(tipo))
+                    if (esReal(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateFMul(v1, v2, "multiplicación");
                     }
-                    else if(esEntero(tipo) || esNatural(tipo))
+                    else if (esEntero(tipo) || esNatural(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateMul(v1, v2, "multiplicación");
                     }
@@ -2338,17 +2332,17 @@ namespace Ñ
                         return resultado;
                     }
                 }
-                else if(op->operación == "/")
+                else if (op->operación == "/")
                 {
-                    if(esReal(tipo))
+                    if (esReal(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateFDiv(v1, v2, "división");
                     }
-                    else if(esEntero(tipo))
+                    else if (esEntero(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateSDiv(v1, v2, "división");
                     }
-                    else if(esNatural(tipo))
+                    else if (esNatural(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateUDiv(v1, v2, "división");
                     }
@@ -2359,17 +2353,17 @@ namespace Ñ
                         return resultado;
                     }
                 }
-                else if(op->operación == "%")
+                else if (op->operación == "%")
                 {
-                    if(esReal(tipo))
+                    if (esReal(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateFRem(v1, v2, "resto");
                     }
-                    else if(esEntero(tipo))
+                    else if (esEntero(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateSRem(v1, v2, "resto");
                     }
-                    else if(esNatural(tipo))
+                    else if (esNatural(tipo))
                     {
                         v1 = entorno->constructorLlvm.CreateURem(v1, v2, "resto");
                     }
@@ -2384,7 +2378,7 @@ namespace Ñ
                 {
                     resultado.error("No reconozco la operación '" + op->operación + "'.");
                     resultado.posición(op->posición());
-                    return resultado; 
+                    return resultado;
                 }
             }
 
@@ -2393,23 +2387,23 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeOperaciónUnaria(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeOperaciónUnaria(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            Ñ::OperaciónUnaria* op = (Ñ::OperaciónUnaria*)nodo;
-            if(nodo->ramas.size() < 1)
+            Ñ::OperaciónUnaria *op = (Ñ::OperaciónUnaria *)nodo;
+            if (nodo->ramas.size() < 1)
             {
                 resultado.error("Operación unaria mal construida.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-            Ñ::Nodo* hijo = nodo->ramas[0];
-            llvm::Value* valor;
-            llvm::Value* valorFinal;
-            
-            if(op->operación == "-")
+            Ñ::Nodo *hijo = nodo->ramas[0];
+            llvm::Value *valor;
+            llvm::Value *valorFinal;
+
+            if (op->operación == "-")
             {
-                if(hijo == nullptr)
+                if (hijo == nullptr)
                 {
                     resultado.error("No puedo negar el valor.");
                     resultado.posición(nodo->posición());
@@ -2417,14 +2411,14 @@ namespace Ñ
                 }
 
                 Ñ::ResultadoLlvm rValor = construyeLDA(hijo);
-                if(rValor.error())
+                if (rValor.error())
                 {
                     return rValor;
                 }
 
                 valor = entorno->constructorLlvm.CreateLoad(rValor.valor());
 
-                if(valor == nullptr)
+                if (valor == nullptr)
                 {
                     resultado.error("No puedo negar el valor.");
                     resultado.posición(nodo->posición());
@@ -2434,37 +2428,37 @@ namespace Ñ
                 auto valorCero = llvm::ConstantInt::get(valor->getType(), 0, false);
                 valorFinal = entorno->constructorLlvm.CreateSub(valorCero, valor, "negativiza");
 
-                if(valorFinal == nullptr)
+                if (valorFinal == nullptr)
                 {
                     resultado.error("Error al intentar negar el valor.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
-                
+
                 resultado.éxito();
                 resultado.valor(valorFinal);
                 return resultado;
             }
-            else if(op->operación == "@")
+            else if (op->operación == "@")
             {
-                if(hijo == nullptr)
+                if (hijo == nullptr)
                 {
                     resultado.error("No puedo leer la dirección de memoria.");
                     resultado.posición(nodo->posición());
                     return resultado;
                 }
 
-                if(hijo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
+                if (hijo->categoría != Ñ::CategoríaNodo::NODO_IDENTIFICADOR)
                 {
                     resultado.error("No puedes leer la dirección de memoria de un '" + obténNombreDeNodo(hijo->categoría) + "'.");
                     resultado.posición(hijo->posición());
                     return resultado;
                 }
 
-                Ñ::Identificador* id = (Ñ::Identificador*)hijo;
+                Ñ::Identificador *id = (Ñ::Identificador *)hijo;
                 valorFinal = leeId(id->id);
 
-                if(valorFinal == nullptr)
+                if (valorFinal == nullptr)
                 {
                     resultado.error("No puedo leer la dirección de memoria de la variable '" + id->id + "'.");
                     resultado.posición(nodo->posición());
@@ -2475,9 +2469,9 @@ namespace Ñ
                 resultado.valor(valorFinal);
                 return resultado;
             }
-            else if(op->operación == "*")
+            else if (op->operación == "*")
             {
-                if(hijo == nullptr)
+                if (hijo == nullptr)
                 {
                     resultado.error("No puedo leer la dirección de memoria.");
                     resultado.posición(nodo->posición());
@@ -2485,15 +2479,15 @@ namespace Ñ
                 }
 
                 Ñ::ResultadoLlvm rValor = construyeLDA(hijo);
-                if(rValor.error())
+                if (rValor.error())
                 {
                     return rValor;
                 }
-                
+
                 // Lee contenido de dirección de memoria
                 valorFinal = entorno->constructorLlvm.CreateLoad(rValor.valor());
 
-                if(valorFinal == nullptr)
+                if (valorFinal == nullptr)
                 {
                     resultado.error("No puedo leer el contenido de la dirección de memoria.");
                     resultado.posición(nodo->posición());
@@ -2510,15 +2504,15 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeLeeElementoSerie(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeLeeElementoSerie(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            llvm::Value* serie;
-            llvm::Value* pSerie;
-            llvm::Value* pos;
+            llvm::Value *serie;
+            llvm::Value *pSerie;
+            llvm::Value *pos;
 
             Ñ::ResultadoLlvm rSerie = construyeLDA(nodo->ramas[0]);
-            if(rSerie.error())
+            if (rSerie.error())
             {
                 return rSerie;
             }
@@ -2526,81 +2520,80 @@ namespace Ñ
             serie = entorno->constructorLlvm.CreateLoad(pSerie);
 
             Ñ::ResultadoLlvm rPos = construyeLDA(nodo->ramas[1]);
-            if(rPos.error())
+            if (rPos.error())
             {
                 return rPos;
             }
 
-            llvm::Type* tipoEnt64 = llvm::IntegerType::getInt64Ty(entorno->contextoLlvm);
+            llvm::Type *tipoEnt64 = llvm::IntegerType::getInt64Ty(entorno->contextoLlvm);
             auto cero = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0, false));
             pos = entorno->constructorLlvm.CreateLoad(rPos.valor());
 
-            //llvm::Value* vElemento = entorno->constructorLlvm.CreateExtractValue(serie, {pos});
-            llvm::Type* tipo = serie->getType();
-            if(!tipo->isArrayTy())
+            // llvm::Value* vElemento = entorno->constructorLlvm.CreateExtractValue(serie, {pos});
+            llvm::Type *tipo = serie->getType();
+            if (!tipo->isArrayTy())
             {
                 resultado.error("No he recibido una serie correcta");
                 return resultado;
             }
-            llvm::ArrayType* tSerie = (llvm::ArrayType*)tipo;
-            llvm::Type* tElemento = tSerie->getElementType();
-            llvm::Value* dirElemento = entorno->constructorLlvm.CreateGEP(tSerie, pSerie, {cero, pos});
-            llvm::Value* vElemento = entorno->constructorLlvm.CreateLoad(dirElemento);
+            llvm::ArrayType *tSerie = (llvm::ArrayType *)tipo;
+            llvm::Type *tElemento = tSerie->getElementType();
+            llvm::Value *dirElemento = entorno->constructorLlvm.CreateGEP(tSerie, pSerie, {cero, pos});
+            llvm::Value *vElemento = entorno->constructorLlvm.CreateLoad(dirElemento);
 
             resultado.éxito();
             resultado.valor(vElemento);
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeLlamadaFunción(Ñ::Nodo* nodo)
+        Ñ::ResultadoLlvm construyeLlamadaFunción(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
-            
-            if(nodo == nullptr)
+
+            if (nodo == nullptr)
             {
                 resultado.error("Esperaba una llamada a una función, pero el nodo es nulo.");
                 return resultado;
             }
 
-            if(nodo->categoría != Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
+            if (nodo->categoría != Ñ::CategoríaNodo::NODO_LLAMA_FUNCIÓN)
             {
                 resultado.error("Esperaba una llamada a una función, pero el nodo es de una categoría inesperada.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
 
-            Ñ::LlamaFunción* fn = (Ñ::LlamaFunción*)nodo;
-            llvm::Function* funciónLlvm = móduloLlvm->getFunction(fn->nombre);
-            
-            if(!funciónLlvm)
+            Ñ::LlamaFunción *fn = (Ñ::LlamaFunción *)nodo;
+            llvm::Function *funciónLlvm = móduloLlvm->getFunction(fn->nombre);
+
+            if (!funciónLlvm)
             {
                 resultado.error("Esperaba una llamada a una función, pero parece que la función \"" + fn->nombre + "()\" no existe.");
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-            
-            std::vector<llvm::Value*> argumentos;
+
+            std::vector<llvm::Value *> argumentos;
 
             // Preparando argumentos
-            Ñ::Nodo* args = nodo->ramas[0];
+            Ñ::Nodo *args = nodo->ramas[0];
 
-            std::vector<llvm::Value*> valoresArgumentos;
-            
-            for(Ñ::Nodo* n : args->ramas)
+            std::vector<llvm::Value *> valoresArgumentos;
+
+            for (Ñ::Nodo *n : args->ramas)
             {
                 resultado = construyeLDA(n);
-                if(resultado.error())
+                if (resultado.error())
                 {
                     return resultado;
                 }
 
-                llvm::Value* vArgumento = entorno->constructorLlvm.CreateLoad(resultado.valor());
+                llvm::Value *vArgumento = entorno->constructorLlvm.CreateLoad(resultado.valor());
 
                 valoresArgumentos.push_back(vArgumento);
-
             }
 
-            if(funciónLlvm->getReturnType()->isVoidTy())
+            if (funciónLlvm->getReturnType()->isVoidTy())
             {
                 entorno->constructorLlvm.CreateCall(funciónLlvm, valoresArgumentos);
                 resultado.éxito();
@@ -2608,7 +2601,7 @@ namespace Ñ
             }
             else
             {
-                llvm::Value* devuelto = entorno->constructorLlvm.CreateCall(funciónLlvm, valoresArgumentos, fn->nombre);
+                llvm::Value *devuelto = entorno->constructorLlvm.CreateCall(funciónLlvm, valoresArgumentos, fn->nombre);
                 resultado.éxito();
                 resultado.valor(devuelto);
             }
@@ -2617,49 +2610,49 @@ namespace Ñ
         }
     };
 
-    Ñ::ResultadoLlvm creaRepresentaciónIntermedia(Ñ::Nodo* árbol, Ñ::EntornoConstrucción* entorno, Ñ::CategoríaNodo categoríaNodo)
+    Ñ::ResultadoLlvm creaRepresentaciónIntermedia(Ñ::Nodo *árbol, Ñ::EntornoConstrucción *entorno, Ñ::CategoríaNodo categoríaNodo)
     {
-        //std::cout << "construye(nodo)" << std::endl;
+        // std::cout << "construye(nodo)" << std::endl;
 
         Ñ::entorno = entorno;
 
         Ñ::ResultadoLlvm resultado;
 
-        Ñ::Constructor* constructor = new Ñ::Constructor;
+        Ñ::Constructor *constructor = new Ñ::Constructor;
 
-        //std::cout << std::endl;
+        // std::cout << std::endl;
 
-        //muestraNodos(árbol);
+        // muestraNodos(árbol);
 
-        //std::cout << std::endl;
-        //std::cout << std::endl;
+        // std::cout << std::endl;
+        // std::cout << std::endl;
 
-        if(categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+        if (categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
             Ñ::ResultadoLlvm rMódulo = constructor->creaMódulo(árbol);
-            if(rMódulo.error())
+            if (rMódulo.error())
             {
                 return rMódulo;
             }
 
             resultado.módulo(constructor->móduloLlvm);
         }
-        else if(categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+        else if (categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {
-            //std::cout << "Preparando construcción 'justo a tiempo'" << std::endl << std::endl;
-            
+            // std::cout << "Preparando construcción 'justo a tiempo'" << std::endl << std::endl;
+
             llvm::InitializeNativeTarget();
             llvm::InitializeNativeTargetAsmPrinter();
             llvm::InitializeNativeTargetAsmParser();
 
-            if(!jat)
+            if (!jat)
             {
                 jat = Ñ::ConstructorJAT::Crea();
             }
-            
+
             Ñ::ResultadoLlvm rExpresión = constructor->construyeExpresiónPrimerNivel(árbol);
-            
-            if(rExpresión.error())
+
+            if (rExpresión.error())
             {
                 resultado.error(rExpresión.mensaje());
                 return resultado;
@@ -2673,12 +2666,12 @@ namespace Ñ
 
             llvm::Expected<llvm::JITEvaluatedSymbol> funciónEvaluadaJAT = jat->busca("__función_anónima__");
 
-            if(auto error = funciónEvaluadaJAT.takeError())
+            if (auto error = funciónEvaluadaJAT.takeError())
             {
                 resultado.error("El constructor JAT no encuentra el símbolo '__función_anónima__()'.");
                 return resultado;
             }
-            
+
             void (*funciónJAT)() = (void (*)())(*funciónEvaluadaJAT).getAddress();
 
             std::cout << "ejecutando '__función_anónima__()' ...";
@@ -2686,18 +2679,18 @@ namespace Ñ
             funciónJAT();
 
             std::cout << "Elimino '__función_anónima__()' ...";
-            
+
             jat->eliminaSímbolo("__función_anónima__");
 
             llvm::Expected<llvm::JITEvaluatedSymbol> variableEvaluadaJAT = jat->busca("a");
 
-            if(auto error = variableEvaluadaJAT.takeError())
+            if (auto error = variableEvaluadaJAT.takeError())
             {
                 resultado.error("El constructor JAT no encuentra el símbolo 'a()'.");
                 return resultado;
             }
-            
-            int64_t* entero = (int64_t*)(*variableEvaluadaJAT).getAddress();
+
+            int64_t *entero = (int64_t *)(*variableEvaluadaJAT).getAddress();
 
             std::cout << "La variable global 'a' vale '" << std::to_string(*entero) << "'." << std::endl;
         }

@@ -42,20 +42,20 @@ std::string _esperaComando()
 	return comando;
 }
 
-void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
+void _interpretaComando(std::string comando, Ñ::TablaSímbolos *tablaSímbolos)
 {
 	Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
 	Ñ::Resultado resultado;
 
-	std::vector<Ñ::Lexema*> lexemas;
-	Ñ::Nodo* nodos;
+	std::vector<Ñ::Lexema *> lexemas;
+	Ñ::Nodo *nodos;
 
 	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
-	
+
 	lexemas = léxico.analiza(comando, entorno);
 
-	if(lexemas.empty())
+	if (lexemas.empty())
 	{
 		Ñ::errorConsola(u8"Error durante el análisis léxico, comando incorrecto.");
 		return;
@@ -63,7 +63,7 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 
 	resultado = sintaxis.analizaComando(lexemas);
 
-	if(resultado.error())
+	if (resultado.error())
 	{
 		Ñ::errorConsola(resultado.mensaje());
 		muestraLexemas(lexemas);
@@ -73,13 +73,13 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 
 	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 
-	if(rSemántico.error())
+	if (rSemántico.error())
 	{
 		std::cout << rSemántico.mensaje() << std::endl;
 		muestraNodos(nodos, tablaSímbolos);
 		return;
 	}
-	//else
+	// else
 	//{
 	//	auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
 	//	if(resultado.error())
@@ -87,16 +87,16 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 	//		std::cout << resultado.mensaje() << std::endl;
 	//		muestraNodos(nodos);
 	//	}
-	//}
+	// }
 
 	Ñ::ResultadoLlvm rConstrucción = Ñ::creaRepresentaciónIntermedia(nodos, entorno, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
-	if(rConstrucción.error())
+	if (rConstrucción.error())
 	{
 		std::cout << rConstrucción.mensaje() << std::endl;
 		return;
 	}
 
-	for(auto l : lexemas)
+	for (auto l : lexemas)
 	{
 		delete l;
 	}
@@ -106,14 +106,14 @@ void _interpretaComando(std::string comando, Ñ::TablaSímbolos* tablaSímbolos)
 
 int interpretaEnLínea()
 {
-	Ñ::TablaSímbolos* tablaSímbolos = new Ñ::TablaSímbolos;
+	Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
 
 	EJECUTA_INTÉRPRETE = true;
 
 	while (EJECUTA_INTÉRPRETE)
 	{
 		std::string comando = _esperaComando();
-		if(comando.size() == 0)
+		if (comando.size() == 0)
 		{
 			continue;
 		}
@@ -127,8 +127,8 @@ int interpretaEnLínea()
 
 static const char VERSIÓN[] = u8R"(Ñ 0.0.1)";
 
-static const char USO[] = 
-u8R"(Ñ 0.0.1 - Compilador del lenguaje de programación Ñ
+static const char USO[] =
+	u8R"(Ñ 0.0.1 - Compilador del lenguaje de programación Ñ
 
 Uso:
  ñ
@@ -153,29 +153,29 @@ void muestraVersión()
 	std::cout << VERSIÓN << std::endl;
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-	if(!(std::numeric_limits< double >::is_iec559))
+	if (!(std::numeric_limits<double>::is_iec559))
 	{
 		std::cout << "Requiero el estándar IEEE 754 para los números reales" << std::endl;
 		return -1;
 	}
 
 	std::map<std::string, docopt::value> args;
-	args = docopt::docopt(USO, { argv + 1, argv + argc }, false);
+	args = docopt::docopt(USO, {argv + 1, argv + argc}, false);
 
-	if(args["--ayuda"].isBool())
+	if (args["--ayuda"].isBool())
 	{
-		if(args["--ayuda"].asBool() == true)
+		if (args["--ayuda"].asBool() == true)
 		{
 			muestraAyuda();
 			return 0;
 		}
 	}
 
-	if(args["--version"].isBool())
+	if (args["--version"].isBool())
 	{
-		if(args["--version"].asBool() == true)
+		if (args["--version"].asBool() == true)
 		{
 			muestraVersión();
 			return 0;
@@ -185,19 +185,19 @@ int main(int argc, char** argv)
 	Director::Configuración cfg;
 
 	std::string nombreArchivoDestino = "programa";
-	if(args["--salida"].isString())
+	if (args["--salida"].isString())
 	{
 		cfg.nombreArchivoDestino = args["--salida"].asString();
 	}
 
 	uint8_t optimización = 0;
-	if(args["-O"].isString())
+	if (args["-O"].isString())
 	{
 		std::string opttxt = args["-O"].asString();
 
 		optimización = std::stoi(opttxt.c_str());
 	}
-	if(optimización > 0)
+	if (optimización > 0)
 	{
 		cfg.optimización = 1;
 	}
@@ -206,12 +206,12 @@ int main(int argc, char** argv)
 		cfg.optimización = 0;
 	}
 
-	if(args["--hablador"].isBool())
+	if (args["--hablador"].isBool())
 	{
 		cfg.HABLADOR = args["--hablador"].asBool();
 	}
 
-	if(args["<archivo>"].isStringList())
+	if (args["<archivo>"].isStringList())
 	{
 		cfg.archivos = args["<archivo>"].asStringList();
 

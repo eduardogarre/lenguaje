@@ -25,7 +25,7 @@ namespace Ñ
 
     extern class TablaSímbolos;
     extern class Posición;
-    
+
     enum CategoríaTipo
     {
         TIPO_NADA = 0,
@@ -47,7 +47,7 @@ namespace Ñ
 
         TIPO_SERIE
     };
-    
+
     class Tipo : public Nodo
     {
     private:
@@ -57,29 +57,29 @@ namespace Ñ
     public:
         CategoríaTipo tipo;
 
-        Tipo(Ñ::Posición* posición = nullptr);
+        Tipo(Ñ::Posición *posición = nullptr);
         ~Tipo();
 
-        void muestra(TablaSímbolos* tablaSímbolos = nullptr);
+        void muestra(TablaSímbolos *tablaSímbolos = nullptr);
         uint64_t tamaño();
         void tamaño(uint64_t nuevotamaño);
-        Ñ::Tipo* subtipo();
+        Ñ::Tipo *subtipo();
     };
 
-    Ñ::Tipo* obténTipoMínimoComún(Ñ::Tipo* t1, Ñ::Tipo* t2);
-    Ñ::Tipo* creaTipoBásico(Ñ::CategoríaTipo tipo);
-    Ñ::Resultado creaFirmaFunción(Ñ::Nodo* fn);
-    std::string obténNombreDeTipo(Ñ::Tipo* t);
-    Ñ::Tipo* obténTipoDeLiteral(Ñ::Literal* literal);
-    Ñ::Tipo* obténTipoDeValor(Ñ::Valor* valor);
+    Ñ::Tipo *obténTipoMínimoComún(Ñ::Tipo *t1, Ñ::Tipo *t2);
+    Ñ::Tipo *creaTipoBásico(Ñ::CategoríaTipo tipo);
+    Ñ::Resultado creaFirmaFunción(Ñ::Nodo *fn);
+    std::string obténNombreDeTipo(Ñ::Tipo *t);
+    Ñ::Tipo *obténTipoDeLiteral(Ñ::Literal *literal);
+    Ñ::Tipo *obténTipoDeValor(Ñ::Valor *valor);
     Ñ::CategoríaTipo obténTipoDeNombre(std::string nombre);
     Ñ::CategoríaTipo obténMínimoNaturalVálido(uint64_t n);
     Ñ::CategoríaTipo obténMínimoEnteroVálido(int64_t e);
-    bool tiposAsignables(Ñ::Tipo* lia, Ñ::Tipo* lda);
-    bool esBooleano(Ñ::Tipo* tipo);
-    bool esEntero(Ñ::Tipo* tipo);
-    bool esNatural(Ñ::Tipo* tipo);
-    bool esPuntero(Ñ::Tipo* tipo);
-    bool esReal(Ñ::Tipo* tipo);
-    bool esSerie(Ñ::Tipo* tipo);
+    bool tiposAsignables(Ñ::Tipo *lia, Ñ::Tipo *lda);
+    bool esBooleano(Ñ::Tipo *tipo);
+    bool esEntero(Ñ::Tipo *tipo);
+    bool esNatural(Ñ::Tipo *tipo);
+    bool esPuntero(Ñ::Tipo *tipo);
+    bool esReal(Ñ::Tipo *tipo);
+    bool esSerie(Ñ::Tipo *tipo);
 }

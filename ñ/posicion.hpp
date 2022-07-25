@@ -31,7 +31,7 @@ namespace Ñ
         Posición();
 
         std::string muestra();
-        
+
         uint64_t cursor();
         uint64_t línea();
         uint64_t columna();

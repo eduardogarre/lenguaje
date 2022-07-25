@@ -14,11 +14,12 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "definiciones.h"
 #include "txt.h"
 
-txt creaTxt (const char* caracteres) {
+txt creaTxt(const char *caracteres)
+{
     txt texto;
     texto = borraTxt(texto);
     int i;
-    for(i = 0; i < 15 && caracteres[i] != 0; i++)
+    for (i = 0; i < 15 && caracteres[i] != 0; i++)
     {
         texto.posición[i] = caracteres[i];
     }
@@ -31,7 +32,7 @@ txt creaTxt (const char* caracteres) {
 
 txt borraTxt(txt texto)
 {
-    for(int i = 0; i < 15; i++)
+    for (int i = 0; i < 15; i++)
     {
         texto.posición[i] = 0;
     }
@@ -45,7 +46,7 @@ txt sumaTxt(txt texto1, txt texto2)
 {
     int i;
     int espacio1 = texto1.posición[15];
-    for(i = 0; i < espacio1 && texto2.posición[i] != 0; i++)
+    for (i = 0; i < espacio1 && texto2.posición[i] != 0; i++)
     {
         texto1.posición[15 - espacio1 + i] = texto2.posición[i];
     }
@@ -61,7 +62,7 @@ int longTxt(txt texto)
     return 15 - texto.posición[15];
 }
 
-const char* cadenaCdeTxt(txt texto)
+const char *cadenaCdeTxt(txt texto)
 {
     return texto.posición;
 }

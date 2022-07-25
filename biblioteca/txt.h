@@ -30,7 +30,7 @@ typedef struct _txt
     char posición[16];
 } txt;
 
-txt creaTxt (const char* caracteres);
+txt creaTxt(const char *caracteres);
 
 txt borraTxt(txt texto);
 
@@ -38,4 +38,4 @@ txt sumaTxt(txt texto1, txt texto2);
 
 int longTxt(txt texto);
 
-const char* cadenaCdeTxt(txt texto);
+const char *cadenaCdeTxt(txt texto);

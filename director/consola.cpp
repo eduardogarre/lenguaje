@@ -21,7 +21,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 namespace Director
 {
-    struct {
+    struct
+    {
         std::string predefinido = "\033[0m";
         std::string blanco = "\x1B[97m";
         std::string grisclaro = "\x1B[37m";
@@ -52,7 +53,7 @@ namespace Director
         escribe("\n");
     }
 
-    void escribeError(std::string texto, std::string archivo, Ñ::Posición* posición)
+    void escribeError(std::string texto, std::string archivo, Ñ::Posición *posición)
     {
         uint64_t cursor = posición->cursor();
         std::string código;
@@ -61,7 +62,7 @@ namespace Director
         {
             código = leeArchivo(archivo);
         }
-        catch(...)
+        catch (...)
         {
             std::cout << ColorConsola.rojoclaro;
             std::cout << "Error: [";
@@ -75,7 +76,7 @@ namespace Director
             return;
         }
 
-        if(cursor >= código.size())
+        if (cursor >= código.size())
         {
             return;
         }
@@ -84,26 +85,24 @@ namespace Director
         uint64_t fin;
         uint64_t i;
 
-        for(i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i--)
+        for (i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i--)
         {
-
         }
 
-        while(código[i] == '\r' || código[i] == '\n')
+        while (código[i] == '\r' || código[i] == '\n')
         {
             i++;
         }
         inicio = i;
 
-        for(i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i++)
+        for (i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i++)
         {
-
         }
 
         fin = i;
 
         std::string prefijo = código.substr(inicio, cursor - inicio);
-        std::string color   = código.substr(cursor, posición->longitud());
+        std::string color = código.substr(cursor, posición->longitud());
         std::string posfijo = código.substr(cursor + posición->longitud(), fin - cursor - posición->longitud());
 
         std::cout << ColorConsola.rojoclaro;
@@ -125,18 +124,19 @@ namespace Director
         std::cout << color;
         std::cout << ColorConsola.predefinido;
         std::cout << posfijo;
-        std::cout << std::endl << std::endl;
+        std::cout << std::endl
+                  << std::endl;
 
-        //std::cout << "\x1B[91mERROR\033[0m [" << archivo << "  " << pos << "] \"" << texto << "\"" << std::endl;
+        // std::cout << "\x1B[91mERROR\033[0m [" << archivo << "  " << pos << "] \"" << texto << "\"" << std::endl;
     }
 
-    void escribeAviso(std::string texto, std::string archivo, Ñ::Posición* posición)
+    void escribeAviso(std::string texto, std::string archivo, Ñ::Posición *posición)
     {
         uint64_t cursor = posición->cursor();
 
         std::string código = leeArchivo(archivo);
 
-        if(cursor >= código.size())
+        if (cursor >= código.size())
         {
             return;
         }
@@ -145,26 +145,24 @@ namespace Director
         uint64_t fin;
         uint64_t i;
 
-        for(i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i--)
+        for (i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i--)
         {
-
         }
 
-        while(código[i] == '\r' || código[i] == '\n')
+        while (código[i] == '\r' || código[i] == '\n')
         {
             i++;
         }
         inicio = i;
 
-        for(i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i++)
+        for (i = cursor; i > 0 && i < código.size() && código[i] != '\r' && código[i] != '\n'; i++)
         {
-
         }
 
         fin = i;
 
         std::string prefijo = código.substr(inicio, cursor - inicio);
-        std::string color   = código.substr(cursor, posición->longitud());
+        std::string color = código.substr(cursor, posición->longitud());
         std::string posfijo = código.substr(cursor + posición->longitud(), fin - cursor - posición->longitud());
 
         std::cout << ColorConsola.amarilloclaro;
@@ -186,9 +184,10 @@ namespace Director
         std::cout << color;
         std::cout << ColorConsola.predefinido;
         std::cout << posfijo;
-        std::cout << std::endl << std::endl;
+        std::cout << std::endl
+                  << std::endl;
 
-        //std::cout << "\x1B[93mERROR\033[0m [" << archivo << "  " << pos << "] \"" << texto << "\"" << std::endl;
+        // std::cout << "\x1B[93mERROR\033[0m [" << archivo << "  " << pos << "] \"" << texto << "\"" << std::endl;
     }
 
 }

@@ -13,5 +13,5 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-void* reserva(unsigned long long _num);
-int suelta(void* _mem);
+void *reserva(unsigned long long _num);
+int suelta(void *_mem);

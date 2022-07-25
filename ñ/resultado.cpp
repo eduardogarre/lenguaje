@@ -22,14 +22,14 @@ Copyright © 2021 Eduardo Garre Muñoz
     _posición = new Ñ::Posición;
 }
 
-Ñ::Posición* Ñ::Resultado::posición()
+Ñ::Posición *Ñ::Resultado::posición()
 {
     return _posición;
 }
 
-void Ñ::Resultado::posición(Ñ::Posición* pos)
+void Ñ::Resultado::posición(Ñ::Posición *pos)
 {
-    if(pos != nullptr)
+    if (pos != nullptr)
     {
         *_posición = *pos;
     }
@@ -53,12 +53,12 @@ std::string Ñ::Resultado::mensaje()
     return (_error ? _mensaje : "");
 }
 
-void Ñ::Resultado::nodo(Ñ::Nodo* nodo)
+void Ñ::Resultado::nodo(Ñ::Nodo *nodo)
 {
     _nodo = nodo;
 }
 
-Ñ::Nodo* Ñ::Resultado::nodo()
+Ñ::Nodo *Ñ::Resultado::nodo()
 {
     return (_error ? nullptr : _nodo);
 }

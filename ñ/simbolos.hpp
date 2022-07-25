@@ -22,7 +22,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 namespace Ñ
 {
-    enum Ámbito {
+    enum Ámbito
+    {
         ÁMBITO_GLOBAL,
         ÁMBITO_BLOQUE_FUNCIÓN,
         ÁMBITO_SUBBLOQUE_FUNCIÓN
@@ -33,22 +34,22 @@ namespace Ñ
     private:
         Ñ::Ámbito ámbito;
 
-        std::map<std::string, llvm::Value*> tabla;
-        std::vector<llvm::BasicBlock*>      pila;
+        std::map<std::string, llvm::Value *> tabla;
+        std::vector<llvm::BasicBlock *> pila;
 
     public:
         Tabla() {}
 
         ~Tabla() {}
 
-        void ponId(std::string id, llvm::Value* valor)
+        void ponId(std::string id, llvm::Value *valor)
         {
             tabla[id] = valor;
         }
 
-        llvm::Value* leeId(std::string id)
+        llvm::Value *leeId(std::string id)
         {
-            llvm::Value* valor = nullptr;
+            llvm::Value *valor = nullptr;
 
             valor = tabla[id];
             return valor;
@@ -64,14 +65,14 @@ namespace Ñ
             ámbito = _ámbito;
         }
 
-        void ponBloqueDestino(llvm::BasicBlock* bloqueDestino)
+        void ponBloqueDestino(llvm::BasicBlock *bloqueDestino)
         {
             pila.push_back(bloqueDestino);
         }
 
-        llvm::BasicBlock* leeBloqueDestino()
+        llvm::BasicBlock *leeBloqueDestino()
         {
-            if(pila.empty())
+            if (pila.empty())
             {
                 return nullptr;
             }
@@ -83,18 +84,17 @@ namespace Ñ
 
         void borraBloqueDestino()
         {
-            if(!(pila.empty()))
+            if (!(pila.empty()))
             {
                 pila.pop_back();
             }
         }
     };
 
-
     class Símbolos
     {
     private:
-        std::vector<Ñ::Tabla*> tablas;
+        std::vector<Ñ::Tabla *> tablas;
 
     public:
         Símbolos() {}
@@ -103,23 +103,23 @@ namespace Ñ
 
         void creaÁmbito(Ñ::Ámbito ámbito)
         {
-            Ñ::Tabla* tabla = new Ñ::Tabla;
+            Ñ::Tabla *tabla = new Ñ::Tabla;
             tabla->ponÁmbito(ámbito);
             tablas.push_back(tabla);
         }
 
         void borraÁmbito()
         {
-            if(!(tablas.empty()))
+            if (!(tablas.empty()))
             {
                 delete tablas.back();
                 tablas.pop_back();
             }
         }
 
-        void ponBloqueDestino(llvm::BasicBlock* bloqueDestino)
+        void ponBloqueDestino(llvm::BasicBlock *bloqueDestino)
         {
-            if(tablas.size() < 1)
+            if (tablas.size() < 1)
             {
                 std::cout << "Error, no puedo guardar el bloque de destino, la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
                 return;
@@ -128,25 +128,25 @@ namespace Ñ
             tablas.back()->ponBloqueDestino(bloqueDestino);
         }
 
-        llvm::BasicBlock* leeBloqueDestino()
+        llvm::BasicBlock *leeBloqueDestino()
         {
-            if(tablas.size() < 1)
+            if (tablas.size() < 1)
             {
                 std::cout << "Error, no puedo leer el bloque de destino, la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
                 return nullptr;
             }
             else
             {
-                for(int i = tablas.size() - 1; i >= 0; i--)
+                for (int i = tablas.size() - 1; i >= 0; i--)
                 {
-                    llvm::BasicBlock* blq = tablas[i]->leeBloqueDestino();
+                    llvm::BasicBlock *blq = tablas[i]->leeBloqueDestino();
 
-                    if(blq != nullptr)
+                    if (blq != nullptr)
                     {
                         return blq;
                     }
 
-                    if(tablas[i]->leeÁmbito() == Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN)
+                    if (tablas[i]->leeÁmbito() == Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN)
                     {
                         // Ya he llegado al bloque raíz de la función
                         break;
@@ -159,7 +159,7 @@ namespace Ñ
 
         void borraBloqueDestino()
         {
-            if(tablas.size() < 1)
+            if (tablas.size() < 1)
             {
                 std::cout << "Error, no puedo leer el bloque de destino, la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
                 return;
@@ -168,9 +168,9 @@ namespace Ñ
             return tablas.back()->borraBloqueDestino();
         }
 
-        void ponId(std::string id, llvm::Value* valor)
+        void ponId(std::string id, llvm::Value *valor)
         {
-            if(tablas.size() < 1)
+            if (tablas.size() < 1)
             {
                 std::cout << "Error, no puedo guardar el identificador '" << id << "', la tabla de símbolos tiene " << std::to_string(tablas.size()) << " niveles" << std::endl;
                 return;
@@ -179,19 +179,19 @@ namespace Ñ
             tablas[tablas.size() - 1]->ponId(id, valor);
         }
 
-        llvm::Value* leeId(std::string id)
+        llvm::Value *leeId(std::string id)
         {
-            llvm::Value* valor = nullptr;
+            llvm::Value *valor = nullptr;
 
-            for(int i = tablas.size() - 1; i >= 0; i--)
+            for (int i = tablas.size() - 1; i >= 0; i--)
             {
                 valor = tablas.at(i)->leeId(id);
-                if(valor != nullptr)
+                if (valor != nullptr)
                 {
                     return valor;
                 }
             }
-            
+
             return nullptr;
         }
     };

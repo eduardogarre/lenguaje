@@ -16,8 +16,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "txt.h"
 
 int escribetxt(txt texto);
-int escribe(char* _texto);
-int escribeln(char* _texto);
+int escribe(char *_texto);
+int escribeln(char *_texto);
 int escribeletra(char _letra);
 int escribeletraln(char _letra);
 int escribenat(unsigned int _num);

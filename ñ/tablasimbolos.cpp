@@ -17,8 +17,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "tipo.hpp"
 #include "valor.hpp"
 
-
-Ñ::Símbolo::Símbolo(std::string nombre, Ñ::Nodo* tipo)
+Ñ::Símbolo::Símbolo(std::string nombre, Ñ::Nodo *tipo)
 {
     _nombre = nombre;
     _tipo = Ñ::duplicaÁrbol(tipo);
@@ -27,13 +26,13 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 Ñ::Símbolo::~Símbolo()
 {
-    if(_tipo != nullptr)
+    if (_tipo != nullptr)
     {
         delete _tipo;
         _tipo = nullptr;
     }
-    
-    if(_valor != nullptr)
+
+    if (_valor != nullptr)
     {
         delete _valor;
         _valor = nullptr;
@@ -45,17 +44,17 @@ std::string Ñ::Símbolo::nombre()
     return _nombre;
 }
 
-Ñ::Nodo* Ñ::Símbolo::tipo()
+Ñ::Nodo *Ñ::Símbolo::tipo()
 {
     return _tipo;
 }
 
-void Ñ::Símbolo::valor(Ñ::Nodo* valor)
+void Ñ::Símbolo::valor(Ñ::Nodo *valor)
 {
     _valor = Ñ::duplicaÁrbol(valor);
 }
 
-Ñ::Nodo* Ñ::Símbolo::valor()
+Ñ::Nodo *Ñ::Símbolo::valor()
 {
     return _valor;
 }
@@ -66,7 +65,7 @@ void Ñ::Símbolo::valor(Ñ::Nodo* valor)
     funciónPropietaria = "";
 }
 
-Ñ::TablaSímbolos::TablaSímbolos(Ñ::TablaSímbolos* tablaSuperior)
+Ñ::TablaSímbolos::TablaSímbolos(Ñ::TablaSímbolos *tablaSuperior)
 {
     _superior = tablaSuperior;
     funciónPropietaria = "";
@@ -76,7 +75,7 @@ void Ñ::Símbolo::valor(Ñ::Nodo* valor)
 {
     for (auto [clave, símbolo] : _tabla)
     {
-        if(símbolo != nullptr)
+        if (símbolo != nullptr)
         {
             delete símbolo;
         }
@@ -87,7 +86,7 @@ void Ñ::Símbolo::valor(Ñ::Nodo* valor)
 
 bool Ñ::TablaSímbolos::nombreReservadoEnEsteÁmbito(std::string nombre)
 {
-    if(_tabla.count(nombre) == 0)
+    if (_tabla.count(nombre) == 0)
     {
         return false;
     }
@@ -99,13 +98,13 @@ bool Ñ::TablaSímbolos::nombreReservadoEnEsteÁmbito(std::string nombre)
 
 bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 {
-    if(_tabla.count(nombre) == 1)
+    if (_tabla.count(nombre) == 1)
     {
         return true;
     }
     else
     {
-        if(_superior != nullptr)
+        if (_superior != nullptr)
         {
             return _superior->nombreReservadoEnCualquierÁmbito(nombre);
         }
@@ -116,19 +115,19 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     }
 }
 
-Ñ::Resultado Ñ::TablaSímbolos::declara(std::string nombre, Ñ::Nodo* tipo)
+Ñ::Resultado Ñ::TablaSímbolos::declara(std::string nombre, Ñ::Nodo *tipo)
 {
     Ñ::Resultado resultado;
 
-    if(nombreReservadoEnEsteÁmbito(nombre))
+    if (nombreReservadoEnEsteÁmbito(nombre))
     {
         resultado.error("El identificador \"" + nombre + "\" ya existe en este ámbito.");
         return resultado;
     }
-    
-    Ñ::Símbolo* s = new Ñ::Símbolo(nombre, tipo);
+
+    Ñ::Símbolo *s = new Ñ::Símbolo(nombre, tipo);
     _tabla[nombre] = s;
-    
+
     resultado.éxito();
     return resultado;
 }
@@ -137,20 +136,20 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 {
     Ñ::Resultado resultado;
 
-    if(!nombreReservadoEnCualquierÁmbito(nombre))
+    if (!nombreReservadoEnCualquierÁmbito(nombre))
     {
         resultado.error("Todavía no has declarado el identificador '" + nombre + "'.");
         return resultado;
     }
 
-    if(!nombreReservadoEnEsteÁmbito(nombre))
+    if (!nombreReservadoEnEsteÁmbito(nombre))
     {
         return _superior->leeValor(nombre);
     }
-    
-    Ñ::Nodo* valor = _tabla[nombre]->valor();
-    
-    if(valor == nullptr)
+
+    Ñ::Nodo *valor = _tabla[nombre]->valor();
+
+    if (valor == nullptr)
     {
         resultado.error("Todavía no has definido el identificador '" + nombre + "'.");
         return resultado;
@@ -165,20 +164,20 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
 {
     Ñ::Resultado resultado;
 
-    if(!nombreReservadoEnCualquierÁmbito(nombre))
+    if (!nombreReservadoEnCualquierÁmbito(nombre))
     {
         resultado.error("Todavía no has declarado el identificador '" + nombre + "'.");
         return resultado;
     }
 
-    if(!nombreReservadoEnEsteÁmbito(nombre))
+    if (!nombreReservadoEnEsteÁmbito(nombre))
     {
         return _superior->leeTipo(nombre);
     }
-    
-    Ñ::Nodo* tipo = _tabla[nombre]->tipo();
-    
-    if(tipo == nullptr)
+
+    Ñ::Nodo *tipo = _tabla[nombre]->tipo();
+
+    if (tipo == nullptr)
     {
         resultado.error("No has declarado correctamente el identificador '" + nombre + "', no sé su tipo.");
         return resultado;
@@ -189,29 +188,29 @@ bool Ñ::TablaSímbolos::nombreReservadoEnCualquierÁmbito(std::string nombre)
     return resultado;
 }
 
-Ñ::Resultado Ñ::TablaSímbolos::ponValor(std::string nombre, Ñ::Nodo* valor)
+Ñ::Resultado Ñ::TablaSímbolos::ponValor(std::string nombre, Ñ::Nodo *valor)
 {
     Ñ::Resultado resultado;
-    
-    if(valor == nullptr)
+
+    if (valor == nullptr)
     {
         resultado.error("Definición errónea.");
         return resultado;
     }
 
-    if(!nombreReservadoEnCualquierÁmbito(nombre))
+    if (!nombreReservadoEnCualquierÁmbito(nombre))
     {
         resultado.error("Todavía no has declarado el identificador '" + nombre + "'.");
         resultado.posición(valor->posición());
         return resultado;
     }
 
-    if(!nombreReservadoEnEsteÁmbito(nombre))
+    if (!nombreReservadoEnEsteÁmbito(nombre))
     {
         return _superior->ponValor(nombre, valor);
     }
-    
-    Ñ::Símbolo* s = _tabla[nombre];
+
+    Ñ::Símbolo *s = _tabla[nombre];
     s->valor(valor);
     _tabla[nombre] = s;
 
@@ -229,21 +228,20 @@ std::string Ñ::TablaSímbolos::leeFunciónPropietaria()
     return funciónPropietaria;
 }
 
-
-Ñ::Resultado Ñ::TablaSímbolos::defineFunciónEjecutable(std::string nombre, Ñ::Nodo* (fne)(Ñ::Nodo*, Ñ::Nodo*), Ñ::Nodo* firma)
+Ñ::Resultado Ñ::TablaSímbolos::defineFunciónEjecutable(std::string nombre, Ñ::Nodo *(fne)(Ñ::Nodo *, Ñ::Nodo *), Ñ::Nodo *firma)
 {
     Ñ::Resultado r;
 
-    Ñ::FunciónEjecutable* función = new Ñ::FunciónEjecutable;
+    Ñ::FunciónEjecutable *función = new Ñ::FunciónEjecutable;
     función->función = fne;
     función->nombre = nombre;
     r = declara(nombre, firma);
-    if(r.error())
+    if (r.error())
     {
         return r;
     }
-    r = ponValor(nombre, (Ñ::Nodo*)función);
-    if(r.error())
+    r = ponValor(nombre, (Ñ::Nodo *)función);
+    if (r.error())
     {
         return r;
     }

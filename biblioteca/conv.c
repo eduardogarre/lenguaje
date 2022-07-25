@@ -17,11 +17,11 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "es.h"
 #include "mem.h"
 
-long long int longitud(char* _texto)
+long long int longitud(char *_texto)
 {
     long long int largo = 0;
 
-    while(_texto[largo] != '\0')
+    while (_texto[largo] != '\0')
     {
         largo++;
     }
@@ -29,10 +29,10 @@ long long int longitud(char* _texto)
     return largo;
 }
 
-extern void copia(char* origen, char* destino)
+extern void copia(char *origen, char *destino)
 {
     int i = 0;
-    while(origen[i] != '\0')
+    while (origen[i] != '\0')
     {
         destino[i] = origen[i];
         i++;
@@ -40,21 +40,21 @@ extern void copia(char* origen, char* destino)
     destino[i] = '\0';
 }
 
-extern char* duplicatxt(char* _texto)
+extern char *duplicatxt(char *_texto)
 {
     long long int largo = longitud(_texto);
-    char* texto = reserva(largo);
+    char *texto = reserva(largo);
     copia(_texto, texto);
     return texto;
 }
 
-char* invierte(char* _texto)
+char *invierte(char *_texto)
 {
     int inicio = 0;
-    char* texto = duplicatxt(_texto);
+    char *texto = duplicatxt(_texto);
     int fin = longitud(texto) - 1;
 
-    while(inicio < fin)
+    while (inicio < fin)
     {
         // PENDIENTE
         char tmp = texto[inicio];
@@ -67,20 +67,20 @@ char* invierte(char* _texto)
     return texto;
 }
 
-extern char* entatxt(long long int _num)
+extern char *entatxt(long long int _num)
 {
     int base = 10;
     long long int contador = 0;
     long long int largo = 0;
     int esNegativo = 0;
 
-    char* texto;
+    char *texto;
 
     // Compruebo si 0
-    if(_num == 0)
+    if (_num == 0)
     {
         texto = reserva(2);
-        if(texto == NULO)
+        if (texto == NULO)
         {
             return NULO;
         }
@@ -90,7 +90,7 @@ extern char* entatxt(long long int _num)
     }
 
     // Quiero operar siempre con números positivos
-    if(_num < 0)
+    if (_num < 0)
     {
         esNegativo = 1;
         _num = -_num;
@@ -98,10 +98,10 @@ extern char* entatxt(long long int _num)
 
     long long int temporal = _num;
     // Calculo cuánto espacio necesito;
-    while(temporal != 0)
+    while (temporal != 0)
     {
         largo++;
-        temporal = temporal/base;
+        temporal = temporal / base;
     }
 
     // Reservo espacio para la cadena
@@ -109,14 +109,14 @@ extern char* entatxt(long long int _num)
     texto = reserva(largo + 1 + esNegativo);
 
     // Voy añadiendo números a la cadena de texto, de forma inversa
-    while(_num != 0)
+    while (_num != 0)
     {
         long long int resto = _num % base;
         texto[contador++] = resto + '0';
-        _num = _num/base;
+        _num = _num / base;
     }
 
-    if(esNegativo)
+    if (esNegativo)
     {
         texto[contador++] = '-';
     }
@@ -124,7 +124,7 @@ extern char* entatxt(long long int _num)
     // Termino la cadena con el caracter nulo
     texto[contador] = '\0';
 
-    char* inverso = invierte(texto);
+    char *inverso = invierte(texto);
     suelta(texto);
 
     return inverso;

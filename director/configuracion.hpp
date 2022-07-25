@@ -22,15 +22,15 @@ namespace Director
     {
         bool HABLADOR = false;
         uint8_t optimización = 1;
-        
+
         std::vector<std::string> archivos;
-        
+
         std::string nombreArchivoDestino = "programa";
 
-        #ifdef _WIN32 //// WINDOWS ////
+#ifdef _WIN32 //// WINDOWS ////
         std::string extensión = ".exe";
-        #else
+#else
         std::string extensión = "";
-        #endif
+#endif
     };
 }

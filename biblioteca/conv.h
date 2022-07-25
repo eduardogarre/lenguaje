@@ -13,4 +13,4 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-char* entatxt(long long int _num);
+char *entatxt(long long int _num);

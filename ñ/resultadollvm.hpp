@@ -24,7 +24,8 @@ namespace Ñ
 {
     extern class Posición;
 
-    enum CategoríaLlvm {
+    enum CategoríaLlvm
+    {
         BLOQUE_LLVM,
         FUNCIÓN_LLVM,
         MÓDULO_LLVM,
@@ -37,36 +38,37 @@ namespace Ñ
         bool _error;
         std::string _mensaje;
         CategoríaLlvm categoría;
-        Posición* _posición = nullptr;
+        Posición *_posición = nullptr;
 
-        union {
-            llvm::BasicBlock *  _bloque;
-            llvm::Function *    _función;
-            llvm::Module *      _módulo;
-            llvm::Value *       _valor;
+        union
+        {
+            llvm::BasicBlock *_bloque;
+            llvm::Function *_función;
+            llvm::Module *_módulo;
+            llvm::Value *_valor;
         } entidad;
 
     public:
         ResultadoLlvm();
 
-        Posición* posición();
-        void posición(Ñ::Posición* pos);
+        Posición *posición();
+        void posición(Ñ::Posición *pos);
 
         bool error();
         void error(std::string mensaje);
         void éxito();
         std::string mensaje();
 
-        void bloque(llvm::BasicBlock* blq);
-        llvm::BasicBlock* bloque();
+        void bloque(llvm::BasicBlock *blq);
+        llvm::BasicBlock *bloque();
 
-        void función(llvm::Function* fn);
-        llvm::Function* función();
+        void función(llvm::Function *fn);
+        llvm::Function *función();
 
-        void módulo(llvm::Module* mod);
-        llvm::Module* módulo();
+        void módulo(llvm::Module *mod);
+        llvm::Module *módulo();
 
-        void valor(llvm::Value* val);
-        llvm::Value* valor();
+        void valor(llvm::Value *val);
+        llvm::Value *valor();
     };
 }

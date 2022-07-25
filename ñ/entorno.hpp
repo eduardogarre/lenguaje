@@ -28,16 +28,16 @@ namespace Ñ
     class EntornoConstrucción
     {
     public:
-        bool                                HABLADOR = false;
-        uint8_t                             optimización = 0;
-        std::string                         archivoActual = "";
-        llvm::LLVMContext                   contextoLlvm;
-        llvm::legacy::FunctionPassManager*  gestorPasesOptimización = nullptr;
-        llvm::IRBuilder<>                   constructorLlvm;
-        std::map<std::string, llvm::Type*>  globales;
-        std::string                         tripleteDestino;
-        const llvm::Target*                 destino;
-        llvm::TargetMachine*                máquinaDestino;
+        bool HABLADOR = false;
+        uint8_t optimización = 0;
+        std::string archivoActual = "";
+        llvm::LLVMContext contextoLlvm;
+        llvm::legacy::FunctionPassManager *gestorPasesOptimización = nullptr;
+        llvm::IRBuilder<> constructorLlvm;
+        std::map<std::string, llvm::Type *> globales;
+        std::string tripleteDestino;
+        const llvm::Target *destino;
+        llvm::TargetMachine *máquinaDestino;
 
         EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
         ~EntornoConstrucción() {}

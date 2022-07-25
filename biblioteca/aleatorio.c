@@ -22,8 +22,6 @@ void saleatorio(unsigned int const semilla)
     estado_pseudoaleatorio = semilla;
 }
 
-
-
 // Devuelve un natural pseudoaleatorio en el rango [0, 32767].
 int aleatorio()
 {

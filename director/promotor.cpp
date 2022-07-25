@@ -37,8 +37,10 @@ std::string creaNombreMódulo(std::string archivo)
 	return después;
 }
 
-int emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno)
+Ñ::Resultado emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno)
 {
+	Ñ::Resultado resultado;
+
 	móduloLlvm->setDataLayout(entorno->máquinaDestino->createDataLayout());
 	móduloLlvm->setTargetTriple(entorno->tripleteDestino);
 
@@ -58,8 +60,8 @@ int emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *ento
 
 	if (códigoError)
 	{
-		std::cout << ("No he podido abrir el archivo: " + códigoError.message()) << std::endl;
-		return -1;
+		resultado.error("No he podido abrir el archivo: " + códigoError.message());
+		return resultado;
 	}
 
 	llvm::legacy::PassManager paseDeCódigoObjeto;
@@ -67,11 +69,11 @@ int emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *ento
 
 	if (entorno->máquinaDestino->addPassesToEmitFile(paseDeCódigoObjeto, archivoDestino, nullptr, tipoArchivo))
 	{
-		std::cout << ("No he podido emitir un archivo de este tipo") << std::endl;
-		return -1;
+		resultado.error("No he podido emitir un archivo de este tipo");
+		return resultado;
 	}
 
-	paseDeCódigoObjeto.run(*(móduloLlvm));
+	paseDeCódigoObjeto.run(*móduloLlvm);
 	archivoDestino.flush();
 
 	if (entorno->HABLADOR)
@@ -79,7 +81,8 @@ int emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *ento
 		std::cout << "He construido el archivo '" + nombreArchivoDestino + "'." << std::endl;
 	}
 
-	return 0;
+	resultado.éxito();
+	return resultado;
 }
 
 Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno)
@@ -192,11 +195,11 @@ int emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *ento
 		return resultadoLlvm;
 	}
 
-	int r = emiteArchivoObjeto(resultadoLlvm.módulo(), entorno);
+	resultado = emiteArchivoObjeto(resultadoLlvm.módulo(), entorno);
 
-	if (r != 0)
+	if (resultado.error())
 	{
-		resultadoLlvm.error("Error al intentar construir el archivo " + entorno->archivoActual);
+		resultadoLlvm.error("[" + entorno->archivoActual + "] " + resultado.mensaje());
 		return resultadoLlvm;
 	}
 	else

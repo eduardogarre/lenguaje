@@ -40,7 +40,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 void Ñ::muestraLexemas(std::vector<Ñ::Lexema*> _lexemas)
 {
-    //std::cout << "muestraLexemas()" << std::endl;
     while(!(_lexemas.empty()))
     {
         std::cout << "LIN:" << _lexemas.front()->posición()->línea();

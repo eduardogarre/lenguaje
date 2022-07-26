@@ -42,8 +42,24 @@ add_library(lenguaje ${CODIGO_LENGUAJE})
 set(componentes_llvm aggressiveinstcombine analysis asmparser asmprinter binaryformat bitreader bitstreamreader bitwriter cfguard codegen core coroutines coverage debuginfocodeview debuginfodwarf debuginfogsym debuginfomsf debuginfopdb demangle dlltooldriver dwarflinker extensions filecheck frontendopenacc frontendopenmp fuzzmutate globalisel instcombine instrumentation interfacestub interpreter ipo irreader libdriver lineeditor linker lto mc mca mcdisassembler mcparser mirparser native nativecodegen objcarcopts object objectyaml option orcjit orcshared orctargetprocess passes profiledata remarks runtimedyld scalaropts selectiondag support symbolize tablegen target textapi transformutils vectorize windowsmanifest x86asmparser x86codegen x86desc x86disassembler x86info xray)
 llvm_map_components_to_libnames(bibliotecas_llvm ${componentes_llvm})
 
-# enlaza la biblioteca "lenguaje" con las bibliotecas importadas de "llvm"
-target_link_libraries(lenguaje LINK_PUBLIC ${bibliotecas_llvm})
+execute_process(COMMAND llvm-config --prefix OUTPUT_VARIABLE carpeta_llvm OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+set(bibliotecas_lld "")
+
+if(MSVC)
+  set(bibliotecas_lld "${carpeta_llvm}/lib/lldCOFF.lib")
+elseif(MINGW)
+  set(bibliotecas_lld "${carpeta_llvm}/lib/lldMinGW.lib")
+elseif(APPLE)
+  set(bibliotecas_lld "${carpeta_llvm}/lib/lldMachO.lib" "${carpeta_llvm}/lib/lldMachO.lib")
+elseif(UNIX)
+  set(bibliotecas_lld "${carpeta_llvm}/lib/lldELF.lib")
+endif()
+
+set(bibliotecas_lld ${carpeta_llvm}/lib/lldCommon.lib ${carpeta_llvm}/lib/lldCore.lib ${carpeta_llvm}/lib/lldDriver.lib ${carpeta_llvm}/lib/lldReaderWriter.lib ${carpeta_llvm}/lib/lldWasm.lib ${carpeta_llvm}/lib/lldYAML.lib ${bibliotecas_lld})
+
+# enlaza la biblioteca "lenguaje" con las bibliotecas importadas de "llvm" y "lld"
+target_link_libraries(lenguaje LINK_PUBLIC ${bibliotecas_llvm} ${bibliotecas_lld})
 
 # make sure the compiler can find include files for our library
 # from other projects who link to us

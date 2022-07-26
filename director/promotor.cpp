@@ -15,8 +15,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <string>
 #include <vector>
 
-#include "lld/Common/Driver.h"
-
 #include "consola.hpp"
 #include "herramientas.hpp"
 #include "ñ/ñ.hpp"
@@ -241,7 +239,7 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 		}
 	}
 
-	int resultado = lld::coff::link(argumentos, true, llvm::outs(), llvm::errs());
+	int resultado = Ñ::enlaza(argumentos);
 
 	for (int i = 0; i < argumentos.size(); i++)
 	{

@@ -11,20 +11,15 @@ the Mozilla Public License, v. 2.0.
 Copyright © 2021 Eduardo Garre Muñoz
 */
 
-#pragma once
+#include "lld/Common/Driver.h"
 
-#include "constructor.hpp"
 #include "enlazador.hpp"
-#include "entorno.hpp"
-#include "lexema.hpp"
-#include "lexico.hpp"
-#include "nodo.hpp"
-#include "posicion.hpp"
-#include "representacionintermedia.hpp"
-#include "resultado.hpp"
-#include "salida.hpp"
-#include "semantico.hpp"
-#include "sintaxis.hpp"
-#include "tablasimbolos.hpp"
-#include "tipo.hpp"
-#include "valor.hpp"
+
+namespace Ñ
+{
+    int enlaza(std::vector<const char *> argumentos)
+    {
+        return lld::coff::link(argumentos, true, llvm::outs(), llvm::errs());
+    }
+
+} // namespace Ñ

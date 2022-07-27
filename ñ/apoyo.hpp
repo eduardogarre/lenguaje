@@ -47,4 +47,11 @@ namespace Ñ
             return x * tmp * tmp;
         }
     }
+
+    inline char *deStrAPtrChars(std::string txt)
+    {
+        char *texto = (char *)malloc(txt.size() + 1);
+        strcpy(texto, txt.c_str());
+        return texto;
+    }
 }

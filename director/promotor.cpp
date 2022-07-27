@@ -185,6 +185,11 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 	std::string bibliotecaEstándar = "bibñ.lib";
 	std::string lugar_de_inicio = "__lugar_de_inicio";
 
+	Ñ::ConfiguraciónEnlazador cfgEnlazador;
+
+	cfgEnlazador.ponArchivoDestino(archivoDestino);
+	cfgEnlazador.ponCarpetaBibliotecaEstándar(carpeta);
+
 	std::vector<const char *> argumentos;
 	std::string opción_llvm = "";
 	char *texto = nullptr;
@@ -201,11 +206,15 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 
 	for (std::string archivo : cfg.archivos)
 	{
+		std::string nombreMódulo = Ñ::creaNombreMódulo(archivo) + ".o ";
+		cfgEnlazador.ponArchivoObjeto(nombreMódulo);
 		opción_llvm = Ñ::creaNombreMódulo(archivo) + ".o ";
 		texto = (char *)malloc(opción_llvm.size() + 1);
 		strcpy(texto, opción_llvm.c_str());
 		argumentos.push_back(texto);
 	}
+
+	cfgEnlazador.ponLugarInicio(lugar_de_inicio);
 
 	opción_llvm = "/entry:" + lugar_de_inicio;
 	texto = (char *)malloc(opción_llvm.size() + 1);
@@ -216,6 +225,8 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 	texto = (char *)malloc(opción_llvm.size() + 1);
 	strcpy(texto, opción_llvm.c_str());
 	argumentos.push_back(texto);
+
+	cfgEnlazador.ponSubsistema("console");
 
 	opción_llvm = "/subsystem:console";
 	texto = (char *)malloc(opción_llvm.size() + 1);
@@ -239,7 +250,23 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 		}
 	}
 
-	int resultado = Ñ::enlaza(argumentos);
+	std::vector<const char *> argumentos2;
+
+	argumentos2 = cfgEnlazador.generaArgumentos();
+
+	if (cfg.HABLADOR)
+	{
+		std::cout << std::endl << std::to_string(argumentos2.size()) << " argumentos2 para LLD" << std::endl;
+
+		for (int i = 0; i < argumentos2.size(); i++)
+		{
+			std::cout << "arg " << std::to_string(i) << ": ";
+			printf(argumentos2[i]);
+			printf("\n");
+		}
+	}
+
+	int resultado = Ñ::enlaza(argumentos2);
 
 	for (int i = 0; i < argumentos.size(); i++)
 	{

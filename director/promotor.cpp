@@ -20,7 +20,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "ñ/ñ.hpp"
 #include "promotor.hpp"
 
-
 Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno, Ñ::Entorno::Configuración cfg)
 {
 	Ñ::ResultadoLlvm resultadoLlvm;
@@ -179,64 +178,22 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 		}
 	}
 
-	std::string archivoDestino = cfg.nombreArchivoDestino + cfg.extensión;
-
-	std::string carpeta = obténCarpetaInstalación() + "/";
-	std::string bibliotecaEstándar = "bibñ.lib";
-	std::string lugar_de_inicio = "__lugar_de_inicio";
-
 	Ñ::ConfiguraciónEnlazador cfgEnlazador;
 
-	cfgEnlazador.ponArchivoDestino(archivoDestino);
-	cfgEnlazador.ponCarpetaBibliotecaEstándar(carpeta);
-
-	std::vector<const char *> argumentos;
-	std::string opción_llvm = "";
-	char *texto = nullptr;
-
-	opción_llvm = "enlazador";
-	texto = (char *)malloc(opción_llvm.size() + 1);
-	strcpy(texto, opción_llvm.c_str());
-	argumentos.push_back(texto);
-
-	opción_llvm = carpeta + bibliotecaEstándar;
-	texto = (char *)malloc(opción_llvm.size() + 1);
-	strcpy(texto, opción_llvm.c_str());
-	argumentos.push_back(texto);
+	cfgEnlazador.ponArchivoDestino(cfg.nombreArchivoDestino + cfg.extensión);
+	cfgEnlazador.ponNombreBibliotecaEstándar("bibñ.lib");
+	cfgEnlazador.ponCarpetaBibliotecaEstándar(obténCarpetaInstalación() + "/");
+	cfgEnlazador.ponLugarInicio("__lugar_de_inicio");
+	cfgEnlazador.ponSubsistema("console");
 
 	for (std::string archivo : cfg.archivos)
 	{
 		std::string nombreMódulo = Ñ::creaNombreMódulo(archivo) + ".o ";
 		cfgEnlazador.ponArchivoObjeto(nombreMódulo);
-		opción_llvm = Ñ::creaNombreMódulo(archivo) + ".o ";
-		texto = (char *)malloc(opción_llvm.size() + 1);
-		strcpy(texto, opción_llvm.c_str());
-		argumentos.push_back(texto);
 	}
 
-	cfgEnlazador.ponLugarInicio(lugar_de_inicio);
-
-	opción_llvm = "/entry:" + lugar_de_inicio;
-	texto = (char *)malloc(opción_llvm.size() + 1);
-	strcpy(texto, opción_llvm.c_str());
-	argumentos.push_back(texto);
-
-	opción_llvm = "/nodefaultlib";
-	texto = (char *)malloc(opción_llvm.size() + 1);
-	strcpy(texto, opción_llvm.c_str());
-	argumentos.push_back(texto);
-
-	cfgEnlazador.ponSubsistema("console");
-
-	opción_llvm = "/subsystem:console";
-	texto = (char *)malloc(opción_llvm.size() + 1);
-	strcpy(texto, opción_llvm.c_str());
-	argumentos.push_back(texto);
-
-	opción_llvm = "/out:" + archivoDestino;
-	texto = (char *)malloc(opción_llvm.size() + 1);
-	strcpy(texto, opción_llvm.c_str());
-	argumentos.push_back(texto);
+	std::vector<const char *> argumentos;
+	argumentos = cfgEnlazador.generaArgumentos();
 
 	if (cfg.HABLADOR)
 	{
@@ -250,23 +207,7 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 		}
 	}
 
-	std::vector<const char *> argumentos2;
-
-	argumentos2 = cfgEnlazador.generaArgumentos();
-
-	if (cfg.HABLADOR)
-	{
-		std::cout << std::endl << std::to_string(argumentos2.size()) << " argumentos2 para LLD" << std::endl;
-
-		for (int i = 0; i < argumentos2.size(); i++)
-		{
-			std::cout << "arg " << std::to_string(i) << ": ";
-			printf(argumentos2[i]);
-			printf("\n");
-		}
-	}
-
-	int resultado = Ñ::enlaza(argumentos2);
+	int resultado = Ñ::enlaza(argumentos);
 
 	for (int i = 0; i < argumentos.size(); i++)
 	{

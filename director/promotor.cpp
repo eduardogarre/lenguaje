@@ -188,7 +188,7 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 
 	for (std::string archivo : cfg.archivos)
 	{
-		std::string nombreMódulo = Ñ::creaNombreMódulo(archivo) + ".o ";
+		std::string nombreMódulo = Ñ::creaNombreMódulo(archivo) + ".o";
 		cfgEnlazador.ponArchivoObjeto(nombreMódulo);
 	}
 

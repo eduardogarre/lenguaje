@@ -18,6 +18,11 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include "herramientas.hpp"
 
+void muestraTexto(std::string txt)
+{
+	std::cout << txt << std::endl;
+}
+
 #if defined(WIN32) || defined(WIN64)
 #include <Windows.h>
 std::string obténCarpetaInstalación()

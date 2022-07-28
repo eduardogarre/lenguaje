@@ -23,107 +23,9 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include "docopt.h"
 #include "ñ/ñ.hpp"
-#include "promotor.hpp"
 
-bool EJECUTA_INTÉRPRETE = false;
-
-void _muestraTexto(std::string txt)
-{
-	std::cout << txt << std::endl;
-}
-
-std::string _esperaComando()
-{
-	std::string comando;
-	std::cout << "> ";
-	std::getline(std::cin, comando);
-
-	return comando;
-}
-
-void _interpretaComando(std::string comando, Ñ::TablaSímbolos *tablaSímbolos, Ñ::Entorno::Configuración cfg)
-{
-
-	Ñ::EntornoConstrucción *entorno = Ñ::preparaEntornoConstrucción(cfg);
-	Ñ::Resultado resultado;
-
-	std::vector<Ñ::Lexema *> lexemas;
-	Ñ::Nodo *nodos;
-
-	Ñ::Léxico léxico;
-	Ñ::Sintaxis sintaxis;
-
-	lexemas = léxico.analiza(comando, entorno);
-
-	if (lexemas.empty())
-	{
-		Ñ::errorConsola(u8"Error durante el análisis léxico, comando incorrecto.");
-		return;
-	}
-
-	resultado = sintaxis.analizaComando(lexemas);
-
-	if (resultado.error())
-	{
-		Ñ::errorConsola(resultado.mensaje());
-		muestraLexemas(lexemas);
-		return;
-	}
-	nodos = resultado.nodo();
-
-	Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
-
-	if (rSemántico.error())
-	{
-		std::cout << rSemántico.mensaje() << std::endl;
-		muestraNodos(nodos, tablaSímbolos);
-		return;
-	}
-	// else
-	//{
-	//	auto resultado = Ñ::interpretaNodos(nodos, tablaSímbolos);
-	//	if(resultado.error())
-	//	{
-	//		std::cout << resultado.mensaje() << std::endl;
-	//		muestraNodos(nodos);
-	//	}
-	// }
-
-	Ñ::ResultadoLlvm rConstrucción = Ñ::creaRepresentaciónIntermedia(nodos, entorno, Ñ::CategoríaNodo::NODO_EXPRESIÓN);
-	if (rConstrucción.error())
-	{
-		std::cout << rConstrucción.mensaje() << std::endl;
-		return;
-	}
-
-	for (auto l : lexemas)
-	{
-		delete l;
-	}
-	lexemas.clear();
-	delete nodos;
-}
-
-int interpretaEnLínea(Ñ::Entorno::Configuración cfg)
-{
-	Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
-
-	EJECUTA_INTÉRPRETE = true;
-
-	while (EJECUTA_INTÉRPRETE)
-	{
-		std::string comando = _esperaComando();
-		if (comando.size() == 0)
-		{
-			continue;
-		}
-		_interpretaComando(comando, tablaSímbolos, cfg);
-	}
-
-	delete tablaSímbolos;
-
-	return 0;
-}
+#include "constructor.hpp"
+#include "interprete.hpp"
 
 static const char VERSIÓN[] = u8R"(Ñ 0.0.1)";
 
@@ -218,5 +120,5 @@ int main(int argc, char **argv)
 		return Director::compila(cfg);
 	}
 
-	return interpretaEnLínea(cfg);
+	return Director::interpretaEnLínea(cfg);
 }

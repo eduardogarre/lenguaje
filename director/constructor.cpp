@@ -18,7 +18,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "consola.hpp"
 #include "herramientas.hpp"
 #include "ñ/ñ.hpp"
-#include "promotor.hpp"
+#include "constructor.hpp"
 
 Ñ::ResultadoLlvm construyeArchivo(std::string archivo, Ñ::EntornoConstrucción *entorno, Ñ::Entorno::Configuración cfg)
 {

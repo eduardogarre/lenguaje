@@ -13,10 +13,9 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-#include <filesystem>
-#include <string>
+#include "ñ/ñ.hpp"
 
-int ejecutaPrograma(std::string ruta, std::string argumentos);
-std::string leeArchivo(std::filesystem::path archivo);
-std::string obténCarpetaInstalación();
-void muestraTexto(std::string txt);
+namespace Director
+{
+    int interpretaEnLínea(Ñ::Entorno::Configuración cfg);
+}

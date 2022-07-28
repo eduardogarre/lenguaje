@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 
+#include "herramientas.hpp"
 #include "interprete.hpp"
 
 namespace Director

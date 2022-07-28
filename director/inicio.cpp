@@ -25,6 +25,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "ñ/ñ.hpp"
 
 #include "constructor.hpp"
+#include "herramientas.hpp"
 #include "interprete.hpp"
 
 static const char VERSIÓN[] = u8R"(Ñ 0.0.1)";
@@ -116,8 +117,10 @@ int main(int argc, char **argv)
 	if (args["<archivo>"].isStringList())
 	{
 		cfg.archivos = args["<archivo>"].asStringList();
-
-		return Director::compila(cfg);
+		if (cfg.archivos.size() > 0)
+		{
+			return Director::compila(cfg);
+		}
 	}
 
 	return Director::interpretaEnLínea(cfg);

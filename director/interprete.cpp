@@ -86,6 +86,10 @@ namespace Director
 			{
 				continue;
 			}
+			else if(comando == "sal")
+			{
+				break;
+			}
 			interpretaComando(comando, tablaSímbolos, cfg);
 		}
 

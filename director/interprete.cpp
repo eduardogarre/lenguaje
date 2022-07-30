@@ -19,10 +19,8 @@ namespace Director
 		return comando;
 	}
 
-	void interpretaComando(std::string comando, Ñ::TablaSímbolos *tablaSímbolos, Ñ::Entorno::Configuración cfg)
+	void interpretaComando(std::string comando, Ñ::TablaSímbolos *tablaSímbolos, Ñ::EntornoConstrucción *entorno)
 	{
-
-		Ñ::EntornoConstrucción *entorno = Ñ::preparaEntornoConstrucción(cfg);
 		Ñ::Resultado resultado;
 
 		std::vector<Ñ::Lexema *> lexemas;
@@ -76,6 +74,8 @@ namespace Director
 	int interpretaEnLínea(Ñ::Entorno::Configuración cfg)
 	{
 		Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
+		
+		Ñ::EntornoConstrucción *entorno = Ñ::preparaEntornoConstrucción(cfg);
 
 		EJECUTA_INTÉRPRETE = true;
 
@@ -90,7 +90,7 @@ namespace Director
 			{
 				break;
 			}
-			interpretaComando(comando, tablaSímbolos, cfg);
+			interpretaComando(comando, tablaSímbolos, entorno);
 		}
 
 		delete tablaSímbolos;

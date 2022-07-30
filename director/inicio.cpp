@@ -25,6 +25,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "ñ/ñ.hpp"
 
 #include "constructor.hpp"
+#include "director.hpp"
 #include "herramientas.hpp"
 #include "interprete.hpp"
 
@@ -63,6 +64,8 @@ int main(int argc, char **argv)
 		std::cout << "Requiero el estándar IEEE 754 para los números reales" << std::endl;
 		return -1;
 	}
+
+	Director::biblioteca_estándar = "bibñ.lib";
 
 	std::map<std::string, docopt::value> args;
 	args = docopt::docopt(USO, {argv + 1, argv + argc}, false);

@@ -16,6 +16,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <vector>
 
 #include "consola.hpp"
+#include "director.hpp"
 #include "herramientas.hpp"
 #include "ñ/ñ.hpp"
 #include "constructor.hpp"
@@ -181,9 +182,9 @@ int Director::compila(Ñ::Entorno::Configuración cfg)
 	Ñ::ConfiguraciónEnlazador cfgEnlazador;
 
 	cfgEnlazador.ponArchivoDestino(cfg.nombreArchivoDestino + cfg.extensión);
-	cfgEnlazador.ponNombreBibliotecaEstándar("bibñ.lib");
+	cfgEnlazador.ponNombreBibliotecaEstándar(biblioteca_estándar);
 	cfgEnlazador.ponCarpetaBibliotecaEstándar(obténCarpetaInstalación() + "/");
-	cfgEnlazador.ponLugarInicio("__lugar_de_inicio");
+	cfgEnlazador.ponLugarInicio(lugar_de_inicio);
 	cfgEnlazador.ponSubsistema("console");
 
 	for (std::string archivo : cfg.archivos)

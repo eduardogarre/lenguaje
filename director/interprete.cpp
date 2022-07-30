@@ -2,14 +2,12 @@
 #include <iostream>
 #include <string>
 
+#include "director.hpp"
 #include "herramientas.hpp"
 #include "interprete.hpp"
 
 namespace Director
 {
-
-	bool EJECUTA_INTÉRPRETE = false;
-
 	std::string esperaComando()
 	{
 		std::string comando;
@@ -76,6 +74,10 @@ namespace Director
 		Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
 		
 		Ñ::EntornoConstrucción *entorno = Ñ::preparaEntornoConstrucción(cfg);
+
+		std::string ruta_biblioteca_estándar = obténCarpetaInstalación() + "/" + biblioteca_estándar;
+
+		std::cout << "Ruta a la biblioteca estándar: '" << ruta_biblioteca_estándar << "'" << std::endl;
 
 		EJECUTA_INTÉRPRETE = true;
 

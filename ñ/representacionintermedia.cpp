@@ -1508,7 +1508,15 @@ namespace Ñ
             id = (Ñ::Identificador *)nodo;
             nombre = id->id;
 
-            variable = leeId(nombre);
+            if (jat)
+            {
+                variable = móduloLlvm->getGlobalVariable(llvm::StringRef(nombre), true);
+            }
+            else
+            {
+                variable = leeId(nombre);
+            }
+            
             if (variable == nullptr)
             {
                 resultado.error("No puedo construir un LIA para la variable '" + nombre + "'.");

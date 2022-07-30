@@ -1553,12 +1553,13 @@ namespace Ñ
             else
             {
                 variable = leeId(nombre);
-                if (variable == nullptr)
-                {
-                    resultado.error("No puedo leer la variable '" + nombre + "'.");
-                    resultado.posición(id->posición());
-                    return resultado;
-                }
+            }
+
+            if (variable == nullptr)
+            {
+                resultado.error("No puedo leer la variable '" + nombre + "'.");
+                resultado.posición(id->posición());
+                return resultado;
             }
 
             llvm::Value *valor = entorno->constructorLlvm.CreateLoad(variable, nombre);

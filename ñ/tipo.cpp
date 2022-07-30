@@ -79,6 +79,7 @@ bool Ñ::esBooleano(Ñ::Tipo *tipo)
 Ñ::Tipo::Tipo(Ñ::Posición *posición) : Ñ::Nodo(posición)
 {
 	categoría = Ñ::CategoríaNodo::NODO_TIPO;
+	tipo = Ñ::CategoríaTipo::TIPO_NADA;
 }
 
 Ñ::Tipo::~Tipo() {}

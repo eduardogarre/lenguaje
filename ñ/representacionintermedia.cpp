@@ -1459,7 +1459,7 @@ namespace Ñ
             variable = leeId(nombre);
             if (variable == nullptr)
             {
-                resultado.error("No puedo leer la variable '" + nombre + "'.");
+                resultado.error("No puedo leer el puntero LIA a la variable '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
@@ -1511,7 +1511,7 @@ namespace Ñ
             variable = leeId(nombre);
             if (variable == nullptr)
             {
-                resultado.error("No puedo leer la variable '" + nombre + "'.");
+                resultado.error("No puedo construir un LIA para la variable '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
@@ -1564,7 +1564,7 @@ namespace Ñ
             if (variable == nullptr)
             {
 
-                resultado.error("No puedo leer la variable '" + nombre + "'.");
+                resultado.error("No puedo leer la variable LDA '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }

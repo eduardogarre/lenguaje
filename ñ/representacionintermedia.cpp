@@ -93,8 +93,13 @@ namespace Ñ
 
         void preparaMóduloJAT(std::string nombre)
         {
+            if (!jat)
+            {
+                // Si es la primera ejecución, todavía no hemos creado el JAT
+                jat = Ñ::ConstructorJAT::Crea();
+            }
 
-            // Creo el módulo LLVM y le asigno el nombre de mi módulo
+            // Creo un nuevo módulo LLVM y le asigno un nombre
             móduloLlvm = new llvm::Module(nombre, entorno->contextoLlvm);
 
             móduloLlvm->setDataLayout(jat->leeDisposiciónDatos());
@@ -1557,16 +1562,30 @@ namespace Ñ
 
             if (variable == nullptr)
             {
+                jat->muestraSímbolos();
+                auto valor = jat->busca(nombre);
+                std::cout << "No puedo leer la variable '" + nombre + "' desde el módulo." << std::endl;
+                std::cout << "Tengo que leerla desde la lista de símbolos del constructor JAT." << std::endl;
+                if (auto err = valor.takeError())
+                {
+                    std::cout << "Error, tampoco he podido leer el símbolo." << std::endl;
+                    llvm::outs() << err;
+                }
+                auto direcciónVariable = valor->getAddress();
+                int a = *((int*)direcciónVariable);
+                std::cout << "El valor es: " << a << std::endl;
                 resultado.error("No puedo leer la variable '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
+            else
+            {
+                llvm::Value *valor = entorno->constructorLlvm.CreateLoad(variable, nombre);
 
-            llvm::Value *valor = entorno->constructorLlvm.CreateLoad(variable, nombre);
-
-            resultado.éxito();
-            resultado.valor(valor);
-            return resultado;
+                resultado.éxito();
+                resultado.valor(valor);
+                return resultado;
+            }
         }
 
         llvm::Value *convierteValorLlvmATipoLlvm(llvm::Value *valor, Ñ::Tipo *tipoInicial, Ñ::Tipo *tipoDestino)
@@ -2626,11 +2645,6 @@ namespace Ñ
         }
         else if (categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {
-            if (!jat)
-            {
-                jat = Ñ::ConstructorJAT::Crea();
-            }
-
             Ñ::ResultadoLlvm rExpresión = constructor->construyeExpresiónPrimerNivel(árbol);
 
             if (rExpresión.error())

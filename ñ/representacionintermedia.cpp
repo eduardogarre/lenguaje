@@ -2612,20 +2612,11 @@ namespace Ñ
 
     Ñ::ResultadoLlvm creaRepresentaciónIntermedia(Ñ::Nodo *árbol, Ñ::EntornoConstrucción *entorno, Ñ::CategoríaNodo categoríaNodo)
     {
-        // std::cout << "construye(nodo)" << std::endl;
-
         Ñ::entorno = entorno;
 
         Ñ::ResultadoLlvm resultado;
 
         Ñ::Constructor *constructor = new Ñ::Constructor;
-
-        // std::cout << std::endl;
-
-        // muestraNodos(árbol);
-
-        // std::cout << std::endl;
-        // std::cout << std::endl;
 
         if (categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
@@ -2639,12 +2630,6 @@ namespace Ñ
         }
         else if (categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {
-            // std::cout << "Preparando construcción 'justo a tiempo'" << std::endl << std::endl;
-
-            llvm::InitializeNativeTarget();
-            llvm::InitializeNativeTargetAsmPrinter();
-            llvm::InitializeNativeTargetAsmParser();
-
             if (!jat)
             {
                 jat = Ñ::ConstructorJAT::Crea();

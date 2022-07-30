@@ -82,6 +82,8 @@ namespace Director
 		while (EJECUTA_INTÉRPRETE)
 		{
 			std::string comando = esperaComando();
+			std::cout << "Tabla de Símbolos:" << std::endl;
+			tablaSímbolos->muestra();
 			if (comando.size() == 0)
 			{
 				continue;

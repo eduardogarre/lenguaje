@@ -586,6 +586,7 @@ namespace Ñ
 
             for (auto const &[nombre, tipo] : entorno->globales)
             {
+                std::cout << "Creando variable global: " << nombre << std::endl;
                 llvm::GlobalVariable *varGlobal = new llvm::GlobalVariable(*(móduloLlvm), tipo, false, llvm::GlobalValue::ExternalLinkage, 0, nombre);
             }
 
@@ -1553,7 +1554,7 @@ namespace Ñ
 
             if (jat)
             {
-                variable = móduloLlvm->getGlobalVariable(nombre, true);
+                variable = móduloLlvm->getGlobalVariable(llvm::StringRef(nombre), true);
             }
             else
             {
@@ -1562,24 +1563,22 @@ namespace Ñ
 
             if (variable == nullptr)
             {
-                jat->muestraSímbolos();
-                auto valor = jat->busca(nombre);
-                std::cout << "No puedo leer la variable '" + nombre + "' desde el módulo." << std::endl;
-                std::cout << "Tengo que leerla desde la lista de símbolos del constructor JAT." << std::endl;
-                if (auto err = valor.takeError())
-                {
-                    std::cout << "Error, tampoco he podido leer el símbolo." << std::endl;
-                    llvm::outs() << err;
-                }
-                auto direcciónVariable = valor->getAddress();
-                int a = *((int*)direcciónVariable);
-                std::cout << "El valor es: " << a << std::endl;
+
                 resultado.error("No puedo leer la variable '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
             else
             {
+                if (jat)
+                {
+                    jat->muestraSímbolos();
+                    auto símbolo = jat->busca(nombre);
+                    auto direcciónVariable = símbolo->getAddress();
+                    int v = *((int *)direcciónVariable);
+                    std::cout << "El valor de '" << nombre << "' es: " << v << std::endl;
+                }
+
                 llvm::Value *valor = entorno->constructorLlvm.CreateLoad(variable, nombre);
 
                 resultado.éxito();
@@ -1723,7 +1722,6 @@ namespace Ñ
                     // }
 
                     llvm::Type *tipoEnt64 = llvm::IntegerType::getInt64Ty(entorno->contextoLlvm);
-                    auto cero = llvm::ConstantInt::get(entorno->contextoLlvm, llvm::APInt(64, 0, false));
                     llvm::Constant *idc0 = llvm::ConstantInt::get(tipoEnt64, 0, false);
                     llvm::Type *tipoInicialLlvm = creaTipoLlvm(tipoInicial);
                     llvm::Type *tipoDestinoLlvm = creaTipoLlvm(tipoDestino);
@@ -2673,21 +2671,9 @@ namespace Ñ
 
             funciónJAT();
 
-            std::cout << "Elimino '__función_anónima__()' ...";
+            std::cout << "Elimino '__función_anónima__()' ..." << std::endl;
 
             jat->eliminaSímbolo("__función_anónima__");
-
-            llvm::Expected<llvm::JITEvaluatedSymbol> variableEvaluadaJAT = jat->busca("a");
-
-            if (auto error = variableEvaluadaJAT.takeError())
-            {
-                resultado.error("El constructor JAT no encuentra el símbolo 'a()'.");
-                return resultado;
-            }
-
-            int64_t *entero = (int64_t *)(*variableEvaluadaJAT).getAddress();
-
-            std::cout << "La variable global 'a' vale '" << std::to_string(*entero) << "'." << std::endl;
         }
 
         resultado.éxito();

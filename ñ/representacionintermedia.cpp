@@ -570,12 +570,7 @@ namespace Ñ
                 resultado.error("He recibido un nodo nulo, esperaba una expresión de primer nivel.");
                 return resultado;
             }
-            else if (nodo->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
-            {
-                // Convierto Ñ::Nodo* a Ñ::DefineFunción*
-                expresión = (Ñ::Expresión *)nodo;
-            }
-            else
+            else if (nodo->categoría != Ñ::CategoríaNodo::NODO_EXPRESIÓN)
             {
                 resultado.error("El nodo no es una expresión de primer nivel.");
                 resultado.posición(nodo->posición());

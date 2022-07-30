@@ -1780,10 +1780,17 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 	lexemas = _lexemas;
 	auto rNodo = (Ñ::Nodo *)expresión();
 
+	// Compruebo que el cursor ha llegado al penúltimo lexema
+	if (cursor == _lexemas.size() - 1)
+	{
+		éxito = true;
+	}
+
 	if (éxito && rNodo)
 	{
 		resultado.éxito();
 		resultado.nodo(rNodo);
+
 		return resultado;
 	}
 	else

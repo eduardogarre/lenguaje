@@ -12,8 +12,13 @@
 rm -ErrorAction SilentlyContinue *.o
 rm -ErrorAction SilentlyContinue *.exe
 
-.\proyecto\ñ.exe .\pruebas\*.ñ -s pruebas -O1
+.\proyecto\ñ.exe .\pruebas\constructor\*.ñ -s pruebas -O1
 .\pruebas.exe
+Get-ChildItem ".\pruebas\intérprete" -Filter *.ñ | 
+Foreach-Object {
+    $archivoPrueba = $_.FullName
+    .\proyecto\ñ.exe $archivoPrueba -i
+}
 
 rm -ErrorAction SilentlyContinue *.o
 rm -ErrorAction SilentlyContinue *.exe

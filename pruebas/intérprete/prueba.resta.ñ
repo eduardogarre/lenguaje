@@ -1,0 +1,4 @@
+ent a = 287;
+ent b = 288;
+ent c = b - a;
+externo ent puts(nat8* _texto); si (c == 1) {puts(".");} sino {puts("Error: Resta");}

@@ -20,10 +20,14 @@ Para construir el **Lenguaje Ñ** necesitarás las bibliotecas [`LLVM`](https://
 
 - **LLVM**
 
-    En el momento actual, los binarios disponibles de **LLVM** para Windows no incluyen algunos módulos y subproyectos necesarios en **Ñ**, como por ejemplo `lld`. Por tanto, para construir el proyecto necesitarás construir tú mismo **LLVM** a partir de su código fuente. En la página oficial de **LLVM** puedes encontrar las instrucciones necesarias, pero un ejemplo rápido de cómo construir esta biblioteca sería:
+    En el momento actual, el compilador de Ñ depende de la version 13 de LLVM. Además, los binarios disponibles de **LLVM** para Windows no incluyen algunos módulos y subproyectos necesarios en **Ñ**, como por ejemplo `lld`. Por tanto, para construir el proyecto necesitarás construir tú mismo **LLVM** a partir de su código fuente. En la página oficial de **LLVM** puedes encontrar las instrucciones necesarias, pero un ejemplo rápido de cómo construir esta biblioteca sería:
 
     ```powerhell
-    git clone --depth 1 --config core.autocrlf=false https://github.com/llvm/llvm-project.git llvm
+    git clone --config core.autocrlf=false https://github.com/llvm/llvm-project.git llvm
+
+    cd .\llvm
+    git checkout llvmorg-13.0.0
+    cd ..
 
     mkdir c:\llvm
     mkdir obra
@@ -61,7 +65,7 @@ El repositorio contiene **3 subproyectos**:
 
 El proyecto `ñ` es una biblioteca que contiene el código que analiza y compila o interpreta el lenguaje Ñ. Esta biblioteca puede ser incluida por otros proyectos para añadir soporte del lenguaje Ñ en ellos.
 
-El proyecto `director` es un ejecutable que incluye la biblioteca `ñ` para, juntos, construir el compilador. Este proyecto es un ejemplo de cómo emplear la biblioteca `ñ` para incorporar soporte del lenguaje `ñ` en un proyecto.
+El proyecto `director` es un ejecutable que incluye la biblioteca `ñ` para, juntos, construir el **Compilador de Ñ**. Además, este proyecto sirve como ejemplo de cómo emplear la biblioteca `ñ` para incorporar soporte del lenguaje `ñ` en un proyecto.
 
 El proyecto `biblioteca` contiene el código de la biblioteca estándar del lenguaje Ñ.
 

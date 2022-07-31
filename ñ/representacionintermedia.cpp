@@ -233,7 +233,7 @@ namespace Ñ
             return nullptr;
         }
 
-        Ñ::ResultadoLlvm creaMódulo(Ñ::Nodo *nodo)
+        Ñ::ResultadoLlvm construyeMódulo(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
 
@@ -255,8 +255,6 @@ namespace Ñ
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-
-            preparaMódulo(módulo->módulo);
 
             preparaPasesDeOptimización();
 
@@ -573,8 +571,6 @@ namespace Ñ
                 resultado.posición(nodo->posición());
                 return resultado;
             }
-
-            preparaMóduloJAT("");
 
             for (auto const &[nombre, tipo] : entorno->globales)
             {
@@ -2633,7 +2629,10 @@ namespace Ñ
 
         if (categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
         {
-            Ñ::ResultadoLlvm rMódulo = constructor->creaMódulo(árbol);
+            std::string nombreMódulo = ((Ñ::Módulo*)árbol)->módulo;
+            constructor->preparaMódulo(nombreMódulo);
+
+            Ñ::ResultadoLlvm rMódulo = constructor->construyeMódulo(árbol);
             if (rMódulo.error())
             {
                 return rMódulo;
@@ -2643,6 +2642,8 @@ namespace Ñ
         }
         else if (categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
         {
+            constructor->preparaMóduloJAT("");
+
             Ñ::ResultadoLlvm rExpresión = constructor->construyeExpresiónPrimerNivel(árbol);
 
             if (rExpresión.error())

@@ -660,7 +660,10 @@ namespace Ñ
 
             for (auto const &[nombre, tipo] : entorno->globales)
             {
-                std::cout << "Creando variable global: " << nombre << std::endl;
+                if (entorno->HABLADOR)
+                {
+                    std::cout << "Creando variable global: " << nombre << std::endl;
+                }
                 llvm::GlobalVariable *varGlobal = new llvm::GlobalVariable(*(móduloLlvm), tipo, false, llvm::GlobalValue::ExternalLinkage, 0, nombre);
             }
 
@@ -1609,9 +1612,8 @@ namespace Ñ
             }
             else
             {
-                if (entorno->jat && esVarGlobal)
+                if (entorno->jat && esVarGlobal && entorno->HABLADOR)
                 {
-                    entorno->jat->muestraSímbolos();
                     auto símbolo = entorno->jat->busca(nombre);
                     auto direcciónVariable = símbolo->getAddress();
                     int v = *((int *)direcciónVariable);
@@ -2682,7 +2684,7 @@ namespace Ñ
 
         Ñ::Constructor *constructor = new Ñ::Constructor;
 
-        if (entorno->jat)
+        if (Ñ::entorno->jat)
         {
             constructor->preparaMóduloJAT("");
 
@@ -2694,7 +2696,11 @@ namespace Ñ
                 return resultado;
             }
 
-            constructor->móduloLlvm->print(llvm::outs(), nullptr);
+            if (Ñ::entorno->HABLADOR)
+            {
+                constructor->móduloLlvm->print(llvm::outs(), nullptr);
+            }
+
             resultado.módulo(constructor->móduloLlvm);
             resultado.éxito();
             return resultado;

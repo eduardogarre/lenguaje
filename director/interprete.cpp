@@ -148,21 +148,7 @@ namespace Director
 			return;
 		}
 
-		// if (resultado.error())
-		//{
-		//	Ñ::errorConsola(resultado.mensaje());
-		//	Ñ::errorConsola("Intento análisis general...");
-		//	resultado = sintaxis.analiza(lexemas, "");
-		//
-		//	if (resultado.error())
-		//	{
-		//		Ñ::errorConsola(resultado.mensaje());
-		//		muestraLexemas(lexemas);
-		//		return;
-		//	}
-		//}
 		nodos = resultado.nodo();
-		muestraNodos(nodos, tablaSímbolos);
 
 		Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 
@@ -208,10 +194,9 @@ namespace Director
 
 		std::string ruta_biblioteca_estándar = obténCarpetaInstalación() + "/" + biblioteca_estándar;
 
-		std::cout << "Ruta a la biblioteca estándar: '" << ruta_biblioteca_estándar << "'" << std::endl;
-
 		if (cfg.archivos.size() != 1)
 		{
+			std::cout << "Ruta a la biblioteca estándar: '" << ruta_biblioteca_estándar << "'" << std::endl;
 			std::cout << "Error, debería haber recibido 1 archivo para interpretar." << std::endl;
 		}
 
@@ -237,9 +222,13 @@ namespace Director
 		std::string comando;
 		while (std::getline(parchivo, comando))
 		{
-			std::cout << "comando: '" << comando << "'" << std::endl;
-			std::cout << "Tabla de Símbolos:" << std::endl;
-			tablaSímbolos->muestra();
+			if (cfg.HABLADOR)
+			{
+				std::cout << "comando: '" << comando << "'" << std::endl;
+				std::cout << "Tabla de Símbolos:" << std::endl;
+				tablaSímbolos->muestra();
+			}
+
 			if (comando.size() == 0)
 			{
 				continue;
@@ -266,16 +255,24 @@ namespace Director
 
 		std::string ruta_biblioteca_estándar = obténCarpetaInstalación() + "/" + biblioteca_estándar;
 
-		std::cout << "Ruta a la biblioteca estándar: '" << ruta_biblioteca_estándar << "'" << std::endl;
+		if (cfg.HABLADOR)
+		{
+			std::cout << "Ruta a la biblioteca estándar: '" << ruta_biblioteca_estándar << "'" << std::endl;
+		}
 
 		EJECUTA_INTÉRPRETE = true;
 
 		while (EJECUTA_INTÉRPRETE)
 		{
 			std::string comando = esperaComando();
-			std::cout << "comando: '" << comando << "'" << std::endl;
-			std::cout << "Tabla de Símbolos:" << std::endl;
-			tablaSímbolos->muestra();
+
+			if (cfg.HABLADOR)
+			{
+				std::cout << "comando: '" << comando << "'" << std::endl;
+				std::cout << "Tabla de Símbolos:" << std::endl;
+				tablaSímbolos->muestra();
+			}
+
 			if (comando.size() == 0)
 			{
 				continue;

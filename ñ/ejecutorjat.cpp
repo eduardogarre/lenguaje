@@ -33,12 +33,18 @@ Copyright © 2021 Eduardo Garre Muñoz
 
     void (*funciónJAT)() = (void (*)())(*funciónEvaluadaJAT).getAddress();
 
-    std::cout << "ejecutando '__función_anónima__()' ..." << std::endl;
+    if (entorno->HABLADOR)
+    {
+        std::cout << "ejecutando '__función_anónima__()' ..." << std::endl;
+    }
 
     funciónJAT();
 
-    std::cout << "Elimino '__función_anónima__()' ..." << std::endl;
-
+    if (entorno->HABLADOR)
+    {
+        std::cout << "Elimino '__función_anónima__()' ..." << std::endl;
+    }
+    
     entorno->jat->eliminaSímbolo("__función_anónima__");
 
     resultado.éxito();

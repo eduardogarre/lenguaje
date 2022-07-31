@@ -12,13 +12,17 @@
 rm -ErrorAction SilentlyContinue *.o
 rm -ErrorAction SilentlyContinue *.exe
 
+echo "[33m" "Pruebas de Construcción" "[0m"
+
 .\proyecto\ñ.exe .\pruebas\constructor\*.ñ -s pruebas -O1
 .\pruebas.exe
+rm -ErrorAction SilentlyContinue *.o
+rm -ErrorAction SilentlyContinue *.exe
+
+echo "[33m" "Pruebas de Interpretación" "[0m"
+
 Get-ChildItem ".\pruebas\intérprete" -Filter *.ñ | 
 Foreach-Object {
     $archivoPrueba = $_.FullName
     .\proyecto\ñ.exe $archivoPrueba -i
 }
-
-rm -ErrorAction SilentlyContinue *.o
-rm -ErrorAction SilentlyContinue *.exe

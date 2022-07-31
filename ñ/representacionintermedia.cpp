@@ -282,6 +282,18 @@ namespace Ñ
                         return resultado;
                     }
                 }
+                else if(entorno->jat && n->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+                {
+                    resultado = construyeExpresiónPrimerNivel(n);
+                    if (resultado.error())
+                    {
+                        return resultado;
+                    }
+                }
+                else 
+                {
+                    resultado.error("No reconozco subnodo del módulo");
+                }
 
                 if (resultado.error())
                 {
@@ -1504,7 +1516,7 @@ namespace Ñ
             {
                 variable = leeId(nombre);
             }
-            
+
             if (variable == nullptr)
             {
                 resultado.error("No puedo construir un LIA para la variable '" + nombre + "'.");
@@ -2621,30 +2633,29 @@ namespace Ñ
 
     Ñ::ResultadoLlvm creaRepresentaciónIntermedia(Ñ::Nodo *árbol, Ñ::EntornoConstrucción *entorno, Ñ::CategoríaNodo categoríaNodo)
     {
-        Ñ::entorno = entorno;
-
         Ñ::ResultadoLlvm resultado;
+
+        if (!árbol)
+        {
+            resultado.error("No puedo crear la representación intermedia, el árbol es nulo.");
+            return resultado;
+        }
+
+        if (!entorno)
+        {
+            resultado.error("No puedo crear la representación intermedia, el entorno es nulo.");
+            return resultado;
+        }
+
+        Ñ::entorno = entorno;
 
         Ñ::Constructor *constructor = new Ñ::Constructor;
 
-        if (categoríaNodo == Ñ::CategoríaNodo::NODO_MÓDULO && árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
-        {
-            std::string nombreMódulo = ((Ñ::Módulo*)árbol)->módulo;
-            constructor->preparaMódulo(nombreMódulo);
-
-            Ñ::ResultadoLlvm rMódulo = constructor->construyeMódulo(árbol);
-            if (rMódulo.error())
-            {
-                return rMódulo;
-            }
-
-            resultado.módulo(constructor->móduloLlvm);
-        }
-        else if (categoríaNodo == Ñ::CategoríaNodo::NODO_EXPRESIÓN && árbol->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+        if (entorno->jat)
         {
             constructor->preparaMóduloJAT("");
 
-            Ñ::ResultadoLlvm rExpresión = constructor->construyeExpresiónPrimerNivel(árbol);
+            Ñ::ResultadoLlvm rExpresión = constructor->construyeMódulo(árbol);
 
             if (rExpresión.error())
             {
@@ -2654,9 +2665,28 @@ namespace Ñ
 
             constructor->móduloLlvm->print(llvm::outs(), nullptr);
             resultado.módulo(constructor->móduloLlvm);
+            resultado.éxito();
+            return resultado;
         }
+        else if (árbol->categoría == Ñ::CategoríaNodo::NODO_MÓDULO)
+        {
+            std::string nombreMódulo = ((Ñ::Módulo *)árbol)->módulo;
+            constructor->preparaMódulo(nombreMódulo);
 
-        resultado.éxito();
-        return resultado;
+            Ñ::ResultadoLlvm rMódulo = constructor->construyeMódulo(árbol);
+            if (rMódulo.error())
+            {
+                return rMódulo;
+            }
+
+            resultado.módulo(constructor->móduloLlvm);
+            resultado.éxito();
+            return resultado;
+        }
+        else
+        {
+            resultado.error("No puedo crear la representación intermedia, error desconocido.");
+            return resultado;
+        }
     }
 }

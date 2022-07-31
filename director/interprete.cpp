@@ -35,15 +35,29 @@ namespace Director
 			return;
 		}
 
-		resultado = sintaxis.analizaComando(lexemas);
-
+		resultado = sintaxis.analiza(lexemas, "");
 		if (resultado.error())
 		{
 			Ñ::errorConsola(resultado.mensaje());
 			muestraLexemas(lexemas);
 			return;
 		}
+
+		// if (resultado.error())
+		//{
+		//	Ñ::errorConsola(resultado.mensaje());
+		//	Ñ::errorConsola("Intento análisis general...");
+		//	resultado = sintaxis.analiza(lexemas, "");
+		//
+		//	if (resultado.error())
+		//	{
+		//		Ñ::errorConsola(resultado.mensaje());
+		//		muestraLexemas(lexemas);
+		//		return;
+		//	}
+		//}
 		nodos = resultado.nodo();
+		muestraNodos(nodos, tablaSímbolos);
 
 		Ñ::Resultado rSemántico = Ñ::analizaSemántica(nodos, tablaSímbolos);
 
@@ -80,7 +94,7 @@ namespace Director
 	int interpretaEnLínea(Ñ::Entorno::Configuración cfg)
 	{
 		Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
-		
+
 		Ñ::EntornoConstrucción *entorno = Ñ::Entorno::preparaEntornoConstrucción(cfg);
 
 		Ñ::Entorno::preparaJAT(entorno);
@@ -100,7 +114,7 @@ namespace Director
 			{
 				continue;
 			}
-			else if(comando == "sal")
+			else if (comando == "sal")
 			{
 				break;
 			}

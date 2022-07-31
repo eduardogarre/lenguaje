@@ -1,0 +1,4 @@
+ent a = 42;
+ent b = 288;
+ent c = a + b;
+externo ent puts(nat8* _texto); puts(".");

@@ -51,88 +51,20 @@ namespace Ñ
     public:
         ConstructorJAT(llvm::orc::JITTargetMachineBuilder constructorJATMáquinaDestino,
                        llvm::DataLayout disposiciónDatos,
-                       std::unique_ptr<llvm::orc::SelfExecutorProcessControl> controlEjecutorDelProceso) : sesiónEjecución(std::move(controlEjecutorDelProceso)),
-                                                                                                           capaObjeto(sesiónEjecución, []()
-                                                                                                                      { return std::make_unique<llvm::SectionMemoryManager>(); }),
-                                                                                                           capaConstrucción(sesiónEjecución, capaObjeto, std::make_unique<llvm::orc::ConcurrentIRCompiler>(std::move(constructorJATMáquinaDestino))),
-                                                                                                           disposiciónDatos(std::move(disposiciónDatos)),
-                                                                                                           traduceSímbolos(sesiónEjecución, this->disposiciónDatos),
-                                                                                                           contexto(std::make_unique<llvm::LLVMContext>()),
-                                                                                                           tablaSímbolosPrincipal(this->sesiónEjecución.createBareJITDylib("<main>"))
-        {
-            // Por el momento, en Windows el gestor de COFF, RuntimeDyldCOFF, no informa correctamente del estado de los símbolos
-            capaObjeto.setOverrideObjectFlagsWithResponsibilityFlags(true);
-            llvm::orc::JITDylib *jitdylib = sesiónEjecución.getJITDylibByName("<main>");
+                       std::unique_ptr<llvm::orc::SelfExecutorProcessControl> controlEjecutorDelProceso);
 
-            if (jitdylib)
-            {
-                jitdylib->addGenerator(llvm::cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(disposiciónDatos.getGlobalPrefix())));
-            }
-        }
+        static Ñ::ConstructorJAT *Crea();
 
-        static Ñ::ConstructorJAT *Crea()
-        {
-            auto controlEjecutorDelProceso = llvm::orc::SelfExecutorProcessControl::Create();
-            if (!controlEjecutorDelProceso)
-            {
-                controlEjecutorDelProceso.takeError();
-                return nullptr;
-            }
+        const llvm::DataLayout &leeDisposiciónDatos() const;
 
-            auto destinoConstrucciónJAT = llvm::orc::JITTargetMachineBuilder::detectHost();
-            if (!destinoConstrucciónJAT)
-            {
-                destinoConstrucciónJAT.takeError();
-                return nullptr;
-            }
+        llvm::LLVMContext &leeContexto();
 
-            auto disposiciónDatos = destinoConstrucciónJAT->getDefaultDataLayoutForTarget();
+        void añadeMódulo(std::unique_ptr<llvm::Module> módulo);
 
-            if (!disposiciónDatos)
-            {
-                disposiciónDatos.takeError();
-                return nullptr;
-            }
+        llvm::Expected<llvm::JITEvaluatedSymbol> busca(llvm::StringRef nombre);
 
-            Ñ::ConstructorJAT *jat = new Ñ::ConstructorJAT(std::move(*destinoConstrucciónJAT), std::move(*disposiciónDatos), std::move(*controlEjecutorDelProceso));
+        void muestraSímbolos();
 
-            return jat;
-        }
-
-        const llvm::DataLayout &leeDisposiciónDatos() const
-        {
-            return disposiciónDatos;
-        }
-
-        llvm::LLVMContext &leeContexto()
-        {
-            return *contexto.getContext();
-        }
-
-        void añadeMódulo(std::unique_ptr<llvm::Module> módulo)
-        {
-            llvm::orc::JITDylib *jitdylib = sesiónEjecución.getJITDylibByName("<main>");
-            llvm::cantFail(capaConstrucción.add(*jitdylib, llvm::orc::ThreadSafeModule(std::move(módulo), contexto)));
-        }
-
-        llvm::Expected<llvm::JITEvaluatedSymbol> busca(llvm::StringRef nombre)
-        {
-            return sesiónEjecución.lookup({sesiónEjecución.getJITDylibByName("<main>")}, traduceSímbolos(nombre.str()), llvm::orc::SymbolState::Resolved);
-        }
-
-        void muestraSímbolos()
-        {
-            sesiónEjecución.getJITDylibByName("<main>")->dump(llvm::errs());
-        }
-
-        llvm::Error eliminaSímbolo(std::string nombre)
-        {
-            auto conjuntoSímbolos = new llvm::orc::SymbolStringPool();
-            auto símbolo = sesiónEjecución.intern(nombre);
-
-            auto res = tablaSímbolosPrincipal.remove({símbolo});
-
-            return res;
-        }
+        llvm::Error eliminaSímbolo(std::string nombre);
     };
 }

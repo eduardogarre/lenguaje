@@ -28,6 +28,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "entorno.hpp"
 namespace Ñ
 {
+	extern class ConstructorJAT;
+
 	class EntornoConstrucción
 	{
 	public:
@@ -39,8 +41,9 @@ namespace Ñ
 		llvm::IRBuilder<> constructorLlvm;
 		std::map<std::string, llvm::Type *> globales;
 		std::string tripleteDestino;
-		const llvm::Target *destino;
-		llvm::TargetMachine *máquinaDestino;
+		const llvm::Target *destino = nullptr;
+		llvm::TargetMachine *máquinaDestino = nullptr;
+		ConstructorJAT *jat = nullptr;
 
 		EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
 		~EntornoConstrucción() {}
@@ -56,7 +59,7 @@ namespace Ñ
 		return entorno->archivoActual;
 	}
 
-	Ñ::EntornoConstrucción *preparaEntornoConstrucción(Entorno::Configuración cfg)
+	Ñ::EntornoConstrucción *Entorno::preparaEntornoConstrucción(Entorno::Configuración cfg)
 	{
 		Ñ::EntornoConstrucción *entorno = new Ñ::EntornoConstrucción;
 		entorno->optimización = cfg.optimización;
@@ -106,4 +109,7 @@ namespace Ñ
 		return entorno;
 	}
 
+	void Entorno::preparaJAT(Ñ::EntornoConstrucción *entorno)
+	{
+	}
 }

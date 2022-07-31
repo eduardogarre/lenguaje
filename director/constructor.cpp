@@ -155,7 +155,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 int Director::compila(Ñ::Entorno::Configuración cfg)
 {
-	Ñ::EntornoConstrucción *entorno = Ñ::preparaEntornoConstrucción(cfg);
+	Ñ::EntornoConstrucción *entorno = Ñ::Entorno::preparaEntornoConstrucción(cfg);
 
 	if (!entorno)
 	{

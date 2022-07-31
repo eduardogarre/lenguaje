@@ -39,6 +39,7 @@ namespace Ñ
         };
 
         Ñ::EntornoConstrucción *preparaEntornoConstrucción(Entorno::Configuración cfg);
+        void preparaJAT(Ñ::EntornoConstrucción *entorno);
         void ponArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo);
         std::string leeArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo);
     }

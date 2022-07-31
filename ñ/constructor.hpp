@@ -27,5 +27,4 @@ namespace Ñ
 {
     std::string creaNombreMódulo(std::string archivo);
     Ñ::Resultado emiteArchivoObjeto(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno);
-    Ñ::EntornoConstrucción *preparaEntornoConstrucción(Entorno::Configuración cfg);
 }

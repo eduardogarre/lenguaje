@@ -73,7 +73,7 @@ namespace Director
 	{
 		Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
 		
-		Ñ::EntornoConstrucción *entorno = Ñ::preparaEntornoConstrucción(cfg);
+		Ñ::EntornoConstrucción *entorno = Ñ::Entorno::preparaEntornoConstrucción(cfg);
 
 		std::string ruta_biblioteca_estándar = obténCarpetaInstalación() + "/" + biblioteca_estándar;
 

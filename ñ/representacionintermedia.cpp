@@ -282,15 +282,11 @@ namespace Ñ
                         return resultado;
                     }
                 }
-                else if(entorno->jat && n->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+                else if (entorno->jat && n->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
                 {
-                    resultado = construyeExpresiónPrimerNivel(n);
-                    if (resultado.error())
-                    {
-                        return resultado;
-                    }
+                    continue;
                 }
-                else 
+                else
                 {
                     resultado.error("No reconozco subnodo del módulo");
                 }
@@ -299,6 +295,84 @@ namespace Ñ
                 {
                     return resultado;
                 }
+            }
+
+            if (entorno->jat)
+            {
+                resultado = _construyeDeclaraciónFunción("__función_anónima__", nullptr, nullptr, true);
+                if (resultado.error())
+                {
+                    return resultado;
+                }
+
+                llvm::Function *funciónLlvm = móduloLlvm->getFunction("__función_anónima__");
+
+                if (!funciónLlvm)
+                {
+                    resultado.error("Todavía no has registrado la función '__función_anónima__()'.");
+                    return resultado;
+                }
+                else if (!funciónLlvm->empty())
+                {
+                    resultado.error("Ya habías definido la función '__función_anónima__()', no puedo redefinirla.");
+                    return resultado;
+                }
+
+                // Inicio construcción del bloque, no hay argumentos que definir
+                // PENDIENTE: No debo usar una tabla de símbolos local
+                tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN);
+
+                std::string nombreBloque = "entrada";
+                llvm::BasicBlock *bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
+                if (bloqueLlvm == nullptr)
+                {
+                    resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo.");
+                    return resultado;
+                }
+
+                entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
+
+                for (auto n : nodo->ramas)
+                {
+                    if (n->categoría == Ñ::CategoríaNodo::NODO_DEFINE_FUNCIÓN)
+                    {
+                        continue;
+                    }
+                    else if (n->categoría == Ñ::CategoríaNodo::NODO_DECLARA_FUNCIÓN)
+                    {
+                        continue;
+                    }
+                    else if (entorno->jat && n->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
+                    {
+                        resultado = construyeExpresiónPrimerNivel(n);
+                        if (resultado.error())
+                        {
+                            return resultado;
+                        }
+                    }
+                    else
+                    {
+                        resultado.error("No reconozco subnodo del módulo");
+                    }
+
+                    if (resultado.error())
+                    {
+                        return resultado;
+                    }
+                }
+
+                entorno->constructorLlvm.CreateRetVoid();
+                entorno->constructorLlvm.CreateUnreachable();
+
+                llvm::verifyFunction(*funciónLlvm);
+
+                // gestorPasesOptimización->run(*funciónLlvm);
+
+                // funciónLlvm->print(llvm::errs(), nullptr);
+
+                tablaSímbolos->borraÁmbito();
+                delete tablaSímbolos;
+                tablaSímbolos = nullptr;
             }
 
             resultado.éxito();
@@ -590,61 +664,14 @@ namespace Ñ
                 llvm::GlobalVariable *varGlobal = new llvm::GlobalVariable(*(móduloLlvm), tipo, false, llvm::GlobalValue::ExternalLinkage, 0, nombre);
             }
 
-            resultado = _construyeDeclaraciónFunción("__función_anónima__", nullptr, nullptr, true);
-            if (resultado.error())
-            {
-                return resultado;
-            }
-
-            llvm::Function *funciónLlvm;
-
-            funciónLlvm = móduloLlvm->getFunction("__función_anónima__");
-
-            if (!funciónLlvm)
-            {
-                resultado.error("Todavía no has registrado la función '__función_anónima__()'.");
-                return resultado;
-            }
-            else if (!funciónLlvm->empty())
-            {
-                resultado.error("Ya habías definido la función '__función_anónima__()', no puedo redefinirla.");
-                return resultado;
-            }
-
-            // Inicio construcción del bloque, no hay argumentos que definir
-            // PENDIENTE: No debo usar una tabla de símbolos local
-            tablaSímbolos->creaÁmbito(Ñ::Ámbito::ÁMBITO_BLOQUE_FUNCIÓN);
-
-            std::string nombreBloque = "entrada";
-            llvm::BasicBlock *bloqueLlvm = llvm::BasicBlock::Create(entorno->contextoLlvm, nombreBloque, funciónLlvm);
-            if (bloqueLlvm == nullptr)
-            {
-                resultado.error("El proceso de creación del bloque '" + nombreBloque + "' me ha devuelto un puntero nulo.");
-                return resultado;
-            }
-
-            entorno->constructorLlvm.SetInsertPoint(bloqueLlvm);
-
             auto rExpresión = construyeExpresión(nodo);
             if (rExpresión.error())
             {
                 return rExpresión;
             }
-            entorno->constructorLlvm.CreateRetVoid();
-            entorno->constructorLlvm.CreateUnreachable();
-
-            llvm::verifyFunction(*funciónLlvm);
-
-            // gestorPasesOptimización->run(*funciónLlvm);
-
-            // funciónLlvm->print(llvm::errs(), nullptr);
-
-            tablaSímbolos->borraÁmbito();
-            delete tablaSímbolos;
-            tablaSímbolos = nullptr;
 
             resultado.éxito();
-            resultado.valor((llvm::Value *)funciónLlvm);
+            resultado.valor((llvm::Value *)rExpresión.valor());
             return resultado;
         }
 
@@ -1560,25 +1587,29 @@ namespace Ñ
             id = (Ñ::Identificador *)nodo;
             nombre = id->id;
 
-            if (entorno->jat)
+            bool esVarGlobal = false;
+
+            variable = leeId(nombre);
+
+            if (variable == nullptr && entorno->jat)
             {
                 variable = móduloLlvm->getGlobalVariable(llvm::StringRef(nombre), true);
-            }
-            else
-            {
-                variable = leeId(nombre);
+
+                if (variable)
+                {
+                    esVarGlobal = true;
+                }
             }
 
             if (variable == nullptr)
             {
-
                 resultado.error("No puedo leer la variable LDA '" + nombre + "'.");
                 resultado.posición(id->posición());
                 return resultado;
             }
             else
             {
-                if (entorno->jat)
+                if (entorno->jat && esVarGlobal)
                 {
                     entorno->jat->muestraSímbolos();
                     auto símbolo = entorno->jat->busca(nombre);

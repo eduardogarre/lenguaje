@@ -13,6 +13,11 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include <string>
 
+#include "llvm/IR/BasicBlock.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/Value.h"
+
 #include "nodo.hpp"
 #include "posicion.hpp"
 #include "resultadollvm.hpp"

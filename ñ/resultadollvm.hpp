@@ -15,10 +15,13 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include <string>
 
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Value.h"
+namespace llvm
+{
+    extern class BasicBlock;
+    extern class Function;
+    extern class Module;
+    extern class Value;
+}
 
 namespace Ñ
 {

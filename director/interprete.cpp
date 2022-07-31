@@ -75,6 +75,8 @@ namespace Director
 		
 		Ñ::EntornoConstrucción *entorno = Ñ::Entorno::preparaEntornoConstrucción(cfg);
 
+		Ñ::Entorno::preparaJAT(entorno);
+
 		std::string ruta_biblioteca_estándar = obténCarpetaInstalación() + "/" + biblioteca_estándar;
 
 		std::cout << "Ruta a la biblioteca estándar: '" << ruta_biblioteca_estándar << "'" << std::endl;

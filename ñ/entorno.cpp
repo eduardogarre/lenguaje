@@ -26,6 +26,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "llvm/Target/TargetMachine.h"
 
 #include "entorno.hpp"
+#include "justoatiempo.hpp"
+
 namespace Ñ
 {
 	extern class ConstructorJAT;
@@ -111,5 +113,10 @@ namespace Ñ
 
 	void Entorno::preparaJAT(Ñ::EntornoConstrucción *entorno)
 	{
+		if (!entorno->jat)
+		{
+			// Si es la primera ejecución, todavía no hemos creado el JAT
+			entorno->jat = Ñ::ConstructorJAT::Crea();
+		}
 	}
 }

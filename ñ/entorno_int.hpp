@@ -25,6 +25,8 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "llvm/Target/TargetMachine.h"
 
 #include "entorno.hpp"
+#include "justoatiempo.hpp"
+
 namespace Ñ
 {
     class EntornoConstrucción
@@ -40,6 +42,7 @@ namespace Ñ
         std::string tripleteDestino;
         const llvm::Target *destino;
         llvm::TargetMachine *máquinaDestino;
+		ConstructorJAT *jat = nullptr;
 
         EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
         ~EntornoConstrucción() {}

@@ -56,8 +56,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 namespace Ñ
 {
-    static Ñ::ConstructorJAT *jat = nullptr;
-
     EntornoConstrucción *entorno = nullptr;
 
     class Constructor
@@ -93,16 +91,10 @@ namespace Ñ
 
         void preparaMóduloJAT(std::string nombre)
         {
-            if (!jat)
-            {
-                // Si es la primera ejecución, todavía no hemos creado el JAT
-                jat = Ñ::ConstructorJAT::Crea();
-            }
-
             // Creo un nuevo módulo LLVM y le asigno un nombre
             móduloLlvm = new llvm::Module(nombre, entorno->contextoLlvm);
 
-            móduloLlvm->setDataLayout(jat->leeDisposiciónDatos());
+            móduloLlvm->setDataLayout(entorno->jat->leeDisposiciónDatos());
         }
 
         void preparaPasesDeOptimización()
@@ -685,7 +677,7 @@ namespace Ñ
                 break;
 
             case Ñ::CategoríaNodo::NODO_DECLARA_VARIABLE:
-                if (jat)
+                if (entorno->jat)
                 {
                     resultado = construyeDeclaraciónVariableGlobal(n);
                 }
@@ -1056,7 +1048,7 @@ namespace Ñ
             if (nodo->ramas.size() == 2)
             {
                 Ñ::ResultadoLlvm rLia;
-                if (jat)
+                if (entorno->jat)
                 {
                     rLia = construyeLIAJAT(nodo->ramas[0]);
                 }
@@ -1508,7 +1500,7 @@ namespace Ñ
             id = (Ñ::Identificador *)nodo;
             nombre = id->id;
 
-            if (jat)
+            if (entorno->jat)
             {
                 variable = móduloLlvm->getGlobalVariable(llvm::StringRef(nombre), true);
             }
@@ -1560,7 +1552,7 @@ namespace Ñ
             id = (Ñ::Identificador *)nodo;
             nombre = id->id;
 
-            if (jat)
+            if (entorno->jat)
             {
                 variable = móduloLlvm->getGlobalVariable(llvm::StringRef(nombre), true);
             }
@@ -1578,10 +1570,10 @@ namespace Ñ
             }
             else
             {
-                if (jat)
+                if (entorno->jat)
                 {
-                    jat->muestraSímbolos();
-                    auto símbolo = jat->busca(nombre);
+                    entorno->jat->muestraSímbolos();
+                    auto símbolo = entorno->jat->busca(nombre);
                     auto direcciónVariable = símbolo->getAddress();
                     int v = *((int *)direcciónVariable);
                     std::cout << "El valor de '" << nombre << "' es: " << v << std::endl;
@@ -2663,9 +2655,9 @@ namespace Ñ
             resultado.módulo(constructor->móduloLlvm);
 
             std::unique_ptr<llvm::Module> módulo(constructor->móduloLlvm);
-            jat->añadeMódulo(std::move(módulo));
+            entorno->jat->añadeMódulo(std::move(módulo));
 
-            llvm::Expected<llvm::JITEvaluatedSymbol> funciónEvaluadaJAT = jat->busca("__función_anónima__");
+            llvm::Expected<llvm::JITEvaluatedSymbol> funciónEvaluadaJAT = entorno->jat->busca("__función_anónima__");
 
             if (auto error = funciónEvaluadaJAT.takeError())
             {
@@ -2681,7 +2673,7 @@ namespace Ñ
 
             std::cout << "Elimino '__función_anónima__()' ..." << std::endl;
 
-            jat->eliminaSímbolo("__función_anónima__");
+            entorno->jat->eliminaSímbolo("__función_anónima__");
         }
 
         resultado.éxito();

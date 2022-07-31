@@ -13,20 +13,17 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #pragma once
 
-#include "constructor.hpp"
-#include "ejecutorjat.hpp"
-#include "enlazador.hpp"
+#include <string>
+
 #include "entorno.hpp"
-#include "lexema.hpp"
-#include "lexico.hpp"
-#include "nodo.hpp"
-#include "posicion.hpp"
-#include "representacionintermedia.hpp"
 #include "resultado.hpp"
-#include "resultadollvm.hpp"
-#include "salida.hpp"
-#include "semantico.hpp"
-#include "sintaxis.hpp"
-#include "tablasimbolos.hpp"
-#include "tipo.hpp"
-#include "valor.hpp"
+
+namespace llvm
+{
+    extern class Module;
+}
+
+namespace Ñ
+{
+    Ñ::Resultado ejecutaMóduloJAT(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno);
+}

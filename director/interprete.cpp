@@ -61,6 +61,14 @@ namespace Director
 			return;
 		}
 
+		resultado = Ñ::ejecutaMóduloJAT(rConstrucción.módulo(), entorno);
+
+		if (resultado.error())
+		{
+			Ñ::errorConsola(resultado.mensaje());
+			return;
+		}
+
 		for (auto l : lexemas)
 		{
 			delete l;

@@ -11,22 +11,12 @@ the Mozilla Public License, v. 2.0.
 Copyright © 2021 Eduardo Garre Muñoz
 */
 
-#pragma once
-
-#include "constructor.hpp"
 #include "ejecutorjat.hpp"
-#include "enlazador.hpp"
-#include "entorno.hpp"
-#include "lexema.hpp"
-#include "lexico.hpp"
-#include "nodo.hpp"
-#include "posicion.hpp"
-#include "representacionintermedia.hpp"
-#include "resultado.hpp"
-#include "resultadollvm.hpp"
-#include "salida.hpp"
-#include "semantico.hpp"
-#include "sintaxis.hpp"
-#include "tablasimbolos.hpp"
-#include "tipo.hpp"
-#include "valor.hpp"
+
+Ñ::Resultado Ñ::ejecutaMóduloJAT(llvm::Module *móduloLlvm, Ñ::EntornoConstrucción *entorno)
+{
+	Ñ::Resultado resultado;
+
+    resultado.éxito();
+    return resultado;
+}

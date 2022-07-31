@@ -21,6 +21,12 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <thread>
 #include <vector>
 
+#if defined(WIN32) || defined(WIN64)
+#include <Windows.h>
+#elif defined(UNIX)
+#include <unistd.h>
+#endif
+
 #include "docopt.h"
 #include "ñ/ñ.hpp"
 
@@ -64,6 +70,10 @@ int main(int argc, char **argv)
 		std::cout << "Requiero el estándar IEEE 754 para los números reales" << std::endl;
 		return -1;
 	}
+
+#if defined(WIN32) || defined(WIN64)
+	SetConsoleOutputCP(65001); // Página de Códigos de UTF8
+#endif
 
 	Director::biblioteca_estándar = "bibñ.lib";
 

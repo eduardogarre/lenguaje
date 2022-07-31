@@ -1,6 +1,22 @@
+/*
+SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
+
+This Source Code Form is subject to the terms of the Mozilla Public License, v.
+2.0. If a copy of the MPL was not distributed with this file, You can obtain one
+at http://mozilla.org/MPL/2.0/.
+
+This Source Code Form is "Incompatible With Secondary Licenses", as defined by
+the Mozilla Public License, v. 2.0.
+
+Copyright © 2021 Eduardo Garre Muñoz
+*/
 
 #include <iostream>
 #include <string>
+
+#if defined(WIN32) || defined(WIN64)
+#include <Windows.h>
+#endif
 
 #include "director.hpp"
 #include "herramientas.hpp"
@@ -8,11 +24,99 @@
 
 namespace Director
 {
+#if defined(WIN32) || defined(WIN64)
+	// Función basada en el código encontrado en https://github.com/skeeto/scratch/blob/master/misc/read-password-w32.c
+	// Código distribuido bajo el dominio público en el momento de la lectura.
+	static int terminal_windows(char *esp8, int len, char *term)
+	{
+		// Recursos que después limpiaremos
+		int nBytesLeídos = 0;
+		DWORD orig = 0;
+		WCHAR *esp16 = 0;
+		SIZE_T esp16_long = 0;
+		HANDLE pe, ps = INVALID_HANDLE_VALUE; // Punteros de E/S
+
+		// Preparo el puntero a la entrada de la consola
+		DWORD acceso = GENERIC_READ | GENERIC_WRITE;
+		pe = CreateFileA("CONIN$", acceso, 0, 0, OPEN_EXISTING, 0, 0);
+		if (!GetConsoleMode(pe, &orig))
+		{
+			goto hecho;
+		}
+		DWORD modo = orig;
+		modo |= ENABLE_PROCESSED_INPUT;
+		modo |= ENABLE_LINE_INPUT;
+		modo |= ENABLE_ECHO_INPUT;
+		if (!SetConsoleMode(pe, modo))
+		{
+			goto hecho;
+		}
+
+		// Preparo el puntero a la salida de la consola
+		ps = CreateFileA("CONOUT$", GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
+		if (!WriteConsoleA(ps, term, strlen(term), 0, 0))
+		{
+			goto hecho;
+		}
+
+		// Reservo espacio para tantos caracteres anchos como mide la salida
+		esp16_long = (len - 1 + 2) * sizeof(WCHAR);
+		esp16 = (WCHAR *)HeapAlloc(GetProcessHeap(), 0, esp16_long);
+		if (!esp16)
+		{
+			goto hecho;
+		}
+
+		// Leo y convierto a UTF-8
+		DWORD nleídos;
+		if (!ReadConsoleW(pe, esp16, len - 1 + 2, &nleídos, 0))
+		{
+			goto hecho;
+		}
+		if (nleídos < 2)
+		{
+			goto hecho;
+		}
+		if (esp16[nleídos - 2] != '\r' || esp16[nleídos - 1] != '\n')
+		{
+			goto hecho;
+		}
+
+		esp16[nleídos - 2] = 0; // trunco "\r\n"
+		nBytesLeídos = WideCharToMultiByte(CP_UTF8, 0, esp16, -1, esp8, len, 0, 0);
+
+	hecho:
+		if (esp16)
+		{
+			SecureZeroMemory(esp16, esp16_long);
+			HeapFree(GetProcessHeap(), 0, esp16);
+		}
+
+		// Aprovecho que las operaciones sobre los INVALID_HANDLE_VALUE son no-op's
+		WriteConsoleA(ps, "\n", 1, 0, 0);
+		SetConsoleMode(pe, orig);
+		CloseHandle(ps);
+		CloseHandle(pe);
+		return nBytesLeídos;
+	}
+#endif
+
 	std::string esperaComando()
 	{
 		std::string comando;
-		std::cout << "> ";
+		std::string term = "> ";
+
+#if defined(WIN32) || defined(WIN64)
+		char espacio[1024];
+		int len = terminal_windows(espacio, sizeof(espacio), (char *)term.c_str());
+		if (len > 0)
+		{
+			comando = espacio;
+		}
+#elif defined(UNIX)
+		std::cout << term;
 		std::getline(std::cin, comando);
+#endif
 
 		return comando;
 	}
@@ -108,6 +212,7 @@ namespace Director
 		while (EJECUTA_INTÉRPRETE)
 		{
 			std::string comando = esperaComando();
+			std::cout << "comando: '" << comando << "'" << std::endl;
 			std::cout << "Tabla de Símbolos:" << std::endl;
 			tablaSímbolos->muestra();
 			if (comando.size() == 0)
@@ -125,5 +230,4 @@ namespace Director
 
 		return 0;
 	}
-
 }

@@ -41,16 +41,19 @@ static const char USO[] =
 	u8R"(Ñ 0.0.1 - Compilador del lenguaje de programación Ñ
 
 Uso:
- ñ
- ñ <archivo>... [--salida <nombre>] [--hablador] [-O=<nivel>]
- ñ --ayuda
- ñ --version
+  ñ
+  ñ <archivo>... [--salida <nombre>] [--hablador] [-O=<nivel>]
+  ñ <archivo>... --interpreta [--hablador]
+  ñ --ayuda
+  ñ --version
+
 Opciones:
- -a, --ayuda                      Muestra este mensaje.
- -h, --hablador                   Muestra mensajes sobre el funcionamiento interno.
- -O=<nivel>                       Escoge el nivel de optimización. [predefinido: 0]
- -s=<nombre>, --salida=<nombre>   Pon nombre al archivo generado.
- -v, --version                    Muestra versión.
+  -a, --ayuda                      Muestra este mensaje.
+  -h, --hablador                   Muestra mensajes del funcionamiento interno.
+  -i, --interpreta                 Interpreta el código en lugar de construirlo.
+  -O=<nivel>                       Pon el nivel de optimización [predefinido: 0]
+  -s=<nombre>, --salida=<nombre>   Pon nombre al archivo generado.
+  -v, --version                    Muestra versión.
 )";
 
 void muestraAyuda()
@@ -127,10 +130,31 @@ int main(int argc, char **argv)
 		cfg.HABLADOR = args["--hablador"].asBool();
 	}
 
+	if (args["--interpreta"].isBool() && args["--interpreta"].asBool())
+	{
+		cfg.construcción = Ñ::OpciónConstrucción::INTERPRETA;
+	}
+	else
+	{
+		cfg.construcción = Ñ::OpciónConstrucción::CONSTRUYE;
+	}
+
 	if (args["<archivo>"].isStringList())
 	{
 		cfg.archivos = args["<archivo>"].asStringList();
-		if (cfg.archivos.size() > 0)
+		if (cfg.archivos.size() <= 0)
+		{
+			std::cout << "Error, no hay archivos que construir." << std::endl;
+		}
+		else if (cfg.archivos.size() == 1 && cfg.construcción == Ñ::OpciónConstrucción::INTERPRETA)
+		{
+			return Director::interpreta(cfg);
+		}
+		else if (cfg.archivos.size() > 1 && cfg.construcción == Ñ::OpciónConstrucción::INTERPRETA)
+		{
+			std::cout << "Error, por el momento Ñ no puede interpretar más que 1 único archivo a la vez." << std::endl;
+		}
+		else if (cfg.archivos.size() > 0 && cfg.construcción == Ñ::OpciónConstrucción::CONSTRUYE)
 		{
 			return Director::compila(cfg);
 		}

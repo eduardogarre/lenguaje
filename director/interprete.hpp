@@ -17,5 +17,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 namespace Director
 {
+    int interpreta(Ñ::Entorno::Configuración cfg);
     int interpretaEnLínea(Ñ::Entorno::Configuración cfg);
 }

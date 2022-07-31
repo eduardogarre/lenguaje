@@ -11,6 +11,7 @@ the Mozilla Public License, v. 2.0.
 Copyright © 2021 Eduardo Garre Muñoz
 */
 
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -193,6 +194,66 @@ namespace Director
 		}
 		lexemas.clear();
 		delete nodos;
+	}
+
+	int interpreta(Ñ::Entorno::Configuración cfg)
+	{
+		Ñ::ResultadoLlvm resultadoLlvm;
+
+		Ñ::TablaSímbolos *tablaSímbolos = new Ñ::TablaSímbolos;
+
+		Ñ::EntornoConstrucción *entorno = Ñ::Entorno::preparaEntornoConstrucción(cfg);
+
+		Ñ::Entorno::preparaJAT(entorno);
+
+		std::string ruta_biblioteca_estándar = obténCarpetaInstalación() + "/" + biblioteca_estándar;
+
+		std::cout << "Ruta a la biblioteca estándar: '" << ruta_biblioteca_estándar << "'" << std::endl;
+
+		if (cfg.archivos.size() != 1)
+		{
+			std::cout << "Error, debería haber recibido 1 archivo para interpretar." << std::endl;
+		}
+
+		std::string archivo = cfg.archivos[0];
+		if (cfg.HABLADOR)
+		{
+			std::cout << "Interpretando '" << archivo << "'" << std::endl;
+		}
+
+		Ñ::Entorno::ponArchivoActual(entorno, archivo);
+
+		std::string código = "";
+
+		std::string nombreMódulo = Ñ::creaNombreMódulo(archivo);
+
+		std::ifstream parchivo(archivo);
+
+		if (cfg.HABLADOR)
+		{
+			std::cout << "LEYENDO EL CODIGO DEL ARCHIVO" << std::endl;
+		}
+
+		std::string comando;
+		while (std::getline(parchivo, comando))
+		{
+			std::cout << "comando: '" << comando << "'" << std::endl;
+			std::cout << "Tabla de Símbolos:" << std::endl;
+			tablaSímbolos->muestra();
+			if (comando.size() == 0)
+			{
+				continue;
+			}
+			else if (comando == "sal")
+			{
+				break;
+			}
+			interpretaComando(comando, tablaSímbolos, entorno);
+		}
+
+		delete tablaSímbolos;
+
+		return 0;
 	}
 
 	int interpretaEnLínea(Ñ::Entorno::Configuración cfg)

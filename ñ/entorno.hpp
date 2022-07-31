@@ -20,11 +20,19 @@ namespace Ñ
 {
     extern class EntornoConstrucción;
 
+    enum OpciónConstrucción {
+        CONSTRUYE,
+        INTERPRETA
+    };
+
     namespace Entorno
     {
         struct Configuración
         {
             bool HABLADOR = false;
+
+            OpciónConstrucción construcción = CONSTRUYE;
+            
             uint8_t optimización = 1;
 
             std::vector<std::string> archivos;

@@ -853,7 +853,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		else
 		{
 			delete t;
-			apuntaError(lexemas[cursor]->posición(), "Esperaba un identificador.");
+			apuntaError(lexemas[cursor]->posición(), "Declara Variable: Esperaba un identificador.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1533,7 +1533,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		else
 		{
 			delete t;
-			apuntaError(lexemas[cursor]->posición(), "Esperaba un identificador.");
+			apuntaError(lexemas[cursor]->posición(), "Define Función: Esperaba un identificador.");
 			cursor = c;
 			return nullptr;
 		}
@@ -1616,7 +1616,7 @@ bool Ñ::Sintaxis::reservada(std::string palabra)
 		else
 		{
 			delete t;
-			apuntaError(lexemas[cursor]->posición(), "Esperaba un identificador.");
+			apuntaError(lexemas[cursor]->posición(), "Declara Función: Esperaba un identificador.");
 			cursor = c;
 			return nullptr;
 		}

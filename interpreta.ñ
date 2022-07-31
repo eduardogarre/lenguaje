@@ -1,4 +1,6 @@
-ent a = 42;
-ent b = 288;
-ent c = a + b;
-externo ent puts(nat8* _texto); puts(".");
+
+ent64[] serie = [2, 4];
+ent64 n0 = serie[0];
+ent64 n1 = serie[1];
+ent64 a = n0 + n1;
+externo ent puts(nat8* _texto); si (a == 6) {puts(".");} sino {puts("Error: "); puts("Serie");}

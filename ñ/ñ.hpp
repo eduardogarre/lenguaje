@@ -22,6 +22,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "posicion.hpp"
 #include "representacionintermedia.hpp"
 #include "resultado.hpp"
+#include "resultadollvm.hpp"
 #include "salida.hpp"
 #include "semantico.hpp"
 #include "sintaxis.hpp"

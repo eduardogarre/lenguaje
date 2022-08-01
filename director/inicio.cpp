@@ -144,14 +144,8 @@ int main(int argc, char **argv)
 		cfg.archivos = args["<archivo>"].asStringList();
 		if (cfg.archivos.size() <= 0)
 		{
-			if (cfg.construcción == Ñ::OpciónConstrucción::INTERPRETA)
-			{
-				return Director::interpretaEnLínea(cfg);
-			}
-			else
-			{
-				std::cout << "Error, no hay archivos que construir." << std::endl;
-			}
+			cfg.construcción = Ñ::OpciónConstrucción::INTERPRETA;
+			return Director::interpretaEnLínea(cfg);
 		}
 		else if (cfg.archivos.size() == 1 && cfg.construcción == Ñ::OpciónConstrucción::INTERPRETA)
 		{

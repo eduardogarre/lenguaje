@@ -9,10 +9,18 @@
 // 
 // Copyright © 2021 Eduardo Garre Muñoz
 
+externo ent puts(nat8* _texto);
+
 ent a = 0;
 ent b = 0;
 bool c = falso;
+
 mientras (c) { a = a + 1; }
+
 c = cierto;
+
 mientras (c) { c = falso; b = b + 1; }
-externo ent puts(nat8* _texto); si (a == 0) {puts(".");} sino {puts("Error: Bucle");} si (b == 1) {puts(".");} sino {puts("Error: Bucle");} si (c == falso) {puts(".");} sino {puts("Error: Bucle");}
+
+si (a == 0) {puts(".");} sino {puts("Error: Bucle");}
+si (b == 1) {puts(".");} sino {puts("Error: Bucle");}
+si (c == falso) {puts(".");} sino {puts("Error: Bucle");}

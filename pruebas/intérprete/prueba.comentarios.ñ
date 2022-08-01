@@ -9,8 +9,10 @@
 // 
 // Copyright © 2021 Eduardo Garre Muñoz
 
+/* Comentario antes de expresión */ externo ent puts(nat8* _texto);
+
 ent a = 1;
 ent b = 2; // Comentario tras expresión
 ent c = a + b; /* Comentario tras expresión */
 /* Comentario aislado */
-externo ent puts(nat8* _texto); /* Comentario entre expresiones*/ si (c == 3 /* Comentario en comparación */ ) {puts("." /* Comentario entre expresiones*/);} sino {puts("Error: "); puts("Comentario") /* Comentario entre expresiones*/;}
+si (c == 3 /* Comentario en comparación */ ) {puts("." /* Comentario entre expresiones*/);} sino {puts("Error: "); puts("Comentario") /* Comentario entre expresiones*/;}

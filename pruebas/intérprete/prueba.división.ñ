@@ -9,7 +9,10 @@
 // 
 // Copyright © 2021 Eduardo Garre Muñoz
 
+externo ent puts(nat8* _texto);
+
 ent a = 6;
 ent b = 3;
 ent c = a / b;
-externo ent puts(nat8* _texto); si (c == 2) {puts(".");} sino {puts("Error: "); puts("Division");} // Ocurre un error si el texto pasado a puts() es muy largo
+
+si (c == 2) {puts(".");} sino {puts("Error: "); puts("Division");} // Ocurre un error si el texto pasado a puts() es muy largo

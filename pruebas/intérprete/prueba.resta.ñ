@@ -9,7 +9,10 @@
 // 
 // Copyright © 2021 Eduardo Garre Muñoz
 
+externo ent puts(nat8* _texto);
+
 ent a = 287;
 ent b = 288;
 ent c = b - a;
-externo ent puts(nat8* _texto); si (c == 1) {puts(".");} sino {puts("Error: Resta");}
+
+si (c == 1) {puts(".");} sino {puts("Error: Resta");}

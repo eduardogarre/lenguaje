@@ -15,8 +15,11 @@ público ent doble(ent número) {devuelve número * 2;}
 
 ent a = doble(2);
 
-si (a == 4) {puts(".");} sino {puts("Error: Funcion");}
+si (a == 4) {puts(".");} sino {puts("Error: "); puts("Funcion1");}
 
-público ent correcto(ent número) { si (número == 288) { puts("."); } sino { puts("Error: "); puts("Funcion");} devuelve número; }
+público ent correcto(ent número) { si (número == 288) { puts("."); } sino { puts("Error: "); puts("Funcion2");} devuelve número; }
 a = correcto(288);
-si (a == 288) { puts("."); } sino { puts("Error: "); puts("Funcion");}
+si (a == 288) { puts("."); } sino { puts("Error: "); puts("Funcion3");}
+
+público nada leeVarPreviaGlobal() { si (a == 288) { puts("."); } sino { puts("Error: "); puts("Funcion4");} vuelve; }
+leeVarPreviaGlobal();

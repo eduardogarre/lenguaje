@@ -21,6 +21,6 @@ c = cierto;
 
 mientras (c) { c = falso; b = b + 1; }
 
-si (a == 0) {puts(".");} sino {puts("Error: Bucle");}
-si (b == 1) {puts(".");} sino {puts("Error: Bucle");}
-si (c == falso) {puts(".");} sino {puts("Error: Bucle");}
+si (a == 0) {puts(".");} sino {puts("Error: "); puts("Bucle1");}
+si (b == 1) {puts(".");} sino {puts("Error: "); puts("Bucle2");}
+si (c == falso) {puts(".");} sino {puts("Error: "); puts("Bucle3");}

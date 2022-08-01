@@ -3,6 +3,9 @@ público ent correcto(ent número) { si (número == 288) { puts("."); } sino { p
 ent a = correcto(288);
 si (a == 288) { puts("."); } sino { puts("Error: "); puts("Funcion");}
 
+público nada leeVarPreviaGlobal() { si (a == 288) { puts("."); } sino { puts("Error: "); puts("Funcion");} vuelve; }
+leeVarPreviaGlobal();
+
 //externo ent puts(nat8* _texto);
 //
 //público ent doble(ent número) { devuelve número * 2; }

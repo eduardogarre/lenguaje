@@ -26,30 +26,12 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "llvm/Target/TargetMachine.h"
 
 #include "entorno.hpp"
+#include "entorno_int.hpp"
 #include "justoatiempo.hpp"
 
 namespace Ñ
 {
 	extern class ConstructorJAT;
-
-	class EntornoConstrucción
-	{
-	public:
-		bool HABLADOR = false;
-		uint8_t optimización = 0;
-		std::string archivoActual = "";
-		llvm::LLVMContext contextoLlvm;
-		llvm::legacy::FunctionPassManager *gestorPasesOptimización = nullptr;
-		llvm::IRBuilder<> constructorLlvm;
-		std::map<std::string, llvm::Type *> globales;
-		std::string tripleteDestino;
-		const llvm::Target *destino = nullptr;
-		llvm::TargetMachine *máquinaDestino = nullptr;
-		ConstructorJAT *jat = nullptr;
-
-		EntornoConstrucción() : constructorLlvm(contextoLlvm) {}
-		~EntornoConstrucción() {}
-	};
 
 	void Entorno::ponArchivoActual(Ñ::EntornoConstrucción *entorno, std::string archivo)
 	{

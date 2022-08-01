@@ -608,6 +608,8 @@ namespace Ñ
 
             llvm::FunctionType *firmaFunción = llvm::FunctionType::get(tRetorno, vArgumentos, false);
 
+            entorno->funcionesGlobales[nombre] = firmaFunción;
+
             llvm::Function *función;
 
             if (externo)
@@ -658,7 +660,16 @@ namespace Ñ
                 return resultado;
             }
 
-            for (auto const &[nombre, tipo] : entorno->globales)
+            for (auto const &[nombre, firmaFunción] : entorno->funcionesGlobales)
+            {
+                if (entorno->HABLADOR)
+                {
+                    std::cout << "Creando función global: " << nombre << std::endl;
+                }
+                llvm::Function *función = llvm::Function::Create(firmaFunción, llvm::Function::ExternalLinkage, nombre.c_str(), móduloLlvm);
+            }
+
+            for (auto const &[nombre, tipo] : entorno->variablesGlobales)
             {
                 if (entorno->HABLADOR)
                 {
@@ -1440,7 +1451,7 @@ namespace Ñ
 
             nombre = dv->variable;
 
-            entorno->globales[nombre] = tipo;
+            entorno->variablesGlobales[nombre] = tipo;
 
             llvm::Constant *CERO = llvm::ConstantInt::get(tipo, 0);
 

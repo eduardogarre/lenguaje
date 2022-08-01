@@ -144,7 +144,14 @@ int main(int argc, char **argv)
 		cfg.archivos = args["<archivo>"].asStringList();
 		if (cfg.archivos.size() <= 0)
 		{
-			std::cout << "Error, no hay archivos que construir." << std::endl;
+			if (cfg.construcción == Ñ::OpciónConstrucción::INTERPRETA)
+			{
+				return Director::interpretaEnLínea(cfg);
+			}
+			else
+			{
+				std::cout << "Error, no hay archivos que construir." << std::endl;
+			}
 		}
 		else if (cfg.archivos.size() == 1 && cfg.construcción == Ñ::OpciónConstrucción::INTERPRETA)
 		{
@@ -159,6 +166,7 @@ int main(int argc, char **argv)
 			return Director::compila(cfg);
 		}
 	}
-
-	return Director::interpretaEnLínea(cfg);
+	
+	std::cout << "Error desconocido, salgo." << std::endl;
+	return -1;
 }

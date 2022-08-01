@@ -38,7 +38,8 @@ namespace Ñ
         llvm::LLVMContext contextoLlvm;
         llvm::legacy::FunctionPassManager *gestorPasesOptimización = nullptr;
         llvm::IRBuilder<> constructorLlvm;
-        std::map<std::string, llvm::Type *> globales;
+        std::map<std::string, llvm::Type *> variablesGlobales;
+        std::map<std::string, llvm::FunctionType *> funcionesGlobales;
         std::string tripleteDestino;
         const llvm::Target *destino;
         llvm::TargetMachine *máquinaDestino;

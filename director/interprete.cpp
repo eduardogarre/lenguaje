@@ -94,7 +94,6 @@ namespace Director
 		}
 
 		// Aprovecho que las operaciones sobre los INVALID_HANDLE_VALUE son no-op's
-		WriteConsoleA(ps, "\n", 1, 0, 0);
 		SetConsoleMode(pe, orig);
 		CloseHandle(ps);
 		CloseHandle(pe);

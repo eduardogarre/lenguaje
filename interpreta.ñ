@@ -1,15 +1,22 @@
 externo ent puts(nat8* _texto);
+público ent correcto(ent número) { si (número == 288) { puts("."); } sino { puts("Error: "); puts("Funcion");} devuelve número; }
+ent a = correcto(288);
+si (a == 288) { puts("."); } sino { puts("Error: "); puts("Funcion");}
 
-público ent doble(ent número) { devuelve número * 2; }
-
-ent a = 6;
-
-si (a == 6) {puts(".");} sino {puts("Error: "); puts("Comparacion");}
-
-a = a / 3;
-
-si (a == 2) {puts(".");} sino {puts("Error: "); puts("Division");}
-
-a = doble(a);
-
-si (a == 4) {puts(".");} sino {puts("Error: "); puts("Funcion");}
+//externo ent puts(nat8* _texto);
+//
+//público ent doble(ent número) { devuelve número * 2; }
+//
+//público nada correcto() { puts("."); vuelve; }
+//
+//ent a = 6;
+//
+//si (a == 6) {puts(".");} sino {puts("Error: "); puts("Comparacion");}
+//
+//a = a / 3;
+//
+//si (a == 2) {puts(".");} sino {puts("Error: "); puts("Division");}
+//
+//a = doble(a);
+//
+//si (a == 4) {puts(".");} sino {puts("Error: "); puts("Funcion");}

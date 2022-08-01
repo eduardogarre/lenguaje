@@ -16,3 +16,7 @@ público ent doble(ent número) {devuelve número * 2;}
 ent a = doble(2);
 
 si (a == 4) {puts(".");} sino {puts("Error: Funcion");}
+
+público ent correcto(ent número) { si (número == 288) { puts("."); } sino { puts("Error: "); puts("Funcion");} devuelve número; }
+a = correcto(288);
+si (a == 288) { puts("."); } sino { puts("Error: "); puts("Funcion");}

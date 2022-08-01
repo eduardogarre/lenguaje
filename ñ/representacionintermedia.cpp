@@ -344,7 +344,7 @@ namespace Ñ
                     }
                     else if (entorno->jat && n->categoría == Ñ::CategoríaNodo::NODO_EXPRESIÓN)
                     {
-                        resultado = construyeExpresiónPrimerNivel(n);
+                        resultado = construyeExpresiónJAT(n);
                         if (resultado.error())
                         {
                             return resultado;
@@ -365,10 +365,12 @@ namespace Ñ
                 entorno->constructorLlvm.CreateUnreachable();
 
                 llvm::verifyFunction(*funciónLlvm);
+                entorno->gestorPasesOptimización->run(*funciónLlvm);
 
-                // gestorPasesOptimización->run(*funciónLlvm);
-
-                // funciónLlvm->print(llvm::errs(), nullptr);
+                if (entorno->HABLADOR)
+                {
+                    funciónLlvm->print(llvm::errs(), nullptr);
+                }
 
                 tablaSímbolos->borraÁmbito();
                 delete tablaSímbolos;
@@ -632,7 +634,16 @@ namespace Ñ
 
             for (auto n : nodo->ramas)
             {
-                Ñ::ResultadoLlvm resultadoIntermedio = construyeExpresión(n);
+                Ñ::ResultadoLlvm resultadoIntermedio;
+                if (entorno->jat)
+                {
+                    resultadoIntermedio = construyeExpresiónJAT(n);
+                }
+                else
+                {
+                    resultadoIntermedio = construyeExpresión(n);
+                }
+
                 if (resultadoIntermedio.error())
                 {
                     return resultadoIntermedio;
@@ -643,7 +654,7 @@ namespace Ñ
             return resultado;
         }
 
-        Ñ::ResultadoLlvm construyeExpresiónPrimerNivel(Ñ::Nodo *nodo)
+        Ñ::ResultadoLlvm construyeExpresiónJAT(Ñ::Nodo *nodo)
         {
             Ñ::ResultadoLlvm resultado;
             Ñ::Expresión *expresión;
@@ -2630,6 +2641,13 @@ namespace Ñ
 
             Ñ::LlamaFunción *fn = (Ñ::LlamaFunción *)nodo;
             llvm::Function *funciónLlvm = móduloLlvm->getFunction(fn->nombre);
+
+            if (funciónLlvm == nullptr && entorno->jat)
+            {
+                resultado.error("La función \"" + fn->nombre + "()\" se define fuera de este módulo.");
+                resultado.posición(nodo->posición());
+                return resultado;
+            }
 
             if (!funciónLlvm)
             {

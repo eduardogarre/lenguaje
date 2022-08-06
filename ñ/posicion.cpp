@@ -90,3 +90,16 @@ void Ñ::Posición::archivo(std::string archivo)
 {
     _archivo = archivo;
 }
+
+json Ñ::Posición::aJson()
+{
+    json posición = {
+        {"cursor", _cursor},
+        {"línea", _línea},
+        {"columna", _columna},
+        {"longitud", _longitud},
+        {"archivo", _archivo}
+    };
+
+    return posición;
+}

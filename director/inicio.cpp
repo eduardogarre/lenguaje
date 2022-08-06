@@ -41,19 +41,20 @@ static const char USO[] =
 	u8R"(Ñ 0.0.1 - Compilador del lenguaje de programación Ñ
 
 Uso:
-  ñ
-  ñ <archivo>... [--salida <nombre>] [--hablador] [-O=<nivel>]
-  ñ <archivo>... --interpreta [--hablador]
+  ñ [--json]
+  ñ <archivo>... [--salida <nombre>] [--hablador] [-O=<nivel>] [--json]
+  ñ <archivo>... --interpreta [--hablador] [--json]
   ñ --ayuda
   ñ --version
 
 Opciones:
-  -a, --ayuda                      Muestra este mensaje.
-  -h, --hablador                   Muestra mensajes del funcionamiento interno.
-  -i, --interpreta                 Interpreta el código en lugar de construirlo.
-  -O=<nivel>                       Pon el nivel de optimización [predefinido: 0]
-  -s=<nombre>, --salida=<nombre>   Pon nombre al archivo generado.
-  -v, --version                    Muestra versión.
+  -a, --ayuda                     Muestra este mensaje.
+  -h, --hablador                  Muestra mensajes del funcionamiento interno.
+  -i, --interpreta                Interpreta el código en lugar de construirlo.
+  -j, --json                 	  Construye e imprime JSON intermedios.
+  -O=<nivel>                      Pon el nivel de optimización [predefinido: 0]
+  -s=<nombre>, --salida=<nombre>  Pon nombre al archivo generado.
+  -v, --version                   Muestra versión.
 )";
 
 void muestraAyuda()
@@ -128,6 +129,11 @@ int main(int argc, char **argv)
 	if (args["--hablador"].isBool())
 	{
 		cfg.HABLADOR = args["--hablador"].asBool();
+	}
+
+	if (args["--json"].isBool())
+	{
+		cfg.json = args["--json"].asBool();
 	}
 
 	if (args["--interpreta"].isBool() && args["--interpreta"].asBool())

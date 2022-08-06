@@ -31,6 +31,8 @@ namespace Ñ
         {
             bool HABLADOR = false;
 
+            bool json = false;
+
             OpciónConstrucción construcción = CONSTRUYE;
             
             uint8_t optimización = 1;

@@ -24,6 +24,10 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include "posicion.hpp"
 #include "salida.hpp"
 
+#include "json.hpp"
+
+using json = nlohmann::json;
+
 namespace Ñ
 {
 
@@ -1114,6 +1118,19 @@ namespace Ñ
         fin->categoría = Ñ::CategoríaLexema::LEXEMA_FIN;
         fin->contenido = "";
         lexemas.push_back(fin);
+
+        json json_lexemas;
+
+        if (entorno->json)
+        {
+            for (auto lexema : lexemas)
+            {
+                json_lexemas.push_back(lexema->aJson());
+            }
+
+            std::cout << std::setw(2) << json_lexemas << std::endl;
+        }
+        
         return lexemas;
     }
 

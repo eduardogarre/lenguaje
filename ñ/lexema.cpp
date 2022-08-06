@@ -75,3 +75,56 @@ void Ñ::muestraLexemas(std::vector<Ñ::Lexema *> _lexemas)
         Ñ::pop_front(_lexemas);
     }
 }
+
+std::string Ñ::categoríaLexemaATxt(CategoríaLexema c)
+{
+    std::string categoría;
+    switch (c)
+    {
+    case LEXEMA_RESERVADO:
+        categoría = "RESERVADO";
+        break;
+    
+    case LEXEMA_IDENTIFICADOR:
+        categoría = "IDENTIFICADOR";
+        break;
+    
+    case LEXEMA_NOTACIÓN:
+        categoría = "NOTACIÓN";
+        break;
+    
+    case LEXEMA_TEXTO:
+        categoría = "TEXTO";
+        break;
+    
+    case LEXEMA_NÚMERO:
+        categoría = "NÚMERO";
+        break;
+    
+    case LEXEMA_NÚMERO_REAL:
+        categoría = "NÚMERO_REAL";
+        break;
+    
+    case LEXEMA_FIN:
+        categoría = "FIN";
+        break;
+    
+    default:
+        categoría = "FIN";
+        break;
+    }
+
+    return categoría;
+}
+
+json Ñ::Lexema::aJson()
+{
+    json lexema = {
+        {"objeto", "lexema"},
+        {"posición", _posición->aJson()},
+        {"categoría", categoríaLexemaATxt(categoría)},
+        {"contenido", contenido}
+    };
+
+    return lexema;
+}

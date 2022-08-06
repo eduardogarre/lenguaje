@@ -33,6 +33,7 @@ namespace Ñ
     {
     public:
         bool HABLADOR = false;
+        bool json = false;
         uint8_t optimización = 0;
         std::string archivoActual = "";
         llvm::LLVMContext contextoLlvm;

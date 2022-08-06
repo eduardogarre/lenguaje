@@ -16,6 +16,10 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <stdint.h>
 #include <string>
 
+#include "json.hpp"
+
+using json = nlohmann::json;
+
 namespace Ñ
 {
     class Posición
@@ -44,6 +48,8 @@ namespace Ñ
         void incColumna();
         void longitud(uint64_t longitud);
         void archivo(std::string archivo);
+
+        json aJson();
     };
 
 } // namespace Ñ

@@ -15,6 +15,10 @@ Copyright © 2021 Eduardo Garre Muñoz
 
 #include <string>
 
+#include "json.hpp"
+
+using json = nlohmann::json;
+
 namespace Ñ
 {
     extern class Posición;
@@ -32,6 +36,8 @@ namespace Ñ
         LEXEMA_FIN
     };
 
+    std::string categoríaLexemaATxt(CategoríaLexema c);
+
     class Lexema
     {
     private:
@@ -45,6 +51,8 @@ namespace Ñ
         std::string contenido;
 
         Posición *posición();
+
+        json aJson();
     };
 
     void muestraLexemas(std::vector<Ñ::Lexema *> _lexemas);

@@ -62,6 +62,8 @@ namespace Ñ
 			return nullptr;
 		}
 
+		entorno->json = cfg.json;
+
 		if (cfg.HABLADOR)
 		{
 			entorno->HABLADOR = true;

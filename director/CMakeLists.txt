@@ -47,8 +47,8 @@ endif()
 set(componentes_llvm aarch64asmparser aarch64codegen aarch64desc aarch64disassembler aarch64info aarch64utils aggressiveinstcombine analysis armasmparser armcodegen armdesc armdisassembler arminfo armutils asmparser asmprinter binaryformat bitreader bitstreamreader bitwriter cfguard codegen core coroutines coverage debuginfocodeview debuginfodwarf debuginfogsym debuginfomsf debuginfopdb demangle dlltooldriver dwarflinker extensions filecheck frontendopenacc frontendopenmp fuzzmutate globalisel instcombine instrumentation interfacestub interpreter ipo irreader libdriver lineeditor linker lto mc mca mcdisassembler mcparser mirparser native nativecodegen objcarcopts object objectyaml option orcjit orcshared orctargetprocess passes profiledata remarks runtimedyld scalaropts selectiondag support symbolize tablegen target textapi transformutils vectorize webassemblyasmparser webassemblycodegen webassemblydesc webassemblydisassembler webassemblyinfo webassemblyutils windowsmanifest x86asmparser x86codegen x86desc x86disassembler x86info xray)
 llvm_map_components_to_libnames(bibliotecas_llvm ${componentes_llvm})
 
-# Enlazo el ejecutable "director" con las bibliotecas "lenguaje" y "docopt_s"
-target_link_libraries(director LINK_PUBLIC lenguaje docopt_s ${bibliotecas_llvm})
+# Enlazo el ejecutable "director" con las bibliotecas "lenguaje" y "docopt"
+target_link_libraries(director LINK_PUBLIC lenguaje docopt ${bibliotecas_llvm})
 
 set_target_properties(director PROPERTIES
                       OUTPUT_NAME "ñ" # Establezco el nombre final del ejecutable

@@ -1016,10 +1016,22 @@ namespace Ñ
         }
     }
 
-    std::vector<Ñ::Lexema *> Léxico::analiza(std::string código, Ñ::EntornoConstrucción *entorno)
+    std::vector<Ñ::Lexema *> Léxico::analiza(std::string _código, Ñ::EntornoConstrucción *_entorno)
     {
+        json contenido;
+        contenido = {
+            {"archivo", _entorno->archivoActual},
+            {"código", _código}
+        };
+
+        std::string jcontenido = contenido.dump();
+        // Frontera de entrada al análisis léxico, sólo transmito JSON serializado a texto
+        json contenido_recibido = json::parse(jcontenido);
+        std::string archivo = contenido_recibido["archivo"];
+        std::string código = contenido_recibido["código"];
+
         posición = new Ñ::Posición;
-        posición->archivo(entorno->archivoActual);
+        posición->archivo(archivo);
 
         std::vector<Ñ::Lexema *> vacía;
         if (!lexemas.empty())
@@ -1121,11 +1133,11 @@ namespace Ñ
 
         json json_lexemas = Ñ::Léxico::aJson(lexemas);
         std::string j = json_lexemas.dump();
-        // Preparo frontera, únicamente es preciso transmitir JSON serializado a texto
+        // Frontera de salida del análisis léxico, sólo transmito JSON serializado a texto
         json json_lexemas2 = json::parse(j);
         auto lexemas2 = Ñ::Léxico::desdeJson(json_lexemas2);
 
-        if(entorno->json)
+        if(_entorno->json)
         {
             std::cout << std::setw(2) << json_lexemas2 << std::endl;
         }

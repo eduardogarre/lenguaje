@@ -16,7 +16,11 @@ Copyright © 2021 Eduardo Garre Muñoz
 #include <string>
 #include <vector>
 
+#include "json.hpp"
+
 #include "lexema.hpp"
+
+using json = nlohmann::json;
 
 namespace Ñ
 {
@@ -27,6 +31,9 @@ namespace Ñ
     {
     public:
         std::vector<Lexema *> analiza(std::string código, Ñ::EntornoConstrucción *entorno);
+
+        static json aJson(std::vector<Lexema *> lexemas);
+        static std::vector<Lexema *> desdeJson(json json_lexemas);
 
 // Compilación condicional: si estamos en pruebas, expongo las funciones privadas de la clase Léxico
 #ifdef EVALUANDO_PRUEBAS

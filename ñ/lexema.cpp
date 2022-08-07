@@ -32,7 +32,7 @@ Copyright © 2021 Eduardo Garre Muñoz
     json jpos = jLexema.at("posición");
     _posición = new Ñ::Posición(jpos);
 
-    categoría = jLexema.at("categoría");
+    categoría = Ñ::txtACategoríaLexema(jLexema.at("categoría"));
     contenido = jLexema.at("contenido");
 }
 

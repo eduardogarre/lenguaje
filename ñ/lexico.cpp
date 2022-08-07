@@ -1119,19 +1119,18 @@ namespace Ñ
         fin->contenido = "";
         lexemas.push_back(fin);
 
-        json json_lexemas;
+        json json_lexemas = Ñ::Léxico::aJson(lexemas);
+        std::string j = json_lexemas.dump();
+        // Preparo frontera, únicamente es preciso transmitir JSON serializado a texto
+        json json_lexemas2 = json::parse(j);
+        auto lexemas2 = Ñ::Léxico::desdeJson(json_lexemas2);
 
-        if (entorno->json)
+        if(entorno->json)
         {
-            for (auto lexema : lexemas)
-            {
-                json_lexemas.push_back(lexema->aJson());
-            }
-
-            std::cout << std::setw(2) << json_lexemas << std::endl;
+            std::cout << std::setw(2) << json_lexemas2 << std::endl;
         }
-        
-        return lexemas;
+
+        return lexemas2;
     }
 
     bool esdígito(std::string c)
@@ -1339,4 +1338,29 @@ namespace Ñ
             return false;
         }
     }
+}
+
+json Ñ::Léxico::aJson(std::vector<Ñ::Lexema *> lexemas)
+{
+    json json_lexemas;
+
+    for (auto lexema : lexemas)
+    {
+        json_lexemas.push_back(lexema->aJson());
+    }
+
+    return json_lexemas;
+}
+
+std::vector<Ñ::Lexema *> Ñ::Léxico::desdeJson(json json_lexemas)
+{
+    std::vector<Ñ::Lexema *> lexemas;
+
+    for(auto jlex : json_lexemas)
+    {
+        Ñ::Lexema* lexema = new Ñ::Lexema(jlex);
+        lexemas.push_back(lexema);
+    }
+
+    return lexemas;
 }

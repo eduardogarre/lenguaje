@@ -48,7 +48,6 @@ Copyright © 2021 Eduardo Garre Muñoz
 	Ñ::Nodo *nodos;
 	Ñ::Resultado resultado;
 
-	Ñ::Léxico léxico;
 	Ñ::Sintaxis sintaxis;
 
 	if (cfg.HABLADOR)
@@ -56,7 +55,7 @@ Copyright © 2021 Eduardo Garre Muñoz
 		std::cout << "ANALIZANDO LEXICO" << std::endl;
 	}
 
-	lexemas = léxico.analiza(código, entorno);
+	lexemas = Ñ::analizaLéxico(código, entorno);
 
 	if (cfg.HABLADOR)
 	{

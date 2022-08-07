@@ -27,10 +27,13 @@ namespace Ñ
     extern class EntornoConstrucción;
     extern class Posición;
 
+    std::vector<Lexema *> analizaLéxico(std::string código, Ñ::EntornoConstrucción *entorno);
+
     class Léxico // Análisis léxico
     {
     public:
         std::vector<Lexema *> analiza(std::string código, Ñ::EntornoConstrucción *entorno);
+        std::string analiza(std::string petición);
 
         static json aJson(std::vector<Lexema *> lexemas);
         static std::vector<Lexema *> desdeJson(json json_lexemas);

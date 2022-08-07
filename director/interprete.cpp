@@ -128,10 +128,9 @@ namespace Director
 		std::vector<Ñ::Lexema *> lexemas;
 		Ñ::Nodo *nodos;
 
-		Ñ::Léxico léxico;
 		Ñ::Sintaxis sintaxis;
 
-		lexemas = léxico.analiza(comando, entorno);
+		lexemas = Ñ::analizaLéxico(comando, entorno);
 
 		if (lexemas.empty())
 		{

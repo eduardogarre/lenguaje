@@ -1021,8 +1021,7 @@ namespace Ñ
         json petición;
         petición = {
             {"archivo", _entorno->archivoActual},
-            {"código", _código}
-        };
+            {"código", _código}};
 
         std::string jPetición = petición.dump();
         // Frontera de entrada al análisis léxico, sólo transmito JSON serializado a texto
@@ -1137,12 +1136,126 @@ namespace Ñ
         json respuesta_lexemas2 = json::parse(respuesta);
         auto lexemas2 = Ñ::Léxico::desdeJson(respuesta_lexemas2);
 
-        if(_entorno->json)
+        if (_entorno->json)
         {
             std::cout << std::setw(2) << respuesta_lexemas2 << std::endl;
         }
 
         return lexemas2;
+    }
+
+    std::string Léxico::analiza(std::string petición)
+    {
+        // Frontera de entrada al análisis léxico, sólo transmito JSON serializado a texto
+        json jpetición = json::parse(petición);
+        std::string archivo = jpetición["archivo"];
+        std::string código = jpetición["código"];
+
+        posición = new Ñ::Posición;
+        posición->archivo(archivo);
+
+        json jvacío;
+        if (!lexemas.empty())
+        {
+            lexemas.clear();
+        }
+
+        try
+        {
+            // std::cout << "_analizaLéxico(" << código << ")" << std::endl;
+
+            std::string cmd = código + " ";
+            longitudarchivo = cmd.size();
+
+            while (posición->cursor() <= cmd.length())
+            {
+                // std::cout << "cursor: " << cursor << std::endl;
+                Posición p = *posición;
+                if (comentario(cmd))
+                {
+                    continue;
+                }
+                *posición = p;
+
+                if (nuevaLínea(cmd))
+                {
+                    continue;
+                }
+                *posición = p;
+
+                if (espacio(cmd))
+                {
+                    continue;
+                }
+                *posición = p;
+
+                if (texto(cmd))
+                {
+                    continue;
+                }
+                *posición = p;
+
+                if (notación(cmd))
+                {
+                    continue;
+                }
+                *posición = p;
+
+                if (reservada(cmd))
+                {
+                    continue;
+                }
+                *posición = p;
+
+                if (número(cmd))
+                {
+                    continue;
+                }
+                *posición = p;
+
+                if (identificador(cmd))
+                {
+                    continue;
+                }
+                *posición = p;
+
+                break;
+            }
+        }
+        catch (const std::runtime_error &re)
+        {
+            // speciffic handling for runtime_error
+            std::string error = u8"Error en tiempo de ejecución: ";
+            error += re.what();
+            Ñ::errorConsola(error);
+            return jvacío.dump();
+        }
+        catch (const std::exception &ex)
+        {
+            // speciffic handling for all exceptions extending std::exception, except
+            // std::runtime_error which is handled explicitly
+            std::string error = u8"Error: ";
+            error += ex.what();
+            Ñ::errorConsola(error);
+            return jvacío.dump();
+        }
+        catch (...)
+        {
+            // catch any other errors (that we have no information about)
+            Ñ::errorConsola(u8"Error desconocido. Posible corrupción de memoria.");
+            return jvacío.dump();
+        }
+
+        posición->longitud(0);
+        Ñ::Lexema *fin = new Ñ::Lexema(posición);
+        fin->categoría = Ñ::CategoríaLexema::LEXEMA_FIN;
+        fin->contenido = "";
+        lexemas.push_back(fin);
+
+        json respuesta_lexemas = Ñ::Léxico::aJson(lexemas);
+        std::string respuesta = respuesta_lexemas.dump();
+        // Frontera de salida del análisis léxico, sólo transmito JSON serializado a texto
+        return respuesta;
     }
 
     bool esdígito(std::string c)
@@ -1368,11 +1481,35 @@ std::vector<Ñ::Lexema *> Ñ::Léxico::desdeJson(json json_lexemas)
 {
     std::vector<Ñ::Lexema *> lexemas;
 
-    for(auto jlex : json_lexemas)
+    for (auto jlex : json_lexemas)
     {
-        Ñ::Lexema* lexema = new Ñ::Lexema(jlex);
+        Ñ::Lexema *lexema = new Ñ::Lexema(jlex);
         lexemas.push_back(lexema);
     }
+
+    return lexemas;
+}
+
+std::vector<Ñ::Lexema *> Ñ::analizaLéxico(std::string código, Ñ::EntornoConstrucción *entorno)
+{
+    json jpetición;
+    jpetición = {
+        {"archivo", entorno->archivoActual},
+        {"código", código}};
+    std::string petición = jpetición.dump();
+
+    Ñ::Léxico léxico;
+    std::string respuesta = léxico.analiza(petición);
+
+    json respuesta_lexemas = json::parse(respuesta);
+    auto lexemas = Ñ::Léxico::desdeJson(respuesta_lexemas);
+
+    if (entorno->json)
+    {
+        std::cout << std::setw(2) << respuesta_lexemas << std::endl;
+    }
+
+    return lexemas;
 
     return lexemas;
 }

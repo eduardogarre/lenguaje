@@ -36,6 +36,7 @@ namespace Ñ
         LEXEMA_FIN
     };
 
+    Ñ::CategoríaLexema txtACategoríaLexema(std::string t);
     std::string categoríaLexemaATxt(CategoríaLexema c);
 
     class Lexema
@@ -45,6 +46,7 @@ namespace Ñ
 
     public:
         Lexema(Posición *posición = nullptr);
+        Lexema(json);
         ~Lexema();
 
         CategoríaLexema categoría;

@@ -24,6 +24,15 @@ Copyright © 2021 Eduardo Garre Muñoz
     _archivo = "";
 }
 
+Ñ::Posición::Posición(json jPosición)
+{
+    _cursor = jPosición.at("cursor");
+    _línea = jPosición.at("línea");
+    _columna = jPosición.at("columna");
+    _longitud = jPosición.at("longitud");
+    _archivo = jPosición.at("archivo");
+}
+
 std::string Ñ::Posición::muestra()
 {
     std::string texto = "";

@@ -33,6 +33,7 @@ namespace Ñ
 
     public:
         Posición();
+        Posición(json);
 
         std::string muestra();
 

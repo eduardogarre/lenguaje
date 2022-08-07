@@ -27,6 +27,15 @@ Copyright © 2021 Eduardo Garre Muñoz
     }
 }
 
+Ñ::Lexema::Lexema(json jLexema)
+{
+    json jpos = jLexema.at("posición");
+    _posición = new Ñ::Posición(jpos);
+
+    categoría = jLexema.at("categoría");
+    contenido = jLexema.at("contenido");
+}
+
 Ñ::Lexema::~Lexema()
 {
     if (_posición != nullptr)
@@ -74,6 +83,42 @@ void Ñ::muestraLexemas(std::vector<Ñ::Lexema *> _lexemas)
         std::cout << _lexemas.front()->contenido << "]" << std::endl;
         Ñ::pop_front(_lexemas);
     }
+}
+
+Ñ::CategoríaLexema Ñ::txtACategoríaLexema(std::string t)
+{
+    Ñ::CategoríaLexema categoría;
+
+    if(t == "RESERVADO")
+    {
+        categoría = Ñ::CategoríaLexema::LEXEMA_RESERVADO;
+    }
+    else if(t == "IDENTIFICADOR")
+    {
+        categoría = Ñ::CategoríaLexema::LEXEMA_IDENTIFICADOR;
+    }
+    else if(t == "NOTACIÓN")
+    {
+        categoría = Ñ::CategoríaLexema::LEXEMA_NOTACIÓN;
+    }
+    else if(t == "TEXTO")
+    {
+        categoría = Ñ::CategoríaLexema::LEXEMA_TEXTO;
+    }
+    else if(t == "NÚMERO")
+    {
+        categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO;
+    }
+    else if(t == "NÚMERO_REAL")
+    {
+        categoría = Ñ::CategoríaLexema::LEXEMA_NÚMERO_REAL;
+    }
+    else if(t == "FIN")
+    {
+        categoría = Ñ::CategoríaLexema::LEXEMA_FIN;
+    }
+
+    return categoría;
 }
 
 std::string Ñ::categoríaLexemaATxt(CategoríaLexema c)

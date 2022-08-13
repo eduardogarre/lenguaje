@@ -3,7 +3,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public License, v.
 # 2.0. If a copy of the MPL was not distributed with this file, You can obtain one
 # at http://mozilla.org/MPL/2.0/.
-# 
+#
 # This Source Code Form is "Incompatible With Secondary Licenses", as defined by
 # the Mozilla Public License, v. 2.0.
 #
@@ -12,7 +12,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
+  set(CMAKE_BUILD_TYPE Release)
 endif()
 
 # set the project name
@@ -23,7 +23,7 @@ find_package(LLVM REQUIRED CONFIG)
 message(STATUS "He encontrado LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Usaré el LLVMConfig.cmake que he encontrado en: ${LLVM_DIR}")
 
-#file(GLOB CODIGO_DIRECTOR CONFIGURE_DEPENDS "./*.hpp" "./*.cpp")
+# file(GLOB CODIGO_DIRECTOR CONFIGURE_DEPENDS "./*.hpp" "./*.cpp")
 file(GLOB_RECURSE CODIGO_DIRECTOR CONFIGURE_DEPENDS "./*.hpp" "./*.cpp")
 
 include_directories(${LLVM_INCLUDE_DIRS})
@@ -34,12 +34,13 @@ add_definitions(${LLVM_DEFINITIONS_LIST})
 add_executable(director ${CODIGO_DIRECTOR})
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /utf-8")
-    set_target_properties(director PROPERTIES
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /utf-8")
+  set_target_properties(director PROPERTIES
+
     # Expande automáticamente los comodines y caracteres especiales de la
     # línea de comandos de Windows
-                                      LINK_FLAGS "/link setargv.obj"
-    )
+    LINK_FLAGS "setargv.obj"
+  )
 elseif(CMAKE_COMPILER_IS_GNUC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
@@ -51,8 +52,8 @@ llvm_map_components_to_libnames(bibliotecas_llvm ${componentes_llvm})
 target_link_libraries(director LINK_PUBLIC lenguaje docopt ${bibliotecas_llvm})
 
 set_target_properties(director PROPERTIES
-                      OUTPUT_NAME "ñ" # Establezco el nombre final del ejecutable
-                      RUNTIME_OUTPUT_DIRECTORY_DEBUG  "../../proyecto/"
-                      RUNTIME_OUTPUT_DIRECTORY_RELEASE  "../../proyecto/"
-                      RUNTIME_OUTPUT_DIRECTORY  "../../proyecto/"
+  OUTPUT_NAME "ñ" # Establezco el nombre final del ejecutable
+  RUNTIME_OUTPUT_DIRECTORY_DEBUG "../../proyecto/"
+  RUNTIME_OUTPUT_DIRECTORY_RELEASE "../../proyecto/"
+  RUNTIME_OUTPUT_DIRECTORY "../../proyecto/"
 )

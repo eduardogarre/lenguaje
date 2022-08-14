@@ -20,7 +20,7 @@ Para construir el **Lenguaje Ñ** necesitarás las bibliotecas [`LLVM`](https://
 
 - **LLVM**
 
-    En el momento actual, el compilador de Ñ depende de la version 13 de LLVM. Además, los binarios disponibles de **LLVM** para Windows no incluyen algunos módulos y subproyectos necesarios en **Ñ**, como por ejemplo `lld`. Por tanto, para construir el proyecto necesitarás construir tú mismo **LLVM** a partir de su código fuente. En la página oficial de **LLVM** puedes encontrar las instrucciones necesarias, pero un ejemplo rápido de cómo construir esta biblioteca sería:
+    En el momento actual, el compilador de Ñ depende de la version 13 de LLVM. Además, los binarios disponibles de **LLVM** para Windows no incluyen algunos módulos y subproyectos necesarios en **Ñ**, como por ejemplo `lld`. Por tanto, para construir el proyecto necesitarás construir tú mismo **LLVM 13.0.0** a partir de su código fuente. En la página oficial de **LLVM** puedes encontrar las instrucciones necesarias, pero un ejemplo rápido de cómo construir esta biblioteca sería:
 
     ```powerhell
     git clone --config core.autocrlf=false https://github.com/llvm/llvm-project.git llvm

@@ -46,7 +46,7 @@ Para construir el **Lenguaje Ñ** necesitarás las bibliotecas [`LLVM`](https://
 
 ### **Consigue el código de Ñ**
 
-Una vez tengas preparadas todas las dependiencias, clona este repositorio para obtener el código de **Ñ**, en este caso dentro de una nueva carpeta llamada `./ñ`.
+Una vez tengas preparadas todas las dependencias, clona este repositorio para obtener el código de **Ñ**, en este caso dentro de una nueva carpeta llamada `./ñ`.
 
 ```powerhell
 mkdir ñ

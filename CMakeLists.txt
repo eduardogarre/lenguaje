@@ -15,7 +15,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# set the project name
+# Nombre del proyecto
 project(lenguaje VERSION 0.1)
 
 add_subdirectory(ñ)

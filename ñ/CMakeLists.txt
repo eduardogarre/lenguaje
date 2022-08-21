@@ -15,7 +15,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# set the project name
+# Nombre del proyecto
 project(lenguaje VERSION 0.1)
 
 find_package(LLVM REQUIRED CONFIG)
@@ -61,9 +61,8 @@ set(bibliotecas_lld ${carpeta_llvm}/lib/lldCommon.lib ${carpeta_llvm}/lib/lldCor
 # enlaza la biblioteca "lenguaje" con las bibliotecas importadas de "llvm" y "lld"
 target_link_libraries(lenguaje LINK_PUBLIC ${bibliotecas_llvm} ${bibliotecas_lld})
 
-# make sure the compiler can find include files for our library
-# from other projects who link to us
-#target_include_directories(ñ PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+# Me aseguro de que el compilador pueda encontrar los archivos de
+# esta biblioteca desde otros proyectos que la enlacen.
 target_include_directories(lenguaje PUBLIC "${CMAKE_SOURCE_DIR}")
 
 set_target_properties(lenguaje PROPERTIES
